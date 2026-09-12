@@ -44,9 +44,25 @@
     padding: 0 14px;
     border-bottom: 1px solid #2d2d2d;
   }
-  .header-title-group { display: flex; align-items: center; gap: 10px; }
+  .header-title-group { display: flex; align-items: center; gap: 8px; }
   h2 { margin: 0; font-size: 1.15rem; color: #fff; font-weight: 700; }
   
+  .neon-blue-toast {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #00e5ff;
+    text-shadow: 0 0 8px rgba(0, 229, 255, 0.8), 0 0 14px rgba(0, 229, 255, 0.4);
+    opacity: 0;
+    transform: translateY(2px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+  .neon-blue-toast.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
   .btn-settings-gear { 
     background: transparent; 
     border: none; 
@@ -282,7 +298,7 @@
     justify-content: space-between;
     align-items: center;
     color: #fff;
-    transform: scale(1.04) rotate(-1deg);
+    transform: scale(1.03);
     opacity: 0.95;
     transition: transform 0.05s linear;
   }
@@ -444,6 +460,7 @@
 <div class="floating-top-bar">
   <div class="header-title-group">
     <h2>מאזן יומי</h2>
+    <span id="neonToast" class="neon-blue-toast">מנה נוספה לתפריט!</span>
     <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
   </div>
   <div class="nav-history-group">
@@ -680,6 +697,7 @@
   let editingPresetIndex = -1;
   let editingLogIndex = -1;
   let aiStatusTimer = null;
+  let toastTimer = null;
 
   document.getElementById('targetCalInput').value = targetCal;
   document.getElementById('targetProInput').value = targetPro;
@@ -703,6 +721,17 @@
       }
     } 
   });
+
+  function showNeonToast(text) {
+    const el = document.getElementById('neonToast');
+    if (!el) return;
+    el.textContent = text || 'מנה נוספה לתפריט!';
+    el.classList.add('show');
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(function() {
+      el.classList.remove('show');
+    }, 2000);
+  }
 
   function pushState() {
     historyStack.push({
@@ -1241,8 +1270,6 @@
 
         if (placeholder && placeholder.parentNode) {
           const targetContainer = placeholder.parentNode;
-          const targetDay = targetContainer.getAttribute('data-day');
-
           targetContainer.insertBefore(rowEl, placeholder);
           placeholder.remove();
           rowEl.style.display = 'flex';
@@ -1575,6 +1602,8 @@
     };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
+
+    showNeonToast('מנה נוספה לתפריט!');
 
     renderLogs();
     updateDisplay();
