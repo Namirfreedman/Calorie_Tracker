@@ -197,7 +197,7 @@
   .btn-toggle-box:active { background: #303030; }
   .collapsible-content { display: none; margin-top: 6px; background: #181818; padding: 10px; border-radius: 10px; border: 1px solid #303030; }
 
-  .log-list { max-height: 340px; overflow-y: auto; font-size: 0.82rem; padding-bottom: 4px; }
+  .log-list { max-height: 340px; overflow-y: auto; font-size: 0.82rem; padding-bottom: 4px; position: relative; }
   
   .history-day-card {
     background: #202020;
@@ -208,8 +208,8 @@
     transition: background 0.2s, border-color 0.2s;
   }
   .history-day-card.drop-hover {
-    border-color: #00e676;
-    background: #1f2b23;
+    border-color: #00e676 !important;
+    background: #1d3324 !important;
   }
   .history-day-header {
     display: flex;
@@ -218,6 +218,7 @@
     border-bottom: 1px solid #2d2d2d;
     padding-bottom: 5px;
     margin-bottom: 6px;
+    pointer-events: none;
   }
   .history-day-title {
     font-size: 0.82rem;
@@ -241,11 +242,14 @@
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 6px 4px; 
+    padding: 6px 6px; 
     border-bottom: 1px solid #262626; 
     color: #dcdcdc;
-    border-radius: 6px;
-    transition: background 0.2s, box-shadow 0.2s, transform 0.2s, border 0.2s;
+    border-radius: 8px;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
     touch-action: pan-y;
   }
   .log-item:last-child { border-bottom: none; }
@@ -257,12 +261,19 @@
   }
 
   .log-item.is-dragging {
-    background: #244b2f !important;
-    border: 1.5px dashed #00e676 !important;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 18px rgba(0, 230, 118, 0.9) !important;
-    transform: scale(1.03) translateY(-3px);
-    opacity: 0.95;
-    z-index: 100;
+    background: #1f4228 !important;
+    border: 1.5px solid #00e676 !important;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.8), 0 0 18px rgba(0, 230, 118, 0.9) !important;
+    transform: scale(1.04) translateY(-2px);
+    z-index: 1000;
+  }
+
+  .log-item-content {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex: 1;
+    pointer-events: none;
   }
 
   .log-actions { display: flex; gap: 4px; align-items: center; }
@@ -417,13 +428,11 @@
     <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
   </div>
   <div class="nav-history-group">
-    <!-- כפתור חזור בפינה השמאלית ביותר: חץ מעוגל רחב שמסתובב כמעט סיבוב שלם -->
     <button class="btn-icon-nav" onclick="undoLastAction()" title="חזור אחורה">
       <svg viewBox="0 0 24 24">
         <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
       </svg>
     </button>
-    <!-- כפתור הלוך מימינו: חץ ישר ונקי שפונה ימינה -->
     <button class="btn-icon-nav" onclick="redoLastAction()" title="הלוך שוב">
       <svg viewBox="0 0 24 24">
         <path d="M4 11h12.17l-5.59-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4v-2z"/>
@@ -1037,7 +1046,8 @@
     return count;
   }
 
-  let draggedLogId = null;
+  let activeDragId = null;
+  let activeDragRow = null;
 
   function renderLogs() {
     const logList = document.getElementById('logs');
@@ -1085,21 +1095,6 @@
       card.innerHTML = dayHtml;
       const itemsContainer = card.querySelector('.day-items-container');
 
-      card.addEventListener('dragover', function(e) {
-        e.preventDefault();
-        card.classList.add('drop-hover');
-      });
-      card.addEventListener('dragleave', function() {
-        card.classList.remove('drop-hover');
-      });
-      card.addEventListener('drop', function(e) {
-        e.preventDefault();
-        card.classList.remove('drop-hover');
-        if (draggedLogId) {
-          executeMoveLog(draggedLogId, dStr);
-        }
-      });
-
       entries.forEach(function(item) {
         const row = document.createElement('div');
         row.className = 'log-item';
@@ -1107,7 +1102,9 @@
         const label = item.name ? ('<strong>' + item.name + '</strong> ') : '';
 
         row.innerHTML = `
-          <span>${label}(+${item.cal} קל' | +${item.pro}ג')</span>
+          <div class="log-item-content">
+            <span>${label}(+${item.cal} קל' | +${item.pro}ג')</span>
+          </div>
           <div class="log-actions">
             <button class="btn-log-action btn-log-edit" title="ערוך בחלון ההזנה" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
             <button class="btn-log-action btn-log-save" title="הוסף מנה זו למאגר" onclick="saveLogItemToPoolById('${item.id}')">📥</button>
@@ -1115,63 +1112,84 @@
           </div>
         `;
 
-        row.addEventListener('dragstart', function(e) {
-          draggedLogId = item.id;
-          row.classList.add('is-dragging');
-        });
-        row.addEventListener('dragend', function() {
-          row.classList.remove('is-dragging');
-          row.classList.remove('holding-active');
-          row.removeAttribute('draggable');
-          draggedLogId = null;
-        });
+        let holdTimer = null;
+        let isDragging = false;
+        let startX = 0;
+        let startY = 0;
 
-        let pressTimer = null;
-        let isActivatedForDrag = false;
+        const onTouchStart = function(e) {
+          if (e.target.closest('.log-actions')) return;
 
-        const startPress = function() {
+          const touch = e.touches[0];
+          startX = touch.clientX;
+          startY = touch.clientY;
+
           row.classList.add('holding-active');
-          pressTimer = setTimeout(function() {
-            isActivatedForDrag = true;
-            row.setAttribute('draggable', 'true');
+
+          holdTimer = setTimeout(function() {
+            isDragging = true;
+            activeDragId = item.id;
+            activeDragRow = row;
+
             row.classList.remove('holding-active');
             row.classList.add('is-dragging');
-            draggedLogId = item.id;
-            if (navigator.vibrate) navigator.vibrate(50);
-          }, 2000);
+
+            if (navigator.vibrate) navigator.vibrate(60);
+          }, 1500);
         };
 
-        const cancelPress = function() {
-          if (pressTimer) clearTimeout(pressTimer);
-          if (!isActivatedForDrag) {
-            row.classList.remove('holding-active');
+        const onTouchMove = function(e) {
+          const touch = e.touches[0];
+          if (!isDragging) {
+            if (Math.abs(touch.clientX - startX) > 10 || Math.abs(touch.clientY - startY) > 10) {
+              clearTimeout(holdTimer);
+              row.classList.remove('holding-active');
+            }
+            return;
+          }
+
+          e.preventDefault();
+
+          document.querySelectorAll('.history-day-card').forEach(c => c.classList.remove('drop-hover'));
+          const elUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+          if (elUnderFinger) {
+            const dayCard = elUnderFinger.closest('.history-day-card');
+            if (dayCard) {
+              dayCard.classList.add('drop-hover');
+            }
           }
         };
 
-        row.addEventListener('mousedown', startPress);
-        row.addEventListener('mouseup', cancelPress);
-        row.addEventListener('mouseleave', cancelPress);
+        const onTouchEnd = function(e) {
+          clearTimeout(holdTimer);
+          row.classList.remove('holding-active');
 
-        row.addEventListener('touchstart', startPress, { passive: true });
-        row.addEventListener('touchend', function(e) {
-          cancelPress();
-          if (isActivatedForDrag && draggedLogId) {
+          if (isDragging) {
+            isDragging = false;
+            row.classList.remove('is-dragging');
+
             const touch = e.changedTouches[0];
-            const targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
-            if (targetEl) {
-              const dayCard = targetEl.closest('.history-day-card');
-              if (dayCard) {
-                const targetDay = dayCard.getAttribute('data-day');
-                if (targetDay) executeMoveLog(draggedLogId, targetDay);
+            const elUnderFinger = document.elementFromPoint(touch.clientX, touch.clientY);
+            document.querySelectorAll('.history-day-card').forEach(c => c.classList.remove('drop-hover'));
+
+            if (elUnderFinger) {
+              const targetDayCard = elUnderFinger.closest('.history-day-card');
+              if (targetDayCard) {
+                const targetDay = targetDayCard.getAttribute('data-day');
+                if (targetDay) {
+                  executeMoveLog(item.id, targetDay);
+                }
               }
             }
-            row.classList.remove('is-dragging');
-            row.removeAttribute('draggable');
-            draggedLogId = null;
-            isActivatedForDrag = false;
+            activeDragId = null;
+            activeDragRow = null;
           }
-        });
-        row.addEventListener('touchcancel', cancelPress);
+        };
+
+        row.addEventListener('touchstart', onTouchStart, { passive: false });
+        row.addEventListener('touchmove', onTouchMove, { passive: false });
+        row.addEventListener('touchend', onTouchEnd);
+        row.addEventListener('touchcancel', onTouchEnd);
 
         itemsContainer.appendChild(row);
       });
