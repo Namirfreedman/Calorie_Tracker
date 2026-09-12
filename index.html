@@ -3,10 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Macro Tracker</title>
+<title>מעקב קלוריות וחלבון</title>
 <link rel="manifest" href="manifest.json?v=2">
+
 <style>
-  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  * { 
+    box-sizing: border-box; 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+    -webkit-tap-highlight-color: transparent;
+  }
   body { 
     background: #121212; 
     color: #e0e0e0; 
@@ -30,30 +35,64 @@
     max-width: 400px;
     height: 52px;
     background: rgba(24, 24, 24, 0.95);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 900;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 14px;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid #2d2d2d;
   }
-  .header-title-group { display: flex; align-items: center; gap: 8px; }
+  .header-title-group { display: flex; align-items: center; gap: 10px; }
   h2 { margin: 0; font-size: 1.15rem; color: #fff; font-weight: 700; }
-  .btn-settings-gear { background: transparent; border: none; font-size: 1.25rem; cursor: pointer; color: #aaa; padding: 4px; }
-  .btn-settings-gear:active { color: #fff; transform: rotate(30deg); }
+  
+  .btn-settings-gear { 
+    background: transparent; 
+    border: none; 
+    outline: none;
+    font-size: 1.3rem; 
+    cursor: pointer; 
+    color: #a0a0a0; 
+    padding: 6px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: color 0.2s, transform 0.2s;
+  }
+  .btn-settings-gear:active { 
+    color: #00e676; 
+    transform: rotate(45deg) scale(0.95); 
+  }
 
-  .nav-history-group { display: flex; gap: 6px; align-items: center; }
-  .btn-undo-header {
-    background: #37474f; color: #eceff1; border: 1px solid #546e7a;
-    border-radius: 8px; padding: 6px 12px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+  .nav-history-group { 
+    display: flex; 
+    gap: 10px; 
+    align-items: center; 
+    margin-right: auto;
   }
-  .btn-redo-header {
-    background: #263238; color: #b0bec5; border: 1px solid #37474f;
-    border-radius: 8px; padding: 6px 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+  .btn-icon-nav {
+    background: #252525;
+    color: #e0e0e0;
+    border: 1px solid #383838;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.15rem;
+    line-height: 1;
+    transition: background 0.15s, transform 0.1s, border-color 0.15s;
+    outline: none;
   }
-  .btn-undo-header:active, .btn-redo-header:active { opacity: 0.8; transform: scale(0.96); }
+  .btn-icon-nav:active { 
+    background: #333; 
+    transform: scale(0.92);
+    border-color: #00e676;
+  }
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
   .stat-box { background: #282828; border-radius: 12px; padding: 12px 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; min-height: 90px; }
@@ -68,7 +107,7 @@
   .stat-box .value.neutral { color: #64b5f6; }
   .stat-box .single-num-wrap { display: flex; align-items: center; justify-content: center; gap: 6px; margin: auto 0; }
   .stat-box .single-num { font-size: 1.5rem; font-weight: bold; line-height: 1.2; }
-  .btn-edit-spare { background: transparent; border: none; color: #81c784; font-size: 0.95rem; cursor: pointer; padding: 2px 4px; }
+  .btn-edit-spare { background: transparent; border: none; color: #81c784; font-size: 0.95rem; cursor: pointer; padding: 2px 4px; outline: none; }
 
   .bar-container { width: 100%; background: #3d3d3d; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 6px; flex-shrink: 0; }
   .bar-fill { height: 100%; width: 0%; border-radius: 3px; transition: width 0.3s ease, background-color 0.3s ease; }
@@ -111,6 +150,7 @@
     color: #fff;
     width: 100%;
     text-align: center;
+    outline: none;
   }
   .btn-add-menu { background: #2e7d32; }
   .btn-add-pool { background: #1565c0; }
@@ -132,6 +172,7 @@
     border: 1px solid #444;
     text-align: center;
     line-height: 1.25;
+    outline: none;
   }
   .btn-day-with-bank {
     background: #26332a;
@@ -146,31 +187,56 @@
   .btn-day-action:active { opacity: 0.8; transform: scale(0.97); }
 
   .collapsible-wrapper { margin-top: 4px; }
-  .btn-toggle-box { background: #252525; color: #bbb; border: 1px solid #383838; border-radius: 8px; font-size: 0.8rem; font-weight: 600; padding: 9px; width: 100%; cursor: pointer; }
+  .btn-toggle-box { background: #252525; color: #bbb; border: 1px solid #383838; border-radius: 8px; font-size: 0.8rem; font-weight: 600; padding: 9px; width: 100%; cursor: pointer; outline: none; }
   .btn-toggle-box:active { background: #303030; }
-  .collapsible-content { display: none; margin-top: 6px; background: #191919; padding: 10px; border-radius: 8px; border: 1px solid #333; }
+  .collapsible-content { display: none; margin-top: 6px; background: #181818; padding: 10px; border-radius: 10px; border: 1px solid #303030; }
 
-  .log-list { max-height: 250px; overflow-y: auto; font-size: 0.82rem; color: #bbb; }
-  .log-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #282828; }
+  .log-list { max-height: 320px; overflow-y: auto; font-size: 0.82rem; }
   
-  .log-day-separator {
+  .history-day-card {
+    background: #202020;
+    border: 1px solid #2e2e2e;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    padding: 8px 10px;
+  }
+  .history-day-header {
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin: 14px 0 8px 0;
-    padding: 6px 10px;
-    background: #1b261e;
-    border: 1px dashed #4caf50;
-    border-radius: 8px;
-    color: #81c784;
+    border-bottom: 1px solid #2d2d2d;
+    padding-bottom: 5px;
+    margin-bottom: 6px;
+  }
+  .history-day-title {
     font-size: 0.82rem;
     font-weight: bold;
-    text-align: center;
+    color: #81c784;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .history-day-summary {
+    font-size: 0.74rem;
+    color: #ffa726;
+    font-weight: bold;
   }
 
-  .log-actions { display: flex; gap: 6px; align-items: center; }
-  .btn-log-action { background: transparent; border: none; font-size: 0.9rem; cursor: pointer; padding: 2px 4px; }
+  .log-item { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    padding: 5px 0; 
+    border-bottom: 1px solid #262626; 
+    color: #dcdcdc;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .log-item:last-child { border-bottom: none; }
+
+  .log-actions { display: flex; gap: 4px; align-items: center; }
+  .btn-log-action { background: transparent; border: none; font-size: 0.9rem; cursor: pointer; padding: 2px 4px; outline: none; }
+  .btn-log-move { color: #ffca28; }
   .btn-log-edit { color: #81c784; }
   .btn-log-save { color: #64b5f6; }
   .btn-log-del { color: #e57373; }
@@ -189,14 +255,14 @@
   }
 
   .pool-tabs { display: flex; gap: 8px; margin-bottom: 8px; }
-  .pool-tab-btn { flex: 1; background: #282828; color: #888; border: 1px solid #3a3a3a; border-radius: 8px; padding: 8px 4px; font-size: 0.82rem; font-weight: bold; cursor: pointer; }
+  .pool-tab-btn { flex: 1; background: #282828; color: #888; border: 1px solid #3a3a3a; border-radius: 8px; padding: 8px 4px; font-size: 0.82rem; font-weight: bold; cursor: pointer; outline: none; }
   .pool-tab-btn.active { background: #388e3c; color: #fff; border-color: #4caf50; }
 
   .category-block { background: #242424; border: 1px solid #333; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
   .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid #333; }
   .category-title { font-size: 0.82rem; font-weight: bold; color: #81c784; }
   .category-controls { display: flex; gap: 4px; }
-  .btn-cat-order { background: #333; color: #aaa; border: none; border-radius: 4px; width: 22px; height: 22px; font-size: 0.75rem; cursor: pointer; }
+  .btn-cat-order { background: #333; color: #aaa; border: none; border-radius: 4px; width: 22px; height: 22px; font-size: 0.75rem; cursor: pointer; outline: none; }
 
   .preset-list { display: flex; flex-wrap: wrap; gap: 6px; }
   .preset-btn-wrapper { 
@@ -208,8 +274,8 @@
     overflow: hidden; 
     transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease; 
   }
-  .preset-btn { background: transparent; color: #e0e0e0; font-size: 0.78rem; padding: 7px 9px; border: none; cursor: pointer; }
-  .preset-sub-btn { background: transparent; font-size: 0.75rem; padding: 7px 5px; border: none; border-right: 1px solid #3a3a3a; cursor: pointer; }
+  .preset-btn { background: transparent; color: #e0e0e0; font-size: 0.78rem; padding: 7px 9px; border: none; cursor: pointer; outline: none; }
+  .preset-sub-btn { background: transparent; font-size: 0.75rem; padding: 7px 5px; border: none; border-right: 1px solid #3a3a3a; cursor: pointer; outline: none; }
   .preset-fav-btn { color: #fbc02d; }
   .preset-edit-btn { color: #81c784; }
   .preset-del-btn { color: #e57373; }
@@ -234,14 +300,14 @@
   .ai-card-title { font-size: 0.85rem; font-weight: bold; color: #4fc3f7; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
   .ai-input-wrap { display: flex; gap: 6px; }
   .ai-input-wrap input { flex: 1; text-align: right; border-color: #0288d1; font-size: 0.95rem; padding: 10px; }
-  .btn-ai-send { background: #0288d1; color: #fff; border: none; border-radius: 8px; padding: 0 14px; font-weight: bold; cursor: pointer; }
+  .btn-ai-send { background: #0288d1; color: #fff; border: none; border-radius: 8px; padding: 0 14px; font-weight: bold; cursor: pointer; outline: none; }
   
   .ai-result-box { margin-top: 10px; background: #242c35; border-radius: 8px; padding: 10px; display: none; font-size: 0.88rem; }
   .ai-edit-grid { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
   .ai-edit-grid input { padding: 6px 8px; font-size: 0.88rem; }
 
   .ai-actions-row { display: flex; gap: 6px; }
-  .btn-ai-act { flex: 1; border: none; border-radius: 6px; padding: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
+  .btn-ai-act { flex: 1; border: none; border-radius: 6px; padding: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; outline: none; }
   .btn-ai-add-day { background: #2e7d32; color: #fff; }
   .btn-ai-add-pool { background: #1565c0; color: #fff; }
 
@@ -250,7 +316,8 @@
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(3px);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     z-index: 1000;
     justify-content: center;
     align-items: center;
@@ -272,7 +339,7 @@
   }
   .modal-title-bar { display: flex; justify-content: space-between; align-items: center; }
   .modal-title-bar h3 { margin: 0; font-size: 1.1rem; color: #fff; }
-  .modal-close-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; }
+  .modal-close-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; outline: none; }
   .modal-btn-row { display: flex; gap: 8px; }
   .modal-btn-full {
     background: #2a2a2a;
@@ -285,10 +352,10 @@
     cursor: pointer;
     width: 100%;
     text-align: center;
+    outline: none;
   }
   .modal-btn-danger { background: #2d1414; color: #ef5350; border-color: #5c2424; }
 
-  /* תצוגת ארכיון */
   .archive-viewer-box {
     display: none;
     background: #141414;
@@ -314,8 +381,8 @@
     <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
   </div>
   <div class="nav-history-group">
-    <button class="btn-undo-header" onclick="undoLastAction()" title="בטל פעולה אחרונה">↩ חזור</button>
-    <button class="btn-redo-header" onclick="redoLastAction()" title="בצע שוב פעולה שבוטלה">הלוך ↪</button>
+    <button class="btn-icon-nav" onclick="undoLastAction()" title="חזור אחורה">⟲</button>
+    <button class="btn-icon-nav" onclick="redoLastAction()" title="הלוך שוב">🠂</button>
   </div>
 </div>
 
@@ -485,7 +552,6 @@
       <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
     </div>
 
-    <!-- בלוק ארכיון משודרג עם אפשרות צפייה נוחה -->
     <div style="background:#1b241e; border:1px solid #2e7d32; border-radius:10px; padding:10px;">
       <div style="font-size:0.8rem; color:#81c784; font-weight:bold; margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
       <div style="font-size:0.72rem; color:#aaa; margin-bottom:8px;" id="archiveCountText">נשמרות כאן כל ההזנות מאז ומעולם ללא מחיקות.</div>
@@ -637,7 +703,7 @@
     const cleanKey = geminiApiKey.trim().replace(/\s+/g, '');
     setAiStatus('מחשב...', '#00e676', false);
 
-    const promptText = 'נתח את המנה: "' + query + '". החזר JSON בלבד: {"name":"שם המנה בעברית","cal":מספר,"pro":מספר}';
+    const promptText = 'אתה מחשבון תזונה. נתח את המנה: "' + query + '". השב ב-JSON בלבד בפורמט הבא ללא טקסט נוסף:\n{"name": "שם המנה בעברית", "cal": מספר קלוריות, "pro": מספר גרם חלבון}';
 
     const modelsToTry = ['gemini-3.6-flash'];
     let success = false;
@@ -654,7 +720,6 @@
             contents: [{ parts: [{ text: promptText }] }],
             generationConfig: {
               responseMimeType: "application/json",
-              maxOutputTokens: 60,
               temperature: 0.1
             }
           })
@@ -672,14 +737,18 @@
           continue;
         }
 
-        const cleanJson = candidateText.replace(/```json/gi, '').replace(/```/g, '').trim();
-        const jsonMatch = cleanJson.match(/\{[\s\S]*?\}/);
-        if (!jsonMatch) {
+        let cleanJson = candidateText.trim();
+        const firstBrace = cleanJson.indexOf('{');
+        const lastBrace = cleanJson.lastIndexOf('}');
+        
+        if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
           lastError = 'מבנה תשובה אינו JSON תקין';
           continue;
         }
 
-        const parsed = JSON.parse(jsonMatch[0]);
+        cleanJson = cleanJson.substring(firstBrace, lastBrace + 1);
+        const parsed = JSON.parse(cleanJson);
+        
         document.getElementById('aiEditName').value = parsed.name || query;
         document.getElementById('aiEditCal').value = parseInt(parsed.cal) || 0;
         document.getElementById('aiEditPro').value = parseInt(parsed.pro) || 0;
@@ -910,15 +979,16 @@
     const dayName = d.toLocaleDateString('he-IL', { weekday: 'long' });
     const day = String(d.getDate()).padStart(2, '0');
     const month = String(d.getMonth() + 1).padStart(2, '0');
-    return `${dayName} ${day}.${month} ↑`;
+    return `${dayName} ${day}.${month} ↓`;
   }
 
   function getTodayLogsCount() {
     const today = new Date().toISOString().slice(0, 10);
     let count = 0;
     for (let i = 0; i < logs.length; i++) {
-      if (logs[i].date && logs[i].date !== today) break;
-      count++;
+      if (logs[i].date && logs[i].date === today) {
+        count++;
+      }
     }
     return count;
   }
@@ -934,30 +1004,127 @@
       return;
     }
 
-    let renderedDates = new Set();
+    const todayStr = new Date().toISOString().slice(0, 10);
 
-    logs.forEach(function(log, index) {
-      const logDate = log.date || new Date().toISOString().slice(0, 10);
-
-      if (!renderedDates.has(logDate)) {
-        renderedDates.add(logDate);
-        const autoSep = document.createElement('div');
-        autoSep.className = 'log-day-separator';
-        autoSep.innerHTML = `<span>── ${formatLogDateTitle(logDate)} ──</span>`;
-        logList.appendChild(autoSep);
-      }
-
-      const item = document.createElement('div');
-      item.className = 'log-item';
-      const label = log.name ? ('<strong>' + log.name + '</strong> ') : '';
-      item.innerHTML = '<span>' + label + log.text + ' (+' + log.cal + " קל' | +" + log.pro + "ג')</span>" +
-        '<div class="log-actions">' +
-          '<button class="btn-log-action btn-log-edit" title="ערוך בחלון ההזנה" onclick="startEditLogItem(' + index + ')">✎</button>' +
-          '<button class="btn-log-action btn-log-save" title="הוסף מנה זו למאגר" onclick="saveLogItemToPool(' + index + ')">📥</button>' +
-          '<button class="btn-log-action btn-log-del" title="מחק שורה זו" onclick="deleteLogItem(' + index + ')">✕</button>' +
-        '</div>';
-      logList.appendChild(item);
+    const groups = {};
+    logs.forEach(function(item, index) {
+      const d = item.date || todayStr;
+      if (!groups[d]) groups[d] = [];
+      groups[d].push({ item: item, origIndex: index });
     });
+
+    const sortedDates = Object.keys(groups).sort().reverse();
+
+    sortedDates.forEach(function(dStr) {
+      const entries = groups[dStr];
+      const isCurrentDay = (dStr === todayStr);
+
+      const dayTotalCal = entries.reduce((acc, cur) => acc + (cur.item.cal || 0), 0);
+      const dayTotalPro = entries.reduce((acc, cur) => acc + (cur.item.pro || 0), 0);
+
+      const card = document.createElement('div');
+      card.className = 'history-day-card';
+
+      const summaryText = isCurrentDay ? 'היום פעיל' : `${dayTotalCal} קל' | ${dayTotalPro}ג'`;
+
+      let dayHtml = `
+        <div class="history-day-header">
+          <span class="history-day-title">${formatLogDateTitle(dStr)}</span>
+          <span class="history-day-summary">${summaryText}</span>
+        </div>
+      `;
+
+      card.innerHTML = dayHtml;
+
+      entries.forEach(function(entry) {
+        const item = entry.item;
+        const index = entry.origIndex;
+
+        const row = document.createElement('div');
+        row.className = 'log-item';
+        const label = item.name ? ('<strong>' + item.name + '</strong> ') : '';
+
+        row.innerHTML = `
+          <span>${label}${item.text || ''} (+${item.cal} קל' | +${item.pro}ג')</span>
+          <div class="log-actions">
+            <button class="btn-log-action btn-log-move" title="העבר יום" onclick="moveItemDayPrompt(${index})">↕</button>
+            <button class="btn-log-action btn-log-edit" title="ערוך בחלון ההזנה" onclick="startEditLogItem(${index})">✎</button>
+            <button class="btn-log-action btn-log-save" title="הוסף מנה זו למאגר" onclick="saveLogItemToPool(${index})">📥</button>
+            <button class="btn-log-action btn-log-del" title="מחק שורה זו" onclick="deleteLogItem(${index})">✕</button>
+          </div>
+        `;
+
+        let pressTimer = null;
+        row.addEventListener('touchstart', function() {
+          pressTimer = setTimeout(function() {
+            moveItemDayPrompt(index);
+          }, 600);
+        });
+        row.addEventListener('touchend', function() {
+          if (pressTimer) clearTimeout(pressTimer);
+        });
+
+        card.appendChild(row);
+      });
+
+      logList.appendChild(card);
+    });
+  }
+
+  function moveItemDayPrompt(index) {
+    const item = logs[index];
+    if (!item) return;
+
+    const todayStr = new Date().toISOString().slice(0, 10);
+    const currentDate = item.date || todayStr;
+
+    const availableDates = Array.from(new Set(logs.map(l => l.date || todayStr)));
+    if (!availableDates.includes(todayStr)) availableDates.push(todayStr);
+    availableDates.sort().reverse();
+
+    let optionsMsg = `העברת המנה "${item.name || 'מנה'}" ליום אחר.\nתאריך נוכחי: ${currentDate}\n\nבחר מספר מהרשימה:\n`;
+    availableDates.forEach((d, i) => {
+      optionsMsg += `${i + 1}. ${formatLogDateTitle(d).replace(' ↓', '')}\n`;
+    });
+    optionsMsg += `${availableDates.length + 1}. הזן תאריך ידנית (YYYY-MM-DD)`;
+
+    const choiceStr = prompt(optionsMsg, '1');
+    if (!choiceStr) return;
+
+    let targetDate = '';
+    const choiceNum = parseInt(choiceStr);
+
+    if (!isNaN(choiceNum) && choiceNum >= 1 && choiceNum <= availableDates.length) {
+      targetDate = availableDates[choiceNum - 1];
+    } else if (choiceNum === availableDates.length + 1) {
+      const custom = prompt('הזן תאריך בפורמט YYYY-MM-DD:', todayStr);
+      if (!custom) return;
+      targetDate = custom.trim();
+    } else {
+      return;
+    }
+
+    if (targetDate === currentDate) return;
+
+    pushState();
+
+    if (currentDate === todayStr && targetDate !== todayStr) {
+      eatenCal = Math.max(0, eatenCal - item.cal);
+      eatenPro = Math.max(0, eatenPro - item.pro);
+    } else if (currentDate !== todayStr && targetDate === todayStr) {
+      eatenCal += item.cal;
+      eatenPro += item.pro;
+    }
+
+    item.date = targetDate;
+
+    if (item.id) {
+      const archItem = archiveLogs.find(a => a.id === item.id);
+      if (archItem) archItem.date = targetDate;
+    }
+
+    renderLogs();
+    updateDisplay();
   }
 
   function startEditLogItem(index) {
@@ -1504,7 +1671,6 @@
       return;
     }
 
-    // קיבוץ לפי תאריכים
     const groups = {};
     archiveLogs.forEach(function(item) {
       const d = item.date || 'לא ידוע';
