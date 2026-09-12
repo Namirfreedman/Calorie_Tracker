@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>מאזן קלוריות וחלבון</title>
+
+<style>
+  * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+  body { 
+    background: #121212; 
+    color: #e0e0e0; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    padding: 14px; 
+    padding-top: 66px; 
+    padding-bottom: 90px; 
+    margin: 0; 
+    gap: 14px; 
+  }
+  .card { background: #1e1e1e; border-radius: 18px; padding: 18px; width: 100%; max-width: 400px; box-shadow: 0 4px 24px rgba(0,0,0,0.6); position: relative; }
+  
+  .floating-top-bar {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 400px;
+    height: 52px;
+    background: rgba(24, 24, 24, 0.95);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 900;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 14px;
+    border-bottom: 1px solid #333;
+  }
+  .header-title-group { display: flex; align-items: center; gap: 8px; }
+  h2 { margin: 0; font-size: 1.15rem; color: #fff; font-weight: 700; }
+  .btn-settings-gear { background: transparent; border: none; font-size: 1.25rem; cursor: pointer; color: #aaa; padding: 4px; }
+  .btn-settings-gear:active { color: #fff; transform: rotate(30deg); }
+
+  .nav-history-group { display: flex; gap: 6px; align-items: center; }
+  .btn-undo-header {
+    background: #37474f; color: #eceff1; border: 1px solid #546e7a;
+    border-radius: 8px; padding: 6px 12px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+  }
+  .btn-redo-header {
+    background: #263238; color: #b0bec5; border: 1px solid #37474f;
+    border-radius: 8px; padding: 6px 8px; font-size: 0.75rem; font-weight: 600; cursor: pointer; white-space: nowrap;
+  }
+  .btn-undo-header:active, .btn-redo-header:active { opacity: 0.8; transform: scale(0.96); }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+  .stat-box { background: #282828; border-radius: 12px; padding: 12px 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; min-height: 90px; }
+  .stat-box .title { font-size: 0.8rem; color: #aaa; margin-bottom: 4px; }
+  
+  .dual-val { display: flex; justify-content: space-between; align-items: stretch; gap: 8px; }
+  .val-item { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; min-width: 0; }
+  .val-item .sub { font-size: 0.7rem; color: #999; margin-bottom: 3px; line-height: 1; }
+  .val-item .num { font-size: 1.35rem; font-weight: bold; line-height: 1.2; height: 1.6rem; display: flex; align-items: center; justify-content: center; }
+  
+  .stat-box .value.negative { color: #ef5350 !important; }
+  .stat-box .value.neutral { color: #64b5f6; }
+  .stat-box .single-num-wrap { display: flex; align-items: center; justify-content: center; gap: 6px; margin: auto 0; }
+  .stat-box .single-num { font-size: 1.5rem; font-weight: bold; line-height: 1.2; }
+  .btn-edit-spare { background: transparent; border: none; color: #81c784; font-size: 0.95rem; cursor: pointer; padding: 2px 4px; }
+
+  .bar-container { width: 100%; background: #3d3d3d; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 6px; flex-shrink: 0; }
+  .bar-fill { height: 100%; width: 0%; border-radius: 3px; transition: width 0.3s ease, background-color 0.3s ease; }
+
+  .entry-highlight-box {
+    background: #1f2a22;
+    border: 2px solid #00e676;
+    box-shadow: 0 0 12px rgba(0, 230, 118, 0.25);
+    border-radius: 14px;
+    padding: 12px;
+    margin-bottom: 12px;
+  }
+  .entry-highlight-title { font-size: 0.8rem; font-weight: bold; color: #00e676; margin-bottom: 8px; text-align: center; }
+
+  .input-row { display: flex; gap: 6px; margin-bottom: 6px; }
+  input[type="number"], input[type="text"], textarea { 
+    background: #2a2a2a; 
+    border: 1px solid #444; 
+    border-radius: 8px; 
+    color: #fff; 
+    padding: 10px 8px; 
+    width: 100%; 
+    font-size: 0.95rem; 
+    text-align: center; 
+    outline: none; 
+    direction: rtl;
+    unicode-bidi: plaintext;
+  }
+  input:focus, textarea:focus { border-color: #00e676; }
+  textarea { text-align: right; resize: vertical; min-height: 80px; font-size: 0.85rem; line-height: 1.4; }
+
+  .action-buttons-stack { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
+  .btn-action-main {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 12px;
+    font-size: 0.92rem;
+    font-weight: bold;
+    cursor: pointer;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+  }
+  .btn-add-menu { background: #2e7d32; }
+  .btn-add-pool { background: #1565c0; }
+  .btn-add-both { background: #7b1fa2; box-shadow: 0 0 8px rgba(186, 104, 200, 0.4); }
+  .btn-action-main:active { opacity: 0.85; transform: scale(0.98); }
+
+  .day-actions-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .btn-day-action {
+    border-radius: 10px;
+    padding: 10px 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 1px solid #444;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .btn-day-with-bank {
+    background: #26332a;
+    color: #81c784;
+    border-color: #388e3c;
+  }
+  .btn-day-no-bank {
+    background: #2d2926;
+    color: #ffb74d;
+    border-color: #f57c00;
+  }
+  .btn-day-action:active { opacity: 0.8; transform: scale(0.97); }
+
+  .collapsible-wrapper { margin-top: 4px; }
+  .btn-toggle-box { background: #252525; color: #bbb; border: 1px solid #383838; border-radius: 8px; font-size: 0.8rem; font-weight: 600; padding: 9px; width: 100%; cursor: pointer; }
+  .btn-toggle-box:active { background: #303030; }
+  .collapsible-content { display: none; margin-top: 6px; background: #191919; padding: 10px; border-radius: 8px; border: 1px solid #333; }
+
+  .log-list { max-height: 250px; overflow-y: auto; font-size: 0.82rem; color: #bbb; }
+  .log-item { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #282828; }
+  
+  .log-day-separator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: 14px 0 8px 0;
+    padding: 6px 10px;
+    background: #1b261e;
+    border: 1px dashed #4caf50;
+    border-radius: 8px;
+    color: #81c784;
+    font-size: 0.82rem;
+    font-weight: bold;
+    text-align: center;
+  }
+
+  .log-actions { display: flex; gap: 6px; align-items: center; }
+  .btn-log-action { background: transparent; border: none; font-size: 0.9rem; cursor: pointer; padding: 2px 4px; }
+  .btn-log-edit { color: #81c784; }
+  .btn-log-save { color: #64b5f6; }
+  .btn-log-del { color: #e57373; }
+
+  .btn-clear-logs {
+    background: #2d1414;
+    color: #ef5350;
+    border: 1px solid #5c2424;
+    border-radius: 6px;
+    padding: 6px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    width: 100%;
+    margin-top: 8px;
+    cursor: pointer;
+  }
+
+  .pool-tabs { display: flex; gap: 8px; margin-bottom: 8px; }
+  .pool-tab-btn { flex: 1; background: #282828; color: #888; border: 1px solid #3a3a3a; border-radius: 8px; padding: 8px 4px; font-size: 0.82rem; font-weight: bold; cursor: pointer; }
+  .pool-tab-btn.active { background: #388e3c; color: #fff; border-color: #4caf50; }
+
+  .category-block { background: #242424; border: 1px solid #333; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
+  .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid #333; }
+  .category-title { font-size: 0.82rem; font-weight: bold; color: #81c784; }
+  .category-controls { display: flex; gap: 4px; }
+  .btn-cat-order { background: #333; color: #aaa; border: none; border-radius: 4px; width: 22px; height: 22px; font-size: 0.75rem; cursor: pointer; }
+
+  .preset-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .preset-btn-wrapper { 
+    display: flex; 
+    align-items: center; 
+    background: #2f2f2f; 
+    border: 1px solid #3d3d3d; 
+    border-radius: 6px; 
+    overflow: hidden; 
+    transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease; 
+  }
+  .preset-btn { background: transparent; color: #e0e0e0; font-size: 0.78rem; padding: 7px 9px; border: none; cursor: pointer; }
+  .preset-sub-btn { background: transparent; font-size: 0.75rem; padding: 7px 5px; border: none; border-right: 1px solid #3a3a3a; cursor: pointer; }
+  .preset-fav-btn { color: #fbc02d; }
+  .preset-edit-btn { color: #81c784; }
+  .preset-del-btn { color: #e57373; }
+
+  .preset-btn-wrapper.pulse-added {
+    background: #1b5e20 !important;
+    border-color: #00e676 !important;
+    box-shadow: 0 0 10px rgba(0, 230, 118, 0.7);
+    transform: scale(0.96);
+  }
+
+  .ai-assistant-card {
+    background: #1c232a;
+    border: 1px solid #0288d1;
+    box-shadow: 0 0 10px rgba(2, 136, 209, 0.2);
+    border-radius: 14px;
+    padding: 14px;
+    width: 100%;
+    max-width: 400px;
+    scroll-margin-bottom: 100px;
+  }
+  .ai-card-title { font-size: 0.85rem; font-weight: bold; color: #4fc3f7; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .ai-input-wrap { display: flex; gap: 6px; }
+  .ai-input-wrap input { flex: 1; text-align: right; border-color: #0288d1; font-size: 0.95rem; padding: 10px; }
+  .btn-ai-send { background: #0288d1; color: #fff; border: none; border-radius: 8px; padding: 0 14px; font-weight: bold; cursor: pointer; }
+  
+  .ai-result-box { margin-top: 10px; background: #242c35; border-radius: 8px; padding: 10px; display: none; font-size: 0.88rem; }
+  .ai-edit-grid { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+  .ai-edit-grid input { padding: 6px 8px; font-size: 0.88rem; }
+
+  .ai-actions-row { display: flex; gap: 6px; }
+  .btn-ai-act { flex: 1; border: none; border-radius: 6px; padding: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; }
+  .btn-ai-add-day { background: #2e7d32; color: #fff; }
+  .btn-ai-add-pool { background: #1565c0; color: #fff; }
+
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(3px);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+    padding: 16px;
+  }
+  .modal-box {
+    background: #1e1e1e;
+    border: 1px solid #444;
+    border-radius: 16px;
+    padding: 20px;
+    width: 100%;
+    max-width: 380px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .modal-title-bar { display: flex; justify-content: space-between; align-items: center; }
+  .modal-title-bar h3 { margin: 0; font-size: 1.1rem; color: #fff; }
+  .modal-close-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; }
+  .modal-btn-row { display: flex; gap: 8px; }
+  .modal-btn-full {
+    background: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+  }
+  .modal-btn-danger { background: #2d1414; color: #ef5350; border-color: #5c2424; }
+
+  /* תצוגת ארכיון */
+  .archive-viewer-box {
+    display: none;
+    background: #141414;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 8px;
+    max-height: 240px;
+    overflow-y: auto;
+    font-size: 0.8rem;
+    margin-top: 6px;
+  }
+  .archive-day-group { margin-bottom: 10px; border-bottom: 1px solid #282828; padding-bottom: 6px; }
+  .archive-day-group:last-child { border-bottom: none; }
+  .archive-day-title { font-weight: bold; color: #81c784; margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .archive-row { display: flex; justify-content: space-between; color: #ccc; padding: 2px 0; font-size: 0.76rem; }
+</style>
+</head>
+<body>
+
+<div class="floating-top-bar">
+  <div class="header-title-group">
+    <h2>מאזן יומי</h2>
+    <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
+  </div>
+  <div class="nav-history-group">
+    <button class="btn-undo-header" onclick="undoLastAction()" title="בטל פעולה אחרונה">↩ חזור</button>
+    <button class="btn-redo-header" onclick="redoLastAction()" title="בצע שוב פעולה שבוטלה">הלוך ↪</button>
+  </div>
+</div>
+
+<div class="card">
+  <div class="stat-box" style="margin-bottom: 10px;">
+    <div class="title">נשאר להיום</div>
+    <div class="dual-val">
+      <div class="val-item">
+        <span class="sub">קלוריות</span>
+        <span id="remainingCal" class="num" style="color: #4caf50;">1,800</span>
+        <div class="bar-container">
+          <div id="barRemainingCal" class="bar-fill" style="background: #4caf50;"></div>
+        </div>
+      </div>
+      <div class="val-item">
+        <span class="sub">חלבון</span>
+        <span id="remainingPro" class="num" style="color: #81c784;">140ג'</span>
+        <div class="bar-container">
+          <div id="barRemainingPro" class="bar-fill" style="background: #81c784;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="stat-box">
+      <div class="title">נאכל היום</div>
+      <div class="dual-val">
+        <div class="val-item">
+          <span class="sub">קלוריות</span>
+          <span id="eatenCal" class="num" style="color: #ffb74d;">0</span>
+          <div class="bar-container">
+            <div id="barEatenCal" class="bar-fill" style="background: #ffb74d;"></div>
+          </div>
+        </div>
+        <div class="val-item">
+          <span class="sub">חלבון</span>
+          <span id="eatenPro" class="num" style="color: #4fc3f7;">0ג'</span>
+          <div class="bar-container">
+            <div id="barEatenPro" class="bar-fill" style="background: #4fc3f7;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stat-box">
+      <div class="title">ספייר מצטבר</div>
+      <div class="single-num-wrap">
+        <div id="weeklyBank" class="single-num neutral">0</div>
+        <button class="btn-edit-spare" onclick="editSpareCalories()" title="ערוך ספייר ידנית">✎</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="entry-highlight-box" id="entryBox">
+    <div class="entry-highlight-title" id="entryTitle">🔍 חיפוש, הזנה ושמירה</div>
+    
+    <div class="input-row">
+      <input type="text" id="entryNameInput" list="poolDatalist" placeholder="שם המנה" oninput="handleNameInput(this.value)" onchange="onNameSelected(this.value)" enterkeyhint="next">
+      <datalist id="poolDatalist"></datalist>
+    </div>
+
+    <div class="input-row">
+      <input type="number" id="calInput" placeholder="קלוריות" inputmode="numeric" enterkeyhint="next">
+      <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
+    </div>
+
+    <div class="input-row" id="catRow">
+      <input type="text" id="entryCatInput" list="categoryDatalist" placeholder="קטגוריה" enterkeyhint="done">
+      <datalist id="categoryDatalist"></datalist>
+    </div>
+
+    <div class="action-buttons-stack" id="defaultActionBtns">
+      <button class="btn-action-main btn-add-menu" id="btnAddMenu" onclick="actionAddMenu()">+ הוסף לתפריט</button>
+      <button class="btn-action-main btn-add-pool" id="btnAddPool" onclick="actionAddPool()">+ הוסף למאגר</button>
+      <button class="btn-action-main btn-add-both" id="btnAddBoth" onclick="actionAddBoth()">+ הוסף למאגר + תפריט</button>
+      <button id="cancelEditPoolBtn" style="display:none; background:#455a64; color:#fff; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
+    </div>
+
+    <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
+      <button class="btn-action-main btn-add-menu" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
+      <button style="background:#455a64; color:#fff; border:none; padding:9px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="cancelLogEdit()">ביטול עריכה</button>
+    </div>
+  </div>
+
+  <div class="day-actions-grid">
+    <button class="btn-day-action btn-day-with-bank" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(מעביר ספייר)</span></button>
+    <button class="btn-day-action btn-day-no-bank" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(ללא ספייר)</span></button>
+  </div>
+
+  <div class="collapsible-wrapper">
+    <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">📜 היסטוריית הזנות היום (0)</button>
+    <div class="collapsible-content" id="logsContent">
+      <div class="log-list" id="logs"></div>
+      <button class="btn-clear-logs" onclick="clearLogsOnly()">🗑 איפוס היסטוריה (7 ימים)</button>
+    </div>
+  </div>
+</div>
+
+<div class="card" id="poolCard">
+  <div class="pool-tabs">
+    <button class="pool-tab-btn" id="tabFavs" onclick="handlePoolTabClick('favs')">⭐ מועדפים</button>
+    <button class="pool-tab-btn" id="tabAll" onclick="handlePoolTabClick('all')">📦 מאגר (0)</button>
+  </div>
+
+  <div id="allSearchRow" style="display:none; margin-bottom:8px;">
+    <input type="text" id="allSearchInput" placeholder="חפש מנה במאגר..." oninput="renderPresets()">
+  </div>
+
+  <div id="categoryContainer"></div>
+</div>
+
+<div class="ai-assistant-card" id="aiAssistantCard">
+  <div class="ai-card-title">
+    <span>🤖 עוזר AI</span>
+    <span id="aiStatus" style="font-size:0.7rem; color:#888; font-weight:normal;"></span>
+  </div>
+  <div class="ai-input-wrap">
+    <input type="text" id="aiFoodQuery" placeholder="מה אכלת וכמה? (למשל: 200ג טופו)" onfocus="scrollAiIntoView()" onkeydown="if(event.key==='Enter') askAI()">
+    <button class="btn-ai-send" onclick="askAI()">שלח</button>
+  </div>
+  <div class="ai-result-box" id="aiResultBox">
+    <div style="font-size:0.75rem; color:#81c784; margin-bottom:6px; font-weight:bold;">ניתן לערוך לפני שמירה:</div>
+    <div class="ai-edit-grid">
+      <input type="text" id="aiEditName" placeholder="שם המנה">
+      <div style="display:flex; gap:6px;">
+        <input type="number" id="aiEditCal" placeholder="קלוריות">
+        <input type="number" id="aiEditPro" placeholder="חלבון">
+      </div>
+    </div>
+    <div class="ai-actions-row">
+      <button class="btn-ai-act btn-ai-add-day" onclick="addAiToDaily()">+ הוסף ליומי</button>
+      <button class="btn-ai-act btn-ai-add-pool" onclick="addAiToPool()">+ שמור למאגר</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title-bar">
+      <h3>⚙ הגדרות וניהול</h3>
+      <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
+    </div>
+
+    <div style="background:#262626; padding:10px; border-radius:10px; border:1px solid #383838;">
+      <div style="font-size:0.8rem; color:#4fc3f7; margin-bottom:6px; font-weight:bold;">מפתח Gemini API:</div>
+      <div class="input-row" style="margin-bottom:0;">
+        <input type="text" id="geminiApiKeyInput" placeholder="הדבק כאן מפתח AQ... או AIza..." style="font-size:0.8rem; direction:ltr;">
+        <button style="background:#0288d1; border:none; color:#fff; border-radius:8px; padding:0 12px; font-weight:bold; cursor:pointer;" onclick="saveApiKey()">שמור</button>
+      </div>
+    </div>
+
+    <div style="background:#262626; padding:10px; border-radius:10px; border:1px solid #383838;">
+      <div style="font-size:0.8rem; color:#aaa; margin-bottom:6px; font-weight:bold;">יעדים יומיים:</div>
+      <div class="input-row" style="margin-bottom:0;">
+        <input type="number" id="targetCalInput" placeholder="קלוריות">
+        <input type="number" id="targetProInput" placeholder="חלבון">
+        <button style="background:#2e7d32; border:none; color:#fff; border-radius:8px; padding:0 12px; font-weight:bold; cursor:pointer;" onclick="updateTargets()">שמור</button>
+      </div>
+    </div>
+
+    <button class="modal-btn-full" style="color:#81c784; border-color:#2e7d32;" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
+
+    <div class="modal-btn-row">
+      <button class="modal-btn-full" onclick="exportBackupTxt()">ייצוא גיבוי כללי</button>
+      <button class="modal-btn-full" onclick="document.getElementById('importFile').click()">ייבוא גיבוי TXT</button>
+      <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
+    </div>
+
+    <!-- בלוק ארכיון משודרג עם אפשרות צפייה נוחה -->
+    <div style="background:#1b241e; border:1px solid #2e7d32; border-radius:10px; padding:10px;">
+      <div style="font-size:0.8rem; color:#81c784; font-weight:bold; margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
+      <div style="font-size:0.72rem; color:#aaa; margin-bottom:8px;" id="archiveCountText">נשמרות כאן כל ההזנות מאז ומעולם ללא מחיקות.</div>
+      
+      <div style="display:flex; gap:6px; margin-bottom:4px;">
+        <button class="modal-btn-full" style="background:#203825; color:#a5d6a7; border-color:#388e3c; font-size:0.8rem;" onclick="toggleArchiveViewer()">👁️ צפייה בארכיון המלא</button>
+        <button class="modal-btn-full" style="background:#243627; color:#a5d6a7; border-color:#388e3c; font-size:0.8rem;" onclick="exportArchiveOnly()">📥 ייצוא TXT</button>
+      </div>
+
+      <div class="archive-viewer-box" id="archiveViewerBox"></div>
+    </div>
+
+    <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
+      <button class="modal-btn-full modal-btn-danger" onclick="resetDayOnly()">איפוס יום (מאפס רק את מה שנאכל היום)</button>
+      <button class="modal-btn-full modal-btn-danger" onclick="clearAllPresets()">נקה מאגר מנות לחלוטין</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="menuImportModal" onclick="closeMenuImportModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-title-bar">
+      <h3>📋 ייבוא מנות מטקסט</h3>
+      <button class="modal-close-btn" onclick="closeMenuImportModal()">✕</button>
+    </div>
+    <div style="font-size:0.75rem; color:#aaa; line-height:1.4;">
+      הדבק שורות (מופרדות בפסיק או טאב מאקסל):<br>
+      <code style="color:#81c784;">שם המנה, קלוריות, חלבון, קטגוריה</code>
+    </div>
+    <textarea id="bulkMenuInput" placeholder="יוגורט חלבון, 250, 20, ארוחת בוקר&#10;טופו צרוב, 350, 27, ארוחת ערב&#10;שייק ירוק, 180, 5, ביניים"></textarea>
+    <button class="btn-action-main btn-add-menu" onclick="processBulkMenu()">טען מנות למאגר</button>
+  </div>
+</div>
+
+<script>
+  let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
+  let targetPro = parseInt(localStorage.getItem('cal_targetPro')) || 140;
+  let eatenCal = parseInt(localStorage.getItem('cal_eatenCal')) || 0;
+  let eatenPro = parseInt(localStorage.getItem('cal_eatenPro')) || 0;
+  let weeklyBank = parseInt(localStorage.getItem('cal_weeklyBank')) || 0;
+  let logs = JSON.parse(localStorage.getItem('cal_logs') || '[]');
+  let archiveLogs = JSON.parse(localStorage.getItem('cal_archiveLogs') || '[]');
+  let presets = JSON.parse(localStorage.getItem('cal_presets') || '[]');
+  let categoryOrder = JSON.parse(localStorage.getItem('cal_catOrder') || '["כללי"]');
+  let lastActiveDate = localStorage.getItem('cal_lastDate') || new Date().toISOString().slice(0, 10);
+  let geminiApiKey = localStorage.getItem('cal_geminiApiKey') || '';
+  
+  let currentPoolTab = localStorage.getItem('cal_poolTabState') || 'none';
+
+  let historyStack = JSON.parse(localStorage.getItem('cal_historyStack') || '[]');
+  let redoStack = [];
+
+  let editingPresetIndex = -1;
+  let editingLogIndex = -1;
+  let aiStatusTimer = null;
+
+  document.getElementById('targetCalInput').value = targetCal;
+  document.getElementById('targetProInput').value = targetPro;
+  document.getElementById('geminiApiKeyInput').value = geminiApiKey;
+
+  const entryNameInput = document.getElementById('entryNameInput');
+  const calInput = document.getElementById('calInput');
+  const proInput = document.getElementById('proInput');
+  const entryCatInput = document.getElementById('entryCatInput');
+
+  entryNameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); calInput.focus(); } });
+  calInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); proInput.focus(); } });
+  proInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); entryCatInput.focus(); } });
+  entryCatInput.addEventListener('keydown', function(e) { 
+    if (e.key === 'Enter') { 
+      e.preventDefault(); 
+      if (editingLogIndex >= 0) {
+        saveLogEdit();
+      } else {
+        actionAddMenu(); 
+      }
+    } 
+  });
+
+  function pushState() {
+    historyStack.push({
+      targetCal: targetCal,
+      targetPro: targetPro,
+      eatenCal: eatenCal,
+      eatenPro: eatenPro,
+      weeklyBank: weeklyBank,
+      logs: JSON.parse(JSON.stringify(logs)),
+      archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
+      presets: JSON.parse(JSON.stringify(presets)),
+      categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
+      lastActiveDate: lastActiveDate
+    });
+    if (historyStack.length > 30) historyStack.shift();
+    redoStack = [];
+  }
+
+  function saveData() {
+    localStorage.setItem('cal_targetCal', targetCal);
+    localStorage.setItem('cal_targetPro', targetPro);
+    localStorage.setItem('cal_eatenCal', eatenCal);
+    localStorage.setItem('cal_eatenPro', eatenPro);
+    localStorage.setItem('cal_weeklyBank', weeklyBank);
+    localStorage.setItem('cal_logs', JSON.stringify(logs));
+    localStorage.setItem('cal_archiveLogs', JSON.stringify(archiveLogs));
+    localStorage.setItem('cal_presets', JSON.stringify(presets));
+    localStorage.setItem('cal_catOrder', JSON.stringify(categoryOrder));
+    localStorage.setItem('cal_lastDate', lastActiveDate);
+    localStorage.setItem('cal_geminiApiKey', geminiApiKey);
+    localStorage.setItem('cal_historyStack', JSON.stringify(historyStack));
+    localStorage.setItem('cal_poolTabState', currentPoolTab);
+  }
+
+  function saveApiKey() {
+    geminiApiKey = document.getElementById('geminiApiKeyInput').value.trim().replace(/\s+/g, '');
+    saveData();
+    alert(geminiApiKey ? 'מפתח נשמר בהצלחה!' : 'המפתח נמחק');
+  }
+
+  function setAiStatus(msg, color, autoClear = true) {
+    const statusEl = document.getElementById('aiStatus');
+    statusEl.textContent = msg;
+    statusEl.style.color = color || '#888';
+
+    if (aiStatusTimer) clearTimeout(aiStatusTimer);
+    if (autoClear && msg) {
+      aiStatusTimer = setTimeout(function() {
+        statusEl.textContent = '';
+      }, 10000);
+    }
+  }
+
+  function scrollAiIntoView() {
+    setTimeout(function() {
+      const card = document.getElementById('aiAssistantCard');
+      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 250);
+  }
+
+  async function askAI() {
+    const query = document.getElementById('aiFoodQuery').value.trim();
+    if (!query) return;
+
+    if (!geminiApiKey) {
+      alert('נא להזין תחילה את מפתח ה-API של Gemini בהגדרות (⚙)');
+      openSettingsModal();
+      return;
+    }
+
+    const cleanKey = geminiApiKey.trim().replace(/\s+/g, '');
+    setAiStatus('מחשב...', '#00e676', false);
+
+    const promptText = 'נתח את המנה: "' + query + '". החזר JSON בלבד: {"name":"שם המנה בעברית","cal":מספר,"pro":מספר}';
+
+    const modelsToTry = ['gemini-3.6-flash'];
+    let success = false;
+    let lastError = '';
+
+    for (let i = 0; i < modelsToTry.length; i++) {
+      const model = modelsToTry[i];
+      try {
+        const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + cleanKey;
+        const response = await fetch(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: promptText }] }],
+            generationConfig: {
+              responseMimeType: "application/json",
+              maxOutputTokens: 60,
+              temperature: 0.1
+            }
+          })
+        });
+
+        const data = await response.json();
+        if (!response.ok || data.error) {
+          lastError = (data.error && data.error.message) ? data.error.message : ('HTTP ' + response.status);
+          continue;
+        }
+
+        const candidateText = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
+        if (!candidateText) {
+          lastError = 'לא התקבל טקסט מהשרת';
+          continue;
+        }
+
+        const cleanJson = candidateText.replace(/```json/gi, '').replace(/```/g, '').trim();
+        const jsonMatch = cleanJson.match(/\{[\s\S]*?\}/);
+        if (!jsonMatch) {
+          lastError = 'מבנה תשובה אינו JSON תקין';
+          continue;
+        }
+
+        const parsed = JSON.parse(jsonMatch[0]);
+        document.getElementById('aiEditName').value = parsed.name || query;
+        document.getElementById('aiEditCal').value = parseInt(parsed.cal) || 0;
+        document.getElementById('aiEditPro').value = parseInt(parsed.pro) || 0;
+
+        document.getElementById('aiResultBox').style.display = 'block';
+        setAiStatus('הושלם!', '#81c784', true);
+        scrollAiIntoView();
+        success = true;
+        break;
+      } catch (e) {
+        lastError = e.message;
+      }
+    }
+
+    if (!success) {
+      setAiStatus('שגיאה', '#ef5350', true);
+      alert('שגיאה בחיבור ל-AI:\n' + lastError);
+    }
+  }
+
+  function getAiItemValues() {
+    return {
+      name: document.getElementById('aiEditName').value.trim() || 'מנה חדשה',
+      cal: parseInt(document.getElementById('aiEditCal').value) || 0,
+      pro: parseInt(document.getElementById('aiEditPro').value) || 0
+    };
+  }
+
+  function addAiToDaily() {
+    const item = getAiItemValues();
+    pushState();
+    eatenCal += item.cal;
+    eatenPro += item.pro;
+    const today = new Date().toISOString().slice(0, 10);
+    const logObj = {
+      id: Date.now() + Math.random().toString(),
+      name: item.name,
+      cal: item.cal,
+      pro: item.pro,
+      date: today,
+      text: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+    };
+    logs.unshift(logObj);
+    archiveLogs.unshift(logObj);
+    renderLogs();
+    updateDisplay();
+    document.getElementById('aiResultBox').style.display = 'none';
+    document.getElementById('aiFoodQuery').value = '';
+    setAiStatus('נוסף ליומי!', '#81c784', true);
+  }
+
+  function addAiToPool() {
+    const item = getAiItemValues();
+    const cat = prompt('קטגוריה עבור המנה (ריק = כללי):', 'כללי');
+    if (cat === null) return;
+    const finalCat = cat.trim() || 'כללי';
+    pushState();
+    presets.push({
+      name: item.name,
+      cal: item.cal,
+      pro: item.pro,
+      cat: finalCat,
+      isFav: true
+    });
+    if (!categoryOrder.includes(finalCat)) categoryOrder.push(finalCat);
+    renderPresets();
+    updateDatalists();
+    saveData();
+    document.getElementById('aiResultBox').style.display = 'none';
+    document.getElementById('aiFoodQuery').value = '';
+    setAiStatus('נשמר במאגר!', '#81c784', true);
+  }
+
+  function handlePoolTabClick(tab) {
+    if (currentPoolTab === tab) {
+      currentPoolTab = 'none';
+    } else {
+      currentPoolTab = tab;
+    }
+    saveData();
+    applyPoolTabUI();
+    renderPresets();
+  }
+
+  function applyPoolTabUI() {
+    document.getElementById('tabFavs').className = 'pool-tab-btn ' + (currentPoolTab === 'favs' ? 'active' : '');
+    document.getElementById('tabAll').className = 'pool-tab-btn ' + (currentPoolTab === 'all' ? 'active' : '');
+    document.getElementById('allSearchRow').style.display = (currentPoolTab === 'all' ? 'block' : 'none');
+  }
+
+  function renderPresets() {
+    const container = document.getElementById('categoryContainer');
+    container.innerHTML = '';
+    updateDatalists();
+
+    document.getElementById('tabAll').textContent = '📦 מאגר (' + presets.length + ')';
+
+    if (currentPoolTab === 'none') {
+      container.style.display = 'none';
+      return;
+    }
+    container.style.display = 'block';
+
+    const searchInput = document.getElementById('allSearchInput');
+    const searchTerm = (searchInput ? searchInput.value : '').trim().toLowerCase();
+
+    const filteredPresets = presets.filter(function(p) {
+      if (currentPoolTab === 'favs') return (p.isFav !== false);
+      if (searchTerm) return p.name.toLowerCase().includes(searchTerm) || (p.cat || '').toLowerCase().includes(searchTerm);
+      return true;
+    });
+
+    if (filteredPresets.length === 0) {
+      container.innerHTML = '<div style="text-align:center; font-size:0.8rem; color:#666; padding:12px;">' + (currentPoolTab === 'favs' ? 'אין מנות מועדפות שמורות' : 'המאגר ריק') + '</div>';
+      return;
+    }
+
+    const activeCats = new Set(filteredPresets.map(function(p) { return p.cat || 'כללי'; }));
+    const visibleCategoryOrder = categoryOrder.filter(function(c) { return activeCats.has(c); });
+
+    visibleCategoryOrder.forEach(function(catName) {
+      const catPresets = filteredPresets.filter(function(p) { return (p.cat || 'כללי') === catName; });
+      if (catPresets.length === 0) return;
+
+      const block = document.createElement('div');
+      block.className = 'category-block';
+
+      const catIdx = categoryOrder.indexOf(catName);
+      let headerHtml = '<div class="category-header">';
+      headerHtml += '<span class="category-title">' + catName + '</span>';
+      headerHtml += '<div class="category-controls">';
+      headerHtml += '<button class="btn-cat-order" onclick="moveCategory(' + catIdx + ', -1)" title="הזז למעלה">↑</button>';
+      headerHtml += '<button class="btn-cat-order" onclick="moveCategory(' + catIdx + ', 1)" title="הזז למטה">↓</button>';
+      headerHtml += '</div></div>';
+
+      let listHtml = '<div class="preset-list">';
+      catPresets.forEach(function(p) {
+        const realIdx = presets.indexOf(p);
+        const favIcon = (p.isFav !== false) ? '⭐' : '☆';
+        listHtml += '<div class="preset-btn-wrapper" id="preset-wrapper-' + realIdx + '">';
+        listHtml += '<button class="preset-btn" onclick="addPresetEntry(' + realIdx + ')">' + p.name + ' (' + p.cal + "ק' / " + p.pro + "ג')</button>";
+        listHtml += '<button class="preset-sub-btn preset-fav-btn" title="הוסף/הסר ממועדפים" onclick="toggleFavPreset(' + realIdx + ')">' + favIcon + '</button>';
+        listHtml += '<button class="preset-sub-btn preset-edit-btn" title="ערוך מנה" onclick="startEditPreset(' + realIdx + ')">✎</button>';
+        listHtml += '<button class="preset-sub-btn preset-del-btn" title="מחק מנה" onclick="deletePreset(' + realIdx + ')">✕</button>';
+        listHtml += '</div>';
+      });
+      listHtml += '</div>';
+
+      block.innerHTML = headerHtml + listHtml;
+      container.appendChild(block);
+    });
+  }
+
+  function handleNameInput(val) {
+    const poolList = document.getElementById('poolDatalist');
+    poolList.innerHTML = '';
+    val = val.trim().toLowerCase();
+    if (!val) return;
+
+    const matched = presets.filter(function(p) { return p.name.toLowerCase().includes(val); });
+    matched.forEach(function(p) {
+      const opt = document.createElement('option');
+      opt.value = p.name;
+      poolList.appendChild(opt);
+    });
+  }
+
+  function onNameSelected(val) {
+    const found = presets.find(function(p) { return p.name === val.trim(); });
+    if (found) {
+      calInput.value = found.cal || '';
+      proInput.value = found.pro || '';
+      entryCatInput.value = (found.cat === 'כללי' ? '' : found.cat);
+    }
+  }
+
+  function updateDatalists() {
+    const catList = document.getElementById('categoryDatalist');
+    catList.innerHTML = '';
+    const uniqueCats = Array.from(new Set(presets.map(function(p) { return p.cat || 'כללי'; })));
+    uniqueCats.forEach(cat => {
+      const opt = document.createElement('option');
+      opt.value = cat;
+      catList.appendChild(opt);
+    });
+  }
+
+  function updateDisplay() {
+    const remCal = targetCal - eatenCal;
+    const remPro = targetPro - eatenPro;
+
+    const remCalEl = document.getElementById('remainingCal');
+    remCalEl.textContent = remCal.toLocaleString();
+    remCalEl.className = 'num ' + (remCal < 0 ? 'negative' : '');
+
+    const remProEl = document.getElementById('remainingPro');
+    remProEl.textContent = remPro + "ג'";
+    remProEl.className = 'num ' + (remPro < 0 ? 'negative' : '');
+
+    document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
+    document.getElementById('eatenPro').textContent = eatenPro + "ג'";
+
+    const bankEl = document.getElementById('weeklyBank');
+    bankEl.textContent = (weeklyBank >= 0 ? '+' : '') + weeklyBank.toLocaleString();
+    bankEl.className = 'single-num ' + (weeklyBank >= 0 ? 'neutral' : 'negative');
+
+    const calEatenPercent = Math.min(100, Math.max(0, (eatenCal / targetCal) * 100));
+    const proEatenPercent = Math.min(100, Math.max(0, (eatenPro / targetPro) * 100));
+    const calRemPercent = Math.min(100, Math.max(0, (remCal / targetCal) * 100));
+    const proRemPercent = Math.min(100, Math.max(0, (remPro / targetPro) * 100));
+
+    document.getElementById('barEatenCal').style.width = calEatenPercent + '%';
+    document.getElementById('barEatenPro').style.width = proEatenPercent + '%';
+    document.getElementById('barRemainingCal').style.width = calRemPercent + '%';
+    document.getElementById('barRemainingPro').style.width = proRemPercent + '%';
+
+    document.getElementById('barRemainingCal').style.background = remCal < 0 ? '#ef5350' : '#4caf50';
+    document.getElementById('barRemainingPro').style.background = remPro < 0 ? '#ef5350' : '#81c784';
+
+    document.getElementById('archiveCountText').textContent = `בארכיון שמורות כרגע ${archiveLogs.length} הזנות תמידיות.`;
+
+    saveData();
+  }
+
+  function formatLogDateTitle(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    const dayName = d.toLocaleDateString('he-IL', { weekday: 'long' });
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    return `${dayName} ${day}.${month} ↑`;
+  }
+
+  function getTodayLogsCount() {
+    const today = new Date().toISOString().slice(0, 10);
+    let count = 0;
+    for (let i = 0; i < logs.length; i++) {
+      if (logs[i].date && logs[i].date !== today) break;
+      count++;
+    }
+    return count;
+  }
+
+  function renderLogs() {
+    const logList = document.getElementById('logs');
+    logList.innerHTML = '';
+    
+    document.getElementById('btnToggleLogs').textContent = '📜 היסטוריית הזנות היום (' + getTodayLogsCount() + ')';
+
+    if (logs.length === 0) {
+      logList.innerHTML = '<div style="text-align:center; font-size:0.75rem; color:#666; padding:6px 0;">אין הזנות רשומות כרגע</div>';
+      return;
+    }
+
+    let renderedDates = new Set();
+
+    logs.forEach(function(log, index) {
+      const logDate = log.date || new Date().toISOString().slice(0, 10);
+
+      if (!renderedDates.has(logDate)) {
+        renderedDates.add(logDate);
+        const autoSep = document.createElement('div');
+        autoSep.className = 'log-day-separator';
+        autoSep.innerHTML = `<span>── ${formatLogDateTitle(logDate)} ──</span>`;
+        logList.appendChild(autoSep);
+      }
+
+      const item = document.createElement('div');
+      item.className = 'log-item';
+      const label = log.name ? ('<strong>' + log.name + '</strong> ') : '';
+      item.innerHTML = '<span>' + label + log.text + ' (+' + log.cal + " קל' | +" + log.pro + "ג')</span>" +
+        '<div class="log-actions">' +
+          '<button class="btn-log-action btn-log-edit" title="ערוך בחלון ההזנה" onclick="startEditLogItem(' + index + ')">✎</button>' +
+          '<button class="btn-log-action btn-log-save" title="הוסף מנה זו למאגר" onclick="saveLogItemToPool(' + index + ')">📥</button>' +
+          '<button class="btn-log-action btn-log-del" title="מחק שורה זו" onclick="deleteLogItem(' + index + ')">✕</button>' +
+        '</div>';
+      logList.appendChild(item);
+    });
+  }
+
+  function startEditLogItem(index) {
+    const item = logs[index];
+    if (!item) return;
+
+    if (editingPresetIndex >= 0) cancelEditPreset();
+
+    editingLogIndex = index;
+    entryNameInput.value = item.name || '';
+    calInput.value = item.cal;
+    proInput.value = item.pro;
+    document.getElementById('catRow').style.display = 'none';
+
+    document.getElementById('entryTitle').textContent = '✎ עריכת הזנה מההיסטוריה';
+    document.getElementById('defaultActionBtns').style.display = 'none';
+    document.getElementById('logEditActionBtns').style.display = 'flex';
+
+    document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    entryNameInput.focus();
+  }
+
+  function saveLogEdit() {
+    if (editingLogIndex < 0) return;
+    const item = logs[editingLogIndex];
+    if (!item) return;
+
+    const val = getEntryValues();
+    pushState();
+
+    const today = new Date().toISOString().slice(0, 10);
+    if (!item.date || item.date === today) {
+      eatenCal = Math.max(0, eatenCal - item.cal + val.cal);
+      eatenPro = Math.max(0, eatenPro - item.pro + val.pro);
+    }
+
+    if (item.id) {
+      const archItem = archiveLogs.find(a => a.id === item.id);
+      if (archItem) {
+        archItem.name = val.name;
+        archItem.cal = val.cal;
+        archItem.pro = val.pro;
+      }
+    }
+
+    item.name = val.name;
+    item.cal = val.cal;
+    item.pro = val.pro;
+
+    cancelLogEdit();
+    renderLogs();
+    updateDisplay();
+  }
+
+  function cancelLogEdit() {
+    editingLogIndex = -1;
+    clearEntryInputs();
+    document.getElementById('catRow').style.display = 'flex';
+    document.getElementById('entryTitle').textContent = '🔍 חיפוש, הזנה ושמירה';
+    document.getElementById('defaultActionBtns').style.display = 'flex';
+    document.getElementById('logEditActionBtns').style.display = 'none';
+  }
+
+  function clearLogsOnly() {
+    if (logs.length === 0) return;
+    if (confirm('לאפס את כל רשימת ההיסטוריה במסך הראשי? (נתוני הארכיון יישמרו במלואם)')) {
+      pushState();
+      logs = [];
+      renderLogs();
+      saveData();
+    }
+  }
+
+  function saveLogItemToPool(index) {
+    const item = logs[index];
+    if (!item) return;
+
+    let defaultName = item.name;
+    if (!defaultName) {
+      const res = prompt('הזן שם למנה זו למאגר:');
+      if (res === null) return;
+      defaultName = res.trim();
+      if (!defaultName) return;
+    }
+
+    const catPrompt = prompt('קטגוריה עבור המנה (ריק = כללי):', 'כללי');
+    if (catPrompt === null) return;
+    const cat = catPrompt.trim() || 'כללי';
+
+    pushState();
+    presets.push({
+      name: defaultName,
+      cal: item.cal,
+      pro: item.pro,
+      cat: cat,
+      isFav: true
+    });
+
+    if (!categoryOrder.includes(cat)) categoryOrder.push(cat);
+    renderPresets();
+    updateDatalists();
+    saveData();
+    alert('המנה "' + defaultName + '" נוספה בהצלחה למאגר!');
+  }
+
+  function toggleFavPreset(idx) {
+    pushState();
+    presets[idx].isFav = (presets[idx].isFav === false);
+    renderPresets();
+    saveData();
+  }
+
+  function moveCategory(index, direction) {
+    const newIdx = index + direction;
+    if (newIdx < 0 || newIdx >= categoryOrder.length) return;
+    pushState();
+    const temp = categoryOrder[index];
+    categoryOrder[index] = categoryOrder[newIdx];
+    categoryOrder[newIdx] = temp;
+    renderPresets();
+    saveData();
+  }
+
+  function getEntryValues() {
+    const name = entryNameInput.value.trim();
+    const cal = parseInt(calInput.value) || 0;
+    const pro = parseInt(proInput.value) || 0;
+    let cat = entryCatInput.value.trim();
+    if (!cat) cat = 'כללי';
+    return { name: name, cal: cal, pro: pro, cat: cat };
+  }
+
+  function clearEntryInputs() {
+    entryNameInput.value = '';
+    calInput.value = '';
+    proInput.value = '';
+    entryCatInput.value = '';
+    document.getElementById('poolDatalist').innerHTML = '';
+  }
+
+  function actionAddMenu() {
+    const val = getEntryValues();
+    if (val.cal <= 0 && val.pro <= 0) return;
+
+    pushState();
+    eatenCal += val.cal;
+    eatenPro += val.pro;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const logObj = {
+      id: Date.now() + Math.random().toString(),
+      name: val.name,
+      cal: val.cal,
+      pro: val.pro,
+      date: today,
+      text: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+    };
+    logs.unshift(logObj);
+    archiveLogs.unshift(logObj);
+
+    clearEntryInputs();
+    renderLogs();
+    updateDisplay();
+  }
+
+  function actionAddPool() {
+    const val = getEntryValues();
+    if (!val.name || (val.cal <= 0 && val.pro <= 0)) {
+      alert('נא להזין שם מנה וערכים (קלוריות או חלבון)');
+      return;
+    }
+
+    pushState();
+    if (editingPresetIndex >= 0) {
+      presets[editingPresetIndex] = { 
+        name: val.name, 
+        cat: val.cat, 
+        cal: val.cal, 
+        pro: val.pro, 
+        isFav: presets[editingPresetIndex].isFav !== false 
+      };
+      cancelEditPreset();
+    } else {
+      presets.push({ name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isFav: true });
+    }
+
+    if (!categoryOrder.includes(val.cat)) categoryOrder.push(val.cat);
+    clearEntryInputs();
+    renderPresets();
+    updateDatalists();
+    saveData();
+  }
+
+  function actionAddBoth() {
+    const val = getEntryValues();
+    if (!val.name || (val.cal <= 0 && val.pro <= 0)) {
+      alert('נא להזין שם מנה וערכים');
+      return;
+    }
+
+    pushState();
+    eatenCal += val.cal;
+    eatenPro += val.pro;
+    const today = new Date().toISOString().slice(0, 10);
+    const logObj = {
+      id: Date.now() + Math.random().toString(),
+      name: val.name,
+      cal: val.cal,
+      pro: val.pro,
+      date: today,
+      text: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+    };
+    logs.unshift(logObj);
+    archiveLogs.unshift(logObj);
+
+    const existingIdx = presets.findIndex(function(p) { return p.name === val.name; });
+    if (existingIdx >= 0) {
+      presets[existingIdx].cal = val.cal;
+      presets[existingIdx].pro = val.pro;
+      presets[existingIdx].cat = val.cat;
+    } else {
+      presets.push({ name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isFav: true });
+      if (!categoryOrder.includes(val.cat)) categoryOrder.push(val.cat);
+    }
+
+    clearEntryInputs();
+    renderLogs();
+    renderPresets();
+    updateDatalists();
+    updateDisplay();
+  }
+
+  function addPresetEntry(idx) {
+    const p = presets[idx];
+    if (!p) return;
+
+    const wrapper = document.getElementById('preset-wrapper-' + idx);
+    if (wrapper) {
+      wrapper.classList.add('pulse-added');
+      setTimeout(function() { wrapper.classList.remove('pulse-added'); }, 300);
+    }
+
+    pushState();
+    eatenCal += p.cal;
+    eatenPro += p.pro;
+
+    const today = new Date().toISOString().slice(0, 10);
+    const logObj = {
+      id: Date.now() + Math.random().toString(),
+      name: p.name,
+      cal: p.cal,
+      pro: p.pro,
+      date: today,
+      text: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+    };
+    logs.unshift(logObj);
+    archiveLogs.unshift(logObj);
+
+    renderLogs();
+    updateDisplay();
+  }
+
+  function startEditPreset(idx) {
+    const p = presets[idx];
+    if (!p) return;
+
+    if (editingLogIndex >= 0) cancelLogEdit();
+
+    editingPresetIndex = idx;
+    entryNameInput.value = p.name;
+    entryCatInput.value = (p.cat === 'כללי' ? '' : p.cat);
+    calInput.value = p.cal;
+    proInput.value = p.pro;
+
+    document.getElementById('btnAddPool').textContent = 'עדכן מנה במאגר';
+    document.getElementById('cancelEditPoolBtn').style.display = 'block';
+    entryNameInput.focus();
+  }
+
+  function cancelEditPreset() {
+    editingPresetIndex = -1;
+    clearEntryInputs();
+    document.getElementById('btnAddPool').textContent = '+ הוסף למאגר';
+    document.getElementById('cancelEditPoolBtn').style.display = 'none';
+  }
+
+  function deletePreset(idx) {
+    if (confirm('למחוק את המנה "' + presets[idx].name + '" מהמאגר?')) {
+      pushState();
+      if (editingPresetIndex === idx) cancelEditPreset();
+      presets.splice(idx, 1);
+      renderPresets();
+      updateDatalists();
+      saveData();
+    }
+  }
+
+  function deleteLogItem(index) {
+    const item = logs[index];
+    if (!item) return;
+
+    const itemName = item.name ? ('"' + item.name + '" ') : '';
+    if (!confirm('למחוק את ההזנה ' + itemName + '(+' + item.cal + ' קלוריות, +' + item.pro + "ג' חלבון)?")) return;
+
+    pushState();
+    const today = new Date().toISOString().slice(0, 10);
+    if (!item.date || item.date === today) {
+      eatenCal = Math.max(0, eatenCal - item.cal);
+      eatenPro = Math.max(0, eatenPro - item.pro);
+    }
+    logs.splice(index, 1);
+
+    renderLogs();
+    updateDisplay();
+  }
+
+  function undoLastAction() {
+    if (historyStack.length === 0) return;
+
+    redoStack.push({
+      targetCal: targetCal,
+      targetPro: targetPro,
+      eatenCal: eatenCal,
+      eatenPro: eatenPro,
+      weeklyBank: weeklyBank,
+      logs: JSON.parse(JSON.stringify(logs)),
+      archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
+      presets: JSON.parse(JSON.stringify(presets)),
+      categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
+      lastActiveDate: lastActiveDate
+    });
+
+    const prev = historyStack.pop();
+    applyStateSilent(prev);
+  }
+
+  function redoLastAction() {
+    if (redoStack.length === 0) return;
+
+    historyStack.push({
+      targetCal: targetCal,
+      targetPro: targetPro,
+      eatenCal: eatenCal,
+      eatenPro: eatenPro,
+      weeklyBank: weeklyBank,
+      logs: JSON.parse(JSON.stringify(logs)),
+      archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
+      presets: JSON.parse(JSON.stringify(presets)),
+      categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
+      lastActiveDate: lastActiveDate
+    });
+
+    const next = redoStack.pop();
+    applyStateSilent(next);
+  }
+
+  function applyStateSilent(st) {
+    targetCal = st.targetCal;
+    targetPro = st.targetPro;
+    eatenCal = st.eatenCal;
+    eatenPro = st.eatenPro;
+    weeklyBank = st.weeklyBank;
+    logs = st.logs;
+    archiveLogs = st.archiveLogs || archiveLogs;
+    presets = st.presets || presets;
+    categoryOrder = st.categoryOrder || categoryOrder;
+    lastActiveDate = st.lastActiveDate || lastActiveDate;
+
+    if (editingPresetIndex >= 0) cancelEditPreset();
+    if (editingLogIndex >= 0) cancelLogEdit();
+
+    document.getElementById('targetCalInput').value = targetCal;
+    document.getElementById('targetProInput').value = targetPro;
+
+    renderLogs();
+    renderPresets();
+    updateDatalists();
+    updateDisplay();
+  }
+
+  function editSpareCalories() {
+    const currentVal = weeklyBank;
+    const newValStr = prompt('ערוך את ספייר הקלוריות המצטבר:', currentVal);
+    if (newValStr === null) return;
+
+    const newVal = parseInt(newValStr);
+    if (!isNaN(newVal)) {
+      pushState();
+      weeklyBank = newVal;
+      updateDisplay();
+    }
+  }
+
+  function closeDay(isAuto, transferBank) {
+    if (typeof isAuto === 'undefined') isAuto = false;
+    if (typeof transferBank === 'undefined') transferBank = true;
+
+    const diffCal = targetCal - eatenCal;
+    const diffFormatted = diffCal >= 0 ? ('+' + diffCal) : diffCal;
+
+    if (!isAuto) {
+      const msg = transferBank 
+        ? ('להתחיל יום חדש?\nספייר שיועבר למצטבר: ' + diffFormatted + ' קלוריות.') 
+        : 'להתחיל יום חדש ללא ספייר?\n(עודף/חוסר של היום יוזנח ולא יועבר למצטבר)';
+      if (!confirm(msg)) return;
+    }
+
+    pushState();
+    if (transferBank) {
+      weeklyBank += diffCal;
+    }
+
+    eatenCal = 0;
+    eatenPro = 0;
+    lastActiveDate = new Date().toISOString().slice(0, 10);
+    renderLogs();
+    updateDisplay();
+  }
+
+  function resetDayOnly() {
+    if (confirm('לאפס רק את מה שנאכל היום ל-0?\n(הספייר, המאגר וההיסטוריה לא יימחקו)')) {
+      pushState();
+      eatenCal = 0;
+      eatenPro = 0;
+      closeSettingsModal();
+      updateDisplay();
+    }
+  }
+
+  function clearAllPresets() {
+    if (confirm('האם אתה בטוח שברצונך למחוק את כל המנות והקטגוריות מהמאגר?\n(ניתן לבטל באמצעות "חזור")')) {
+      pushState();
+      cancelEditPreset();
+      presets = [];
+      categoryOrder = ['כללי'];
+      closeSettingsModal();
+      renderPresets();
+      updateDatalists();
+      saveData();
+    }
+  }
+
+  function updateTargets() {
+    const newCal = parseInt(document.getElementById('targetCalInput').value);
+    const newPro = parseInt(document.getElementById('targetProInput').value);
+
+    if ((newCal && newCal > 0) || (newPro && newPro > 0)) {
+      pushState();
+      if (newCal && newCal > 0) targetCal = newCal;
+      if (newPro && newPro > 0) targetPro = newPro;
+      closeSettingsModal();
+      updateDisplay();
+      alert('היעדים עודכנו בהצלחה');
+    }
+  }
+
+  function toggleLogs() {
+    const el = document.getElementById('logsContent');
+    el.style.display = el.style.display === 'block' ? 'none' : 'block';
+  }
+
+  function openSettingsModal() { 
+    document.getElementById('settingsModal').style.display = 'flex'; 
+    updateDisplay();
+  }
+  
+  function closeSettingsModal(e) { 
+    if (!e || e.target === document.getElementById('settingsModal') || e.target.classList.contains('modal-close-btn')) {
+      document.getElementById('settingsModal').style.display = 'none'; 
+      document.getElementById('archiveViewerBox').style.display = 'none';
+    }
+  }
+
+  function openMenuImportFromSettings() {
+    closeSettingsModal();
+    document.getElementById('menuImportModal').style.display = 'flex';
+  }
+  
+  function closeMenuImportModal(e) { 
+    if (!e || e.target === document.getElementById('menuImportModal') || e.target.classList.contains('modal-close-btn')) {
+      document.getElementById('menuImportModal').style.display = 'none'; 
+    }
+  }
+
+  function processBulkMenu() {
+    const rawText = document.getElementById('bulkMenuInput').value.trim();
+    if (!rawText) return;
+
+    const lines = rawText.split('\n');
+    let addedCount = 0;
+
+    pushState();
+
+    lines.forEach(function(line) {
+      line = line.trim();
+      if (!line) return;
+
+      const parts = line.includes('\t') ? line.split('\t') : (line.includes(',') ? line.split(',') : line.split(';'));
+
+      if (parts.length >= 3) {
+        const name = parts[0].trim();
+        const cal = parseInt(parts[1].trim()) || 0;
+        const pro = parseInt(parts[2].trim()) || 0;
+        let cat = parts[3] ? parts[3].trim() : 'כללי';
+        if (!cat) cat = 'כללי';
+
+        if (name && (cal > 0 || pro > 0)) {
+          presets.push({ name: name, cat: cat, cal: cal, pro: pro, isFav: true });
+          if (!categoryOrder.includes(cat)) categoryOrder.push(cat);
+          addedCount++;
+        }
+      }
+    });
+
+    if (addedCount > 0) {
+      document.getElementById('bulkMenuInput').value = '';
+      closeMenuImportModal();
+      renderPresets();
+      updateDatalists();
+      saveData();
+      alert('נוספו בהצלחה ' + addedCount + ' מנות חדשות למאגר!');
+    } else {
+      alert('לא זוהו מנות בפורמט תקין (שם, קלוריות, חלבון, קטגוריה)');
+    }
+  }
+
+  function toggleArchiveViewer() {
+    const box = document.getElementById('archiveViewerBox');
+    if (box.style.display === 'block') {
+      box.style.display = 'none';
+      return;
+    }
+
+    renderArchiveViewer();
+    box.style.display = 'block';
+  }
+
+  function renderArchiveViewer() {
+    const box = document.getElementById('archiveViewerBox');
+    box.innerHTML = '';
+
+    if (archiveLogs.length === 0) {
+      box.innerHTML = '<div style="text-align:center; color:#666; padding:8px;">הארכיון ריק כרגע</div>';
+      return;
+    }
+
+    // קיבוץ לפי תאריכים
+    const groups = {};
+    archiveLogs.forEach(function(item) {
+      const d = item.date || 'לא ידוע';
+      if (!groups[d]) groups[d] = [];
+      groups[d].push(item);
+    });
+
+    const sortedDates = Object.keys(groups).sort().reverse();
+
+    sortedDates.forEach(function(dStr) {
+      const items = groups[dStr];
+      const totalCal = items.reduce((acc, cur) => acc + (cur.cal || 0), 0);
+      const totalPro = items.reduce((acc, cur) => acc + (cur.pro || 0), 0);
+
+      const groupEl = document.createElement('div');
+      groupEl.className = 'archive-day-group';
+
+      let titleText = dStr;
+      if (dStr !== 'לא ידוע') {
+        const dObj = new Date(dStr + 'T00:00:00');
+        titleText = dObj.toLocaleDateString('he-IL', { weekday: 'long', day: '2-digit', month: '2-digit' });
+      }
+
+      let groupHtml = `<div class="archive-day-title"><span>📅 ${titleText}</span><span style="color:#aaa; font-size:0.75rem;">${totalCal} קל' | ${totalPro}ג'</span></div>`;
+
+      items.forEach(function(item) {
+        groupHtml += `
+          <div class="archive-row">
+            <span>${item.name} (${item.text || ''})</span>
+            <span>+${item.cal} קל' | +${item.pro}ג'</span>
+          </div>
+        `;
+      });
+
+      groupEl.innerHTML = groupHtml;
+      box.appendChild(groupEl);
+    });
+  }
+
+  function exportBackupTxt() {
+    if (!confirm('לייצא ולהוריד קובץ גיבוי TXT מלא?')) return;
+    const data = { 
+      targetCal: targetCal, 
+      targetPro: targetPro, 
+      eatenCal: eatenCal, 
+      eatenPro: eatenPro, 
+      weeklyBank: weeklyBank, 
+      logs: logs, 
+      archiveLogs: archiveLogs, 
+      presets: presets, 
+      categoryOrder: categoryOrder, 
+      lastActiveDate: lastActiveDate, 
+      geminiApiKey: geminiApiKey 
+    };
+    const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'calorie_backup_full_' + new Date().toISOString().slice(0,10) + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+    closeSettingsModal();
+  }
+
+  function exportArchiveOnly() {
+    if (archiveLogs.length === 0) {
+      alert('הארכיון ריק עדיין');
+      return;
+    }
+    const blob = new Blob([JSON.stringify(archiveLogs, null, 2)], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'calorie_archive_logs_' + new Date().toISOString().slice(0,10) + '.txt';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importBackupTxt(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(evt) {
+      try {
+        const data = JSON.parse(evt.target.result);
+        if (confirm('לייבא את נתוני הגיבוי ולדרוס את הנתונים הנוכחיים?')) {
+          pushState();
+          targetCal = data.targetCal || 1800;
+          targetPro = data.targetPro || 140;
+          eatenCal = data.eatenCal || 0;
+          eatenPro = data.eatenPro || 0;
+          weeklyBank = data.weeklyBank || 0;
+          logs = data.logs || [];
+          archiveLogs = data.archiveLogs || (data.logs ? JSON.parse(JSON.stringify(data.logs)) : []);
+          presets = data.presets || [];
+          categoryOrder = data.categoryOrder || ['כללי'];
+          lastActiveDate = data.lastActiveDate || new Date().toISOString().slice(0, 10);
+          if (data.geminiApiKey) geminiApiKey = data.geminiApiKey;
+
+          if (editingPresetIndex >= 0) cancelEditPreset();
+          if (editingLogIndex >= 0) cancelLogEdit();
+
+          document.getElementById('targetCalInput').value = targetCal;
+          document.getElementById('targetProInput').value = targetPro;
+          document.getElementById('geminiApiKeyInput').value = geminiApiKey;
+
+          closeSettingsModal();
+          renderLogs();
+          applyPoolTabUI();
+          renderPresets();
+          updateDatalists();
+          updateDisplay();
+          alert('הגיבוי יובא בהצלחה!');
+        }
+      } catch (err) {
+        alert('שגיאה בקריאת קובץ ה-TXT');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  }
+
+  function checkMidnightRollover() {
+    const today = new Date().toISOString().slice(0, 10);
+    if (lastActiveDate && lastActiveDate !== today) {
+      if (eatenCal > 0 || eatenPro > 0) {
+        if (confirm('התחיל יום חדש (' + today + ')!\nלהעביר את הספייר מאתמול למצטבר ולאפס את היום?')) {
+          closeDay(true, true);
+        } else {
+          lastActiveDate = today;
+          saveData();
+        }
+      } else {
+        lastActiveDate = today;
+        saveData();
+      }
+    }
+  }
+
+  function applySevenDayRollingWindow() {
+    const today = new Date();
+    const cutoffDate = new Date(today);
+    cutoffDate.setDate(today.getDate() - 7);
+    const cutoffIso = cutoffDate.toISOString().slice(0, 10);
+
+    const initialLen = logs.length;
+    logs = logs.filter(function(log) {
+      const logDate = log.date || new Date().toISOString().slice(0, 10);
+      return logDate >= cutoffIso;
+    });
+
+    if (logs.length !== initialLen) {
+      saveData();
+    }
+  }
+
+  applySevenDayRollingWindow();
+  checkMidnightRollover();
+  renderLogs();
+  applyPoolTabUI();
+  renderPresets();
+  updateDisplay();
+</script>
+
+</body>
+</html>
