@@ -89,8 +89,8 @@
     padding: 0;
   }
   .btn-icon-nav svg {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     fill: currentColor;
   }
   .btn-icon-nav:active { 
@@ -197,7 +197,7 @@
   .btn-toggle-box:active { background: #303030; }
   .collapsible-content { display: none; margin-top: 6px; background: #181818; padding: 10px; border-radius: 10px; border: 1px solid #303030; }
 
-  .log-list { max-height: 320px; overflow-y: auto; font-size: 0.82rem; }
+  .log-list { max-height: 340px; overflow-y: auto; font-size: 0.82rem; padding-bottom: 4px; }
   
   .history-day-card {
     background: #202020;
@@ -205,6 +205,11 @@
     border-radius: 10px;
     margin-bottom: 10px;
     padding: 8px 10px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .history-day-card.drop-hover {
+    border-color: #00e676;
+    background: #1f2b23;
   }
   .history-day-header {
     display: flex;
@@ -228,36 +233,61 @@
     font-weight: bold;
   }
 
+  .day-items-container {
+    min-height: 24px;
+  }
+
   .log-item { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 5px 0; 
+    padding: 6px 4px; 
     border-bottom: 1px solid #262626; 
     color: #dcdcdc;
-    user-select: none;
-    -webkit-user-select: none;
+    border-radius: 6px;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s, border 0.2s;
+    touch-action: pan-y;
   }
   .log-item:last-child { border-bottom: none; }
 
+  .log-item.holding-active {
+    background: #173822 !important;
+    border: 1px solid #00e676 !important;
+    box-shadow: 0 0 14px rgba(0, 230, 118, 0.7) !important;
+  }
+
+  .log-item.is-dragging {
+    background: #244b2f !important;
+    border: 1.5px dashed #00e676 !important;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.8), 0 0 18px rgba(0, 230, 118, 0.9) !important;
+    transform: scale(1.03) translateY(-3px);
+    opacity: 0.95;
+    z-index: 100;
+  }
+
   .log-actions { display: flex; gap: 4px; align-items: center; }
   .btn-log-action { background: transparent; border: none; font-size: 0.9rem; cursor: pointer; padding: 2px 4px; outline: none; }
-  .btn-log-move { color: #ffca28; }
   .btn-log-edit { color: #81c784; }
   .btn-log-save { color: #64b5f6; }
   .btn-log-del { color: #e57373; }
 
-  .btn-clear-logs {
-    background: #2d1414;
-    color: #ef5350;
-    border: 1px solid #5c2424;
+  .btn-clear-logs-subtle {
+    background: transparent;
+    color: #777;
+    border: 1px dashed #3a3a3a;
     border-radius: 6px;
     padding: 6px;
-    font-size: 0.75rem;
-    font-weight: bold;
+    font-size: 0.72rem;
     width: 100%;
-    margin-top: 8px;
+    margin-top: 14px;
+    margin-bottom: 4px;
     cursor: pointer;
+    text-align: center;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-clear-logs-subtle:active {
+    color: #ef5350;
+    border-color: #ef5350;
   }
 
   .pool-tabs { display: flex; gap: 8px; margin-bottom: 8px; }
@@ -387,16 +417,16 @@
     <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
   </div>
   <div class="nav-history-group">
-    <!-- כפתור חזור בפינה השמאלית ביותר עם SVG מובנה וברור -->
+    <!-- כפתור חזור בפינה השמאלית ביותר: חץ מעוגל רחב שמסתובב כמעט סיבוב שלם -->
     <button class="btn-icon-nav" onclick="undoLastAction()" title="חזור אחורה">
       <svg viewBox="0 0 24 24">
-        <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>
+        <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
       </svg>
     </button>
-    <!-- כפתור הלוך מימינו עם חץ ישר ימינה ברור -->
+    <!-- כפתור הלוך מימינו: חץ ישר ונקי שפונה ימינה -->
     <button class="btn-icon-nav" onclick="redoLastAction()" title="הלוך שוב">
       <svg viewBox="0 0 24 24">
-        <path d="M11.5 8c2.65 0 5.05.99 6.9 2.6L22 7v9h-9l3.62-3.62c-1.39-1.16-3.16-1.88-5.12-1.88-3.54 0-6.55 2.31-7.6 5.5l-2.37-.78C2.92 11.03 6.85 8 11.5 8z"/>
+        <path d="M4 11h12.17l-5.59-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4v-2z"/>
       </svg>
     </button>
   </div>
@@ -490,10 +520,9 @@
   </div>
 
   <div class="collapsible-wrapper">
-    <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">📜 היסטוריית הזנות היום (0)</button>
+    <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">📜 היסטוריה שבועית (0)</button>
     <div class="collapsible-content" id="logsContent">
       <div class="log-list" id="logs"></div>
-      <button class="btn-clear-logs" onclick="clearLogsOnly()">🗑 איפוס היסטוריה (7 ימים)</button>
     </div>
   </div>
 </div>
@@ -536,7 +565,6 @@
   </div>
 </div>
 
-<!-- מודל הגדרות -->
 <div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title-bar">
@@ -588,7 +616,6 @@
   </div>
 </div>
 
-<!-- מודל ייבוא תפריט (יוצא חזרה להגדרות) -->
 <div class="modal-overlay" id="menuImportModal" onclick="closeMenuImportModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title-bar">
@@ -806,8 +833,7 @@
       name: item.name,
       cal: item.cal,
       pro: item.pro,
-      date: today,
-      text: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+      date: today
     };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
@@ -1011,11 +1037,13 @@
     return count;
   }
 
+  let draggedLogId = null;
+
   function renderLogs() {
     const logList = document.getElementById('logs');
     logList.innerHTML = '';
     
-    document.getElementById('btnToggleLogs').textContent = '📜 היסטוריית הזנות היום (' + getTodayLogsCount() + ')';
+    document.getElementById('btnToggleLogs').textContent = '📜 היסטוריה שבועית (' + getTodayLogsCount() + ')';
 
     if (logs.length === 0) {
       logList.innerHTML = '<div style="text-align:center; font-size:0.75rem; color:#666; padding:6px 0;">אין הזנות רשומות כרגע</div>';
@@ -1025,10 +1053,10 @@
     const todayStr = new Date().toISOString().slice(0, 10);
 
     const groups = {};
-    logs.forEach(function(item, index) {
+    logs.forEach(function(item) {
       const d = item.date || todayStr;
       if (!groups[d]) groups[d] = [];
-      groups[d].push({ item: item, origIndex: index });
+      groups[d].push(item);
     });
 
     const sortedDates = Object.keys(groups).sort().reverse();
@@ -1037,92 +1065,135 @@
       const entries = groups[dStr];
       const isCurrentDay = (dStr === todayStr);
 
-      const dayTotalCal = entries.reduce((acc, cur) => acc + (cur.item.cal || 0), 0);
-      const dayTotalPro = entries.reduce((acc, cur) => acc + (cur.item.pro || 0), 0);
+      const dayTotalCal = entries.reduce((acc, cur) => acc + (cur.cal || 0), 0);
+      const dayTotalPro = entries.reduce((acc, cur) => acc + (cur.pro || 0), 0);
 
       const card = document.createElement('div');
       card.className = 'history-day-card';
+      card.setAttribute('data-day', dStr);
 
-      const summaryText = isCurrentDay ? 'היום פעיל' : `${dayTotalCal} קל' | ${dayTotalPro}ג'`;
+      const summaryText = isCurrentDay ? 'היום-פעיל' : `${dayTotalCal} קל' | ${dayTotalPro}ג'`;
 
       let dayHtml = `
         <div class="history-day-header">
           <span class="history-day-title">${formatLogDateTitle(dStr)}</span>
           <span class="history-day-summary">${summaryText}</span>
         </div>
+        <div class="day-items-container" data-day="${dStr}"></div>
       `;
 
       card.innerHTML = dayHtml;
+      const itemsContainer = card.querySelector('.day-items-container');
 
-      entries.forEach(function(entry) {
-        const item = entry.item;
-        const index = entry.origIndex;
+      card.addEventListener('dragover', function(e) {
+        e.preventDefault();
+        card.classList.add('drop-hover');
+      });
+      card.addEventListener('dragleave', function() {
+        card.classList.remove('drop-hover');
+      });
+      card.addEventListener('drop', function(e) {
+        e.preventDefault();
+        card.classList.remove('drop-hover');
+        if (draggedLogId) {
+          executeMoveLog(draggedLogId, dStr);
+        }
+      });
 
+      entries.forEach(function(item) {
         const row = document.createElement('div');
         row.className = 'log-item';
+        row.setAttribute('data-id', item.id);
         const label = item.name ? ('<strong>' + item.name + '</strong> ') : '';
 
         row.innerHTML = `
-          <span>${label}${item.text || ''} (+${item.cal} קל' | +${item.pro}ג')</span>
+          <span>${label}(+${item.cal} קל' | +${item.pro}ג')</span>
           <div class="log-actions">
-            <button class="btn-log-action btn-log-move" title="העבר יום" onclick="moveItemDayPrompt(${index})">↕</button>
-            <button class="btn-log-action btn-log-edit" title="ערוך בחלון ההזנה" onclick="startEditLogItem(${index})">✎</button>
-            <button class="btn-log-action btn-log-save" title="הוסף מנה זו למאגר" onclick="saveLogItemToPool(${index})">📥</button>
-            <button class="btn-log-action btn-log-del" title="מחק שורה זו" onclick="deleteLogItem(${index})">✕</button>
+            <button class="btn-log-action btn-log-edit" title="ערוך בחלון ההזנה" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
+            <button class="btn-log-action btn-log-save" title="הוסף מנה זו למאגר" onclick="saveLogItemToPoolById('${item.id}')">📥</button>
+            <button class="btn-log-action btn-log-del" title="מחק שורה זו" onclick="deleteLogItemById('${item.id}')">✕</button>
           </div>
         `;
 
-        let pressTimer = null;
-        row.addEventListener('touchstart', function() {
-          pressTimer = setTimeout(function() {
-            moveItemDayPrompt(index);
-          }, 600);
+        row.addEventListener('dragstart', function(e) {
+          draggedLogId = item.id;
+          row.classList.add('is-dragging');
         });
-        row.addEventListener('touchend', function() {
-          if (pressTimer) clearTimeout(pressTimer);
+        row.addEventListener('dragend', function() {
+          row.classList.remove('is-dragging');
+          row.classList.remove('holding-active');
+          row.removeAttribute('draggable');
+          draggedLogId = null;
         });
 
-        card.appendChild(row);
+        let pressTimer = null;
+        let isActivatedForDrag = false;
+
+        const startPress = function() {
+          row.classList.add('holding-active');
+          pressTimer = setTimeout(function() {
+            isActivatedForDrag = true;
+            row.setAttribute('draggable', 'true');
+            row.classList.remove('holding-active');
+            row.classList.add('is-dragging');
+            draggedLogId = item.id;
+            if (navigator.vibrate) navigator.vibrate(50);
+          }, 2000);
+        };
+
+        const cancelPress = function() {
+          if (pressTimer) clearTimeout(pressTimer);
+          if (!isActivatedForDrag) {
+            row.classList.remove('holding-active');
+          }
+        };
+
+        row.addEventListener('mousedown', startPress);
+        row.addEventListener('mouseup', cancelPress);
+        row.addEventListener('mouseleave', cancelPress);
+
+        row.addEventListener('touchstart', startPress, { passive: true });
+        row.addEventListener('touchend', function(e) {
+          cancelPress();
+          if (isActivatedForDrag && draggedLogId) {
+            const touch = e.changedTouches[0];
+            const targetEl = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (targetEl) {
+              const dayCard = targetEl.closest('.history-day-card');
+              if (dayCard) {
+                const targetDay = dayCard.getAttribute('data-day');
+                if (targetDay) executeMoveLog(draggedLogId, targetDay);
+              }
+            }
+            row.classList.remove('is-dragging');
+            row.removeAttribute('draggable');
+            draggedLogId = null;
+            isActivatedForDrag = false;
+          }
+        });
+        row.addEventListener('touchcancel', cancelPress);
+
+        itemsContainer.appendChild(row);
       });
 
       logList.appendChild(card);
     });
+
+    const resetBtn = document.createElement('button');
+    resetBtn.className = 'btn-clear-logs-subtle';
+    resetBtn.textContent = '🗑 איפוס היסטוריה (7 ימים)';
+    resetBtn.onclick = clearLogsOnly;
+    logList.appendChild(resetBtn);
   }
 
-  function moveItemDayPrompt(index) {
-    const item = logs[index];
+  function executeMoveLog(itemId, targetDate) {
+    const item = logs.find(l => l.id === itemId);
     if (!item) return;
 
     const todayStr = new Date().toISOString().slice(0, 10);
     const currentDate = item.date || todayStr;
 
-    const availableDates = Array.from(new Set(logs.map(l => l.date || todayStr)));
-    if (!availableDates.includes(todayStr)) availableDates.push(todayStr);
-    availableDates.sort().reverse();
-
-    let optionsMsg = `העברת המנה "${item.name || 'מנה'}" ליום אחר.\nתאריך נוכחי: ${currentDate}\n\nבחר מספר מהרשימה:\n`;
-    availableDates.forEach((d, i) => {
-      optionsMsg += `${i + 1}. ${formatLogDateTitle(d).replace(' ↓', '')}\n`;
-    });
-    optionsMsg += `${availableDates.length + 1}. הזן תאריך ידנית (YYYY-MM-DD)`;
-
-    const choiceStr = prompt(optionsMsg, '1');
-    if (!choiceStr) return;
-
-    let targetDate = '';
-    const choiceNum = parseInt(choiceStr);
-
-    if (!isNaN(choiceNum) && choiceNum >= 1 && choiceNum <= availableDates.length) {
-      targetDate = availableDates[choiceNum - 1];
-    } else if (choiceNum === availableDates.length + 1) {
-      const custom = prompt('הזן תאריך בפורמט YYYY-MM-DD:', todayStr);
-      if (!custom) return;
-      targetDate = custom.trim();
-    } else {
-      return;
-    }
-
-    if (targetDate === currentDate) return;
+    if (currentDate === targetDate) return;
 
     pushState();
 
@@ -1136,13 +1207,22 @@
 
     item.date = targetDate;
 
-    if (item.id) {
-      const archItem = archiveLogs.find(a => a.id === item.id);
-      if (archItem) archItem.date = targetDate;
-    }
+    const archItem = archiveLogs.find(a => a.id === item.id);
+    if (archItem) archItem.date = targetDate;
 
     renderLogs();
     updateDisplay();
+  }
+
+  function confirmStartEditLogItem(itemId) {
+    const idx = logs.findIndex(l => l.id === itemId);
+    if (idx < 0) return;
+    const item = logs[idx];
+    const itemName = item.name ? ('"' + item.name + '"') : 'המנה';
+    
+    if (confirm(`האם לערוך את ${itemName} בחלון ההזנה הראשי?`)) {
+      startEditLogItem(idx);
+    }
   }
 
   function startEditLogItem(index) {
@@ -1216,8 +1296,8 @@
     }
   }
 
-  function saveLogItemToPool(index) {
-    const item = logs[index];
+  function saveLogItemToPoolById(itemId) {
+    const item = logs.find(l => l.id === itemId);
     if (!item) return;
 
     let defaultName = item.name;
@@ -1297,8 +1377,7 @@
       name: val.name,
       cal: val.cal,
       pro: val.pro,
-      date: today,
-      text: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+      date: today
     };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
@@ -1352,8 +1431,7 @@
       name: val.name,
       cal: val.cal,
       pro: val.pro,
-      date: today,
-      text: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+      date: today
     };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
@@ -1395,8 +1473,7 @@
       name: p.name,
       cal: p.cal,
       pro: p.pro,
-      date: today,
-      text: new Date().toLocaleTimeString('he-IL', {hour: '2-digit', minute:'2-digit'})
+      date: today
     };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
@@ -1440,9 +1517,10 @@
     }
   }
 
-  function deleteLogItem(index) {
+  function deleteLogItemById(itemId) {
+    const index = logs.findIndex(l => l.id === itemId);
+    if (index < 0) return;
     const item = logs[index];
-    if (!item) return;
 
     const itemName = item.name ? ('"' + item.name + '" ') : '';
     if (!confirm('למחוק את ההזנה ' + itemName + '(+' + item.cal + ' קלוריות, +' + item.pro + "ג' חלבון)?")) return;
@@ -1719,7 +1797,7 @@
       items.forEach(function(item) {
         groupHtml += `
           <div class="archive-row">
-            <span>${item.name} (${item.text || ''})</span>
+            <span>${item.name}</span>
             <span>+${item.cal} קל' | +${item.pro}ג'</span>
           </div>
         `;
