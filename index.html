@@ -68,7 +68,8 @@
 
   .nav-history-group { 
     display: flex; 
-    gap: 10px; 
+    flex-direction: row-reverse;
+    gap: 8px; 
     align-items: center; 
     margin-right: auto;
   }
@@ -77,21 +78,26 @@
     color: #e0e0e0;
     border: 1px solid #383838;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 38px;
+    height: 38px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 1.15rem;
-    line-height: 1;
     transition: background 0.15s, transform 0.1s, border-color 0.15s;
     outline: none;
+    padding: 0;
+  }
+  .btn-icon-nav svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
   }
   .btn-icon-nav:active { 
     background: #333; 
     transform: scale(0.92);
     border-color: #00e676;
+    color: #00e676;
   }
 
   .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
@@ -381,8 +387,18 @@
     <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
   </div>
   <div class="nav-history-group">
-    <button class="btn-icon-nav" onclick="undoLastAction()" title="חזור אחורה">⟲</button>
-    <button class="btn-icon-nav" onclick="redoLastAction()" title="הלוך שוב">🠂</button>
+    <!-- כפתור חזור בפינה השמאלית ביותר עם SVG מובנה וברור -->
+    <button class="btn-icon-nav" onclick="undoLastAction()" title="חזור אחורה">
+      <svg viewBox="0 0 24 24">
+        <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>
+      </svg>
+    </button>
+    <!-- כפתור הלוך מימינו עם חץ ישר ימינה ברור -->
+    <button class="btn-icon-nav" onclick="redoLastAction()" title="הלוך שוב">
+      <svg viewBox="0 0 24 24">
+        <path d="M11.5 8c2.65 0 5.05.99 6.9 2.6L22 7v9h-9l3.62-3.62c-1.39-1.16-3.16-1.88-5.12-1.88-3.54 0-6.55 2.31-7.6 5.5l-2.37-.78C2.92 11.03 6.85 8 11.5 8z"/>
+      </svg>
+    </button>
   </div>
 </div>
 
@@ -520,6 +536,7 @@
   </div>
 </div>
 
+<!-- מודל הגדרות -->
 <div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title-bar">
@@ -571,6 +588,7 @@
   </div>
 </div>
 
+<!-- מודל ייבוא תפריט (יוצא חזרה להגדרות) -->
 <div class="modal-overlay" id="menuImportModal" onclick="closeMenuImportModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-title-bar">
@@ -1599,13 +1617,14 @@
   }
 
   function openMenuImportFromSettings() {
-    closeSettingsModal();
+    document.getElementById('settingsModal').style.display = 'none';
     document.getElementById('menuImportModal').style.display = 'flex';
   }
   
   function closeMenuImportModal(e) { 
     if (!e || e.target === document.getElementById('menuImportModal') || e.target.classList.contains('modal-close-btn')) {
       document.getElementById('menuImportModal').style.display = 'none'; 
+      document.getElementById('settingsModal').style.display = 'flex';
     }
   }
 
@@ -1641,7 +1660,8 @@
 
     if (addedCount > 0) {
       document.getElementById('bulkMenuInput').value = '';
-      closeMenuImportModal();
+      document.getElementById('menuImportModal').style.display = 'none';
+      document.getElementById('settingsModal').style.display = 'flex';
       renderPresets();
       updateDatalists();
       saveData();
@@ -1740,6 +1760,9 @@
       alert('הארכיון ריק עדיין');
       return;
     }
+    if (!confirm(`האם להוריד קובץ ארכיון עם כל ${archiveLogs.length} ההזנות שנשמרו מאז ומעולם?`)) {
+      return;
+    }
     const blob = new Blob([JSON.stringify(archiveLogs, null, 2)], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -1798,16 +1821,10 @@
     const today = new Date().toISOString().slice(0, 10);
     if (lastActiveDate && lastActiveDate !== today) {
       if (eatenCal > 0 || eatenPro > 0) {
-        if (confirm('התחיל יום חדש (' + today + ')!\nלהעביר את הספייר מאתמול למצטבר ולאפס את היום?')) {
-          closeDay(true, true);
-        } else {
-          lastActiveDate = today;
-          saveData();
-        }
-      } else {
-        lastActiveDate = today;
-        saveData();
+        alert(`שים לב: התחיל יום חדש (${today}) וטרם איפסת את אתמול!\n\nהערכים נשארו כפי שהם כדי שתוכל לבחור האם ללחוץ על "יום חדש (מעביר ספייר)" או "יום חדש (ללא ספייר)" במסך הראשי.`);
       }
+      lastActiveDate = today;
+      saveData();
     }
   }
 
