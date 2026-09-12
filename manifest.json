@@ -1,6 +1,6 @@
 {
-  "name": "מאזן קלוריות וחלבון",
-  "short_name": "קלוריות",
+  "name": "Macro Tracker",
+  "short_name": "Macro Tracker",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#121212",
