@@ -44,23 +44,34 @@
     padding: 0 14px;
     border-bottom: 1px solid #2d2d2d;
   }
-  .header-title-group { display: flex; align-items: center; gap: 8px; }
+  .header-title-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
   h2 { margin: 0; font-size: 1.15rem; color: #fff; font-weight: 700; }
   
+  .topbar-center-slot {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 6px;
+    overflow: hidden;
+  }
   .neon-blue-toast {
-    font-size: 0.75rem;
+    font-size: 0.72rem;
     font-weight: 700;
     color: #00e5ff;
     text-shadow: 0 0 8px rgba(0, 229, 255, 0.8), 0 0 14px rgba(0, 229, 255, 0.4);
     opacity: 0;
-    transform: translateY(2px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+    transition: none;
     pointer-events: none;
     white-space: nowrap;
   }
   .neon-blue-toast.show {
     opacity: 1;
-    transform: translateY(0);
+    transition: none;
+  }
+  .neon-blue-toast.fade-out {
+    opacity: 0;
+    transition: opacity 0.8s ease-out;
   }
 
   .btn-settings-gear { 
@@ -87,7 +98,7 @@
     flex-direction: row-reverse;
     gap: 8px; 
     align-items: center; 
-    margin-right: auto;
+    flex-shrink: 0;
   }
   .btn-icon-nav {
     background: #252525;
@@ -458,11 +469,18 @@
 <body>
 
 <div class="floating-top-bar">
+  <!-- הכותרת וגלגל ההגדרות צמודים מימין -->
   <div class="header-title-group">
     <h2>מאזן יומי</h2>
-    <span id="neonToast" class="neon-blue-toast">מנה נוספה לתפריט!</span>
     <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
   </div>
+
+  <!-- האזור השחור הריק בין הגלגל לחצים שבו מוצגת ההתראה -->
+  <div class="topbar-center-slot">
+    <span id="neonToast" class="neon-blue-toast">מנה נוספה לתפריט!</span>
+  </div>
+
+  <!-- כפתורי הלוך וחזור משמאל -->
   <div class="nav-history-group">
     <button class="btn-icon-nav" onclick="undoLastAction()" title="חזור אחורה">
       <svg viewBox="0 0 24 24">
@@ -697,7 +715,7 @@
   let editingPresetIndex = -1;
   let editingLogIndex = -1;
   let aiStatusTimer = null;
-  let toastTimer = null;
+  let toastFadeTimer = null;
 
   document.getElementById('targetCalInput').value = targetCal;
   document.getElementById('targetProInput').value = targetPro;
@@ -725,12 +743,17 @@
   function showNeonToast(text) {
     const el = document.getElementById('neonToast');
     if (!el) return;
+
+    if (toastFadeTimer) clearTimeout(toastFadeTimer);
+
     el.textContent = text || 'מנה נוספה לתפריט!';
+    el.classList.remove('fade-out');
     el.classList.add('show');
-    if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(function() {
+
+    toastFadeTimer = setTimeout(function() {
       el.classList.remove('show');
-    }, 2000);
+      el.classList.add('fade-out');
+    }, 1000);
   }
 
   function pushState() {
