@@ -5,11 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>מעקב קלוריות וחלבון</title>
 <link rel="manifest" href="manifest.json?v=2">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="קלוריות">
 <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png">
- 
+
 <style>
   * { 
     box-sizing: border-box; 
@@ -175,6 +176,35 @@
   }
   input:focus, textarea:focus { border-color: #00e676; }
   textarea { text-align: right; resize: vertical; min-height: 80px; font-size: 0.85rem; line-height: 1.4; }
+
+  .portion-calc-row {
+    display: none;
+    background: #18231c;
+    border: 1px dashed #00e676;
+    border-radius: 8px;
+    padding: 8px;
+    margin-bottom: 6px;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+  }
+  .portion-calc-label {
+    font-size: 0.78rem;
+    color: #81c784;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+  .portion-calc-input {
+    width: 80px !important;
+    padding: 6px !important;
+    font-size: 0.9rem !important;
+    text-align: center !important;
+  }
+  .portion-unit-tag {
+    font-size: 0.75rem;
+    color: #aaa;
+    white-space: nowrap;
+  }
 
   .action-buttons-stack { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
   .btn-action-main {
@@ -351,8 +381,8 @@
     border-color: #ef5350;
   }
 
-  .pool-tabs { display: flex; gap: 8px; margin-bottom: 8px; }
-  .pool-tab-btn { flex: 1; background: #282828; color: #888; border: 1px solid #3a3a3a; border-radius: 8px; padding: 8px 4px; font-size: 0.82rem; font-weight: bold; cursor: pointer; outline: none; }
+  .pool-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
+  .pool-tab-btn { flex: 1; background: #282828; color: #888; border: 1px solid #3a3a3a; border-radius: 8px; padding: 8px 2px; font-size: 0.78rem; font-weight: bold; cursor: pointer; outline: none; }
   .pool-tab-btn.active { background: #388e3c; color: #fff; border-color: #4caf50; }
 
   .category-block { background: #242424; border: 1px solid #333; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
@@ -453,6 +483,35 @@
   }
   .modal-btn-danger { background: #2d1414; color: #ef5350; border-color: #5c2424; }
 
+  .toggle-switch-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .toggle-switch-label {
+    font-size: 0.85rem;
+    font-weight: bold;
+    color: #4fc3f7;
+  }
+  .switch-btn {
+    background: #333;
+    border: 1px solid #555;
+    border-radius: 16px;
+    padding: 4px 10px;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 0.78rem;
+    font-weight: bold;
+    outline: none;
+    transition: background 0.2s, color 0.2s;
+  }
+  .switch-btn.active {
+    background: #0288d1;
+    border-color: #03a9f4;
+    color: #fff;
+  }
+
   .archive-viewer-box {
     display: none;
     background: #141414;
@@ -473,18 +532,15 @@
 <body>
 
 <div class="floating-top-bar">
-  <!-- הכותרת וגלגל ההגדרות צמודים מימין -->
   <div class="header-title-group">
     <h2>מאזן יומי</h2>
     <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
   </div>
 
-  <!-- האזור השחור הריק בין הגלגל לחצים שבו מוצגת ההתראה -->
   <div class="topbar-center-slot">
     <span id="neonToast" class="neon-blue-toast">מנה נוספה לתפריט!</span>
   </div>
 
-  <!-- כפתורי הלוך וחזור משמאל -->
   <div class="nav-history-group">
     <button class="btn-icon-nav" onclick="undoLastAction()" title="חזור אחורה">
       <svg viewBox="0 0 24 24">
@@ -558,6 +614,14 @@
       <datalist id="poolDatalist"></datalist>
     </div>
 
+    <div class="portion-calc-row" id="portionCalcRow">
+      <span class="portion-calc-label" id="portionCalcLabel">כמות לפי שקילה/מנה:</span>
+      <div style="display:flex; align-items:center; gap:4px;">
+        <input type="number" id="portionQtyInput" class="portion-calc-input" value="100" step="any" oninput="onPortionQtyChanged()" inputmode="decimal">
+        <span class="portion-unit-tag" id="portionUnitTag">גרם</span>
+      </div>
+    </div>
+
     <div class="input-row">
       <input type="number" id="calInput" placeholder="קלוריות" inputmode="numeric" enterkeyhint="next">
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
@@ -597,11 +661,12 @@
 <div class="card" id="poolCard">
   <div class="pool-tabs">
     <button class="pool-tab-btn" id="tabFavs" onclick="handlePoolTabClick('favs')">⭐ מועדפים</button>
-    <button class="pool-tab-btn" id="tabAll" onclick="handlePoolTabClick('all')">📦 מאגר (0)</button>
+    <button class="pool-tab-btn" id="tabAll" onclick="handlePoolTabClick('all')">📦 המאגר שלי (0)</button>
+    <button class="pool-tab-btn" id="tabBase" onclick="handlePoolTabClick('base')">⚖️ מאגר בסיס</button>
   </div>
 
   <div id="allSearchRow" style="display:none; margin-bottom:8px;">
-    <input type="text" id="allSearchInput" placeholder="חפש מנה במאגר..." oninput="renderPresets()">
+    <input type="text" id="allSearchInput" placeholder="חפש מנה..." oninput="renderPresets()">
   </div>
 
   <div id="categoryContainer"></div>
@@ -640,9 +705,13 @@
     </div>
 
     <div style="background:#262626; padding:10px; border-radius:10px; border:1px solid #383838;">
-      <div style="font-size:0.8rem; color:#4fc3f7; margin-bottom:6px; font-weight:bold;">מפתח Gemini API:</div>
+      <div class="toggle-switch-row">
+        <span class="toggle-switch-label">עוזר AI (צ'אט)</span>
+        <button id="btnAiToggle" class="switch-btn active" onclick="toggleAiEnabled()">ON</button>
+      </div>
+      <div style="font-size:0.75rem; color:#aaa; margin-bottom:6px;">מפתח Gemini API:</div>
       <div class="input-row" style="margin-bottom:0;">
-        <input type="text" id="geminiApiKeyInput" placeholder="הדבק כאן מפתח AQ... או AIza..." style="font-size:0.8rem; direction:ltr;">
+        <input type="text" id="geminiApiKeyInput" placeholder="הדבק כאן מפתח API..." style="font-size:0.8rem; direction:ltr;">
         <button style="background:#0288d1; border:none; color:#fff; border-radius:8px; padding:0 12px; font-weight:bold; cursor:pointer;" onclick="saveApiKey()">שמור</button>
       </div>
     </div>
@@ -678,7 +747,7 @@
 
     <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
       <button class="modal-btn-full modal-btn-danger" onclick="resetDayOnly()">איפוס יום (מאפס רק את מה שנאכל היום)</button>
-      <button class="modal-btn-full modal-btn-danger" onclick="clearAllPresets()">נקה מאגר מנות לחלוטין</button>
+      <button class="modal-btn-full modal-btn-danger" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
     </div>
   </div>
 </div>
@@ -699,6 +768,54 @@
 </div>
 
 <script>
+  const BASE_FOODS = [
+    { name: "מנגו", cal: 60, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "בננה", cal: 89, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "תפוח עץ", cal: 52, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "תות שדה", cal: 32, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "אבטיח", cal: 30, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "מלפפון", cal: 15, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "עגבנייה", cal: 18, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "גזר", cal: 41, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "בטטה אפויה", cal: 90, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "תפוח אדמה מבושל", cal: 87, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "ברוקולי מבושל", cal: 35, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+
+    { name: "טופו במרקם קשה", cal: 144, pro: 15.5, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "טופו משי", cal: 55, pro: 5.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "טמפה", cal: 192, pro: 20.3, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "סייטן", cal: 140, pro: 24.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "שבבי סויה יבשים", cal: 330, pro: 50.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "אדממה (פולי סויה)", cal: 122, pro: 11.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "עדשים מבושלות", cal: 116, pro: 9.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "גרגרי חומוס מבושלים", cal: 164, pro: 8.9, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "שעועית שחורה מבושלת", cal: 132, pro: 8.9, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "שעועית לבנה מבושלת", cal: 139, pro: 9.7, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "אבקת חלבון", cal: 120, pro: 25.0, cat: "חלבונים", unit: "סקופ", baseQty: 1 },
+    { name: "ביצה גדולה (L)", cal: 72, pro: 6.3, cat: "חלבונים", unit: "יח'", baseQty: 1 },
+    { name: "חלבון ביצה (L)", cal: 17, pro: 3.6, cat: "חלבונים", unit: "יח'", baseQty: 1 },
+    { name: "חזה עוף מבושל/צלוי", cal: 165, pro: 31.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "פילה סלמון אפוי", cal: 206, pro: 22.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+    { name: "טונה במים (מסוננת)", cal: 116, pro: 26.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
+
+    { name: "אורז בסמטי מבושל", cal: 130, pro: 2.7, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "אורז מלא מבושל", cal: 112, pro: 2.6, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "שיבולת שועל (יבשה)", cal: 389, pro: 16.9, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "פסטה מבושלת", cal: 158, pro: 5.8, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "קינואה מבושלת", cal: 120, pro: 4.4, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "כוסמת מבושלת", cal: 92, pro: 3.4, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "פיתה רגילה", cal: 230, pro: 8.0, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
+    { name: "פרוסת לחם מלא", cal: 75, pro: 3.5, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
+
+    { name: "טחינה גולמית", cal: 595, pro: 17.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
+    { name: "שמן זית", cal: 884, pro: 0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
+    { name: "שמן זית (כף)", cal: 120, pro: 0, cat: "שומנים ואגוזים", unit: "יח'", baseQty: 1 },
+    { name: "אגוזי מלך", cal: 654, pro: 15.2, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
+    { name: "שקדים טבעיים", cal: 579, pro: 21.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
+    { name: "חמאת בוטנים טבעית", cal: 588, pro: 25.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
+    { name: "אבוקדו", cal: 160, pro: 0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 }
+  ];
+
   let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
   let targetPro = parseInt(localStorage.getItem('cal_targetPro')) || 140;
   let eatenCal = parseInt(localStorage.getItem('cal_eatenCal')) || 0;
@@ -710,8 +827,11 @@
   let categoryOrder = JSON.parse(localStorage.getItem('cal_catOrder') || '["כללי"]');
   let lastActiveDate = localStorage.getItem('cal_lastDate') || new Date().toISOString().slice(0, 10);
   let geminiApiKey = localStorage.getItem('cal_geminiApiKey') || '';
+  let isAiEnabled = localStorage.getItem('cal_isAiEnabled') !== 'false';
   
   let currentPoolTab = localStorage.getItem('cal_poolTabState') || 'none';
+
+  let activePortionContext = null;
 
   let historyStack = JSON.parse(localStorage.getItem('cal_historyStack') || '[]');
   let redoStack = [];
@@ -724,6 +844,8 @@
   document.getElementById('targetCalInput').value = targetCal;
   document.getElementById('targetProInput').value = targetPro;
   document.getElementById('geminiApiKeyInput').value = geminiApiKey;
+
+  applyAiStateUI();
 
   const entryNameInput = document.getElementById('entryNameInput');
   const calInput = document.getElementById('calInput');
@@ -743,6 +865,26 @@
       }
     } 
   });
+
+  function toggleAiEnabled() {
+    isAiEnabled = !isAiEnabled;
+    localStorage.setItem('cal_isAiEnabled', isAiEnabled ? 'true' : 'false');
+    applyAiStateUI();
+  }
+
+  function applyAiStateUI() {
+    const btn = document.getElementById('btnAiToggle');
+    const card = document.getElementById('aiAssistantCard');
+    if (isAiEnabled) {
+      btn.textContent = 'ON';
+      btn.className = 'switch-btn active';
+      card.style.display = 'block';
+    } else {
+      btn.textContent = 'OFF';
+      btn.className = 'switch-btn';
+      card.style.display = 'none';
+    }
+  }
 
   function showNeonToast(text) {
     const el = document.getElementById('neonToast');
@@ -789,6 +931,7 @@
     localStorage.setItem('cal_catOrder', JSON.stringify(categoryOrder));
     localStorage.setItem('cal_lastDate', lastActiveDate);
     localStorage.setItem('cal_geminiApiKey', geminiApiKey);
+    localStorage.setItem('cal_isAiEnabled', isAiEnabled ? 'true' : 'false');
     localStorage.setItem('cal_historyStack', JSON.stringify(historyStack));
     localStorage.setItem('cal_poolTabState', currentPoolTab);
   }
@@ -834,7 +977,7 @@
 
     const promptText = 'אתה מחשבון תזונה. נתח את המנה: "' + query + '". השב ב-JSON בלבד בפורמט הבא ללא טקסט נוסף:\n{"name": "שם המנה בעברית", "cal": מספר קלוריות, "pro": מספר גרם חלבון}';
 
-    const modelsToTry = ['gemini-3.6-flash'];
+    const modelsToTry = ['gemini-2.5-flash', 'gemini-1.5-flash'];
     let success = false;
     let lastError = '';
 
@@ -964,7 +1107,9 @@
   function applyPoolTabUI() {
     document.getElementById('tabFavs').className = 'pool-tab-btn ' + (currentPoolTab === 'favs' ? 'active' : '');
     document.getElementById('tabAll').className = 'pool-tab-btn ' + (currentPoolTab === 'all' ? 'active' : '');
-    document.getElementById('allSearchRow').style.display = (currentPoolTab === 'all' ? 'block' : 'none');
+    document.getElementById('tabBase').className = 'pool-tab-btn ' + (currentPoolTab === 'base' ? 'active' : '');
+    
+    document.getElementById('allSearchRow').style.display = (currentPoolTab === 'all' || currentPoolTab === 'base') ? 'block' : 'none';
   }
 
   function renderPresets() {
@@ -972,7 +1117,7 @@
     container.innerHTML = '';
     updateDatalists();
 
-    document.getElementById('tabAll').textContent = '📦 מאגר (' + presets.length + ')';
+    document.getElementById('tabAll').textContent = '📦 המאגר שלי (' + presets.length + ')';
 
     if (currentPoolTab === 'none') {
       container.style.display = 'none';
@@ -982,6 +1127,11 @@
 
     const searchInput = document.getElementById('allSearchInput');
     const searchTerm = (searchInput ? searchInput.value : '').trim().toLowerCase();
+
+    if (currentPoolTab === 'base') {
+      renderBaseFoodPresets(container, searchTerm);
+      return;
+    }
 
     const filteredPresets = presets.filter(function(p) {
       if (currentPoolTab === 'favs') return (p.isFav !== false);
@@ -1030,34 +1180,143 @@
     });
   }
 
+  function renderBaseFoodPresets(container, searchTerm) {
+    const filtered = BASE_FOODS.filter(function(b) {
+      if (!searchTerm) return true;
+      return b.name.toLowerCase().includes(searchTerm) || (b.cat && b.cat.toLowerCase().includes(searchTerm));
+    });
+
+    if (filtered.length === 0) {
+      container.innerHTML = '<div style="text-align:center; font-size:0.8rem; color:#666; padding:12px;">לא נמצאו פריטים תואמים במאגר הבסיס</div>';
+      return;
+    }
+
+    const cats = Array.from(new Set(filtered.map(b => b.cat)));
+
+    cats.forEach(function(catName) {
+      const catItems = filtered.filter(b => b.cat === catName);
+      if (catItems.length === 0) return;
+
+      const block = document.createElement('div');
+      block.className = 'category-block';
+
+      let headerHtml = `<div class="category-header"><span class="category-title">${catName}</span></div>`;
+      let listHtml = '<div class="preset-list">';
+
+      catItems.forEach(function(item) {
+        const unitSuffix = item.unit === 'גרם' ? '100ג' : `1 ${item.unit}`;
+        listHtml += `
+          <div class="preset-btn-wrapper">
+            <button class="preset-btn" onclick="loadBaseFoodForPortion('${item.name}')">
+              ⚖️ ${item.name} (${item.cal} קל' / ${item.pro}ג' ל-${unitSuffix})
+            </button>
+          </div>
+        `;
+      });
+      listHtml += '</div>';
+
+      block.innerHTML = headerHtml + listHtml;
+      container.appendChild(block);
+    });
+  }
+
   function handleNameInput(val) {
     const poolList = document.getElementById('poolDatalist');
     poolList.innerHTML = '';
     val = val.trim().toLowerCase();
     if (!val) return;
 
-    const matched = presets.filter(function(p) { return p.name.toLowerCase().includes(val); });
-    matched.forEach(function(p) {
-      const opt = document.createElement('option');
-      opt.value = p.name;
-      poolList.appendChild(opt);
+    presets.forEach(p => {
+      if (p.name.toLowerCase().includes(val)) {
+        const opt = document.createElement('option');
+        opt.value = p.name;
+        poolList.appendChild(opt);
+      }
+    });
+
+    BASE_FOODS.forEach(b => {
+      if (b.name.toLowerCase().includes(val)) {
+        const opt = document.createElement('option');
+        opt.value = b.name;
+        poolList.appendChild(opt);
+      }
     });
   }
 
   function onNameSelected(val) {
-    const found = presets.find(function(p) { return p.name === val.trim(); });
-    if (found) {
-      calInput.value = found.cal || '';
-      proInput.value = found.pro || '';
-      entryCatInput.value = (found.cat === 'כללי' ? '' : found.cat);
+    const trimmed = val.trim();
+    if (!trimmed) return;
+
+    const baseFound = BASE_FOODS.find(b => b.name === trimmed);
+    if (baseFound) {
+      loadBaseFoodForPortion(baseFound.name);
+      return;
     }
+
+    const presetFound = presets.find(p => p.name === trimmed);
+    if (presetFound) {
+      closePortionCalculator();
+      calInput.value = presetFound.cal || '';
+      proInput.value = presetFound.pro || '';
+      entryCatInput.value = (presetFound.cat === 'כללי' ? '' : presetFound.cat);
+    }
+  }
+
+  function loadBaseFoodForPortion(foodName) {
+    const item = BASE_FOODS.find(b => b.name === foodName);
+    if (!item) return;
+
+    activePortionContext = {
+      name: item.name,
+      calPerUnit: item.cal / item.baseQty,
+      proPerUnit: item.pro / item.baseQty,
+      unit: item.unit,
+      baseQty: item.baseQty,
+      cat: item.cat
+    };
+
+    entryNameInput.value = item.name;
+    entryCatInput.value = item.cat || '';
+
+    const portionRow = document.getElementById('portionCalcRow');
+    const qtyInput = document.getElementById('portionQtyInput');
+    const unitTag = document.getElementById('portionUnitTag');
+
+    unitTag.textContent = item.unit;
+    qtyInput.value = item.baseQty;
+
+    portionRow.style.display = 'flex';
+    onPortionQtyChanged();
+
+    document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    qtyInput.focus();
+    qtyInput.select();
+  }
+
+  function onPortionQtyChanged() {
+    if (!activePortionContext) return;
+    const qty = parseFloat(document.getElementById('portionQtyInput').value) || 0;
+
+    const finalCal = Math.round(activePortionContext.calPerUnit * qty);
+    const finalPro = Math.round((activePortionContext.proPerUnit * qty) * 10) / 10;
+
+    calInput.value = finalCal;
+    proInput.value = finalPro;
+  }
+
+  function closePortionCalculator() {
+    activePortionContext = null;
+    document.getElementById('portionCalcRow').style.display = 'none';
   }
 
   function updateDatalists() {
     const catList = document.getElementById('categoryDatalist');
     catList.innerHTML = '';
-    const uniqueCats = Array.from(new Set(presets.map(function(p) { return p.cat || 'כללי'; })));
-    uniqueCats.forEach(cat => {
+    const allCats = new Set([
+      ...presets.map(p => p.cat || 'כללי'),
+      ...BASE_FOODS.map(b => b.cat)
+    ]);
+    allCats.forEach(cat => {
       const opt = document.createElement('option');
       opt.value = cat;
       catList.appendChild(opt);
@@ -1148,7 +1407,7 @@
       const isCurrentDay = (dStr === todayStr);
 
       const dayTotalCal = entries.reduce((acc, cur) => acc + (cur.cal || 0), 0);
-      const dayTotalPro = entries.reduce((acc, cur) => acc + (cur.pro || 0), 0);
+      const dayTotalPro = Math.round(entries.reduce((acc, cur) => acc + (cur.pro || 0), 0) * 10) / 10;
 
       const card = document.createElement('div');
       card.className = 'history-day-card';
@@ -1360,7 +1619,7 @@
     });
 
     eatenCal = Math.max(0, eatenCal - oldTodayCal + newTodayCal);
-    eatenPro = Math.max(0, eatenPro - oldTodayPro + newTodayPro);
+    eatenPro = Math.max(0, Math.round((eatenPro - oldTodayPro + newTodayPro) * 10) / 10);
 
     renderLogs();
     updateDisplay();
@@ -1382,6 +1641,7 @@
     if (!item) return;
 
     if (editingPresetIndex >= 0) cancelEditPreset();
+    closePortionCalculator();
 
     editingLogIndex = index;
     entryNameInput.value = item.name || '';
@@ -1408,7 +1668,7 @@
     const today = new Date().toISOString().slice(0, 10);
     if (!item.date || item.date === today) {
       eatenCal = Math.max(0, eatenCal - item.cal + val.cal);
-      eatenPro = Math.max(0, eatenPro - item.pro + val.pro);
+      eatenPro = Math.max(0, Math.round((eatenPro - item.pro + val.pro) * 10) / 10);
     }
 
     if (item.id) {
@@ -1499,12 +1759,17 @@
   }
 
   function getEntryValues() {
-    const name = entryNameInput.value.trim();
+    let name = entryNameInput.value.trim();
+    if (activePortionContext) {
+      const qty = parseFloat(document.getElementById('portionQtyInput').value) || activePortionContext.baseQty;
+      name = `${activePortionContext.name} (${qty} ${activePortionContext.unit})`;
+    }
+
     const cal = parseInt(calInput.value) || 0;
-    const pro = parseInt(proInput.value) || 0;
+    const pro = parseFloat(proInput.value) || 0;
     let cat = entryCatInput.value.trim();
     if (!cat) cat = 'כללי';
-    return { name: name, cal: cal, pro: pro, cat: cat };
+    return { name: name, cal: cal, pro: Math.round(pro * 10) / 10, cat: cat };
   }
 
   function clearEntryInputs() {
@@ -1512,6 +1777,7 @@
     calInput.value = '';
     proInput.value = '';
     entryCatInput.value = '';
+    closePortionCalculator();
     document.getElementById('poolDatalist').innerHTML = '';
   }
 
@@ -1521,7 +1787,7 @@
 
     pushState();
     eatenCal += val.cal;
-    eatenPro += val.pro;
+    eatenPro = Math.round((eatenPro + val.pro) * 10) / 10;
 
     const today = new Date().toISOString().slice(0, 10);
     const logObj = {
@@ -1576,7 +1842,7 @@
 
     pushState();
     eatenCal += val.cal;
-    eatenPro += val.pro;
+    eatenPro = Math.round((eatenPro + val.pro) * 10) / 10;
     const today = new Date().toISOString().slice(0, 10);
     const logObj = {
       id: Date.now() + Math.random().toString(),
@@ -1617,7 +1883,7 @@
 
     pushState();
     eatenCal += p.cal;
-    eatenPro += p.pro;
+    eatenPro = Math.round((eatenPro + p.pro) * 10) / 10;
 
     const today = new Date().toISOString().slice(0, 10);
     const logObj = {
@@ -1641,6 +1907,7 @@
     if (!p) return;
 
     if (editingLogIndex >= 0) cancelLogEdit();
+    closePortionCalculator();
 
     editingPresetIndex = idx;
     entryNameInput.value = p.name;
@@ -1683,7 +1950,7 @@
     const today = new Date().toISOString().slice(0, 10);
     if (!item.date || item.date === today) {
       eatenCal = Math.max(0, eatenCal - item.cal);
-      eatenPro = Math.max(0, eatenPro - item.pro);
+      eatenPro = Math.max(0, Math.round((eatenPro - item.pro) * 10) / 10);
     }
     logs.splice(index, 1);
 
@@ -1745,6 +2012,7 @@
 
     if (editingPresetIndex >= 0) cancelEditPreset();
     if (editingLogIndex >= 0) cancelLogEdit();
+    closePortionCalculator();
 
     document.getElementById('targetCalInput').value = targetCal;
     document.getElementById('targetProInput').value = targetPro;
@@ -1805,7 +2073,7 @@
   }
 
   function clearAllPresets() {
-    if (confirm('האם אתה בטוח שברצונך למחוק את כל המנות והקטגוריות מהמאגר?\n(ניתן לבטל באמצעות "חזור")')) {
+    if (confirm('האם אתה בטוח שברצונך למחוק את כל המנות והקטגוריות מהמאגר האישי שלך?\n(ניתן לבטל באמצעות "חזור")')) {
       pushState();
       cancelEditPreset();
       presets = [];
@@ -1878,12 +2146,12 @@
       if (parts.length >= 3) {
         const name = parts[0].trim();
         const cal = parseInt(parts[1].trim()) || 0;
-        const pro = parseInt(parts[2].trim()) || 0;
+        const pro = parseFloat(parts[2].trim()) || 0;
         let cat = parts[3] ? parts[3].trim() : 'כללי';
         if (!cat) cat = 'כללי';
 
         if (name && (cal > 0 || pro > 0)) {
-          presets.push({ name: name, cat: cat, cal: cal, pro: pro, isFav: true });
+          presets.push({ name: name, cat: cat, cal: cal, pro: Math.round(pro * 10) / 10, isFav: true });
           if (!categoryOrder.includes(cat)) categoryOrder.push(cat);
           addedCount++;
         }
@@ -1935,7 +2203,7 @@
     sortedDates.forEach(function(dStr) {
       const items = groups[dStr];
       const totalCal = items.reduce((acc, cur) => acc + (cur.cal || 0), 0);
-      const totalPro = items.reduce((acc, cur) => acc + (cur.pro || 0), 0);
+      const totalPro = Math.round(items.reduce((acc, cur) => acc + (cur.pro || 0), 0) * 10) / 10;
 
       const groupEl = document.createElement('div');
       groupEl.className = 'archive-day-group';
@@ -1975,7 +2243,8 @@
       presets: presets, 
       categoryOrder: categoryOrder, 
       lastActiveDate: lastActiveDate, 
-      geminiApiKey: geminiApiKey 
+      geminiApiKey: geminiApiKey,
+      isAiEnabled: isAiEnabled 
     };
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
@@ -2025,14 +2294,17 @@
           categoryOrder = data.categoryOrder || ['כללי'];
           lastActiveDate = data.lastActiveDate || new Date().toISOString().slice(0, 10);
           if (data.geminiApiKey) geminiApiKey = data.geminiApiKey;
+          if (typeof data.isAiEnabled !== 'undefined') isAiEnabled = data.isAiEnabled;
 
           if (editingPresetIndex >= 0) cancelEditPreset();
           if (editingLogIndex >= 0) cancelLogEdit();
+          closePortionCalculator();
 
           document.getElementById('targetCalInput').value = targetCal;
           document.getElementById('targetProInput').value = targetPro;
           document.getElementById('geminiApiKeyInput').value = geminiApiKey;
 
+          applyAiStateUI();
           closeSettingsModal();
           renderLogs();
           applyPoolTabUI();
