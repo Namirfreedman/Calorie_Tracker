@@ -224,6 +224,26 @@
   .btn-add-both { background: #7b1fa2; box-shadow: 0 0 8px rgba(186, 104, 200, 0.4); }
   .btn-action-main:active { opacity: 0.85; transform: scale(0.98); }
 
+  .btn-clear-selection {
+    display: none;
+    background: #282828;
+    color: #bbb;
+    border: 1px solid #444;
+    border-radius: 8px;
+    padding: 7px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    outline: none;
+    transition: background 0.15s, color 0.15s;
+  }
+  .btn-clear-selection:active {
+    background: #333;
+    color: #fff;
+  }
+
   .day-actions-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -636,6 +656,7 @@
       <button class="btn-action-main btn-add-menu" id="btnAddMenu" onclick="actionAddMenu()">+ הוסף לתפריט</button>
       <button class="btn-action-main btn-add-pool" id="btnAddPool" onclick="actionAddPool()">+ הוסף למאגר</button>
       <button class="btn-action-main btn-add-both" id="btnAddBoth" onclick="actionAddBoth()">+ הוסף למאגר + תפריט</button>
+      <button class="btn-clear-selection" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
       <button id="cancelEditPoolBtn" style="display:none; background:#455a64; color:#fff; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
     </div>
 
@@ -852,6 +873,17 @@
   const proInput = document.getElementById('proInput');
   const entryCatInput = document.getElementById('entryCatInput');
 
+  function updateClearBtnVisibility() {
+    const btn = document.getElementById('btnClearSelection');
+    if (!btn) return;
+    const hasData = entryNameInput.value.trim() !== '' || calInput.value !== '' || proInput.value !== '' || activePortionContext !== null;
+    btn.style.display = hasData ? 'block' : 'none';
+  }
+
+  [entryNameInput, calInput, proInput, entryCatInput].forEach(el => {
+    el.addEventListener('input', updateClearBtnVisibility);
+  });
+
   entryNameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); calInput.focus(); } });
   calInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); proInput.focus(); } });
   proInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); entryCatInput.focus(); } });
@@ -913,7 +945,15 @@
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate: lastActiveDate
+      lastActiveDate: lastActiveDate,
+      inputState: {
+        name: entryNameInput.value,
+        cal: calInput.value,
+        pro: proInput.value,
+        cat: entryCatInput.value,
+        activePortion: activePortionContext ? JSON.parse(JSON.stringify(activePortionContext)) : null,
+        portionQty: document.getElementById('portionQtyInput').value
+      }
     });
     if (historyStack.length > 30) historyStack.shift();
     redoStack = [];
@@ -1247,6 +1287,8 @@
     const trimmed = val.trim();
     if (!trimmed) return;
 
+    pushState();
+
     const baseFound = BASE_FOODS.find(b => b.name === trimmed);
     if (baseFound) {
       loadBaseFoodForPortion(baseFound.name);
@@ -1259,12 +1301,15 @@
       calInput.value = presetFound.cal || '';
       proInput.value = presetFound.pro || '';
       entryCatInput.value = (presetFound.cat === 'כללי' ? '' : presetFound.cat);
+      updateClearBtnVisibility();
     }
   }
 
   function loadBaseFoodForPortion(foodName) {
     const item = BASE_FOODS.find(b => b.name === foodName);
     if (!item) return;
+
+    pushState();
 
     activePortionContext = {
       name: item.name,
@@ -1287,6 +1332,7 @@
 
     portionRow.style.display = 'flex';
     onPortionQtyChanged();
+    updateClearBtnVisibility();
 
     document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
     qtyInput.focus();
@@ -1302,6 +1348,7 @@
 
     calInput.value = finalCal;
     proInput.value = finalPro;
+    updateClearBtnVisibility();
   }
 
   function closePortionCalculator() {
@@ -1655,6 +1702,7 @@
 
     document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
     entryNameInput.focus();
+    updateClearBtnVisibility();
   }
 
   function saveLogEdit() {
@@ -1779,6 +1827,12 @@
     entryCatInput.value = '';
     closePortionCalculator();
     document.getElementById('poolDatalist').innerHTML = '';
+    updateClearBtnVisibility();
+  }
+
+  function clearEntryInputsManually() {
+    pushState();
+    clearEntryInputs();
   }
 
   function actionAddMenu() {
@@ -1918,6 +1972,7 @@
     document.getElementById('btnAddPool').textContent = 'עדכן מנה במאגר';
     document.getElementById('cancelEditPoolBtn').style.display = 'block';
     entryNameInput.focus();
+    updateClearBtnVisibility();
   }
 
   function cancelEditPreset() {
@@ -1971,7 +2026,15 @@
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate: lastActiveDate
+      lastActiveDate: lastActiveDate,
+      inputState: {
+        name: entryNameInput.value,
+        cal: calInput.value,
+        pro: proInput.value,
+        cat: entryCatInput.value,
+        activePortion: activePortionContext ? JSON.parse(JSON.stringify(activePortionContext)) : null,
+        portionQty: document.getElementById('portionQtyInput').value
+      }
     });
 
     const prev = historyStack.pop();
@@ -1991,7 +2054,15 @@
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate: lastActiveDate
+      lastActiveDate: lastActiveDate,
+      inputState: {
+        name: entryNameInput.value,
+        cal: calInput.value,
+        pro: proInput.value,
+        cat: entryCatInput.value,
+        activePortion: activePortionContext ? JSON.parse(JSON.stringify(activePortionContext)) : null,
+        portionQty: document.getElementById('portionQtyInput').value
+      }
     });
 
     const next = redoStack.pop();
@@ -2012,7 +2083,25 @@
 
     if (editingPresetIndex >= 0) cancelEditPreset();
     if (editingLogIndex >= 0) cancelLogEdit();
-    closePortionCalculator();
+
+    if (st.inputState) {
+      entryNameInput.value = st.inputState.name || '';
+      calInput.value = st.inputState.cal || '';
+      proInput.value = st.inputState.pro || '';
+      entryCatInput.value = st.inputState.cat || '';
+      activePortionContext = st.inputState.activePortion;
+      if (activePortionContext) {
+        document.getElementById('portionCalcRow').style.display = 'flex';
+        document.getElementById('portionUnitTag').textContent = activePortionContext.unit;
+        document.getElementById('portionQtyInput').value = st.inputState.portionQty || activePortionContext.baseQty;
+      } else {
+        closePortionCalculator();
+      }
+    } else {
+      clearEntryInputs();
+    }
+
+    updateClearBtnVisibility();
 
     document.getElementById('targetCalInput').value = targetCal;
     document.getElementById('targetProInput').value = targetPro;
@@ -2298,7 +2387,7 @@
 
           if (editingPresetIndex >= 0) cancelEditPreset();
           if (editingLogIndex >= 0) cancelLogEdit();
-          closePortionCalculator();
+          clearEntryInputs();
 
           document.getElementById('targetCalInput').value = targetCal;
           document.getElementById('targetProInput').value = targetPro;
@@ -2357,6 +2446,5 @@
   updateDisplay();
 </script>
 
- 
 </body>
 </html>
