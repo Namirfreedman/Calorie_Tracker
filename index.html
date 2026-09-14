@@ -17,27 +17,29 @@
 
 <style>
   :root {
-    --bg-page: #f2eee6;
+    --bg-page: #f8f9fa;
     --card-bg: #ffffff;
-    --card-border: #2b2825;
-    --card-shadow: 0 4px 0 #2b2825;
+    --card-border: #e9ecef;
+    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     
-    --text-main: #1c1917;
-    --text-muted: #615c56;
+    --text-main: #1a1d20;
+    --text-muted: #6c757d;
+    --text-subtle: #adb5bd;
     
-    --cal-color: #047857;
-    --cal-surface: #e9f7f0;
+    --accent-primary: #3b5bdb;
+    --primary-surface: #edf2ff;
     
-    --pro-color: #0369a1;
-    --pro-surface: #e8f4fc;
+    --accent-secondary: #1c7ed6;
+    --secondary-surface: #e7f5ff;
     
-    --bank-color: #6d28d9;
-    --bank-surface: #f1edfa;
+    --bank-color: #7048e8;
+    --bank-surface: #f3f0ff;
     
-    --danger: #be123c;
-    --danger-surface: #fde8ec;
+    --danger: #e03131;
+    --danger-surface: #fff5f5;
 
-    --input-bg: #f9f7f2;
+    --input-bg: #f8f9fa;
+    --input-border: #dee2e6;
   }
 
   * { 
@@ -61,8 +63,8 @@
 
   .card { 
     background: var(--card-bg); 
-    border: 2px solid var(--card-border);
-    border-radius: 22px; 
+    border: 1px solid var(--card-border);
+    border-radius: 20px; 
     padding: 16px; 
     width: 100%; 
     max-width: 410px; 
@@ -78,19 +80,19 @@
     width: 100%;
     max-width: 410px;
     height: 56px;
-    background: rgba(242, 238, 230, 0.96);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 900;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 16px;
-    border-bottom: 2px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
   }
 
   .header-title-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  h2 { margin: 0; font-size: 1.22rem; color: var(--text-main); font-weight: 900; }
+  h2 { margin: 0; font-size: 1.15rem; color: var(--text-main); font-weight: 800; }
 
   .topbar-center-slot {
     flex: 1;
@@ -101,16 +103,15 @@
   }
   .toast-pill {
     font-size: 0.75rem;
-    font-weight: 800;
+    font-weight: 700;
     color: #ffffff;
-    background: var(--cal-color);
-    border: 1.5px solid var(--card-border);
-    box-shadow: 0 2px 0 var(--card-border);
-    padding: 4px 10px;
+    background: var(--accent-primary);
+    padding: 4px 12px;
     border-radius: 20px;
     opacity: 0;
     pointer-events: none;
     white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(59, 91, 219, 0.25);
   }
   .toast-pill.show { opacity: 1; }
   .toast-pill.fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
@@ -119,15 +120,16 @@
     background: transparent; 
     border: none; 
     outline: none;
-    font-size: 1.35rem; 
+    font-size: 1.3rem; 
     cursor: pointer; 
-    color: var(--text-main); 
+    color: var(--text-muted); 
     padding: 4px; 
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: color 0.15s;
   }
-  .btn-icon-top:active { transform: scale(0.9); }
+  .btn-icon-top:active { color: var(--accent-primary); transform: scale(0.92); }
 
   .nav-history-group { 
     display: flex; 
@@ -136,10 +138,9 @@
     align-items: center; 
   }
   .btn-nav-circle {
-    background: #ffffff;
-    color: var(--text-main);
-    border: 2px solid var(--card-border);
-    box-shadow: 0 2px 0 var(--card-border);
+    background: var(--input-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--input-border);
     border-radius: 50%;
     width: 36px;
     height: 36px;
@@ -149,16 +150,17 @@
     cursor: pointer;
     outline: none;
     padding: 0;
+    transition: all 0.15s;
   }
-  .btn-nav-circle svg { width: 18px; height: 18px; fill: currentColor; }
-  .btn-nav-circle:active { transform: translateY(2px); box-shadow: none; }
+  .btn-nav-circle svg { width: 17px; height: 17px; fill: currentColor; }
+  .btn-nav-circle:active { color: var(--accent-primary); border-color: var(--accent-primary); transform: scale(0.94); }
 
-  /* תצוגת סטטיסטיקות עליונה נקייה עם משטחי צבע רכים */
+  /* לוח סטטיסטיקות עליון נקי */
   .stats-board {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
+    gap: 10px;
+    margin-bottom: 14px;
   }
   .stats-primary-row {
     display: grid;
@@ -166,40 +168,39 @@
     gap: 10px;
   }
   .stat-card-target {
-    border: 2px solid var(--card-border);
+    border: 1px solid var(--card-border);
     border-radius: 16px;
-    padding: 10px 12px;
+    padding: 12px 14px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 90px;
-    box-shadow: 0 3px 0 var(--card-border);
+    min-height: 94px;
   }
-  .stat-card-target.cal { background: var(--cal-surface); }
-  .stat-card-target.pro { background: var(--pro-surface); }
+  .stat-card-target.cal { background: var(--primary-surface); }
+  .stat-card-target.pro { background: var(--secondary-surface); }
 
   .stat-card-target .stat-head {
-    font-size: 0.76rem;
-    font-weight: 800;
+    font-size: 0.74rem;
+    font-weight: 700;
     color: var(--text-muted);
     display: flex;
     justify-content: space-between;
   }
   .stat-card-target .stat-number {
-    font-size: 1.6rem;
+    font-size: 1.65rem;
     font-weight: 900;
     line-height: 1.1;
-    margin: 2px 0;
+    margin: 4px 0;
   }
-  .stat-card-target.cal .stat-number { color: var(--cal-color); }
-  .stat-card-target.pro .stat-number { color: var(--pro-color); }
+  .stat-card-target.cal .stat-number { color: var(--accent-primary); }
+  .stat-card-target.pro .stat-number { color: var(--accent-secondary); }
   .stat-card-target.negative .stat-number { color: var(--danger) !important; }
 
   .bar-container { 
     width: 100%; 
-    background: rgba(0, 0, 0, 0.08); 
-    height: 7px; 
-    border-radius: 4px; 
+    background: rgba(0, 0, 0, 0.06); 
+    height: 6px; 
+    border-radius: 3px; 
     overflow: hidden; 
     margin-top: 4px; 
   }
@@ -216,42 +217,40 @@
     gap: 10px;
   }
   .stat-chip-box {
-    border: 2px solid var(--card-border);
-    box-shadow: 0 3px 0 var(--card-border);
+    border: 1px solid var(--card-border);
     border-radius: 14px;
-    padding: 8px 10px;
+    padding: 10px 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     min-height: 74px;
-    text-align: center;
+    background: #fbfbfc;
   }
-  .stat-chip-box.eaten { background: #faf6ed; }
   .stat-chip-box.bank { background: var(--bank-surface); }
 
   .stat-chip-box .chip-title {
     font-size: 0.74rem;
-    font-weight: 800;
+    font-weight: 700;
     color: var(--text-muted);
   }
   .stat-chip-box .chip-num {
-    font-size: 1.45rem;
+    font-size: 1.4rem;
     font-weight: 900;
     line-height: 1.1;
     color: var(--bank-color);
   }
   .stat-chip-box .chip-num.negative { color: var(--danger); }
 
-  /* אזור ההזנה - עיצוב שטוח ומרווח ללא ריבוע-בתוך-ריבוע */
+  /* אזור הזנה שטוח ומובנה ללא ריבועים מיותרים */
   .entry-flat-section {
-    border-top: 2px solid #e5dfd5;
-    padding-top: 12px;
-    margin-top: 4px;
+    border-top: 1px solid var(--card-border);
+    padding-top: 14px;
+    margin-top: 6px;
     margin-bottom: 12px;
   }
   .entry-flat-title { 
-    font-size: 0.86rem; 
-    font-weight: 900; 
+    font-size: 0.85rem; 
+    font-weight: 800; 
     color: var(--text-main); 
     margin-bottom: 10px; 
     display: flex;
@@ -262,19 +261,21 @@
   .search-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
   input[type="text"], input[type="number"], textarea, select { 
     background: var(--input-bg); 
-    border: 2px solid var(--card-border); 
+    border: 1px solid var(--input-border); 
     border-radius: 12px; 
     color: var(--text-main); 
     padding: 11px 12px; 
     width: 100%; 
-    font-size: 0.95rem; 
+    font-size: 0.92rem; 
     font-weight: 600;
     outline: none; 
     direction: rtl;
+    transition: all 0.2s;
   }
   input:focus, textarea:focus, select:focus { 
     background: #ffffff;
-    border-color: var(--pro-color);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.12);
   }
 
   .custom-search-dropdown {
@@ -283,34 +284,34 @@
     left: 0;
     right: 0;
     background: #ffffff;
-    border: 2px solid var(--card-border);
+    border: 1px solid var(--input-border);
     border-radius: 14px;
     margin-top: 4px;
     max-height: 240px;
     overflow-y: auto;
     z-index: 1000;
-    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
     display: none;
   }
   .dropdown-item {
-    padding: 10px 12px;
+    padding: 10px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    border-bottom: 1px solid #e7e2d7;
-    font-size: 0.86rem;
-    font-weight: 700;
+    border-bottom: 1px solid var(--card-border);
+    font-size: 0.85rem;
+    font-weight: 600;
   }
   .dropdown-item:last-child { border-bottom: none; }
-  .dropdown-item:active { background: var(--cal-surface); color: var(--cal-color); }
+  .dropdown-item:active { background: var(--primary-surface); color: var(--accent-primary); }
   .dropdown-item-meta { font-size: 0.74rem; color: var(--text-muted); font-weight: normal; }
 
-  /* מחשבון כמויות דו-כיווני */
+  /* מחשבון כמויות זורם */
   .portion-panel {
     display: none;
-    background: var(--pro-surface);
-    border: 2px dashed var(--pro-color);
+    background: var(--secondary-surface);
+    border: 1px dashed var(--accent-secondary);
     border-radius: 12px;
     padding: 10px;
     margin-bottom: 8px;
@@ -329,14 +330,14 @@
     gap: 3px;
   }
   .portion-input-cell label {
-    font-size: 0.75rem;
-    font-weight: 800;
-    color: var(--pro-color);
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--accent-secondary);
   }
   .portion-input-cell input {
-    padding: 7px !important;
+    padding: 8px !important;
     text-align: center;
-    font-weight: 900;
+    font-weight: 800;
     border-radius: 8px;
     background: #ffffff;
   }
@@ -344,25 +345,38 @@
   .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
 
   .action-buttons-stack { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
-  .btn-neo {
-    border: 2px solid var(--card-border);
+  .btn-action-primary {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border: none;
     border-radius: 12px;
     padding: 12px;
     font-size: 0.92rem;
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
     width: 100%;
     text-align: center;
     outline: none;
-    box-shadow: 0 3px 0 var(--card-border);
-    transition: transform 0.08s, box-shadow 0.08s;
+    box-shadow: 0 2px 8px rgba(59, 91, 219, 0.2);
+    transition: opacity 0.15s, transform 0.1s;
   }
-  .btn-neo:active { transform: translateY(3px); box-shadow: none; }
+  .btn-action-primary:active { opacity: 0.9; transform: scale(0.98); }
 
-  .btn-add-menu { background: var(--cal-color); color: #ffffff; }
-  .btn-add-pool { background: #faf8f4; color: var(--text-main); }
-  .btn-add-both { background: var(--pro-color); color: #ffffff; }
-  .btn-clear-sel { background: #ede8df; color: var(--text-muted); font-size: 0.8rem; padding: 8px; display: none; }
+  .btn-action-secondary {
+    background: var(--input-bg);
+    color: var(--text-main);
+    border: 1px solid var(--input-border);
+    border-radius: 12px;
+    padding: 11px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+    outline: none;
+    transition: background 0.15s;
+  }
+  .btn-action-secondary:active { background: #e9ecef; }
+  .btn-clear-sel { background: transparent; color: var(--text-muted); font-size: 0.8rem; padding: 6px; display: none; border: none; }
 
   .day-actions-grid {
     display: grid;
@@ -370,88 +384,84 @@
     gap: 10px;
     margin-bottom: 10px;
   }
-  .btn-day-neo {
-    border: 2px solid var(--card-border);
+  .btn-day-card {
+    border: 1px solid var(--card-border);
     border-radius: 14px;
     padding: 10px 8px;
-    font-size: 0.84rem;
-    font-weight: 900;
+    font-size: 0.82rem;
+    font-weight: 700;
     cursor: pointer;
     text-align: center;
     outline: none;
-    box-shadow: 0 3px 0 var(--card-border);
+    transition: all 0.15s;
   }
-  .btn-day-neo.bank { background: var(--cal-surface); color: var(--cal-color); }
-  .btn-day-neo.nobank { background: var(--danger-surface); color: var(--danger); }
-  .btn-day-neo:active { transform: translateY(3px); box-shadow: none; }
+  .btn-day-card.bank { background: var(--primary-surface); color: var(--accent-primary); border-color: #d0ebff; }
+  .btn-day-card.nobank { background: #fff9db; color: #f59f00; border-color: #ffec99; }
+  .btn-day-card:active { transform: scale(0.97); }
 
   .collapsible-wrapper { margin-top: 4px; }
   .btn-toggle-box {
-    background: #fdfbf7;
+    background: #ffffff;
     color: var(--text-main);
-    border: 2px solid var(--card-border);
-    box-shadow: 0 3px 0 var(--card-border);
+    border: 1px solid var(--card-border);
     border-radius: 14px;
     font-size: 0.84rem;
-    font-weight: 900;
-    padding: 10px;
+    font-weight: 700;
+    padding: 11px;
     width: 100%;
     cursor: pointer;
     outline: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .btn-toggle-box:active { transform: translateY(3px); box-shadow: none; }
-  .collapsible-content {
+  .collapsible-box {
     display: none;
     margin-top: 8px;
-    background: #faf8f4;
-    padding: 10px;
-    border-radius: 16px;
-    border: 2px solid var(--card-border);
+    padding: 4px 0;
   }
 
-  .log-list { max-height: 340px; overflow-y: auto; font-size: 0.84rem; }
+  /* היסטוריה נקייה הזורמת בשורות במקום "ריבוע בתוך ריבוע" */
   .history-day-card {
     background: #ffffff;
-    border: 2px solid var(--card-border);
-    border-radius: 14px;
-    margin-bottom: 8px;
-    padding: 8px 10px;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    margin-bottom: 10px;
+    padding: 10px 14px;
   }
   .history-day-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1.5px solid #e7e2d7;
-    padding-bottom: 5px;
-    margin-bottom: 6px;
-    pointer-events: none;
+    padding-bottom: 8px;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #f1f3f5;
   }
-  .history-day-title { font-size: 0.84rem; font-weight: 900; color: var(--cal-color); }
-  .history-day-summary { font-size: 0.76rem; color: var(--pro-color); font-weight: 900; }
+  .history-day-title { font-size: 0.82rem; font-weight: 800; color: var(--accent-primary); }
+  .history-day-summary { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; }
 
-  .day-items-container { min-height: 28px; display: flex; flex-direction: column; gap: 4px; }
-  .log-item { 
+  .day-items-container { min-height: 28px; display: flex; flex-direction: column; }
+  .log-item-row { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 8px 10px; 
-    background: #faf8f4;
-    border: 1.5px solid var(--card-border);
+    padding: 9px 0; 
+    border-bottom: 1px solid #f8f9fa;
     color: var(--text-main);
-    border-radius: 10px;
     user-select: none;
     -webkit-user-select: none;
     touch-action: pan-y;
   }
-  .log-item.holding-active {
-    background: var(--cal-surface) !important;
-    border-color: var(--cal-color) !important;
+  .log-item-row:last-child { border-bottom: none; }
+  .log-item-row.holding-active {
+    background: var(--primary-surface);
+    border-radius: 8px;
   }
   .drag-placeholder {
     height: 38px;
-    border: 2px dashed var(--cal-color);
-    background: var(--cal-surface);
-    border-radius: 10px;
+    border: 1.5px dashed var(--accent-primary);
+    background: var(--primary-surface);
+    border-radius: 8px;
     margin: 2px 0;
     pointer-events: none;
   }
@@ -460,47 +470,45 @@
     pointer-events: none;
     z-index: 9999;
     background: #ffffff;
-    border: 2px solid var(--card-border);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    border: 1px solid var(--accent-primary);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
     border-radius: 10px;
-    padding: 8px 12px;
+    padding: 8px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--text-main);
-    transform: scale(1.03);
+    transform: scale(1.02);
   }
 
-  .btn-log-action { background: transparent; border: none; font-size: 0.95rem; cursor: pointer; padding: 2px 4px; }
-  .btn-log-edit { color: var(--cal-color); }
-  .btn-log-save { color: var(--pro-color); }
-  .btn-log-del { color: var(--danger); }
+  .btn-log-action { background: transparent; border: none; font-size: 0.95rem; cursor: pointer; padding: 2px 5px; color: var(--text-subtle); transition: color 0.15s; }
+  .btn-log-action:active { color: var(--accent-primary); }
+  .btn-log-del:active { color: var(--danger); }
 
-  .pool-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
+  .pool-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
   .pool-tab-btn {
     flex: 1;
-    background: #fdfbf7;
-    color: var(--text-main);
-    border: 2px solid var(--card-border);
-    box-shadow: 0 3px 0 var(--card-border);
+    background: var(--input-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--input-border);
     border-radius: 12px;
     padding: 9px 4px;
     font-size: 0.82rem;
-    font-weight: 900;
+    font-weight: 700;
     cursor: pointer;
     outline: none;
+    transition: all 0.15s;
   }
   .pool-tab-btn.active {
-    background: var(--cal-color);
+    background: var(--accent-primary);
     color: #ffffff;
-    transform: translateY(2px);
-    box-shadow: none;
+    border-color: var(--accent-primary);
   }
 
-  /* אקורדיון קטגוריות מתקפל */
+  /* אקורדיון קטגוריות מעודן */
   .category-block {
-    background: #fdfbf7;
-    border: 2px solid var(--card-border);
+    background: #ffffff;
+    border: 1px solid var(--card-border);
     border-radius: 14px;
     margin-bottom: 8px;
     overflow: hidden;
@@ -509,36 +517,31 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 12px;
+    padding: 11px 14px;
     cursor: pointer;
     user-select: none;
-    background: #fdfbf7;
+    background: #ffffff;
   }
-  .category-header:active {
-    background: #f5efe3;
-  }
-  .category-title { font-size: 0.88rem; font-weight: 900; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+  .category-header:active { background: var(--input-bg); }
+  .category-title { font-size: 0.85rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
   .category-chevron { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
   .category-block.open .category-chevron { transform: rotate(180deg); }
   .category-content {
     display: none;
-    padding: 10px 12px;
-    border-top: 1.5px solid #e7e2d7;
-    background: #ffffff;
+    padding: 10px 14px;
+    border-top: 1px solid #f1f3f5;
+    background: #fafbfc;
   }
-  .category-block.open .category-content {
-    display: block;
-  }
+  .category-block.open .category-content { display: block; }
 
   .btn-cat-order {
-    background: #ffffff;
-    color: var(--text-main);
-    border: 1.5px solid var(--card-border);
+    background: var(--input-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--input-border);
     border-radius: 6px;
     width: 24px;
     height: 24px;
     font-size: 0.75rem;
-    font-weight: bold;
     cursor: pointer;
   }
 
@@ -546,8 +549,8 @@
   .preset-btn-wrapper { 
     display: flex; 
     align-items: center; 
-    background: #faf8f4; 
-    border: 1.5px solid var(--card-border); 
+    background: #ffffff; 
+    border: 1px solid var(--input-border); 
     border-radius: 10px; 
     overflow: hidden; 
   }
@@ -558,26 +561,25 @@
     padding: 8px 10px;
     border: none;
     cursor: pointer;
-    font-weight: 700;
+    font-weight: 600;
   }
   .preset-sub-btn {
     background: transparent;
     font-size: 0.78rem;
     padding: 8px 6px;
     border: none;
-    border-right: 1.5px solid var(--card-border);
+    border-right: 1px solid #f1f3f5;
     cursor: pointer;
+    color: var(--text-subtle);
   }
-  .preset-edit-btn { color: var(--cal-color); }
-  .preset-del-btn { color: var(--danger); }
-  .preset-btn-wrapper.pulse-added { background: var(--cal-surface) !important; transform: scale(0.96); }
+  .preset-sub-btn:active { color: var(--accent-primary); }
+  .preset-btn-wrapper.pulse-added { background: var(--primary-surface) !important; border-color: var(--accent-primary); }
 
   .ai-card {
     background: #ffffff;
-    border: 2px solid var(--card-border);
-    box-shadow: 0 4px 0 var(--card-border);
+    border: 1px solid var(--card-border);
     border-radius: 20px;
-    padding: 14px;
+    padding: 16px;
     width: 100%;
     max-width: 410px;
   }
@@ -586,8 +588,8 @@
     justify-content: space-between;
     align-items: center;
     font-size: 0.88rem;
-    font-weight: 900;
-    color: var(--pro-color);
+    font-weight: 800;
+    color: var(--accent-primary);
     margin-bottom: 8px;
   }
 
@@ -595,7 +597,7 @@
     display: none;
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(28, 25, 23, 0.6);
+    background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(4px);
     z-index: 1000;
     justify-content: center;
@@ -604,76 +606,65 @@
   }
   .modal-box {
     background: #ffffff;
-    border: 2px solid var(--card-border);
+    border: 1px solid var(--card-border);
     border-radius: 20px;
     padding: 20px;
     width: 100%;
     max-width: 380px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 10px 0 var(--card-border);
+    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
   .modal-header-bar { display: flex; justify-content: space-between; align-items: center; }
-  .modal-header-bar h3 { margin: 0; font-size: 1.15rem; font-weight: 900; }
-  .modal-close-btn { background: transparent; border: none; font-size: 1.3rem; font-weight: 900; cursor: pointer; }
+  .modal-header-bar h3 { margin: 0; font-size: 1.15rem; font-weight: 800; }
+  .modal-close-btn { background: transparent; border: none; font-size: 1.3rem; color: var(--text-muted); cursor: pointer; }
 
   .switch-btn {
-    background: #e7e2d7;
-    border: 2px solid var(--card-border);
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
     border-radius: 16px;
     padding: 4px 12px;
-    color: var(--text-main);
-    font-weight: 900;
+    color: var(--text-muted);
+    font-weight: 700;
     font-size: 0.78rem;
     cursor: pointer;
   }
-  .switch-btn.active { background: var(--cal-color); color: #ffffff; }
+  .switch-btn.active { background: var(--accent-primary); color: #ffffff; border-color: var(--accent-primary); }
 
-  /* ארכיון משוקם ומעוצב */
+  /* ארכיון בשורות מופרדות ללא קופסאות כפולות */
   .archive-viewer-box {
     display: none;
-    background: #faf8f4;
-    border: 2px solid var(--card-border);
+    background: #fbfbfc;
+    border: 1px solid var(--card-border);
     border-radius: 14px;
-    padding: 10px;
+    padding: 10px 14px;
     max-height: 260px;
     overflow-y: auto;
     font-size: 0.8rem;
     margin-top: 6px;
   }
   .archive-day-card {
-    background: #ffffff;
-    border: 1.5px solid var(--card-border);
-    border-radius: 10px;
-    padding: 8px 10px;
-    margin-bottom: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--card-border);
   }
+  .archive-day-card:last-child { border-bottom: none; }
   .archive-day-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #e7e2d7;
-    padding-bottom: 4px;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
-  .archive-day-date {
-    font-weight: 900;
-    color: var(--cal-color);
-  }
-  .archive-day-totals {
-    font-weight: 900;
-    color: var(--pro-color);
-    font-size: 0.74rem;
-  }
+  .archive-day-date { font-weight: 800; color: var(--accent-primary); }
+  .archive-day-totals { font-weight: 700; color: var(--text-muted); font-size: 0.74rem; }
   .archive-item-row {
     display: flex;
     justify-content: space-between;
     padding: 3px 0;
     color: var(--text-main);
-    font-size: 0.76rem;
+    font-size: 0.78rem;
   }
 </style>
 </head>
@@ -704,14 +695,14 @@
 </div>
 
 <div class="card">
-  <!-- לוח עליון נקי עם הפרדת גוונים -->
+  <!-- לוח עליון מודרני והרמוני -->
   <div class="stats-board">
     <div class="stats-primary-row">
       <div class="stat-card-target cal" id="boxRemCal">
         <div class="stat-head"><span>נשאר להיום</span><span>קלוריות</span></div>
         <div id="remainingCal" class="stat-number">1,800</div>
         <div class="bar-container">
-          <div id="barRemainingCal" class="bar-fill" style="background: var(--cal-color);"></div>
+          <div id="barRemainingCal" class="bar-fill" style="background: var(--accent-primary);"></div>
         </div>
       </div>
 
@@ -719,21 +710,21 @@
         <div class="stat-head"><span>נשאר להיום</span><span>חלבון</span></div>
         <div id="remainingPro" class="stat-number">140ג'</div>
         <div class="bar-container">
-          <div id="barRemainingPro" class="bar-fill" style="background: var(--pro-color);"></div>
+          <div id="barRemainingPro" class="bar-fill" style="background: var(--accent-secondary);"></div>
         </div>
       </div>
     </div>
 
     <div class="stats-secondary-row">
-      <div class="stat-chip-box eaten">
+      <div class="stat-chip-box">
         <div class="chip-title">🍽️ נאכל היום</div>
         <div style="display:flex; justify-content:space-around; align-items:baseline; margin-top:2px;">
-          <span style="font-size:1.1rem; font-weight:900; color:var(--cal-color);" id="eatenCal">0</span>
-          <span style="font-size:0.8rem; color:var(--text-muted);">|</span>
-          <span style="font-size:1.1rem; font-weight:900; color:var(--pro-color);" id="eatenPro">0ג'</span>
+          <span style="font-size:1.15rem; font-weight:800; color:var(--accent-primary);" id="eatenCal">0</span>
+          <span style="font-size:0.8rem; color:var(--text-subtle);">|</span>
+          <span style="font-size:1.15rem; font-weight:800; color:var(--accent-secondary);" id="eatenPro">0ג'</span>
         </div>
         <div class="bar-container" style="height:5px; margin-top:4px;">
-          <div id="barEatenCal" class="bar-fill" style="background: var(--cal-color);"></div>
+          <div id="barEatenCal" class="bar-fill" style="background: var(--accent-primary);"></div>
         </div>
       </div>
 
@@ -747,7 +738,7 @@
     </div>
   </div>
 
-  <!-- הזנה ישירה וחלקה ללא ריבוע-בתוך-ריבוע -->
+  <!-- הזנה זורמת ושטוחה -->
   <div class="entry-flat-section" id="entryBox">
     <div class="entry-flat-title" id="entryTitle">🔍 הזנה, חיפוש ושמירת מנה</div>
     
@@ -756,7 +747,7 @@
       <div class="custom-search-dropdown" id="searchDropdown"></div>
     </div>
 
-    <!-- מחשבון כמויות גמיש (משקל / יחידות) -->
+    <!-- מחשבון כמויות דו-כיווני (גרם מול יחידה) -->
     <div class="portion-panel" id="portionCalcRow">
       <div class="portion-dual-inputs">
         <div class="portion-input-cell" id="unitInputCell">
@@ -775,7 +766,6 @@
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
     </div>
 
-    <!-- בחירת אופן שמירה למאגר האישי -->
     <div class="input-row" id="saveTypeRow" style="margin-bottom:8px;">
       <select id="entryPortionModeSelect" onchange="onSaveModeSelectionChanged()">
         <option value="fixed">מנה קבועה (ללא חישוב משקל)</option>
@@ -794,29 +784,32 @@
     </div>
 
     <div class="action-buttons-stack" id="defaultActionBtns">
-      <button class="btn-neo btn-add-menu" onclick="actionAddMenu()">+ הוסף לתפריט</button>
-      <div style="display:flex; gap:6px;">
-        <button class="btn-neo btn-add-pool" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
-        <button class="btn-neo btn-add-both" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
+      <button class="btn-action-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
+      <div style="display:flex; gap:8px;">
+        <button class="btn-action-secondary" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
+        <button class="btn-action-secondary" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
       </div>
-      <button class="btn-neo btn-clear-sel" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
-      <button id="cancelEditPoolBtn" class="btn-neo" style="display:none; background:#ede8df;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
+      <button class="btn-clear-sel" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
+      <button id="cancelEditPoolBtn" class="btn-action-secondary" style="display:none;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
     </div>
 
     <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
-      <button class="btn-neo btn-add-menu" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
-      <button class="btn-neo btn-add-pool" onclick="cancelLogEdit()">ביטול עריכה</button>
+      <button class="btn-action-primary" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
+      <button class="btn-action-secondary" onclick="cancelLogEdit()">ביטול עריכה</button>
     </div>
   </div>
 
   <div class="day-actions-grid">
-    <button class="btn-day-neo bank" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(מעביר ספייר)</span></button>
-    <button class="btn-day-neo nobank" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(ללא ספייר)</span></button>
+    <button class="btn-day-card bank" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(מעביר ספייר)</span></button>
+    <button class="btn-day-card nobank" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(ללא ספייר)</span></button>
   </div>
 
   <div class="collapsible-wrapper">
-    <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">📜 היסטוריה שבועית (0)</button>
-    <div class="collapsible-content" id="logsContent">
+    <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">
+      <span>📜 היסטוריה שבועית (0)</span>
+      <span style="font-size:0.75rem; color:var(--text-muted);">▼</span>
+    </button>
+    <div class="collapsible-box" id="logsContent">
       <div class="log-list" id="logs"></div>
     </div>
   </div>
@@ -842,18 +835,18 @@
   </div>
   <div style="display:flex; gap:6px;">
     <input type="text" id="aiFoodQuery" placeholder="מה אכלת וכמה? (למשל: 150ג סייטן)" onkeydown="if(event.key==='Enter') askAI()">
-    <button class="btn-neo btn-add-both" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
+    <button class="btn-action-primary" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
   </div>
-  <div id="aiResultBox" style="display:none; margin-top:10px; background:#faf8f4; padding:10px; border-radius:12px; border:2px solid var(--card-border);">
-    <div style="font-size:0.75rem; color:var(--pro-color); font-weight:900; margin-bottom:6px;">ערוך לפני שמירה:</div>
+  <div id="aiResultBox" style="display:none; margin-top:10px; background:#fbfbfc; padding:12px; border-radius:14px; border:1px solid var(--card-border);">
+    <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:800; margin-bottom:6px;">ערוך לפני שמירה:</div>
     <input type="text" id="aiEditName" style="margin-bottom:6px;">
     <div class="input-row" style="margin-bottom:8px;">
       <input type="number" id="aiEditCal" placeholder="קלוריות">
       <input type="number" id="aiEditPro" placeholder="חלבון">
     </div>
     <div style="display:flex; gap:6px;">
-      <button class="btn-neo btn-add-menu" style="flex:1;" onclick="addAiToDaily()">+ ליומי</button>
-      <button class="btn-neo btn-add-pool" style="flex:1;" onclick="addAiToPool()">+ למאגר</button>
+      <button class="btn-action-primary" style="flex:1;" onclick="addAiToDaily()">+ ליומי</button>
+      <button class="btn-action-secondary" style="flex:1;" onclick="addAiToPool()">+ למאגר</button>
     </div>
   </div>
 </div>
@@ -865,48 +858,48 @@
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <div style="background:#faf8f4; padding:12px; border-radius:14px; border:2px solid var(--card-border);">
+    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1px solid var(--card-border);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <span style="font-size:0.85rem; font-weight:900;">עוזר AI (צ'אט)</span>
+        <span style="font-size:0.85rem; font-weight:800;">עוזר AI (צ'אט)</span>
         <button id="btnAiToggle" class="switch-btn active" onclick="toggleAiEnabled()">ON</button>
       </div>
       <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:6px;">מפתח Gemini API:</div>
       <div style="display:flex; gap:6px;">
         <input type="text" id="geminiApiKeyInput" placeholder="הדבק מפתח API..." style="font-size:0.8rem; direction:ltr;">
-        <button class="btn-neo btn-add-both" style="width:auto; padding:0 12px;" onclick="saveApiKey()">שמור</button>
+        <button class="btn-action-primary" style="width:auto; padding:0 12px;" onclick="saveApiKey()">שמור</button>
       </div>
     </div>
 
-    <div style="background:#faf8f4; padding:12px; border-radius:14px; border:2px solid var(--card-border);">
-      <div style="font-size:0.82rem; font-weight:900; margin-bottom:6px;">יעדים יומיים:</div>
+    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1px solid var(--card-border);">
+      <div style="font-size:0.82rem; font-weight:800; margin-bottom:6px;">יעדים יומיים:</div>
       <div class="input-row" style="margin-bottom:6px;">
         <input type="number" id="targetCalInput" placeholder="קלוריות">
         <input type="number" id="targetProInput" placeholder="חלבון">
       </div>
-      <button class="btn-neo btn-add-menu" onclick="updateTargets()">שמור יעדים</button>
+      <button class="btn-action-primary" onclick="updateTargets()">שמור יעדים</button>
     </div>
 
-    <button class="btn-neo btn-add-pool" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
+    <button class="btn-action-secondary" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
 
     <div style="display:flex; gap:6px;">
-      <button class="btn-neo btn-add-pool" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
-      <button class="btn-neo btn-add-pool" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
+      <button class="btn-action-secondary" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
+      <button class="btn-action-secondary" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
       <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
     </div>
 
-    <div style="background:#faf8f4; border:2px solid var(--card-border); border-radius:14px; padding:12px;">
-      <div style="font-size:0.82rem; font-weight:900; color:var(--cal-color); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
+    <div style="background:#fbfbfc; border:1px solid var(--card-border); border-radius:14px; padding:12px;">
+      <div style="font-size:0.82rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
       <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
       <div style="display:flex; gap:6px;">
-        <button class="btn-neo btn-add-pool" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
-        <button class="btn-neo btn-add-pool" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
+        <button class="btn-action-secondary" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
+        <button class="btn-action-secondary" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
       </div>
       <div class="archive-viewer-box" id="archiveViewerBox"></div>
     </div>
 
     <div style="display:flex; flex-direction:column; gap:6px;">
-      <button class="btn-neo" style="background:#fff1f2; color:var(--danger);" onclick="resetDayOnly()">איפוס יום נוכחי בלבד</button>
-      <button class="btn-neo" style="background:#fff1f2; color:var(--danger);" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
+      <button class="btn-action-secondary" style="color:var(--danger); border-color:#ffc9c9;" onclick="resetDayOnly()">איפוס יום נוכחי בלבד</button>
+      <button class="btn-action-secondary" style="color:var(--danger); border-color:#ffc9c9;" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
     </div>
   </div>
 </div>
@@ -922,7 +915,7 @@
       <code>שם המנה, קלוריות, חלבון, קטגוריה</code>
     </div>
     <textarea id="bulkMenuInput" placeholder="טופו צרוב, 350, 27, ארוחת ערב"></textarea>
-    <button class="btn-neo btn-add-menu" onclick="processBulkMenu()">טען מנות למאגר</button>
+    <button class="btn-action-primary" onclick="processBulkMenu()">טען מנות למאגר</button>
   </div>
 </div>
 
@@ -1396,7 +1389,7 @@
     }
 
     const cleanKey = geminiApiKey.trim().replace(/\s+/g, '');
-    setAiStatus('מחשב...', 'var(--cal-color)', false);
+    setAiStatus('מחשב...', 'var(--accent-primary)', false);
 
     const promptText = `אתה מחשבון תזונה טבעוני. נתח את המנה: "${query}". השב ב-JSON בלבד בפורמט:
 {"name": "שם המנה בעברית", "cal": מספר קלוריות, "pro": מספר גרם חלבון (רק אם הוא משמעותי, אחרת 0)}`;
@@ -1422,7 +1415,7 @@
       document.getElementById('aiEditPro').value = parseFloat(parsed.pro) || 0;
 
       document.getElementById('aiResultBox').style.display = 'block';
-      setAiStatus('הושלם!', 'var(--cal-color)', true);
+      setAiStatus('הושלם!', 'var(--accent-primary)', true);
     } catch (e) {
       setAiStatus('שגיאה', 'var(--danger)', true);
       alert('שגיאה בחיבור ל-AI: ' + e.message);
@@ -1658,11 +1651,11 @@
 
     const barRemCal = document.getElementById('barRemainingCal');
     barRemCal.style.width = calRemPercent + '%';
-    barRemCal.style.background = remCal < 0 ? 'var(--danger)' : 'var(--cal-color)';
+    barRemCal.style.background = remCal < 0 ? 'var(--danger)' : 'var(--accent-primary)';
 
     const barRemPro = document.getElementById('barRemainingPro');
     barRemPro.style.width = proRemPercent + '%';
-    barRemPro.style.background = remPro < 0 ? 'var(--danger)' : 'var(--pro-color)';
+    barRemPro.style.background = remPro < 0 ? 'var(--danger)' : 'var(--accent-secondary)';
 
     const barEatCal = document.getElementById('barEatenCal');
     barEatCal.style.width = calEatenPercent + '%';
@@ -1685,10 +1678,10 @@
   function renderLogs() {
     const logList = document.getElementById('logs');
     logList.innerHTML = '';
-    document.getElementById('btnToggleLogs').textContent = `📜 היסטוריה שבועית (${getTodayLogsCount()})`;
+    document.getElementById('btnToggleLogs').innerHTML = `<span>📜 היסטוריה שבועית (${getTodayLogsCount()})</span><span style="font-size:0.75rem; color:var(--text-muted);">▼</span>`;
 
     if (logs.length === 0) {
-      logList.innerHTML = '<div style="text-align:center; font-size:0.78rem; color:var(--text-muted); padding:10px 0;">אין הזנות רשומות כרגע</div>';
+      logList.innerHTML = '<div style="text-align:center; font-size:0.8rem; color:var(--text-muted); padding:12px 0;">אין הזנות רשומות כרגע</div>';
       return;
     }
 
@@ -1720,15 +1713,15 @@
       const container = card.querySelector('.day-items-container');
       entries.forEach(item => {
         const row = document.createElement('div');
-        row.className = 'log-item';
+        row.className = 'log-item-row';
         row.setAttribute('data-id', item.id);
         row.innerHTML = `
-          <div style="flex:1; pointer-events:none;">
-            <strong>${item.name || ''}</strong> (+${item.cal} קל' | +${item.pro}ג')
+          <div style="flex:1; pointer-events:none; font-size:0.82rem;">
+            <strong>${item.name || ''}</strong> <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro}ג')</span>
           </div>
-          <div style="display:flex; gap:4px;">
-            <button class="btn-log-action btn-log-edit" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
-            <button class="btn-log-action btn-log-save" onclick="saveLogItemToPoolById('${item.id}')">📥</button>
+          <div style="display:flex; gap:2px;">
+            <button class="btn-log-action" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
+            <button class="btn-log-action" onclick="saveLogItemToPoolById('${item.id}')">📥</button>
             <button class="btn-log-action btn-log-del" onclick="deleteLogItemById('${item.id}')">✕</button>
           </div>
         `;
@@ -1792,7 +1785,7 @@
       const elBelow = document.elementFromPoint(point.clientX, point.clientY);
       const dayContainer = elBelow?.closest('.day-items-container');
       if (dayContainer) {
-        const siblings = Array.from(dayContainer.querySelectorAll('.log-item:not([style*="display: none"])'));
+        const siblings = Array.from(dayContainer.querySelectorAll('.log-item-row:not([style*="display: none"])'));
         let inserted = false;
         for (let sib of siblings) {
           const r = sib.getBoundingClientRect();
@@ -1844,7 +1837,7 @@
 
     document.querySelectorAll('.day-items-container').forEach(c => {
       const day = c.getAttribute('data-day');
-      c.querySelectorAll('.log-item').forEach(row => {
+      c.querySelectorAll('.log-item-row').forEach(row => {
         const id = row.getAttribute('data-id');
         const item = logs.find(l => l.id === id);
         if (item) {
@@ -2337,7 +2330,6 @@
     }
   }
 
-  // תצוגת ארכיון משוקמת עם כרטיסי יום מופרדים וברורים
   function toggleArchiveViewer() {
     const box = document.getElementById('archiveViewerBox');
     if (box.style.display === 'block') { box.style.display = 'none'; return; }
@@ -2376,8 +2368,8 @@
         items.forEach(it => {
           grp.innerHTML += `
             <div class="archive-item-row">
-              <span><strong>${it.name || 'ללא שם'}</strong></span>
-              <span>+${it.cal} קל' | +${it.pro}ג'</span>
+              <span>${it.name || 'ללא שם'}</span>
+              <span style="color:var(--text-muted);">+${it.cal} קל' | +${it.pro}ג'</span>
             </div>
           `;
         });
