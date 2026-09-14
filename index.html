@@ -13,26 +13,25 @@
 
 <style>
   :root {
-    --bg-page: #ede8df;
-    --card-bg: #f9f7f2;
-    --card-border: #e0dbce;
-    --card-shadow: 0 4px 20px rgba(50, 45, 38, 0.05);
-    --text-main: #2b2723;
-    --text-muted: #797166;
-    --text-subtle: #a8a095;
+    --bg-page: #f1ede4;
+    --card-bg: #ffffff;
+    --card-border: #24221f;
+    --card-shadow: 0 4px 0 #24221f;
     
-    --sage-primary: #2d5038;
-    --sage-light: #e4ece6;
-    --sage-accent: #3e6d4c;
+    --text-main: #1c1917;
+    --text-muted: #57534e;
     
-    --warm-terracotta: #c25e2e;
-    --terracotta-light: #fbeee8;
+    --cal-color: #059669;
+    --cal-bg: #d1fae5;
     
-    --neutral-chip: #eee9df;
-    --neutral-border: #d8d1c2;
-    --input-bg: #ffffff;
-    --danger: #b93838;
-    --danger-light: #faeaea;
+    --pro-color: #0284c7;
+    --pro-bg: #e0f2fe;
+    
+    --bank-color: #7c3aed;
+    --bank-bg: #ede9fe;
+    
+    --danger: #e11d48;
+    --danger-bg: #ffe4e6;
   }
 
   * { 
@@ -56,9 +55,9 @@
 
   .card { 
     background: var(--card-bg); 
-    border: 1px solid var(--card-border);
-    border-radius: 24px; 
-    padding: 18px; 
+    border: 2px solid var(--card-border);
+    border-radius: 20px; 
+    padding: 16px; 
     width: 100%; 
     max-width: 410px; 
     box-shadow: var(--card-shadow); 
@@ -73,19 +72,19 @@
     width: 100%;
     max-width: 410px;
     height: 56px;
-    background: rgba(237, 232, 223, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(241, 237, 228, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     z-index: 900;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 16px;
-    border-bottom: 1px solid rgba(224, 219, 206, 0.7);
+    border-bottom: 2px solid var(--card-border);
   }
 
   .header-title-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  h2 { margin: 0; font-size: 1.15rem; color: var(--text-main); font-weight: 800; letter-spacing: -0.3px; }
+  h2 { margin: 0; font-size: 1.2rem; color: var(--text-main); font-weight: 900; }
 
   .topbar-center-slot {
     flex: 1;
@@ -93,60 +92,48 @@
     align-items: center;
     justify-content: center;
     padding: 0 6px;
-    overflow: hidden;
   }
   .toast-pill {
     font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--sage-primary);
-    background: var(--sage-light);
-    border: 1px solid #c8d8cc;
+    font-weight: 800;
+    color: #ffffff;
+    background: var(--cal-color);
+    border: 1.5px solid var(--card-border);
+    box-shadow: 0 2px 0 var(--card-border);
     padding: 4px 10px;
     border-radius: 20px;
     opacity: 0;
-    transition: none;
     pointer-events: none;
     white-space: nowrap;
   }
-  .toast-pill.show {
-    opacity: 1;
-    transition: none;
-  }
-  .toast-pill.fade-out {
-    opacity: 0;
-    transition: opacity 0.8s ease-out;
-  }
+  .toast-pill.show { opacity: 1; }
+  .toast-pill.fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
 
   .btn-icon-top { 
     background: transparent; 
     border: none; 
     outline: none;
-    font-size: 1.25rem; 
+    font-size: 1.35rem; 
     cursor: pointer; 
-    color: var(--text-muted); 
-    padding: 6px; 
+    color: var(--text-main); 
+    padding: 4px; 
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    transition: transform 0.15s, color 0.15s;
   }
-  .btn-icon-top:active { 
-    color: var(--sage-primary); 
-    transform: scale(0.92); 
-  }
+  .btn-icon-top:active { transform: scale(0.9); }
 
   .nav-history-group { 
     display: flex; 
     flex-direction: row-reverse;
     gap: 8px; 
     align-items: center; 
-    flex-shrink: 0;
   }
   .btn-nav-circle {
-    background: var(--card-bg);
+    background: #ffffff;
     color: var(--text-main);
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
+    box-shadow: 0 2px 0 var(--card-border);
     border-radius: 50%;
     width: 36px;
     height: 36px;
@@ -154,140 +141,142 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.15s;
     outline: none;
     padding: 0;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
   }
   .btn-nav-circle svg { width: 18px; height: 18px; fill: currentColor; }
-  .btn-nav-circle:active { 
-    background: var(--neutral-chip); 
-    transform: scale(0.92);
-    color: var(--sage-primary);
-  }
+  .btn-nav-circle:active { transform: translateY(2px); box-shadow: none; }
 
-  .dashboard-overview {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+  /* שני הריבועים העליונים עם סרגלי ההתקדמות */
+  .stat-box-large {
+    background: #fdfbf7;
+    border: 2px solid var(--card-border);
+    border-radius: 16px;
+    padding: 12px;
+    text-align: center;
+    margin-bottom: 12px;
+    box-shadow: 0 3px 0 var(--card-border);
   }
-  .dash-main-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
-  .stat-card-focus {
-    background: #ffffff;
-    border: 1px solid var(--card-border);
-    border-radius: 18px;
-    padding: 12px 14px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 98px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
-  }
-  .stat-card-focus .stat-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    display: flex;
-    justify-content: space-between;
-  }
-  .stat-card-focus .stat-num {
-    font-size: 1.45rem;
+  .stat-box-large .box-headline {
+    font-size: 0.85rem;
     font-weight: 900;
-    line-height: 1.1;
-    margin: 4px 0;
+    color: var(--text-muted);
+    margin-bottom: 6px;
   }
-  .stat-card-focus.cal .stat-num { color: var(--sage-primary); }
-  .stat-card-focus.pro .stat-num { color: var(--sage-accent); }
-  .stat-card-focus.negative .stat-num { color: var(--danger) !important; }
+  .dual-val { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: stretch; 
+    gap: 12px; 
+  }
+  .val-item { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    flex: 1; 
+  }
+  .val-item .sub { 
+    font-size: 0.72rem; 
+    font-weight: 800;
+    color: var(--text-muted); 
+    margin-bottom: 2px; 
+  }
+  .val-item .num { 
+    font-size: 1.55rem; 
+    font-weight: 900; 
+    line-height: 1.1; 
+  }
+  .val-item.cal .num { color: var(--cal-color); }
+  .val-item.pro .num { color: var(--pro-color); }
+  .val-item.cal.negative .num, .val-item.pro.negative .num { color: var(--danger) !important; }
 
-  .bar-container {
-    width: 100%;
-    background: var(--neutral-chip);
-    height: 6px;
-    border-radius: 3px;
-    overflow: hidden;
-    margin-top: 4px;
+  .bar-container { 
+    width: 100%; 
+    background: #e7e2d7; 
+    height: 8px; 
+    border-radius: 4px; 
+    border: 1px solid var(--card-border);
+    overflow: hidden; 
+    margin-top: 6px; 
   }
-  .bar-fill {
-    height: 100%;
-    width: 0%;
-    border-radius: 3px;
-    transition: width 0.3s ease, background-color 0.3s ease;
+  .bar-fill { 
+    height: 100%; 
+    width: 0%; 
+    border-radius: 3px; 
+    transition: width 0.3s ease, background-color 0.3s ease; 
   }
 
-  .dash-sub-row {
+  .grid-bottom-stats {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
+    margin-bottom: 12px;
   }
-  .stat-card-sub {
-    background: var(--neutral-chip);
-    border-radius: 14px;
-    padding: 10px 12px;
+  .stat-box-small {
+    background: #fdfbf7;
+    border: 2px solid var(--card-border);
+    box-shadow: 0 3px 0 var(--card-border);
+    border-radius: 16px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-  }
-  .stat-card-sub .sub-title {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--text-muted);
-    margin-bottom: 2px;
-  }
-  .stat-card-sub .sub-val {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--text-main);
-  }
-  .stat-card-sub .sub-val.neg { color: var(--danger); }
-  .stat-card-sub.spare-box {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
     justify-content: space-between;
-  }
-
-  .entry-box {
-    background: #ffffff;
-    border: 1.5px solid var(--sage-primary);
-    border-radius: 20px;
-    padding: 14px;
-    margin-top: 4px;
-    position: relative;
-    box-shadow: 0 4px 16px rgba(45, 80, 56, 0.06);
-  }
-  .entry-box-header {
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--sage-primary);
-    margin-bottom: 10px;
+    min-height: 84px;
     text-align: center;
   }
+  .stat-box-small .title {
+    font-size: 0.78rem;
+    font-weight: 900;
+    color: var(--text-muted);
+  }
+  .stat-box-small .single-num-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin: auto 0;
+  }
+  .stat-box-small .single-num {
+    font-size: 1.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+  }
+  .stat-box-small .single-num.bank { color: var(--bank-color); }
+  .stat-box-small .single-num.negative { color: var(--danger); }
 
-  .search-wrapper {
-    position: relative;
-    width: 100%;
-    margin-bottom: 8px;
+  /* תיבת הזנה */
+  .entry-highlight-box {
+    background: #ffffff;
+    border: 2px solid var(--card-border);
+    box-shadow: 0 4px 0 var(--card-border);
+    border-radius: 18px;
+    padding: 14px;
+    margin-bottom: 12px;
   }
-  input[type="text"], input[type="number"], textarea {
-    background: var(--input-bg);
-    border: 1px solid var(--neutral-border);
-    border-radius: 12px;
-    color: var(--text-main);
-    padding: 12px 14px;
-    width: 100%;
-    font-size: 0.95rem;
-    outline: none;
+  .entry-highlight-title { 
+    font-size: 0.85rem; 
+    font-weight: 900; 
+    color: var(--text-main); 
+    margin-bottom: 10px; 
+    text-align: center; 
+  }
+
+  .search-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
+  input[type="text"], input[type="number"], textarea { 
+    background: #faf8f4; 
+    border: 2px solid var(--card-border); 
+    border-radius: 12px; 
+    color: var(--text-main); 
+    padding: 11px 12px; 
+    width: 100%; 
+    font-size: 0.95rem; 
+    font-weight: 600;
+    outline: none; 
     direction: rtl;
-    transition: border-color 0.2s, box-shadow 0.2s;
   }
-  input:focus, textarea:focus {
-    border-color: var(--sage-primary);
-    box-shadow: 0 0 0 3px var(--sage-light);
+  input:focus, textarea:focus { 
+    background: #ffffff;
+    border-color: var(--pro-color);
   }
 
   .custom-search-dropdown {
@@ -296,155 +285,120 @@
     left: 0;
     right: 0;
     background: #ffffff;
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
     border-radius: 14px;
     margin-top: 4px;
     max-height: 220px;
     overflow-y: auto;
     z-index: 1000;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.12);
     display: none;
   }
   .dropdown-item {
-    padding: 10px 14px;
+    padding: 10px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
-    border-bottom: 1px solid var(--neutral-chip);
+    border-bottom: 1px solid #e7e2d7;
     font-size: 0.86rem;
-    font-weight: 600;
+    font-weight: 700;
   }
   .dropdown-item:last-child { border-bottom: none; }
-  .dropdown-item:active, .dropdown-item.hovered {
-    background: var(--sage-light);
-    color: var(--sage-primary);
-  }
-  .dropdown-item-meta {
-    font-size: 0.74rem;
-    color: var(--text-muted);
-    font-weight: normal;
-  }
+  .dropdown-item:active { background: var(--cal-bg); color: var(--cal-color); }
+  .dropdown-item-meta { font-size: 0.74rem; color: var(--text-muted); font-weight: normal; }
 
   .portion-row {
     display: none;
-    background: var(--sage-light);
-    border: 1px dashed var(--sage-accent);
+    background: var(--pro-bg);
+    border: 2px dashed var(--pro-color);
     border-radius: 12px;
-    padding: 9px 12px;
+    padding: 8px 12px;
     margin-bottom: 8px;
     align-items: center;
     justify-content: space-between;
   }
-  .portion-row .portion-label {
-    font-size: 0.78rem;
-    font-weight: 800;
-    color: var(--sage-primary);
-  }
-  .portion-row .portion-input-wrap {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
+  .portion-row .portion-label { font-size: 0.8rem; font-weight: 900; color: var(--pro-color); }
   .portion-row input {
-    width: 78px !important;
-    padding: 6px 8px !important;
+    width: 80px !important;
+    padding: 6px !important;
     text-align: center;
-    font-weight: bold;
+    font-weight: 900;
     border-radius: 8px;
   }
 
-  .input-dual-row {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 8px;
-  }
+  .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
 
-  .btn-primary-action {
-    background: var(--sage-primary);
-    color: #ffffff;
-    border: none;
+  .action-buttons-stack { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  .btn-neo {
+    border: 2px solid var(--card-border);
     border-radius: 12px;
     padding: 12px;
     font-size: 0.92rem;
-    font-weight: 800;
+    font-weight: 900;
     cursor: pointer;
     width: 100%;
     text-align: center;
     outline: none;
-    transition: opacity 0.15s, transform 0.1s;
+    box-shadow: 0 3px 0 var(--card-border);
+    transition: transform 0.08s, box-shadow 0.08s;
   }
-  .btn-primary-action:active { opacity: 0.9; transform: scale(0.98); }
+  .btn-neo:active { transform: translateY(3px); box-shadow: none; }
 
-  .action-stack {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    margin-top: 4px;
-  }
-  .btn-secondary-action {
-    background: var(--neutral-chip);
-    color: var(--text-main);
-    border: 1px solid var(--neutral-border);
-    border-radius: 12px;
-    padding: 10px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    cursor: pointer;
-    outline: none;
-    text-align: center;
-  }
-  .btn-secondary-action:active { background: #e3ded4; }
+  .btn-add-menu { background: var(--cal-color); color: #ffffff; }
+  .btn-add-pool { background: #faf8f4; color: var(--text-main); }
+  .btn-add-both { background: var(--pro-color); color: #ffffff; }
+  .btn-clear-sel { background: #f3efe6; color: var(--text-muted); font-size: 0.8rem; padding: 8px; display: none; }
 
-  .day-triggers-grid {
+  .day-actions-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
-    margin-bottom: 6px;
+    gap: 10px;
+    margin-bottom: 10px;
   }
-  .btn-day-trigger {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
+  .btn-day-neo {
+    border: 2px solid var(--card-border);
     border-radius: 14px;
     padding: 10px 8px;
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--text-main);
+    font-size: 0.84rem;
+    font-weight: 900;
     cursor: pointer;
-    line-height: 1.3;
+    text-align: center;
     outline: none;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
+    box-shadow: 0 3px 0 var(--card-border);
   }
-  .btn-day-trigger.bank { color: var(--sage-primary); border-color: #cbd8cf; }
-  .btn-day-trigger.nobank { color: var(--warm-terracotta); border-color: #eed6cb; }
-  .btn-day-trigger:active { transform: scale(0.97); }
+  .btn-day-neo.bank { background: var(--cal-bg); color: var(--cal-color); }
+  .btn-day-neo.nobank { background: #fff1f2; color: var(--danger); }
+  .btn-day-neo:active { transform: translateY(3px); box-shadow: none; }
 
   .collapsible-wrapper { margin-top: 4px; }
-  .btn-toggle-collapsible {
-    background: var(--card-bg);
-    color: var(--text-muted);
-    border: 1px solid var(--card-border);
-    border-radius: 12px;
-    font-size: 0.82rem;
-    font-weight: 700;
+  .btn-toggle-box {
+    background: #fdfbf7;
+    color: var(--text-main);
+    border: 2px solid var(--card-border);
+    box-shadow: 0 3px 0 var(--card-border);
+    border-radius: 14px;
+    font-size: 0.84rem;
+    font-weight: 900;
     padding: 10px;
     width: 100%;
     cursor: pointer;
     outline: none;
   }
-  .collapsible-box {
+  .btn-toggle-box:active { transform: translateY(3px); box-shadow: none; }
+  .collapsible-content {
     display: none;
     margin-top: 8px;
-    background: #ffffff;
+    background: #faf8f4;
     padding: 10px;
     border-radius: 16px;
-    border: 1px solid var(--card-border);
+    border: 2px solid var(--card-border);
   }
 
   .log-list { max-height: 340px; overflow-y: auto; font-size: 0.84rem; }
   .history-day-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
+    background: #ffffff;
+    border: 2px solid var(--card-border);
     border-radius: 14px;
     margin-bottom: 8px;
     padding: 8px 10px;
@@ -453,46 +407,37 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--card-border);
+    border-bottom: 1.5px solid #e7e2d7;
     padding-bottom: 5px;
     margin-bottom: 6px;
     pointer-events: none;
   }
-  .history-day-title { font-size: 0.82rem; font-weight: 800; color: var(--sage-primary); }
-  .history-day-summary { font-size: 0.74rem; color: var(--warm-terracotta); font-weight: 800; }
+  .history-day-title { font-size: 0.82rem; font-weight: 900; color: var(--cal-color); }
+  .history-day-summary { font-size: 0.74rem; color: var(--pro-color); font-weight: 900; }
 
-  .day-items-container {
-    min-height: 28px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-  }
-
+  .day-items-container { min-height: 28px; display: flex; flex-direction: column; gap: 4px; }
   .log-item { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 7px 10px; 
-    background: #ffffff;
-    border: 1px solid var(--card-border);
+    padding: 8px 10px; 
+    background: #faf8f4;
+    border: 1.5px solid var(--card-border);
     color: var(--text-main);
     border-radius: 10px;
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
-    transition: transform 0.15s ease, opacity 0.15s ease;
     touch-action: pan-y;
   }
   .log-item.holding-active {
-    background: var(--sage-light) !important;
-    border-color: var(--sage-primary) !important;
-    box-shadow: 0 0 10px rgba(45, 80, 56, 0.2) !important;
+    background: var(--cal-bg) !important;
+    border-color: var(--cal-color) !important;
   }
-
   .drag-placeholder {
     height: 38px;
-    border: 2px dashed var(--sage-accent);
-    background: var(--sage-light);
+    border: 2px dashed var(--cal-color);
+    background: var(--cal-bg);
     border-radius: 10px;
     margin: 2px 0;
     pointer-events: none;
@@ -502,8 +447,8 @@
     pointer-events: none;
     z-index: 9999;
     background: #ffffff;
-    border: 1.5px solid var(--sage-primary);
-    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    border: 2px solid var(--card-border);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.15);
     border-radius: 10px;
     padding: 8px 12px;
     display: flex;
@@ -511,36 +456,37 @@
     align-items: center;
     color: var(--text-main);
     transform: scale(1.03);
-    opacity: 0.95;
   }
 
-  .btn-log-action { background: transparent; border: none; font-size: 0.95rem; cursor: pointer; padding: 2px 4px; outline: none; }
-  .btn-log-edit { color: var(--sage-accent); }
-  .btn-log-save { color: #2563eb; }
+  .btn-log-action { background: transparent; border: none; font-size: 0.95rem; cursor: pointer; padding: 2px 4px; }
+  .btn-log-edit { color: var(--cal-color); }
+  .btn-log-save { color: var(--pro-color); }
   .btn-log-del { color: var(--danger); }
 
   .pool-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
   .pool-tab-btn {
     flex: 1;
-    background: var(--neutral-chip);
-    color: var(--text-muted);
-    border: 1px solid var(--neutral-border);
+    background: #fdfbf7;
+    color: var(--text-main);
+    border: 2px solid var(--card-border);
+    box-shadow: 0 3px 0 var(--card-border);
     border-radius: 12px;
-    padding: 9px 4px;
+    padding: 8px 2px;
     font-size: 0.78rem;
-    font-weight: 800;
+    font-weight: 900;
     cursor: pointer;
     outline: none;
   }
   .pool-tab-btn.active {
-    background: var(--sage-primary);
+    background: var(--cal-color);
     color: #ffffff;
-    border-color: var(--sage-primary);
+    transform: translateY(2px);
+    box-shadow: none;
   }
 
   .category-block {
-    background: #ffffff;
-    border: 1px solid var(--card-border);
+    background: #fdfbf7;
+    border: 2px solid var(--card-border);
     border-radius: 14px;
     padding: 10px 12px;
     margin-bottom: 8px;
@@ -551,17 +497,18 @@
     align-items: center;
     margin-bottom: 8px;
     padding-bottom: 4px;
-    border-bottom: 1px solid var(--neutral-chip);
+    border-bottom: 1.5px solid #e7e2d7;
   }
-  .category-title { font-size: 0.82rem; font-weight: 800; color: var(--sage-primary); }
+  .category-title { font-size: 0.84rem; font-weight: 900; color: var(--text-main); }
   .btn-cat-order {
-    background: var(--neutral-chip);
-    color: var(--text-muted);
-    border: none;
+    background: #ffffff;
+    color: var(--text-main);
+    border: 1.5px solid var(--card-border);
     border-radius: 6px;
     width: 24px;
     height: 24px;
     font-size: 0.75rem;
+    font-weight: bold;
     cursor: pointer;
   }
 
@@ -569,11 +516,10 @@
   .preset-btn-wrapper { 
     display: flex; 
     align-items: center; 
-    background: var(--card-bg); 
-    border: 1px solid var(--card-border); 
+    background: #ffffff; 
+    border: 1.5px solid var(--card-border); 
     border-radius: 10px; 
     overflow: hidden; 
-    transition: all 0.2s ease; 
   }
   .preset-btn {
     background: transparent;
@@ -582,44 +528,37 @@
     padding: 8px 10px;
     border: none;
     cursor: pointer;
-    font-weight: 600;
-    outline: none;
+    font-weight: 700;
   }
   .preset-sub-btn {
     background: transparent;
     font-size: 0.75rem;
     padding: 8px 6px;
     border: none;
-    border-right: 1px solid var(--card-border);
+    border-right: 1.5px solid var(--card-border);
     cursor: pointer;
-    outline: none;
   }
   .preset-fav-btn { color: #d97706; }
-  .preset-edit-btn { color: var(--sage-accent); }
+  .preset-edit-btn { color: var(--cal-color); }
   .preset-del-btn { color: var(--danger); }
-
-  .preset-btn-wrapper.pulse-added {
-    background: var(--sage-light) !important;
-    border-color: var(--sage-primary) !important;
-    transform: scale(0.96);
-  }
+  .preset-btn-wrapper.pulse-added { background: var(--cal-bg) !important; transform: scale(0.96); }
 
   .ai-card {
     background: #ffffff;
-    border: 1px solid #bfe3cc;
+    border: 2px solid var(--card-border);
+    box-shadow: 0 4px 0 var(--card-border);
     border-radius: 20px;
     padding: 14px;
     width: 100%;
     max-width: 410px;
-    box-shadow: 0 4px 16px rgba(45, 80, 56, 0.05);
   }
   .ai-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 0.85rem;
-    font-weight: 800;
-    color: var(--sage-primary);
+    font-weight: 900;
+    color: var(--pro-color);
     margin-bottom: 8px;
   }
 
@@ -627,58 +566,47 @@
     display: none;
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(43, 39, 35, 0.45);
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
+    background: rgba(28, 25, 23, 0.6);
+    backdrop-filter: blur(4px);
     z-index: 1000;
     justify-content: center;
     align-items: center;
     padding: 16px;
   }
   .modal-box {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    border-radius: 24px;
+    background: #ffffff;
+    border: 2px solid var(--card-border);
+    border-radius: 20px;
     padding: 20px;
     width: 100%;
     max-width: 380px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 16px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 10px 0 var(--card-border);
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
   .modal-header-bar { display: flex; justify-content: space-between; align-items: center; }
-  .modal-header-bar h3 { margin: 0; font-size: 1.1rem; color: var(--text-main); font-weight: 800; }
-  .modal-close-btn { background: transparent; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer; }
+  .modal-header-bar h3 { margin: 0; font-size: 1.15rem; font-weight: 900; }
+  .modal-close-btn { background: transparent; border: none; font-size: 1.3rem; font-weight: 900; cursor: pointer; }
 
-  .toggle-setting-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-  }
   .switch-btn {
-    background: var(--neutral-chip);
-    border: 1px solid var(--neutral-border);
+    background: #e7e2d7;
+    border: 2px solid var(--card-border);
     border-radius: 16px;
     padding: 4px 12px;
-    color: var(--text-muted);
-    font-weight: 800;
+    color: var(--text-main);
+    font-weight: 900;
     font-size: 0.78rem;
     cursor: pointer;
   }
-  .switch-btn.active {
-    background: var(--sage-primary);
-    color: #ffffff;
-    border-color: var(--sage-primary);
-  }
+  .switch-btn.active { background: var(--cal-color); color: #ffffff; }
 
   .archive-viewer-box {
     display: none;
-    background: #ffffff;
-    border: 1px solid var(--card-border);
+    background: #faf8f4;
+    border: 2px solid var(--card-border);
     border-radius: 12px;
     padding: 10px;
     max-height: 240px;
@@ -686,10 +614,6 @@
     font-size: 0.8rem;
     margin-top: 6px;
   }
-  .archive-day-group { margin-bottom: 10px; border-bottom: 1px solid var(--neutral-chip); padding-bottom: 6px; }
-  .archive-day-group:last-child { border-bottom: none; }
-  .archive-day-title { font-weight: 800; color: var(--sage-primary); margin-bottom: 4px; display: flex; justify-content: space-between; }
-  .archive-row { display: flex; justify-content: space-between; color: var(--text-muted); padding: 2px 0; font-size: 0.76rem; }
 </style>
 </head>
 <body>
@@ -719,41 +643,58 @@
 </div>
 
 <div class="card">
-  <div class="dashboard-overview">
-    <div class="dash-main-row">
-      <div class="stat-card-focus cal" id="cardRemCal">
-        <span class="stat-label"><span>נשאר להיום</span><span>קלוריות</span></span>
-        <div class="stat-num" id="remainingCal">1,800</div>
+  <!-- ריבוע 1: נשאר להיום (קלוריות וחלבון עם סרגלים) -->
+  <div class="stat-box-large">
+    <div class="box-headline">🎯 נשאר להיום</div>
+    <div class="dual-val">
+      <div class="val-item cal" id="boxRemCal">
+        <span class="sub">קלוריות</span>
+        <span id="remainingCal" class="num">1,800</span>
         <div class="bar-container">
-          <div id="barRemainingCal" class="bar-fill" style="background: var(--sage-primary);"></div>
+          <div id="barRemainingCal" class="bar-fill" style="background: var(--cal-color);"></div>
         </div>
       </div>
-      <div class="stat-card-focus pro" id="cardRemPro">
-        <span class="stat-label"><span>נשאר להיום</span><span>חלבון</span></span>
-        <div class="stat-num" id="remainingPro">140ג'</div>
+      <div class="val-item pro" id="boxRemPro">
+        <span class="sub">חלבון</span>
+        <span id="remainingPro" class="num">140ג'</span>
         <div class="bar-container">
-          <div id="barRemainingPro" class="bar-fill" style="background: var(--sage-accent);"></div>
+          <div id="barRemainingPro" class="bar-fill" style="background: var(--pro-color);"></div>
         </div>
-      </div>
-    </div>
-
-    <div class="dash-sub-row">
-      <div class="stat-card-sub">
-        <span class="sub-title">נאכל היום</span>
-        <span class="sub-val" id="eatenSummary">0 קל' | 0ג'</span>
-      </div>
-      <div class="stat-card-sub spare-box">
-        <div>
-          <div class="sub-title">ספייר מצטבר</div>
-          <div class="sub-val" id="weeklyBank">0</div>
-        </div>
-        <button class="btn-icon-top" onclick="editSpareCalories()" style="font-size:0.95rem; color:var(--sage-accent);" title="ערוך ספייר">✎</button>
       </div>
     </div>
   </div>
 
-  <div class="entry-box" id="entryBox">
-    <div class="entry-box-header" id="entryTitle">🔍 חיפוש, הזנה ושמירה</div>
+  <!-- ריבוע 2: נאכל היום (קלוריות וחלבון עם סרגלים) + ספייר מצטבר -->
+  <div class="grid-bottom-stats">
+    <div class="stat-box-small" style="text-align: right;">
+      <div class="title" style="text-align: center;">🍽️ נאכל היום</div>
+      <div style="display:flex; justify-content:space-around; margin-top:4px;">
+        <div style="text-align:center;">
+          <div style="font-size:0.7rem; font-weight:800; color:var(--text-muted);">קלוריות</div>
+          <div id="eatenCal" style="font-size:1.15rem; font-weight:900; color:var(--cal-color);">0</div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:0.7rem; font-weight:800; color:var(--text-muted);">חלבון</div>
+          <div id="eatenPro" style="font-size:1.15rem; font-weight:900; color:var(--pro-color);">0ג'</div>
+        </div>
+      </div>
+      <div class="bar-container" style="margin-top:6px; height:6px;">
+        <div id="barEatenCal" class="bar-fill" style="background: var(--cal-color);"></div>
+      </div>
+    </div>
+
+    <div class="stat-box-small">
+      <div class="title">🏦 ספייר מצטבר</div>
+      <div class="single-num-wrap">
+        <div id="weeklyBank" class="single-num bank">0</div>
+        <button class="btn-icon-top" onclick="editSpareCalories()" style="font-size:0.95rem; color:var(--bank-color);" title="ערוך ספייר">✎</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- תיבת הזנה ראשית -->
+  <div class="entry-highlight-box" id="entryBox">
+    <div class="entry-highlight-title" id="entryTitle">🔍 חיפוש, הזנה ושמירה</div>
     
     <div class="search-wrapper">
       <input type="text" id="entryNameInput" placeholder="חפש מנה במאגר או הקלד חדשה..." autocomplete="off" oninput="handleLiveSearch(this.value)">
@@ -762,13 +703,13 @@
 
     <div class="portion-row" id="portionCalcRow">
       <span class="portion-label">כמות לפי שקילה/מנה:</span>
-      <div class="portion-input-wrap">
+      <div style="display:flex; align-items:center; gap:6px;">
         <input type="number" id="portionQtyInput" value="100" step="any" oninput="onPortionQtyChanged()" inputmode="decimal">
-        <span style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);" id="portionUnitTag">גרם</span>
+        <span style="font-size:0.8rem; font-weight:bold; color:var(--text-main);" id="portionUnitTag">גרם</span>
       </div>
     </div>
 
-    <div class="input-dual-row">
+    <div class="input-row">
       <input type="number" id="calInput" placeholder="קלוריות" inputmode="numeric" enterkeyhint="next">
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
     </div>
@@ -778,30 +719,30 @@
       <datalist id="categoryDatalist"></datalist>
     </div>
 
-    <div class="action-stack" id="defaultActionBtns">
-      <button class="btn-primary-action" onclick="actionAddMenu()">+ הוסף לתפריט</button>
+    <div class="action-buttons-stack" id="defaultActionBtns">
+      <button class="btn-neo btn-add-menu" onclick="actionAddMenu()">+ הוסף לתפריט</button>
       <div style="display:flex; gap:6px;">
-        <button class="btn-secondary-action" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
-        <button class="btn-secondary-action" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
+        <button class="btn-neo btn-add-pool" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
+        <button class="btn-neo btn-add-both" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
       </div>
-      <button class="btn-secondary-action" id="btnClearSelection" style="display:none;" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
-      <button id="cancelEditPoolBtn" style="display:none; background:var(--neutral-chip); color:var(--text-main); border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
+      <button class="btn-neo btn-clear-sel" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
+      <button id="cancelEditPoolBtn" class="btn-neo" style="display:none; background:#f3efe6;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
     </div>
 
-    <div class="action-stack" id="logEditActionBtns" style="display:none;">
-      <button class="btn-primary-action" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
-      <button class="btn-secondary-action" onclick="cancelLogEdit()">ביטול עריכה</button>
+    <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
+      <button class="btn-neo btn-add-menu" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
+      <button class="btn-neo btn-add-pool" onclick="cancelLogEdit()">ביטול עריכה</button>
     </div>
   </div>
 
-  <div class="day-triggers-grid" style="margin-top: 10px;">
-    <button class="btn-day-trigger bank" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(מעביר ספייר)</span></button>
-    <button class="btn-day-trigger nobank" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(ללא ספייר)</span></button>
+  <div class="day-actions-grid">
+    <button class="btn-day-neo bank" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(מעביר ספייר)</span></button>
+    <button class="btn-day-neo nobank" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(ללא ספייר)</span></button>
   </div>
 
   <div class="collapsible-wrapper">
-    <button class="btn-toggle-collapsible" id="btnToggleLogs" onclick="toggleLogs()">📜 היסטוריה שבועית (0)</button>
-    <div class="collapsible-box" id="logsContent">
+    <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">📜 היסטוריה שבועית (0)</button>
+    <div class="collapsible-content" id="logsContent">
       <div class="log-list" id="logs"></div>
     </div>
   </div>
@@ -815,7 +756,7 @@
   </div>
 
   <div id="allSearchRow" style="display:none; margin-bottom:8px;">
-    <input type="text" id="allSearchInput" placeholder="סינון בתוך המאגר..." oninput="renderPresets()">
+    <input type="text" id="allSearchInput" placeholder="סינון במאגר..." oninput="renderPresets()">
   </div>
 
   <div id="categoryContainer"></div>
@@ -828,18 +769,18 @@
   </div>
   <div style="display:flex; gap:6px;">
     <input type="text" id="aiFoodQuery" placeholder="מה אכלת וכמה? (למשל: 150ג סייטן)" onkeydown="if(event.key==='Enter') askAI()">
-    <button class="btn-primary-action" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
+    <button class="btn-neo btn-add-both" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
   </div>
-  <div id="aiResultBox" style="display:none; margin-top:10px; background:var(--card-bg); padding:10px; border-radius:12px; border:1px solid var(--card-border);">
-    <div style="font-size:0.75rem; color:var(--sage-primary); font-weight:800; margin-bottom:6px;">ערוך לפני שמירה:</div>
+  <div id="aiResultBox" style="display:none; margin-top:10px; background:#faf8f4; padding:10px; border-radius:12px; border:2px solid var(--card-border);">
+    <div style="font-size:0.75rem; color:var(--pro-color); font-weight:900; margin-bottom:6px;">ערוך לפני שמירה:</div>
     <input type="text" id="aiEditName" style="margin-bottom:6px;">
-    <div class="input-dual-row" style="margin-bottom:8px;">
+    <div class="input-row" style="margin-bottom:8px;">
       <input type="number" id="aiEditCal" placeholder="קלוריות">
       <input type="number" id="aiEditPro" placeholder="חלבון">
     </div>
     <div style="display:flex; gap:6px;">
-      <button class="btn-primary-action" style="flex:1;" onclick="addAiToDaily()">+ ליומי</button>
-      <button class="btn-secondary-action" style="flex:1;" onclick="addAiToPool()">+ למאגר</button>
+      <button class="btn-neo btn-add-menu" style="flex:1;" onclick="addAiToDaily()">+ ליומי</button>
+      <button class="btn-neo btn-add-pool" style="flex:1;" onclick="addAiToPool()">+ למאגר</button>
     </div>
   </div>
 </div>
@@ -851,48 +792,48 @@
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <div style="background:#ffffff; padding:12px; border-radius:16px; border:1px solid var(--card-border);">
-      <div class="toggle-setting-row">
-        <span style="font-size:0.85rem; font-weight:800;">עוזר AI (צ'אט)</span>
+    <div style="background:#faf8f4; padding:12px; border-radius:14px; border:2px solid var(--card-border);">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <span style="font-size:0.85rem; font-weight:900;">עוזר AI (צ'אט)</span>
         <button id="btnAiToggle" class="switch-btn active" onclick="toggleAiEnabled()">ON</button>
       </div>
       <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:6px;">מפתח Gemini API:</div>
       <div style="display:flex; gap:6px;">
-        <input type="text" id="geminiApiKeyInput" placeholder="הדבק כאן מפתח API..." style="font-size:0.8rem; direction:ltr;">
-        <button class="btn-primary-action" style="width:auto; padding:0 12px;" onclick="saveApiKey()">שמור</button>
+        <input type="text" id="geminiApiKeyInput" placeholder="הדבק מפתח API..." style="font-size:0.8rem; direction:ltr;">
+        <button class="btn-neo btn-add-both" style="width:auto; padding:0 12px;" onclick="saveApiKey()">שמור</button>
       </div>
     </div>
 
-    <div style="background:#ffffff; padding:12px; border-radius:16px; border:1px solid var(--card-border);">
-      <div style="font-size:0.82rem; font-weight:800; margin-bottom:6px;">יעדים יומיים:</div>
-      <div class="input-dual-row" style="margin-bottom:6px;">
+    <div style="background:#faf8f4; padding:12px; border-radius:14px; border:2px solid var(--card-border);">
+      <div style="font-size:0.82rem; font-weight:900; margin-bottom:6px;">יעדים יומיים:</div>
+      <div class="input-row" style="margin-bottom:6px;">
         <input type="number" id="targetCalInput" placeholder="קלוריות">
         <input type="number" id="targetProInput" placeholder="חלבון">
       </div>
-      <button class="btn-secondary-action" style="width:100%;" onclick="updateTargets()">שמור יעדים</button>
+      <button class="btn-neo btn-add-menu" onclick="updateTargets()">שמור יעדים</button>
     </div>
 
-    <button class="btn-secondary-action" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
+    <button class="btn-neo btn-add-pool" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
 
     <div style="display:flex; gap:6px;">
-      <button class="btn-secondary-action" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
-      <button class="btn-secondary-action" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
+      <button class="btn-neo btn-add-pool" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
+      <button class="btn-neo btn-add-pool" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
       <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
     </div>
 
-    <div style="background:#ffffff; border:1px solid var(--card-border); border-radius:16px; padding:12px;">
-      <div style="font-size:0.82rem; font-weight:800; color:var(--sage-primary); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
+    <div style="background:#faf8f4; border:2px solid var(--card-border); border-radius:14px; padding:12px;">
+      <div style="font-size:0.82rem; font-weight:900; color:var(--cal-color); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
       <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
       <div style="display:flex; gap:6px;">
-        <button class="btn-secondary-action" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
-        <button class="btn-secondary-action" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
+        <button class="btn-neo btn-add-pool" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
+        <button class="btn-neo btn-add-pool" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
       </div>
       <div class="archive-viewer-box" id="archiveViewerBox"></div>
     </div>
 
     <div style="display:flex; flex-direction:column; gap:6px;">
-      <button class="btn-secondary-action" style="color:var(--danger); border-color:#f1c2c2;" onclick="resetDayOnly()">איפוס יום נוכחי בלבד</button>
-      <button class="btn-secondary-action" style="color:var(--danger); border-color:#f1c2c2;" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
+      <button class="btn-neo" style="background:#fff1f2; color:var(--danger);" onclick="resetDayOnly()">איפוס יום נוכחי בלבד</button>
+      <button class="btn-neo" style="background:#fff1f2; color:var(--danger);" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
     </div>
   </div>
 </div>
@@ -908,12 +849,11 @@
       <code>שם המנה, קלוריות, חלבון, קטגוריה</code>
     </div>
     <textarea id="bulkMenuInput" placeholder="טופו צרוב, 350, 27, ארוחת ערב"></textarea>
-    <button class="btn-primary-action" onclick="processBulkMenu()">טען מנות למאגר</button>
+    <button class="btn-neo btn-add-menu" onclick="processBulkMenu()">טען מנות למאגר</button>
   </div>
 </div>
 
 <script>
-  // מאגר בסיס טבעוני 100% - חלבון נספר רק במקורות משמעותיים (0 בפירות, שמנים וירקות דלים)
   const BASE_FOODS = [
     { name: "טופו קשה", cal: 144, pro: 15.5, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
     { name: "טופו משי", cal: 55, pro: 5.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
@@ -1222,7 +1162,7 @@
     }
 
     const cleanKey = geminiApiKey.trim().replace(/\s+/g, '');
-    setAiStatus('מחשב...', 'var(--sage-primary)', false);
+    setAiStatus('מחשב...', 'var(--cal-color)', false);
 
     const promptText = `אתה מחשבון תזונה טבעוני. נתח את המנה: "${query}". השב ב-JSON בלבד בפורמט:
 {"name": "שם המנה בעברית", "cal": מספר קלוריות, "pro": מספר גרם חלבון (רק אם הוא משמעותי, אחרת 0)}`;
@@ -1248,7 +1188,7 @@
       document.getElementById('aiEditPro').value = parseFloat(parsed.pro) || 0;
 
       document.getElementById('aiResultBox').style.display = 'block';
-      setAiStatus('הושלם!', 'var(--sage-accent)', true);
+      setAiStatus('הושלם!', 'var(--cal-color)', true);
     } catch (e) {
       setAiStatus('שגיאה', 'var(--danger)', true);
       alert('שגיאה בחיבור ל-AI: ' + e.message);
@@ -1431,28 +1371,33 @@
 
     const remCalEl = document.getElementById('remainingCal');
     remCalEl.textContent = remCal.toLocaleString();
-    document.getElementById('cardRemCal').className = 'stat-card-focus cal ' + (remCal < 0 ? 'negative' : '');
+    document.getElementById('boxRemCal').className = 'val-item cal ' + (remCal < 0 ? 'negative' : '');
 
     const remProEl = document.getElementById('remainingPro');
     remProEl.textContent = remPro + "ג'";
-    document.getElementById('cardRemPro').className = 'stat-card-focus pro ' + (remPro < 0 ? 'negative' : '');
+    document.getElementById('boxRemPro').className = 'val-item pro ' + (remPro < 0 ? 'negative' : '');
 
-    document.getElementById('eatenSummary').textContent = `${eatenCal.toLocaleString()} קל' | ${eatenPro}ג'`;
+    document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
+    document.getElementById('eatenPro').textContent = eatenPro + "ג'";
 
     const bankEl = document.getElementById('weeklyBank');
     bankEl.textContent = (weeklyBank >= 0 ? '+' : '') + weeklyBank.toLocaleString();
-    bankEl.className = 'sub-val ' + (weeklyBank < 0 ? 'neg' : '');
+    bankEl.className = 'single-num bank ' + (weeklyBank < 0 ? 'negative' : '');
 
     const calRemPercent = Math.min(100, Math.max(0, (remCal / targetCal) * 100));
     const proRemPercent = Math.min(100, Math.max(0, (remPro / targetPro) * 100));
+    const calEatenPercent = Math.min(100, Math.max(0, (eatenCal / targetCal) * 100));
 
-    const barCal = document.getElementById('barRemainingCal');
-    barCal.style.width = calRemPercent + '%';
-    barCal.style.background = remCal < 0 ? 'var(--danger)' : 'var(--sage-primary)';
+    const barRemCal = document.getElementById('barRemainingCal');
+    barRemCal.style.width = calRemPercent + '%';
+    barRemCal.style.background = remCal < 0 ? 'var(--danger)' : 'var(--cal-color)';
 
-    const barPro = document.getElementById('barRemainingPro');
-    barPro.style.width = proRemPercent + '%';
-    barPro.style.background = remPro < 0 ? 'var(--danger)' : 'var(--sage-accent)';
+    const barRemPro = document.getElementById('barRemainingPro');
+    barRemPro.style.width = proRemPercent + '%';
+    barRemPro.style.background = remPro < 0 ? 'var(--danger)' : 'var(--pro-color)';
+
+    const barEatCal = document.getElementById('barEatenCal');
+    barEatCal.style.width = calEatenPercent + '%';
 
     document.getElementById('archiveCountText').textContent = `בארכיון שמורות ${archiveLogs.length} הזנות תמידיות.`;
     saveData();
@@ -1637,7 +1582,6 @@
         if (item) {
           item.date = day;
           newLogs.push(item);
-          // סנכרון תאריך בארכיון
           const arch = archiveLogs.find(a => a.id === id);
           if (arch) arch.date = day;
         }
@@ -1702,7 +1646,6 @@
       eatenPro = Math.max(0, Math.round((eatenPro - item.pro + val.pro) * 10) / 10);
     }
 
-    // סנכרון עריכה מלא בארכיון
     const arch = archiveLogs.find(a => a.id === item.id);
     if (arch) {
       arch.name = val.name;
@@ -1742,7 +1685,6 @@
       eatenPro = Math.max(0, Math.round((eatenPro - item.pro) * 10) / 10);
     }
 
-    // סנכרון מחיקה מלא גם בארכיון
     const archIdx = archiveLogs.findIndex(a => a.id === itemId);
     if (archIdx >= 0) archiveLogs.splice(archIdx, 1);
 
