@@ -3,55 +3,90 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>מעקב קלוריות וחלבון</title>
+<title>מעקב תזונה יומי</title>
 <link rel="manifest" href="manifest.json?v=2">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="קלוריות">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="תזונה">
 <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png">
 
 <style>
+  :root {
+    --bg-page: #ede8df;
+    --card-bg: #f9f7f2;
+    --card-border: #e0dbce;
+    --card-shadow: 0 4px 20px rgba(50, 45, 38, 0.05);
+    --text-main: #2b2723;
+    --text-muted: #797166;
+    --text-subtle: #a8a095;
+    
+    --sage-primary: #2d5038;
+    --sage-light: #e4ece6;
+    --sage-accent: #3e6d4c;
+    
+    --warm-terracotta: #c25e2e;
+    --terracotta-light: #fbeee8;
+    
+    --neutral-chip: #eee9df;
+    --neutral-border: #d8d1c2;
+    --input-bg: #ffffff;
+    --danger: #b93838;
+    --danger-light: #faeaea;
+  }
+
   * { 
     box-sizing: border-box; 
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
     -webkit-tap-highlight-color: transparent;
   }
+
   body { 
-    background: #121212; 
-    color: #e0e0e0; 
+    background: var(--bg-page); 
+    color: var(--text-main); 
     display: flex; 
     flex-direction: column; 
     align-items: center; 
     padding: 14px; 
-    padding-top: 66px; 
+    padding-top: 68px; 
     padding-bottom: 90px; 
     margin: 0; 
     gap: 14px; 
   }
-  .card { background: #1e1e1e; border-radius: 18px; padding: 18px; width: 100%; max-width: 400px; box-shadow: 0 4px 24px rgba(0,0,0,0.6); position: relative; }
-  
+
+  .card { 
+    background: var(--card-bg); 
+    border: 1px solid var(--card-border);
+    border-radius: 24px; 
+    padding: 18px; 
+    width: 100%; 
+    max-width: 410px; 
+    box-shadow: var(--card-shadow); 
+    position: relative; 
+  }
+
   .floating-top-bar {
     position: fixed;
     top: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: 400px;
-    height: 52px;
-    background: rgba(24, 24, 24, 0.95);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    max-width: 410px;
+    height: 56px;
+    background: rgba(237, 232, 223, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     z-index: 900;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0 14px;
-    border-bottom: 1px solid #2d2d2d;
+    padding: 0 16px;
+    border-bottom: 1px solid rgba(224, 219, 206, 0.7);
   }
+
   .header-title-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  h2 { margin: 0; font-size: 1.15rem; color: #fff; font-weight: 700; }
-  
+  h2 { margin: 0; font-size: 1.15rem; color: var(--text-main); font-weight: 800; letter-spacing: -0.3px; }
+
   .topbar-center-slot {
     flex: 1;
     display: flex;
@@ -60,42 +95,45 @@
     padding: 0 6px;
     overflow: hidden;
   }
-  .neon-blue-toast {
+  .toast-pill {
     font-size: 0.72rem;
     font-weight: 700;
-    color: #00e5ff;
-    text-shadow: 0 0 8px rgba(0, 229, 255, 0.8), 0 0 14px rgba(0, 229, 255, 0.4);
+    color: var(--sage-primary);
+    background: var(--sage-light);
+    border: 1px solid #c8d8cc;
+    padding: 4px 10px;
+    border-radius: 20px;
     opacity: 0;
     transition: none;
     pointer-events: none;
     white-space: nowrap;
   }
-  .neon-blue-toast.show {
+  .toast-pill.show {
     opacity: 1;
     transition: none;
   }
-  .neon-blue-toast.fade-out {
+  .toast-pill.fade-out {
     opacity: 0;
     transition: opacity 0.8s ease-out;
   }
 
-  .btn-settings-gear { 
+  .btn-icon-top { 
     background: transparent; 
     border: none; 
     outline: none;
-    font-size: 1.3rem; 
+    font-size: 1.25rem; 
     cursor: pointer; 
-    color: #a0a0a0; 
+    color: var(--text-muted); 
     padding: 6px; 
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    transition: color 0.2s, transform 0.2s;
+    transition: transform 0.15s, color 0.15s;
   }
-  .btn-settings-gear:active { 
-    color: #00e676; 
-    transform: rotate(45deg) scale(0.95); 
+  .btn-icon-top:active { 
+    color: var(--sage-primary); 
+    transform: scale(0.92); 
   }
 
   .nav-history-group { 
@@ -105,211 +143,323 @@
     align-items: center; 
     flex-shrink: 0;
   }
-  .btn-icon-nav {
-    background: #252525;
-    color: #e0e0e0;
-    border: 1px solid #383838;
+  .btn-nav-circle {
+    background: var(--card-bg);
+    color: var(--text-main);
+    border: 1px solid var(--card-border);
     border-radius: 50%;
-    width: 38px;
-    height: 38px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s, border-color 0.15s;
+    transition: all 0.15s;
     outline: none;
     padding: 0;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.03);
   }
-  .btn-icon-nav svg {
-    width: 22px;
-    height: 22px;
-    fill: currentColor;
-  }
-  .btn-icon-nav:active { 
-    background: #333; 
+  .btn-nav-circle svg { width: 18px; height: 18px; fill: currentColor; }
+  .btn-nav-circle:active { 
+    background: var(--neutral-chip); 
     transform: scale(0.92);
-    border-color: #00e676;
-    color: #00e676;
+    color: var(--sage-primary);
   }
 
-  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-  .stat-box { background: #282828; border-radius: 12px; padding: 12px 10px; text-align: center; display: flex; flex-direction: column; justify-content: space-between; min-height: 90px; }
-  .stat-box .title { font-size: 0.8rem; color: #aaa; margin-bottom: 4px; }
-  
-  .dual-val { display: flex; justify-content: space-between; align-items: stretch; gap: 8px; }
-  .val-item { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; flex: 1; min-width: 0; }
-  .val-item .sub { font-size: 0.7rem; color: #999; margin-bottom: 3px; line-height: 1; }
-  .val-item .num { font-size: 1.35rem; font-weight: bold; line-height: 1.2; height: 1.6rem; display: flex; align-items: center; justify-content: center; }
-  
-  .stat-box .value.negative { color: #ef5350 !important; }
-  .stat-box .value.neutral { color: #64b5f6; }
-  .stat-box .single-num-wrap { display: flex; align-items: center; justify-content: center; gap: 6px; margin: auto 0; }
-  .stat-box .single-num { font-size: 1.5rem; font-weight: bold; line-height: 1.2; }
-  .btn-edit-spare { background: transparent; border: none; color: #81c784; font-size: 0.95rem; cursor: pointer; padding: 2px 4px; outline: none; }
-
-  .bar-container { width: 100%; background: #3d3d3d; height: 6px; border-radius: 3px; overflow: hidden; margin-top: 6px; flex-shrink: 0; }
-  .bar-fill { height: 100%; width: 0%; border-radius: 3px; transition: width 0.3s ease, background-color 0.3s ease; }
-
-  .entry-highlight-box {
-    background: #1f2a22;
-    border: 2px solid #00e676;
-    box-shadow: 0 0 12px rgba(0, 230, 118, 0.25);
-    border-radius: 14px;
-    padding: 12px;
-    margin-bottom: 12px;
+  .dashboard-overview {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
   }
-  .entry-highlight-title { font-size: 0.8rem; font-weight: bold; color: #00e676; margin-bottom: 8px; text-align: center; }
-
-  .input-row { display: flex; gap: 6px; margin-bottom: 6px; }
-  input[type="number"], input[type="text"], textarea { 
-    background: #2a2a2a; 
-    border: 1px solid #444; 
-    border-radius: 8px; 
-    color: #fff; 
-    padding: 10px 8px; 
-    width: 100%; 
-    font-size: 0.95rem; 
-    text-align: center; 
-    outline: none; 
-    direction: rtl;
-    unicode-bidi: plaintext;
+  .dash-main-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
   }
-  input:focus, textarea:focus { border-color: #00e676; }
-  textarea { text-align: right; resize: vertical; min-height: 80px; font-size: 0.85rem; line-height: 1.4; }
-
-  .portion-calc-row {
-    display: none;
-    background: #18231c;
-    border: 1px dashed #00e676;
-    border-radius: 8px;
-    padding: 8px;
-    margin-bottom: 6px;
-    align-items: center;
-    gap: 8px;
+  .stat-card-focus {
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 18px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 98px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  }
+  .stat-card-focus .stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    display: flex;
     justify-content: space-between;
   }
-  .portion-calc-label {
-    font-size: 0.78rem;
-    color: #81c784;
-    font-weight: bold;
-    white-space: nowrap;
+  .stat-card-focus .stat-num {
+    font-size: 1.45rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 4px 0;
   }
-  .portion-calc-input {
-    width: 80px !important;
-    padding: 6px !important;
-    font-size: 0.9rem !important;
-    text-align: center !important;
-  }
-  .portion-unit-tag {
-    font-size: 0.75rem;
-    color: #aaa;
-    white-space: nowrap;
-  }
+  .stat-card-focus.cal .stat-num { color: var(--sage-primary); }
+  .stat-card-focus.pro .stat-num { color: var(--sage-accent); }
+  .stat-card-focus.negative .stat-num { color: var(--danger) !important; }
 
-  .action-buttons-stack { display: flex; flex-direction: column; gap: 6px; margin-top: 8px; }
-  .btn-action-main {
-    border: none;
-    border-radius: 8px;
-    padding: 11px 12px;
-    font-size: 0.92rem;
-    font-weight: bold;
-    cursor: pointer;
-    color: #fff;
+  .bar-container {
     width: 100%;
-    text-align: center;
-    outline: none;
+    background: var(--neutral-chip);
+    height: 6px;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
   }
-  .btn-add-menu { background: #2e7d32; }
-  .btn-add-pool { background: #1565c0; }
-  .btn-add-both { background: #7b1fa2; box-shadow: 0 0 8px rgba(186, 104, 200, 0.4); }
-  .btn-action-main:active { opacity: 0.85; transform: scale(0.98); }
+  .bar-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.3s ease, background-color 0.3s ease;
+  }
 
-  .btn-clear-selection {
+  .dash-sub-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-card-sub {
+    background: var(--neutral-chip);
+    border-radius: 14px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .stat-card-sub .sub-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    margin-bottom: 2px;
+  }
+  .stat-card-sub .sub-val {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-main);
+  }
+  .stat-card-sub .sub-val.neg { color: var(--danger); }
+  .stat-card-sub.spare-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .entry-box {
+    background: #ffffff;
+    border: 1.5px solid var(--sage-primary);
+    border-radius: 20px;
+    padding: 14px;
+    margin-top: 4px;
+    position: relative;
+    box-shadow: 0 4px 16px rgba(45, 80, 56, 0.06);
+  }
+  .entry-box-header {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--sage-primary);
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .search-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  input[type="text"], input[type="number"], textarea {
+    background: var(--input-bg);
+    border: 1px solid var(--neutral-border);
+    border-radius: 12px;
+    color: var(--text-main);
+    padding: 12px 14px;
+    width: 100%;
+    font-size: 0.95rem;
+    outline: none;
+    direction: rtl;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  input:focus, textarea:focus {
+    border-color: var(--sage-primary);
+    box-shadow: 0 0 0 3px var(--sage-light);
+  }
+
+  .custom-search-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    margin-top: 4px;
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
     display: none;
-    background: #282828;
-    color: #bbb;
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 7px;
-    font-size: 0.78rem;
+  }
+  .dropdown-item {
+    padding: 10px 14px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--neutral-chip);
+    font-size: 0.86rem;
     font-weight: 600;
+  }
+  .dropdown-item:last-child { border-bottom: none; }
+  .dropdown-item:active, .dropdown-item.hovered {
+    background: var(--sage-light);
+    color: var(--sage-primary);
+  }
+  .dropdown-item-meta {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    font-weight: normal;
+  }
+
+  .portion-row {
+    display: none;
+    background: var(--sage-light);
+    border: 1px dashed var(--sage-accent);
+    border-radius: 12px;
+    padding: 9px 12px;
+    margin-bottom: 8px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .portion-row .portion-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    color: var(--sage-primary);
+  }
+  .portion-row .portion-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .portion-row input {
+    width: 78px !important;
+    padding: 6px 8px !important;
+    text-align: center;
+    font-weight: bold;
+    border-radius: 8px;
+  }
+
+  .input-dual-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+
+  .btn-primary-action {
+    background: var(--sage-primary);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 0.92rem;
+    font-weight: 800;
     cursor: pointer;
     width: 100%;
     text-align: center;
     outline: none;
-    transition: background 0.15s, color 0.15s;
+    transition: opacity 0.15s, transform 0.1s;
   }
-  .btn-clear-selection:active {
-    background: #333;
-    color: #fff;
-  }
+  .btn-primary-action:active { opacity: 0.9; transform: scale(0.98); }
 
-  .day-actions-grid {
+  .action-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .btn-secondary-action {
+    background: var(--neutral-chip);
+    color: var(--text-main);
+    border: 1px solid var(--neutral-border);
+    border-radius: 12px;
+    padding: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    text-align: center;
+  }
+  .btn-secondary-action:active { background: #e3ded4; }
+
+  .day-triggers-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 6px;
   }
-  .btn-day-action {
-    border-radius: 10px;
-    padding: 10px 6px;
+  .btn-day-trigger {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 10px 8px;
     font-size: 0.82rem;
-    font-weight: 700;
+    font-weight: 800;
+    color: var(--text-main);
     cursor: pointer;
-    border: 1px solid #444;
-    text-align: center;
-    line-height: 1.25;
+    line-height: 1.3;
     outline: none;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.02);
   }
-  .btn-day-with-bank {
-    background: #26332a;
-    color: #81c784;
-    border-color: #388e3c;
-  }
-  .btn-day-no-bank {
-    background: #2d2926;
-    color: #ffb74d;
-    border-color: #f57c00;
-  }
-  .btn-day-action:active { opacity: 0.8; transform: scale(0.97); }
+  .btn-day-trigger.bank { color: var(--sage-primary); border-color: #cbd8cf; }
+  .btn-day-trigger.nobank { color: var(--warm-terracotta); border-color: #eed6cb; }
+  .btn-day-trigger:active { transform: scale(0.97); }
 
   .collapsible-wrapper { margin-top: 4px; }
-  .btn-toggle-box { background: #252525; color: #bbb; border: 1px solid #383838; border-radius: 8px; font-size: 0.8rem; font-weight: 600; padding: 9px; width: 100%; cursor: pointer; outline: none; }
-  .btn-toggle-box:active { background: #303030; }
-  .collapsible-content { display: none; margin-top: 6px; background: #181818; padding: 10px; border-radius: 10px; border: 1px solid #303030; }
+  .btn-toggle-collapsible {
+    background: var(--card-bg);
+    color: var(--text-muted);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    outline: none;
+  }
+  .collapsible-box {
+    display: none;
+    margin-top: 8px;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 16px;
+    border: 1px solid var(--card-border);
+  }
 
-  .log-list { max-height: 340px; overflow-y: auto; font-size: 0.82rem; padding-bottom: 4px; position: relative; }
-  
+  .log-list { max-height: 340px; overflow-y: auto; font-size: 0.84rem; }
   .history-day-card {
-    background: #202020;
-    border: 1px solid #2e2e2e;
-    border-radius: 10px;
-    margin-bottom: 10px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    margin-bottom: 8px;
     padding: 8px 10px;
-    transition: border-color 0.2s;
   }
   .history-day-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #2d2d2d;
+    border-bottom: 1px solid var(--card-border);
     padding-bottom: 5px;
     margin-bottom: 6px;
     pointer-events: none;
   }
-  .history-day-title {
-    font-size: 0.82rem;
-    font-weight: bold;
-    color: #81c784;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-  .history-day-summary {
-    font-size: 0.74rem;
-    color: #ffa726;
-    font-weight: bold;
-  }
+  .history-day-title { font-size: 0.82rem; font-weight: 800; color: var(--sage-primary); }
+  .history-day-summary { font-size: 0.74rem; color: var(--warm-terracotta); font-weight: 800; }
 
   .day-items-container {
     min-height: 28px;
@@ -322,231 +472,224 @@
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 6px 8px; 
-    background: #242424;
-    border: 1px solid #2e2e2e;
-    color: #dcdcdc;
-    border-radius: 8px;
+    padding: 7px 10px; 
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    color: var(--text-main);
+    border-radius: 10px;
     user-select: none;
     -webkit-user-select: none;
     -webkit-touch-callout: none;
     transition: transform 0.15s ease, opacity 0.15s ease;
     touch-action: pan-y;
   }
-
   .log-item.holding-active {
-    background: #173822 !important;
-    border-color: #00e676 !important;
-    box-shadow: 0 0 12px rgba(0, 230, 118, 0.7) !important;
+    background: var(--sage-light) !important;
+    border-color: var(--sage-primary) !important;
+    box-shadow: 0 0 10px rgba(45, 80, 56, 0.2) !important;
   }
 
   .drag-placeholder {
     height: 38px;
-    border: 2px dashed #00e676;
-    background: rgba(0, 230, 118, 0.1);
-    border-radius: 8px;
+    border: 2px dashed var(--sage-accent);
+    background: var(--sage-light);
+    border-radius: 10px;
     margin: 2px 0;
-    transition: all 0.15s ease;
     pointer-events: none;
   }
-
   .floating-drag-clone {
     position: fixed;
     pointer-events: none;
     z-index: 9999;
-    background: #1b3823;
-    border: 1.5px solid #00e676;
-    box-shadow: 0 12px 28px rgba(0,0,0,0.85), 0 0 16px rgba(0, 230, 118, 0.8);
-    border-radius: 8px;
-    padding: 6px 10px;
+    background: #ffffff;
+    border: 1.5px solid var(--sage-primary);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+    border-radius: 10px;
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    color: #fff;
+    color: var(--text-main);
     transform: scale(1.03);
     opacity: 0.95;
-    transition: transform 0.05s linear;
   }
 
-  .log-item-content {
-    display: flex;
-    align-items: center;
-    gap: 4px;
+  .btn-log-action { background: transparent; border: none; font-size: 0.95rem; cursor: pointer; padding: 2px 4px; outline: none; }
+  .btn-log-edit { color: var(--sage-accent); }
+  .btn-log-save { color: #2563eb; }
+  .btn-log-del { color: var(--danger); }
+
+  .pool-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .pool-tab-btn {
     flex: 1;
-    pointer-events: none;
-  }
-
-  .log-actions { display: flex; gap: 4px; align-items: center; }
-  .btn-log-action { background: transparent; border: none; font-size: 0.9rem; cursor: pointer; padding: 2px 4px; outline: none; }
-  .btn-log-edit { color: #81c784; }
-  .btn-log-save { color: #64b5f6; }
-  .btn-log-del { color: #e57373; }
-
-  .btn-clear-logs-subtle {
-    background: transparent;
-    color: #777;
-    border: 1px dashed #3a3a3a;
-    border-radius: 6px;
-    padding: 6px;
-    font-size: 0.72rem;
-    width: 100%;
-    margin-top: 14px;
-    margin-bottom: 4px;
+    background: var(--neutral-chip);
+    color: var(--text-muted);
+    border: 1px solid var(--neutral-border);
+    border-radius: 12px;
+    padding: 9px 4px;
+    font-size: 0.78rem;
+    font-weight: 800;
     cursor: pointer;
-    text-align: center;
-    transition: color 0.2s, border-color 0.2s;
+    outline: none;
   }
-  .btn-clear-logs-subtle:active {
-    color: #ef5350;
-    border-color: #ef5350;
+  .pool-tab-btn.active {
+    background: var(--sage-primary);
+    color: #ffffff;
+    border-color: var(--sage-primary);
   }
 
-  .pool-tabs { display: flex; gap: 6px; margin-bottom: 8px; }
-  .pool-tab-btn { flex: 1; background: #282828; color: #888; border: 1px solid #3a3a3a; border-radius: 8px; padding: 8px 2px; font-size: 0.78rem; font-weight: bold; cursor: pointer; outline: none; }
-  .pool-tab-btn.active { background: #388e3c; color: #fff; border-color: #4caf50; }
-
-  .category-block { background: #242424; border: 1px solid #333; border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; }
-  .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; padding-bottom: 4px; border-bottom: 1px solid #333; }
-  .category-title { font-size: 0.82rem; font-weight: bold; color: #81c784; }
-  .category-controls { display: flex; gap: 4px; }
-  .btn-cat-order { background: #333; color: #aaa; border: none; border-radius: 4px; width: 22px; height: 22px; font-size: 0.75rem; cursor: pointer; outline: none; }
+  .category-block {
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+  }
+  .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--neutral-chip);
+  }
+  .category-title { font-size: 0.82rem; font-weight: 800; color: var(--sage-primary); }
+  .btn-cat-order {
+    background: var(--neutral-chip);
+    color: var(--text-muted);
+    border: none;
+    border-radius: 6px;
+    width: 24px;
+    height: 24px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
 
   .preset-list { display: flex; flex-wrap: wrap; gap: 6px; }
   .preset-btn-wrapper { 
     display: flex; 
     align-items: center; 
-    background: #2f2f2f; 
-    border: 1px solid #3d3d3d; 
-    border-radius: 6px; 
+    background: var(--card-bg); 
+    border: 1px solid var(--card-border); 
+    border-radius: 10px; 
     overflow: hidden; 
-    transition: background 0.25s ease, border-color 0.25s ease, transform 0.15s ease; 
+    transition: all 0.2s ease; 
   }
-  .preset-btn { background: transparent; color: #e0e0e0; font-size: 0.78rem; padding: 7px 9px; border: none; cursor: pointer; outline: none; }
-  .preset-sub-btn { background: transparent; font-size: 0.75rem; padding: 7px 5px; border: none; border-right: 1px solid #3a3a3a; cursor: pointer; outline: none; }
-  .preset-fav-btn { color: #fbc02d; }
-  .preset-edit-btn { color: #81c784; }
-  .preset-del-btn { color: #e57373; }
+  .preset-btn {
+    background: transparent;
+    color: var(--text-main);
+    font-size: 0.8rem;
+    padding: 8px 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    outline: none;
+  }
+  .preset-sub-btn {
+    background: transparent;
+    font-size: 0.75rem;
+    padding: 8px 6px;
+    border: none;
+    border-right: 1px solid var(--card-border);
+    cursor: pointer;
+    outline: none;
+  }
+  .preset-fav-btn { color: #d97706; }
+  .preset-edit-btn { color: var(--sage-accent); }
+  .preset-del-btn { color: var(--danger); }
 
   .preset-btn-wrapper.pulse-added {
-    background: #1b5e20 !important;
-    border-color: #00e676 !important;
-    box-shadow: 0 0 10px rgba(0, 230, 118, 0.7);
+    background: var(--sage-light) !important;
+    border-color: var(--sage-primary) !important;
     transform: scale(0.96);
   }
 
-  .ai-assistant-card {
-    background: #1c232a;
-    border: 1px solid #0288d1;
-    box-shadow: 0 0 10px rgba(2, 136, 209, 0.2);
-    border-radius: 14px;
+  .ai-card {
+    background: #ffffff;
+    border: 1px solid #bfe3cc;
+    border-radius: 20px;
     padding: 14px;
     width: 100%;
-    max-width: 400px;
-    scroll-margin-bottom: 100px;
+    max-width: 410px;
+    box-shadow: 0 4px 16px rgba(45, 80, 56, 0.05);
   }
-  .ai-card-title { font-size: 0.85rem; font-weight: bold; color: #4fc3f7; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
-  .ai-input-wrap { display: flex; gap: 6px; }
-  .ai-input-wrap input { flex: 1; text-align: right; border-color: #0288d1; font-size: 0.95rem; padding: 10px; }
-  .btn-ai-send { background: #0288d1; color: #fff; border: none; border-radius: 8px; padding: 0 14px; font-weight: bold; cursor: pointer; outline: none; }
-  
-  .ai-result-box { margin-top: 10px; background: #242c35; border-radius: 8px; padding: 10px; display: none; font-size: 0.88rem; }
-  .ai-edit-grid { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
-  .ai-edit-grid input { padding: 6px 8px; font-size: 0.88rem; }
-
-  .ai-actions-row { display: flex; gap: 6px; }
-  .btn-ai-act { flex: 1; border: none; border-radius: 6px; padding: 8px; font-size: 0.8rem; font-weight: bold; cursor: pointer; outline: none; }
-  .btn-ai-add-day { background: #2e7d32; color: #fff; }
-  .btn-ai-add-pool { background: #1565c0; color: #fff; }
+  .ai-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--sage-primary);
+    margin-bottom: 8px;
+  }
 
   .modal-overlay {
     display: none;
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.75);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
+    background: rgba(43, 39, 35, 0.45);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
     z-index: 1000;
     justify-content: center;
     align-items: center;
     padding: 16px;
   }
   .modal-box {
-    background: #1e1e1e;
-    border: 1px solid #444;
-    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 24px;
     padding: 20px;
     width: 100%;
     max-width: 380px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.8);
+    box-shadow: 0 16px 40px rgba(0,0,0,0.15);
     display: flex;
     flex-direction: column;
     gap: 12px;
   }
-  .modal-title-bar { display: flex; justify-content: space-between; align-items: center; }
-  .modal-title-bar h3 { margin: 0; font-size: 1.1rem; color: #fff; }
-  .modal-close-btn { background: transparent; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer; outline: none; }
-  .modal-btn-row { display: flex; gap: 8px; }
-  .modal-btn-full {
-    background: #2a2a2a;
-    color: #e0e0e0;
-    border: 1px solid #444;
-    border-radius: 8px;
-    padding: 10px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    cursor: pointer;
-    width: 100%;
-    text-align: center;
-    outline: none;
-  }
-  .modal-btn-danger { background: #2d1414; color: #ef5350; border-color: #5c2424; }
+  .modal-header-bar { display: flex; justify-content: space-between; align-items: center; }
+  .modal-header-bar h3 { margin: 0; font-size: 1.1rem; color: var(--text-main); font-weight: 800; }
+  .modal-close-btn { background: transparent; border: none; font-size: 1.25rem; color: var(--text-muted); cursor: pointer; }
 
-  .toggle-switch-row {
+  .toggle-setting-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
   }
-  .toggle-switch-label {
-    font-size: 0.85rem;
-    font-weight: bold;
-    color: #4fc3f7;
-  }
   .switch-btn {
-    background: #333;
-    border: 1px solid #555;
+    background: var(--neutral-chip);
+    border: 1px solid var(--neutral-border);
     border-radius: 16px;
-    padding: 4px 10px;
-    color: #aaa;
-    cursor: pointer;
+    padding: 4px 12px;
+    color: var(--text-muted);
+    font-weight: 800;
     font-size: 0.78rem;
-    font-weight: bold;
-    outline: none;
-    transition: background 0.2s, color 0.2s;
+    cursor: pointer;
   }
   .switch-btn.active {
-    background: #0288d1;
-    border-color: #03a9f4;
-    color: #fff;
+    background: var(--sage-primary);
+    color: #ffffff;
+    border-color: var(--sage-primary);
   }
 
   .archive-viewer-box {
     display: none;
-    background: #141414;
-    border: 1px solid #333;
-    border-radius: 8px;
-    padding: 8px;
+    background: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 10px;
     max-height: 240px;
     overflow-y: auto;
     font-size: 0.8rem;
     margin-top: 6px;
   }
-  .archive-day-group { margin-bottom: 10px; border-bottom: 1px solid #282828; padding-bottom: 6px; }
+  .archive-day-group { margin-bottom: 10px; border-bottom: 1px solid var(--neutral-chip); padding-bottom: 6px; }
   .archive-day-group:last-child { border-bottom: none; }
-  .archive-day-title { font-weight: bold; color: #81c784; margin-bottom: 4px; display: flex; justify-content: space-between; }
-  .archive-row { display: flex; justify-content: space-between; color: #ccc; padding: 2px 0; font-size: 0.76rem; }
+  .archive-day-title { font-weight: 800; color: var(--sage-primary); margin-bottom: 4px; display: flex; justify-content: space-between; }
+  .archive-row { display: flex; justify-content: space-between; color: var(--text-muted); padding: 2px 0; font-size: 0.76rem; }
 </style>
 </head>
 <body>
@@ -554,20 +697,20 @@
 <div class="floating-top-bar">
   <div class="header-title-group">
     <h2>מאזן יומי</h2>
-    <button class="btn-settings-gear" onclick="openSettingsModal()" title="הגדרות">⚙</button>
+    <button class="btn-icon-top" onclick="openSettingsModal()" title="הגדרות">⚙</button>
   </div>
 
   <div class="topbar-center-slot">
-    <span id="neonToast" class="neon-blue-toast">מנה נוספה לתפריט!</span>
+    <span id="toastMsg" class="toast-pill">מנה נוספה לתפריט!</span>
   </div>
 
   <div class="nav-history-group">
-    <button class="btn-icon-nav" onclick="undoLastAction()" title="חזור אחורה">
+    <button class="btn-nav-circle" onclick="undoLastAction()" title="חזור אחורה">
       <svg viewBox="0 0 24 24">
         <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
       </svg>
     </button>
-    <button class="btn-icon-nav" onclick="redoLastAction()" title="הלוך שוב">
+    <button class="btn-nav-circle" onclick="redoLastAction()" title="הלוך שוב">
       <svg viewBox="0 0 24 24">
         <path d="M4 11h12.17l-5.59-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4v-2z"/>
       </svg>
@@ -576,104 +719,89 @@
 </div>
 
 <div class="card">
-  <div class="stat-box" style="margin-bottom: 10px;">
-    <div class="title">נשאר להיום</div>
-    <div class="dual-val">
-      <div class="val-item">
-        <span class="sub">קלוריות</span>
-        <span id="remainingCal" class="num" style="color: #4caf50;">1,800</span>
+  <div class="dashboard-overview">
+    <div class="dash-main-row">
+      <div class="stat-card-focus cal" id="cardRemCal">
+        <span class="stat-label"><span>נשאר להיום</span><span>קלוריות</span></span>
+        <div class="stat-num" id="remainingCal">1,800</div>
         <div class="bar-container">
-          <div id="barRemainingCal" class="bar-fill" style="background: #4caf50;"></div>
+          <div id="barRemainingCal" class="bar-fill" style="background: var(--sage-primary);"></div>
         </div>
       </div>
-      <div class="val-item">
-        <span class="sub">חלבון</span>
-        <span id="remainingPro" class="num" style="color: #81c784;">140ג'</span>
+      <div class="stat-card-focus pro" id="cardRemPro">
+        <span class="stat-label"><span>נשאר להיום</span><span>חלבון</span></span>
+        <div class="stat-num" id="remainingPro">140ג'</div>
         <div class="bar-container">
-          <div id="barRemainingPro" class="bar-fill" style="background: #81c784;"></div>
+          <div id="barRemainingPro" class="bar-fill" style="background: var(--sage-accent);"></div>
         </div>
+      </div>
+    </div>
+
+    <div class="dash-sub-row">
+      <div class="stat-card-sub">
+        <span class="sub-title">נאכל היום</span>
+        <span class="sub-val" id="eatenSummary">0 קל' | 0ג'</span>
+      </div>
+      <div class="stat-card-sub spare-box">
+        <div>
+          <div class="sub-title">ספייר מצטבר</div>
+          <div class="sub-val" id="weeklyBank">0</div>
+        </div>
+        <button class="btn-icon-top" onclick="editSpareCalories()" style="font-size:0.95rem; color:var(--sage-accent);" title="ערוך ספייר">✎</button>
       </div>
     </div>
   </div>
 
-  <div class="grid">
-    <div class="stat-box">
-      <div class="title">נאכל היום</div>
-      <div class="dual-val">
-        <div class="val-item">
-          <span class="sub">קלוריות</span>
-          <span id="eatenCal" class="num" style="color: #ffb74d;">0</span>
-          <div class="bar-container">
-            <div id="barEatenCal" class="bar-fill" style="background: #ffb74d;"></div>
-          </div>
-        </div>
-        <div class="val-item">
-          <span class="sub">חלבון</span>
-          <span id="eatenPro" class="num" style="color: #4fc3f7;">0ג'</span>
-          <div class="bar-container">
-            <div id="barEatenPro" class="bar-fill" style="background: #4fc3f7;"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="stat-box">
-      <div class="title">ספייר מצטבר</div>
-      <div class="single-num-wrap">
-        <div id="weeklyBank" class="single-num neutral">0</div>
-        <button class="btn-edit-spare" onclick="editSpareCalories()" title="ערוך ספייר ידנית">✎</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="entry-highlight-box" id="entryBox">
-    <div class="entry-highlight-title" id="entryTitle">🔍 חיפוש, הזנה ושמירה</div>
+  <div class="entry-box" id="entryBox">
+    <div class="entry-box-header" id="entryTitle">🔍 חיפוש, הזנה ושמירה</div>
     
-    <div class="input-row">
-      <input type="text" id="entryNameInput" list="poolDatalist" placeholder="שם המנה" oninput="handleNameInput(this.value)" onchange="onNameSelected(this.value)" enterkeyhint="next">
-      <datalist id="poolDatalist"></datalist>
+    <div class="search-wrapper">
+      <input type="text" id="entryNameInput" placeholder="חפש מנה במאגר או הקלד חדשה..." autocomplete="off" oninput="handleLiveSearch(this.value)">
+      <div class="custom-search-dropdown" id="searchDropdown"></div>
     </div>
 
-    <div class="portion-calc-row" id="portionCalcRow">
-      <span class="portion-calc-label" id="portionCalcLabel">כמות לפי שקילה/מנה:</span>
-      <div style="display:flex; align-items:center; gap:4px;">
-        <input type="number" id="portionQtyInput" class="portion-calc-input" value="100" step="any" oninput="onPortionQtyChanged()" inputmode="decimal">
-        <span class="portion-unit-tag" id="portionUnitTag">גרם</span>
+    <div class="portion-row" id="portionCalcRow">
+      <span class="portion-label">כמות לפי שקילה/מנה:</span>
+      <div class="portion-input-wrap">
+        <input type="number" id="portionQtyInput" value="100" step="any" oninput="onPortionQtyChanged()" inputmode="decimal">
+        <span style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);" id="portionUnitTag">גרם</span>
       </div>
     </div>
 
-    <div class="input-row">
+    <div class="input-dual-row">
       <input type="number" id="calInput" placeholder="קלוריות" inputmode="numeric" enterkeyhint="next">
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
     </div>
 
-    <div class="input-row" id="catRow">
-      <input type="text" id="entryCatInput" list="categoryDatalist" placeholder="קטגוריה" enterkeyhint="done">
+    <div style="margin-bottom:8px;" id="catRow">
+      <input type="text" id="entryCatInput" list="categoryDatalist" placeholder="קטגוריה (ברירת מחדל: כללי)" enterkeyhint="done">
       <datalist id="categoryDatalist"></datalist>
     </div>
 
-    <div class="action-buttons-stack" id="defaultActionBtns">
-      <button class="btn-action-main btn-add-menu" id="btnAddMenu" onclick="actionAddMenu()">+ הוסף לתפריט</button>
-      <button class="btn-action-main btn-add-pool" id="btnAddPool" onclick="actionAddPool()">+ הוסף למאגר</button>
-      <button class="btn-action-main btn-add-both" id="btnAddBoth" onclick="actionAddBoth()">+ הוסף למאגר + תפריט</button>
-      <button class="btn-clear-selection" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
-      <button id="cancelEditPoolBtn" style="display:none; background:#455a64; color:#fff; border:none; padding:8px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
+    <div class="action-stack" id="defaultActionBtns">
+      <button class="btn-primary-action" onclick="actionAddMenu()">+ הוסף לתפריט</button>
+      <div style="display:flex; gap:6px;">
+        <button class="btn-secondary-action" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
+        <button class="btn-secondary-action" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
+      </div>
+      <button class="btn-secondary-action" id="btnClearSelection" style="display:none;" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
+      <button id="cancelEditPoolBtn" style="display:none; background:var(--neutral-chip); color:var(--text-main); border:none; padding:8px; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
     </div>
 
-    <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
-      <button class="btn-action-main btn-add-menu" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
-      <button style="background:#455a64; color:#fff; border:none; padding:9px; border-radius:8px; font-weight:bold; cursor:pointer;" onclick="cancelLogEdit()">ביטול עריכה</button>
+    <div class="action-stack" id="logEditActionBtns" style="display:none;">
+      <button class="btn-primary-action" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
+      <button class="btn-secondary-action" onclick="cancelLogEdit()">ביטול עריכה</button>
     </div>
   </div>
 
-  <div class="day-actions-grid">
-    <button class="btn-day-action btn-day-with-bank" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(מעביר ספייר)</span></button>
-    <button class="btn-day-action btn-day-no-bank" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(ללא ספייר)</span></button>
+  <div class="day-triggers-grid" style="margin-top: 10px;">
+    <button class="btn-day-trigger bank" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(מעביר ספייר)</span></button>
+    <button class="btn-day-trigger nobank" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(ללא ספייר)</span></button>
   </div>
 
   <div class="collapsible-wrapper">
-    <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">📜 היסטוריה שבועית (0)</button>
-    <div class="collapsible-content" id="logsContent">
+    <button class="btn-toggle-collapsible" id="btnToggleLogs" onclick="toggleLogs()">📜 היסטוריה שבועית (0)</button>
+    <div class="collapsible-box" id="logsContent">
       <div class="log-list" id="logs"></div>
     </div>
   </div>
@@ -681,166 +809,158 @@
 
 <div class="card" id="poolCard">
   <div class="pool-tabs">
-    <button class="pool-tab-btn" id="tabFavs" onclick="handlePoolTabClick('favs')">⭐ מועדפים</button>
+    <button class="pool-tab-btn" id="tabFavs" onclick="handlePoolTabClick('favs')">⭐ מועדפים (0)</button>
     <button class="pool-tab-btn" id="tabAll" onclick="handlePoolTabClick('all')">📦 המאגר שלי (0)</button>
-    <button class="pool-tab-btn" id="tabBase" onclick="handlePoolTabClick('base')">⚖️ מאגר בסיס</button>
+    <button class="pool-tab-btn" id="tabBase" onclick="handlePoolTabClick('base')">⚖️ מאגר בסיס (0)</button>
   </div>
 
   <div id="allSearchRow" style="display:none; margin-bottom:8px;">
-    <input type="text" id="allSearchInput" placeholder="חפש מנה..." oninput="renderPresets()">
+    <input type="text" id="allSearchInput" placeholder="סינון בתוך המאגר..." oninput="renderPresets()">
   </div>
 
   <div id="categoryContainer"></div>
 </div>
 
-<div class="ai-assistant-card" id="aiAssistantCard">
-  <div class="ai-card-title">
+<div class="ai-card" id="aiAssistantCard">
+  <div class="ai-header">
     <span>🤖 עוזר AI</span>
-    <span id="aiStatus" style="font-size:0.7rem; color:#888; font-weight:normal;"></span>
+    <span id="aiStatus" style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;"></span>
   </div>
-  <div class="ai-input-wrap">
-    <input type="text" id="aiFoodQuery" placeholder="מה אכלת וכמה? (למשל: 200ג טופו)" onfocus="scrollAiIntoView()" onkeydown="if(event.key==='Enter') askAI()">
-    <button class="btn-ai-send" onclick="askAI()">שלח</button>
+  <div style="display:flex; gap:6px;">
+    <input type="text" id="aiFoodQuery" placeholder="מה אכלת וכמה? (למשל: 150ג סייטן)" onkeydown="if(event.key==='Enter') askAI()">
+    <button class="btn-primary-action" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
   </div>
-  <div class="ai-result-box" id="aiResultBox">
-    <div style="font-size:0.75rem; color:#81c784; margin-bottom:6px; font-weight:bold;">ניתן לערוך לפני שמירה:</div>
-    <div class="ai-edit-grid">
-      <input type="text" id="aiEditName" placeholder="שם המנה">
-      <div style="display:flex; gap:6px;">
-        <input type="number" id="aiEditCal" placeholder="קלוריות">
-        <input type="number" id="aiEditPro" placeholder="חלבון">
-      </div>
+  <div id="aiResultBox" style="display:none; margin-top:10px; background:var(--card-bg); padding:10px; border-radius:12px; border:1px solid var(--card-border);">
+    <div style="font-size:0.75rem; color:var(--sage-primary); font-weight:800; margin-bottom:6px;">ערוך לפני שמירה:</div>
+    <input type="text" id="aiEditName" style="margin-bottom:6px;">
+    <div class="input-dual-row" style="margin-bottom:8px;">
+      <input type="number" id="aiEditCal" placeholder="קלוריות">
+      <input type="number" id="aiEditPro" placeholder="חלבון">
     </div>
-    <div class="ai-actions-row">
-      <button class="btn-ai-act btn-ai-add-day" onclick="addAiToDaily()">+ הוסף ליומי</button>
-      <button class="btn-ai-act btn-ai-add-pool" onclick="addAiToPool()">+ שמור למאגר</button>
+    <div style="display:flex; gap:6px;">
+      <button class="btn-primary-action" style="flex:1;" onclick="addAiToDaily()">+ ליומי</button>
+      <button class="btn-secondary-action" style="flex:1;" onclick="addAiToPool()">+ למאגר</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-title-bar">
+    <div class="modal-header-bar">
       <h3>⚙ הגדרות וניהול</h3>
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <div style="background:#262626; padding:10px; border-radius:10px; border:1px solid #383838;">
-      <div class="toggle-switch-row">
-        <span class="toggle-switch-label">עוזר AI (צ'אט)</span>
+    <div style="background:#ffffff; padding:12px; border-radius:16px; border:1px solid var(--card-border);">
+      <div class="toggle-setting-row">
+        <span style="font-size:0.85rem; font-weight:800;">עוזר AI (צ'אט)</span>
         <button id="btnAiToggle" class="switch-btn active" onclick="toggleAiEnabled()">ON</button>
       </div>
-      <div style="font-size:0.75rem; color:#aaa; margin-bottom:6px;">מפתח Gemini API:</div>
-      <div class="input-row" style="margin-bottom:0;">
+      <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:6px;">מפתח Gemini API:</div>
+      <div style="display:flex; gap:6px;">
         <input type="text" id="geminiApiKeyInput" placeholder="הדבק כאן מפתח API..." style="font-size:0.8rem; direction:ltr;">
-        <button style="background:#0288d1; border:none; color:#fff; border-radius:8px; padding:0 12px; font-weight:bold; cursor:pointer;" onclick="saveApiKey()">שמור</button>
+        <button class="btn-primary-action" style="width:auto; padding:0 12px;" onclick="saveApiKey()">שמור</button>
       </div>
     </div>
 
-    <div style="background:#262626; padding:10px; border-radius:10px; border:1px solid #383838;">
-      <div style="font-size:0.8rem; color:#aaa; margin-bottom:6px; font-weight:bold;">יעדים יומיים:</div>
-      <div class="input-row" style="margin-bottom:0;">
+    <div style="background:#ffffff; padding:12px; border-radius:16px; border:1px solid var(--card-border);">
+      <div style="font-size:0.82rem; font-weight:800; margin-bottom:6px;">יעדים יומיים:</div>
+      <div class="input-dual-row" style="margin-bottom:6px;">
         <input type="number" id="targetCalInput" placeholder="קלוריות">
         <input type="number" id="targetProInput" placeholder="חלבון">
-        <button style="background:#2e7d32; border:none; color:#fff; border-radius:8px; padding:0 12px; font-weight:bold; cursor:pointer;" onclick="updateTargets()">שמור</button>
       </div>
+      <button class="btn-secondary-action" style="width:100%;" onclick="updateTargets()">שמור יעדים</button>
     </div>
 
-    <button class="modal-btn-full" style="color:#81c784; border-color:#2e7d32;" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
+    <button class="btn-secondary-action" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
 
-    <div class="modal-btn-row">
-      <button class="modal-btn-full" onclick="exportBackupTxt()">ייצוא גיבוי כללי</button>
-      <button class="modal-btn-full" onclick="document.getElementById('importFile').click()">ייבוא גיבוי TXT</button>
+    <div style="display:flex; gap:6px;">
+      <button class="btn-secondary-action" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
+      <button class="btn-secondary-action" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
       <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
     </div>
 
-    <div style="background:#1b241e; border:1px solid #2e7d32; border-radius:10px; padding:10px;">
-      <div style="font-size:0.8rem; color:#81c784; font-weight:bold; margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
-      <div style="font-size:0.72rem; color:#aaa; margin-bottom:8px;" id="archiveCountText">נשמרות כאן כל ההזנות מאז ומעולם ללא מחיקות.</div>
-      
-      <div style="display:flex; gap:6px; margin-bottom:4px;">
-        <button class="modal-btn-full" style="background:#203825; color:#a5d6a7; border-color:#388e3c; font-size:0.8rem;" onclick="toggleArchiveViewer()">👁️ צפייה בארכיון המלא</button>
-        <button class="modal-btn-full" style="background:#243627; color:#a5d6a7; border-color:#388e3c; font-size:0.8rem;" onclick="exportArchiveOnly()">📥 ייצוא TXT</button>
+    <div style="background:#ffffff; border:1px solid var(--card-border); border-radius:16px; padding:12px;">
+      <div style="font-size:0.82rem; font-weight:800; color:var(--sage-primary); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
+      <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
+      <div style="display:flex; gap:6px;">
+        <button class="btn-secondary-action" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
+        <button class="btn-secondary-action" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
       </div>
-
       <div class="archive-viewer-box" id="archiveViewerBox"></div>
     </div>
 
-    <div style="display:flex; flex-direction:column; gap:6px; margin-top:4px;">
-      <button class="modal-btn-full modal-btn-danger" onclick="resetDayOnly()">איפוס יום (מאפס רק את מה שנאכל היום)</button>
-      <button class="modal-btn-full modal-btn-danger" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
+    <div style="display:flex; flex-direction:column; gap:6px;">
+      <button class="btn-secondary-action" style="color:var(--danger); border-color:#f1c2c2;" onclick="resetDayOnly()">איפוס יום נוכחי בלבד</button>
+      <button class="btn-secondary-action" style="color:var(--danger); border-color:#f1c2c2;" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
     </div>
   </div>
 </div>
 
 <div class="modal-overlay" id="menuImportModal" onclick="closeMenuImportModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
-    <div class="modal-title-bar">
+    <div class="modal-header-bar">
       <h3>📋 ייבוא מנות מטקסט</h3>
       <button class="modal-close-btn" onclick="closeMenuImportModal()">✕</button>
     </div>
-    <div style="font-size:0.75rem; color:#aaa; line-height:1.4;">
-      הדבק שורות (מופרדות בפסיק או טאב מאקסל):<br>
-      <code style="color:#81c784;">שם המנה, קלוריות, חלבון, קטגוריה</code>
+    <div style="font-size:0.75rem; color:var(--text-muted);">
+      הדבק שורות (פסיק או טאב):<br>
+      <code>שם המנה, קלוריות, חלבון, קטגוריה</code>
     </div>
-    <textarea id="bulkMenuInput" placeholder="יוגורט חלבון, 250, 20, ארוחת בוקר&#10;טופו צרוב, 350, 27, ארוחת ערב&#10;שייק ירוק, 180, 5, ביניים"></textarea>
-    <button class="btn-action-main btn-add-menu" onclick="processBulkMenu()">טען מנות למאגר</button>
+    <textarea id="bulkMenuInput" placeholder="טופו צרוב, 350, 27, ארוחת ערב"></textarea>
+    <button class="btn-primary-action" onclick="processBulkMenu()">טען מנות למאגר</button>
   </div>
 </div>
 
 <script>
+  // מאגר בסיס טבעוני 100% - חלבון נספר רק במקורות משמעותיים (0 בפירות, שמנים וירקות דלים)
   const BASE_FOODS = [
+    { name: "טופו קשה", cal: 144, pro: 15.5, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "טופו משי", cal: 55, pro: 5.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "טמפה", cal: 192, pro: 20.3, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "סייטן", cal: 140, pro: 24.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "שבבי סויה יבשים", cal: 330, pro: 50.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "יובה (עור טופו יבש)", cal: 420, pro: 52.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "אדממה (פולי סויה)", cal: 122, pro: 11.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "אבקת חלבון צמחית", cal: 120, pro: 24.0, cat: "חלבונים מובחרים", unit: "סקופ", baseQty: 1 },
+
+    { name: "עדשים מבושלות (חומות/ירוקות)", cal: 116, pro: 9.0, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "עדשים כתומות מבושלות", cal: 112, pro: 8.5, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "גרגרי חומוס מבושלים", cal: 164, pro: 8.9, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "שעועית שחורה מבושלת", cal: 132, pro: 8.9, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "שעועית לבנה מבושלת", cal: 139, pro: 9.7, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "שיבולת שועל (יבשה)", cal: 389, pro: 16.9, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "קינואה מבושלת", cal: 120, pro: 4.4, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "כוסמת מבושלת", cal: 92, pro: 3.4, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "אורז בסמטי מבושל", cal: 130, pro: 2.7, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "פסטה מבושלת", cal: 158, pro: 5.8, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
+    { name: "פיתה רגילה", cal: 230, pro: 8.0, cat: "קטניות ודגנים", unit: "יח'", baseQty: 1 },
+    { name: "פרוסת לחם מלא", cal: 75, pro: 3.5, cat: "קטניות ודגנים", unit: "יח'", baseQty: 1 },
+
     { name: "מנגו", cal: 60, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
     { name: "בננה", cal: 89, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
     { name: "תפוח עץ", cal: 52, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
     { name: "תות שדה", cal: 32, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
     { name: "אבטיח", cal: 30, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "מלפפון", cal: 15, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
     { name: "עגבנייה", cal: 18, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "גזר", cal: 41, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    { name: "מלפפון", cal: 15, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
     { name: "בטטה אפויה", cal: 90, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
     { name: "תפוח אדמה מבושל", cal: 87, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
     { name: "ברוקולי מבושל", cal: 35, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
 
-    { name: "טופו במרקם קשה", cal: 144, pro: 15.5, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "טופו משי", cal: 55, pro: 5.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "טמפה", cal: 192, pro: 20.3, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "סייטן", cal: 140, pro: 24.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "שבבי סויה יבשים", cal: 330, pro: 50.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "אדממה (פולי סויה)", cal: 122, pro: 11.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "עדשים מבושלות", cal: 116, pro: 9.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "גרגרי חומוס מבושלים", cal: 164, pro: 8.9, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "שעועית שחורה מבושלת", cal: 132, pro: 8.9, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "שעועית לבנה מבושלת", cal: 139, pro: 9.7, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "אבקת חלבון", cal: 120, pro: 25.0, cat: "חלבונים", unit: "סקופ", baseQty: 1 },
-    { name: "ביצה גדולה (L)", cal: 72, pro: 6.3, cat: "חלבונים", unit: "יח'", baseQty: 1 },
-    { name: "חלבון ביצה (L)", cal: 17, pro: 3.6, cat: "חלבונים", unit: "יח'", baseQty: 1 },
-    { name: "חזה עוף מבושל/צלוי", cal: 165, pro: 31.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "פילה סלמון אפוי", cal: 206, pro: 22.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-    { name: "טונה במים (מסוננת)", cal: 116, pro: 26.0, cat: "חלבונים", unit: "גרם", baseQty: 100 },
-
-    { name: "אורז בסמטי מבושל", cal: 130, pro: 2.7, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
-    { name: "אורז מלא מבושל", cal: 112, pro: 2.6, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
-    { name: "שיבולת שועל (יבשה)", cal: 389, pro: 16.9, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
-    { name: "פסטה מבושלת", cal: 158, pro: 5.8, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
-    { name: "קינואה מבושלת", cal: 120, pro: 4.4, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
-    { name: "כוסמת מבושלת", cal: 92, pro: 3.4, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
-    { name: "פיתה רגילה", cal: 230, pro: 8.0, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
-    { name: "פרוסת לחם מלא", cal: 75, pro: 3.5, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
-
     { name: "טחינה גולמית", cal: 595, pro: 17.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
+    { name: "שקדים טבעיים", cal: 579, pro: 21.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
+    { name: "אגוזי מלך", cal: 654, pro: 15.2, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
+    { name: "חמאת בוטנים טבעית", cal: 588, pro: 25.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
     { name: "שמן זית", cal: 884, pro: 0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
     { name: "שמן זית (כף)", cal: 120, pro: 0, cat: "שומנים ואגוזים", unit: "יח'", baseQty: 1 },
-    { name: "אגוזי מלך", cal: 654, pro: 15.2, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
-    { name: "שקדים טבעיים", cal: 579, pro: 21.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
-    { name: "חמאת בוטנים טבעית", cal: 588, pro: 25.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
     { name: "אבוקדו", cal: 160, pro: 0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 }
   ];
 
   let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
   let targetPro = parseInt(localStorage.getItem('cal_targetPro')) || 140;
   let eatenCal = parseInt(localStorage.getItem('cal_eatenCal')) || 0;
-  let eatenPro = parseInt(localStorage.getItem('cal_eatenPro')) || 0;
+  let eatenPro = parseFloat(localStorage.getItem('cal_eatenPro')) || 0;
   let weeklyBank = parseInt(localStorage.getItem('cal_weeklyBank')) || 0;
   let logs = JSON.parse(localStorage.getItem('cal_logs') || '[]');
   let archiveLogs = JSON.parse(localStorage.getItem('cal_archiveLogs') || '[]');
@@ -851,7 +971,6 @@
   let isAiEnabled = localStorage.getItem('cal_isAiEnabled') !== 'false';
   
   let currentPoolTab = localStorage.getItem('cal_poolTabState') || 'none';
-
   let activePortionContext = null;
 
   let historyStack = JSON.parse(localStorage.getItem('cal_historyStack') || '[]');
@@ -872,6 +991,7 @@
   const calInput = document.getElementById('calInput');
   const proInput = document.getElementById('proInput');
   const entryCatInput = document.getElementById('entryCatInput');
+  const searchDropdown = document.getElementById('searchDropdown');
 
   function updateClearBtnVisibility() {
     const btn = document.getElementById('btnClearSelection');
@@ -890,13 +1010,128 @@
   entryCatInput.addEventListener('keydown', function(e) { 
     if (e.key === 'Enter') { 
       e.preventDefault(); 
-      if (editingLogIndex >= 0) {
-        saveLogEdit();
-      } else {
-        actionAddMenu(); 
-      }
+      if (editingLogIndex >= 0) saveLogEdit(); else actionAddMenu(); 
     } 
   });
+
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.search-wrapper')) {
+      searchDropdown.style.display = 'none';
+    }
+  });
+
+  function handleLiveSearch(query) {
+    query = query.trim().toLowerCase();
+    searchDropdown.innerHTML = '';
+
+    if (!query) {
+      searchDropdown.style.display = 'none';
+      return;
+    }
+
+    const matches = [];
+
+    presets.forEach(p => {
+      if (p.name.toLowerCase().includes(query)) {
+        matches.push({ type: 'preset', data: p });
+      }
+    });
+
+    BASE_FOODS.forEach(b => {
+      if (b.name.toLowerCase().includes(query) || (b.cat && b.cat.toLowerCase().includes(query))) {
+        matches.push({ type: 'base', data: b });
+      }
+    });
+
+    if (matches.length === 0) {
+      searchDropdown.style.display = 'none';
+      return;
+    }
+
+    matches.slice(0, 10).forEach(m => {
+      const row = document.createElement('div');
+      row.className = 'dropdown-item';
+
+      if (m.type === 'base') {
+        const unitSuffix = m.data.unit === 'גרם' ? '100ג' : `1 ${m.data.unit}`;
+        row.innerHTML = `
+          <span>⚖️ ${m.data.name}</span>
+          <span class="dropdown-item-meta">${m.data.cal} קל' | ${m.data.pro}ג' (${unitSuffix})</span>
+        `;
+        row.onclick = () => {
+          loadBaseFoodForPortion(m.data.name);
+          searchDropdown.style.display = 'none';
+        };
+      } else {
+        row.innerHTML = `
+          <span>📦 ${m.data.name}</span>
+          <span class="dropdown-item-meta">${m.data.cal} קל' | ${m.data.pro}ג'</span>
+        `;
+        row.onclick = () => {
+          selectCustomPreset(m.data);
+          searchDropdown.style.display = 'none';
+        };
+      }
+      searchDropdown.appendChild(row);
+    });
+
+    searchDropdown.style.display = 'block';
+  }
+
+  function selectCustomPreset(preset) {
+    pushState();
+    closePortionCalculator();
+    entryNameInput.value = preset.name;
+    calInput.value = preset.cal;
+    proInput.value = preset.pro;
+    entryCatInput.value = (preset.cat === 'כללי' ? '' : preset.cat);
+    updateClearBtnVisibility();
+  }
+
+  function loadBaseFoodForPortion(foodName) {
+    const item = BASE_FOODS.find(b => b.name === foodName);
+    if (!item) return;
+
+    pushState();
+    activePortionContext = {
+      name: item.name,
+      calPerUnit: item.cal / item.baseQty,
+      proPerUnit: item.pro / item.baseQty,
+      unit: item.unit,
+      baseQty: item.baseQty,
+      cat: item.cat
+    };
+
+    entryNameInput.value = item.name;
+    entryCatInput.value = item.cat || '';
+
+    const portionRow = document.getElementById('portionCalcRow');
+    const qtyInput = document.getElementById('portionQtyInput');
+    const unitTag = document.getElementById('portionUnitTag');
+
+    unitTag.textContent = item.unit;
+    qtyInput.value = item.baseQty;
+
+    portionRow.style.display = 'flex';
+    onPortionQtyChanged();
+    updateClearBtnVisibility();
+
+    qtyInput.focus();
+    qtyInput.select();
+  }
+
+  function onPortionQtyChanged() {
+    if (!activePortionContext) return;
+    const qty = parseFloat(document.getElementById('portionQtyInput').value) || 0;
+    calInput.value = Math.round(activePortionContext.calPerUnit * qty);
+    proInput.value = Math.round((activePortionContext.proPerUnit * qty) * 10) / 10;
+    updateClearBtnVisibility();
+  }
+
+  function closePortionCalculator() {
+    activePortionContext = null;
+    document.getElementById('portionCalcRow').style.display = 'none';
+  }
 
   function toggleAiEnabled() {
     isAiEnabled = !isAiEnabled;
@@ -918,17 +1153,14 @@
     }
   }
 
-  function showNeonToast(text) {
-    const el = document.getElementById('neonToast');
+  function showToast(text) {
+    const el = document.getElementById('toastMsg');
     if (!el) return;
-
     if (toastFadeTimer) clearTimeout(toastFadeTimer);
-
     el.textContent = text || 'מנה נוספה לתפריט!';
     el.classList.remove('fade-out');
     el.classList.add('show');
-
-    toastFadeTimer = setTimeout(function() {
+    toastFadeTimer = setTimeout(() => {
       el.classList.remove('show');
       el.classList.add('fade-out');
     }, 1000);
@@ -936,24 +1168,12 @@
 
   function pushState() {
     historyStack.push({
-      targetCal: targetCal,
-      targetPro: targetPro,
-      eatenCal: eatenCal,
-      eatenPro: eatenPro,
-      weeklyBank: weeklyBank,
+      targetCal, targetPro, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate: lastActiveDate,
-      inputState: {
-        name: entryNameInput.value,
-        cal: calInput.value,
-        pro: proInput.value,
-        cat: entryCatInput.value,
-        activePortion: activePortionContext ? JSON.parse(JSON.stringify(activePortionContext)) : null,
-        portionQty: document.getElementById('portionQtyInput').value
-      }
+      lastActiveDate
     });
     if (historyStack.length > 30) historyStack.shift();
     redoStack = [];
@@ -985,160 +1205,96 @@
   function setAiStatus(msg, color, autoClear = true) {
     const statusEl = document.getElementById('aiStatus');
     statusEl.textContent = msg;
-    statusEl.style.color = color || '#888';
-
+    statusEl.style.color = color || 'var(--text-muted)';
     if (aiStatusTimer) clearTimeout(aiStatusTimer);
     if (autoClear && msg) {
-      aiStatusTimer = setTimeout(function() {
-        statusEl.textContent = '';
-      }, 10000);
+      aiStatusTimer = setTimeout(() => { statusEl.textContent = ''; }, 10000);
     }
-  }
-
-  function scrollAiIntoView() {
-    setTimeout(function() {
-      const card = document.getElementById('aiAssistantCard');
-      if (card) card.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }, 250);
   }
 
   async function askAI() {
     const query = document.getElementById('aiFoodQuery').value.trim();
     if (!query) return;
-
     if (!geminiApiKey) {
-      alert('נא להזין תחילה את מפתח ה-API של Gemini בהגדרות (⚙)');
+      alert('נא להזין תחילה מפתח Gemini בהגדרות (⚙)');
       openSettingsModal();
       return;
     }
 
     const cleanKey = geminiApiKey.trim().replace(/\s+/g, '');
-    setAiStatus('מחשב...', '#00e676', false);
+    setAiStatus('מחשב...', 'var(--sage-primary)', false);
 
-    const promptText = 'אתה מחשבון תזונה. נתח את המנה: "' + query + '". השב ב-JSON בלבד בפורמט הבא ללא טקסט נוסף:\n{"name": "שם המנה בעברית", "cal": מספר קלוריות, "pro": מספר גרם חלבון}';
+    const promptText = `אתה מחשבון תזונה טבעוני. נתח את המנה: "${query}". השב ב-JSON בלבד בפורמט:
+{"name": "שם המנה בעברית", "cal": מספר קלוריות, "pro": מספר גרם חלבון (רק אם הוא משמעותי, אחרת 0)}`;
 
-    const modelsToTry = ['gemini-2.5-flash', 'gemini-1.5-flash'];
-    let success = false;
-    let lastError = '';
+    try {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${cleanKey}`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: promptText }] }],
+          generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
+        })
+      });
 
-    for (let i = 0; i < modelsToTry.length; i++) {
-      const model = modelsToTry[i];
-      try {
-        const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + model + ':generateContent?key=' + cleanKey;
-        const response = await fetch(url, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: promptText }] }],
-            generationConfig: {
-              responseMimeType: "application/json",
-              temperature: 0.1
-            }
-          })
-        });
+      const data = await response.json();
+      const candidateText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (!candidateText) throw new Error('לא התקבל פיענוח');
 
-        const data = await response.json();
-        if (!response.ok || data.error) {
-          lastError = (data.error && data.error.message) ? data.error.message : ('HTTP ' + response.status);
-          continue;
-        }
+      const parsed = JSON.parse(candidateText);
+      document.getElementById('aiEditName').value = parsed.name || query;
+      document.getElementById('aiEditCal').value = parseInt(parsed.cal) || 0;
+      document.getElementById('aiEditPro').value = parseFloat(parsed.pro) || 0;
 
-        const candidateText = data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts[0] && data.candidates[0].content.parts[0].text;
-        if (!candidateText) {
-          lastError = 'לא התקבל טקסט מהשרת';
-          continue;
-        }
-
-        let cleanJson = candidateText.trim();
-        const firstBrace = cleanJson.indexOf('{');
-        const lastBrace = cleanJson.lastIndexOf('}');
-        
-        if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) {
-          lastError = 'מבנה תשובה אינו JSON תקין';
-          continue;
-        }
-
-        cleanJson = cleanJson.substring(firstBrace, lastBrace + 1);
-        const parsed = JSON.parse(cleanJson);
-        
-        document.getElementById('aiEditName').value = parsed.name || query;
-        document.getElementById('aiEditCal').value = parseInt(parsed.cal) || 0;
-        document.getElementById('aiEditPro').value = parseInt(parsed.pro) || 0;
-
-        document.getElementById('aiResultBox').style.display = 'block';
-        setAiStatus('הושלם!', '#81c784', true);
-        scrollAiIntoView();
-        success = true;
-        break;
-      } catch (e) {
-        lastError = e.message;
-      }
+      document.getElementById('aiResultBox').style.display = 'block';
+      setAiStatus('הושלם!', 'var(--sage-accent)', true);
+    } catch (e) {
+      setAiStatus('שגיאה', 'var(--danger)', true);
+      alert('שגיאה בחיבור ל-AI: ' + e.message);
     }
-
-    if (!success) {
-      setAiStatus('שגיאה', '#ef5350', true);
-      alert('שגיאה בחיבור ל-AI:\n' + lastError);
-    }
-  }
-
-  function getAiItemValues() {
-    return {
-      name: document.getElementById('aiEditName').value.trim() || 'מנה חדשה',
-      cal: parseInt(document.getElementById('aiEditCal').value) || 0,
-      pro: parseInt(document.getElementById('aiEditPro').value) || 0
-    };
   }
 
   function addAiToDaily() {
-    const item = getAiItemValues();
+    const name = document.getElementById('aiEditName').value.trim() || 'מנה חדשה';
+    const cal = parseInt(document.getElementById('aiEditCal').value) || 0;
+    const pro = parseFloat(document.getElementById('aiEditPro').value) || 0;
+
     pushState();
-    eatenCal += item.cal;
-    eatenPro += item.pro;
+    eatenCal += cal;
+    eatenPro = Math.round((eatenPro + pro) * 10) / 10;
     const today = new Date().toISOString().slice(0, 10);
-    const logObj = {
-      id: Date.now() + Math.random().toString(),
-      name: item.name,
-      cal: item.cal,
-      pro: item.pro,
-      date: today
-    };
+    const logObj = { id: Date.now() + Math.random().toString(), name, cal, pro, date: today };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
+
     renderLogs();
     updateDisplay();
     document.getElementById('aiResultBox').style.display = 'none';
     document.getElementById('aiFoodQuery').value = '';
-    setAiStatus('נוסף ליומי!', '#81c784', true);
+    showToast('נוסף ליומי מה-AI!');
   }
 
   function addAiToPool() {
-    const item = getAiItemValues();
-    const cat = prompt('קטגוריה עבור המנה (ריק = כללי):', 'כללי');
-    if (cat === null) return;
-    const finalCat = cat.trim() || 'כללי';
+    const name = document.getElementById('aiEditName').value.trim() || 'מנה חדשה';
+    const cal = parseInt(document.getElementById('aiEditCal').value) || 0;
+    const pro = parseFloat(document.getElementById('aiEditPro').value) || 0;
+    const cat = prompt('קטגוריה עבור המנה:', 'כללי') || 'כללי';
+
     pushState();
-    presets.push({
-      name: item.name,
-      cal: item.cal,
-      pro: item.pro,
-      cat: finalCat,
-      isFav: true
-    });
-    if (!categoryOrder.includes(finalCat)) categoryOrder.push(finalCat);
+    presets.push({ name, cal, pro, cat: cat.trim(), isFav: true });
+    if (!categoryOrder.includes(cat.trim())) categoryOrder.push(cat.trim());
+
     renderPresets();
     updateDatalists();
     saveData();
     document.getElementById('aiResultBox').style.display = 'none';
     document.getElementById('aiFoodQuery').value = '';
-    setAiStatus('נשמר במאגר!', '#81c784', true);
+    showToast('נשמר במאגר!');
   }
 
   function handlePoolTabClick(tab) {
-    if (currentPoolTab === tab) {
-      currentPoolTab = 'none';
-    } else {
-      currentPoolTab = tab;
-    }
+    currentPoolTab = (currentPoolTab === tab) ? 'none' : tab;
     saveData();
     applyPoolTabUI();
     renderPresets();
@@ -1148,7 +1304,6 @@
     document.getElementById('tabFavs').className = 'pool-tab-btn ' + (currentPoolTab === 'favs' ? 'active' : '');
     document.getElementById('tabAll').className = 'pool-tab-btn ' + (currentPoolTab === 'all' ? 'active' : '');
     document.getElementById('tabBase').className = 'pool-tab-btn ' + (currentPoolTab === 'base' ? 'active' : '');
-    
     document.getElementById('allSearchRow').style.display = (currentPoolTab === 'all' || currentPoolTab === 'base') ? 'block' : 'none';
   }
 
@@ -1157,7 +1312,10 @@
     container.innerHTML = '';
     updateDatalists();
 
-    document.getElementById('tabAll').textContent = '📦 המאגר שלי (' + presets.length + ')';
+    const favCount = presets.filter(p => p.isFav !== false).length;
+    document.getElementById('tabFavs').textContent = `⭐ מועדפים (${favCount})`;
+    document.getElementById('tabAll').textContent = `📦 המאגר שלי (${presets.length})`;
+    document.getElementById('tabBase').textContent = `⚖️ מאגר בסיס (${BASE_FOODS.length})`;
 
     if (currentPoolTab === 'none') {
       container.style.display = 'none';
@@ -1165,204 +1323,101 @@
     }
     container.style.display = 'block';
 
-    const searchInput = document.getElementById('allSearchInput');
-    const searchTerm = (searchInput ? searchInput.value : '').trim().toLowerCase();
+    const searchTerm = (document.getElementById('allSearchInput')?.value || '').trim().toLowerCase();
 
     if (currentPoolTab === 'base') {
-      renderBaseFoodPresets(container, searchTerm);
+      renderBaseFoodTab(container, searchTerm);
       return;
     }
 
-    const filteredPresets = presets.filter(function(p) {
+    const filtered = presets.filter(p => {
       if (currentPoolTab === 'favs') return (p.isFav !== false);
       if (searchTerm) return p.name.toLowerCase().includes(searchTerm) || (p.cat || '').toLowerCase().includes(searchTerm);
       return true;
     });
 
-    if (filteredPresets.length === 0) {
-      container.innerHTML = '<div style="text-align:center; font-size:0.8rem; color:#666; padding:12px;">' + (currentPoolTab === 'favs' ? 'אין מנות מועדפות שמורות' : 'המאגר ריק') + '</div>';
+    if (filtered.length === 0) {
+      container.innerHTML = `<div style="text-align:center; font-size:0.8rem; color:var(--text-muted); padding:12px;">${currentPoolTab === 'favs' ? 'אין מועדפים' : 'המאגר ריק'}</div>`;
       return;
     }
 
-    const activeCats = new Set(filteredPresets.map(function(p) { return p.cat || 'כללי'; }));
-    const visibleCategoryOrder = categoryOrder.filter(function(c) { return activeCats.has(c); });
+    const activeCats = new Set(filtered.map(p => p.cat || 'כללי'));
+    const visibleCategories = categoryOrder.filter(c => activeCats.has(c));
 
-    visibleCategoryOrder.forEach(function(catName) {
-      const catPresets = filteredPresets.filter(function(p) { return (p.cat || 'כללי') === catName; });
+    visibleCategories.forEach(catName => {
+      const catPresets = filtered.filter(p => (p.cat || 'כללי') === catName);
       if (catPresets.length === 0) return;
 
       const block = document.createElement('div');
       block.className = 'category-block';
-
       const catIdx = categoryOrder.indexOf(catName);
-      let headerHtml = '<div class="category-header">';
-      headerHtml += '<span class="category-title">' + catName + '</span>';
-      headerHtml += '<div class="category-controls">';
-      headerHtml += '<button class="btn-cat-order" onclick="moveCategory(' + catIdx + ', -1)" title="הזז למעלה">↑</button>';
-      headerHtml += '<button class="btn-cat-order" onclick="moveCategory(' + catIdx + ', 1)" title="הזז למטה">↓</button>';
-      headerHtml += '</div></div>';
 
-      let listHtml = '<div class="preset-list">';
-      catPresets.forEach(function(p) {
+      block.innerHTML = `
+        <div class="category-header">
+          <span class="category-title">${catName}</span>
+          <div style="display:flex; gap:4px;">
+            <button class="btn-cat-order" onclick="moveCategory(${catIdx}, -1)">↑</button>
+            <button class="btn-cat-order" onclick="moveCategory(${catIdx}, 1)">↓</button>
+          </div>
+        </div>
+        <div class="preset-list" id="cat-list-${catIdx}"></div>
+      `;
+
+      const listEl = block.querySelector(`#cat-list-${catIdx}`);
+      catPresets.forEach(p => {
         const realIdx = presets.indexOf(p);
-        const favIcon = (p.isFav !== false) ? '⭐' : '☆';
-        listHtml += '<div class="preset-btn-wrapper" id="preset-wrapper-' + realIdx + '">';
-        listHtml += '<button class="preset-btn" onclick="addPresetEntry(' + realIdx + ')">' + p.name + ' (' + p.cal + "ק' / " + p.pro + "ג')</button>";
-        listHtml += '<button class="preset-sub-btn preset-fav-btn" title="הוסף/הסר ממועדפים" onclick="toggleFavPreset(' + realIdx + ')">' + favIcon + '</button>';
-        listHtml += '<button class="preset-sub-btn preset-edit-btn" title="ערוך מנה" onclick="startEditPreset(' + realIdx + ')">✎</button>';
-        listHtml += '<button class="preset-sub-btn preset-del-btn" title="מחק מנה" onclick="deletePreset(' + realIdx + ')">✕</button>';
-        listHtml += '</div>';
+        const itemWrap = document.createElement('div');
+        itemWrap.className = 'preset-btn-wrapper';
+        itemWrap.id = `preset-wrapper-${realIdx}`;
+        itemWrap.innerHTML = `
+          <button class="preset-btn" onclick="addPresetEntry(${realIdx})">${p.name} (${p.cal} קל' | ${p.pro}ג')</button>
+          <button class="preset-sub-btn preset-fav-btn" onclick="toggleFavPreset(${realIdx})">${p.isFav !== false ? '⭐' : '☆'}</button>
+          <button class="preset-sub-btn preset-edit-btn" onclick="startEditPreset(${realIdx})">✎</button>
+          <button class="preset-sub-btn preset-del-btn" onclick="deletePreset(${realIdx})">✕</button>
+        `;
+        listEl.appendChild(itemWrap);
       });
-      listHtml += '</div>';
 
-      block.innerHTML = headerHtml + listHtml;
       container.appendChild(block);
     });
   }
 
-  function renderBaseFoodPresets(container, searchTerm) {
-    const filtered = BASE_FOODS.filter(function(b) {
+  function renderBaseFoodTab(container, searchTerm) {
+    const filtered = BASE_FOODS.filter(b => {
       if (!searchTerm) return true;
       return b.name.toLowerCase().includes(searchTerm) || (b.cat && b.cat.toLowerCase().includes(searchTerm));
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = '<div style="text-align:center; font-size:0.8rem; color:#666; padding:12px;">לא נמצאו פריטים תואמים במאגר הבסיס</div>';
+      container.innerHTML = '<div style="text-align:center; font-size:0.8rem; color:var(--text-muted); padding:12px;">לא נמצאו תוצאות</div>';
       return;
     }
 
     const cats = Array.from(new Set(filtered.map(b => b.cat)));
-
-    cats.forEach(function(catName) {
+    cats.forEach(catName => {
       const catItems = filtered.filter(b => b.cat === catName);
-      if (catItems.length === 0) return;
-
       const block = document.createElement('div');
       block.className = 'category-block';
-
-      let headerHtml = `<div class="category-header"><span class="category-title">${catName}</span></div>`;
-      let listHtml = '<div class="preset-list">';
-
-      catItems.forEach(function(item) {
+      block.innerHTML = `
+        <div class="category-header"><span class="category-title">${catName}</span></div>
+        <div class="preset-list"></div>
+      `;
+      const listEl = block.querySelector('.preset-list');
+      catItems.forEach(item => {
         const unitSuffix = item.unit === 'גרם' ? '100ג' : `1 ${item.unit}`;
-        listHtml += `
-          <div class="preset-btn-wrapper">
-            <button class="preset-btn" onclick="loadBaseFoodForPortion('${item.name}')">
-              ⚖️ ${item.name} (${item.cal} קל' / ${item.pro}ג' ל-${unitSuffix})
-            </button>
-          </div>
-        `;
+        const wrap = document.createElement('div');
+        wrap.className = 'preset-btn-wrapper';
+        wrap.innerHTML = `<button class="preset-btn" onclick="loadBaseFoodForPortion('${item.name}')">⚖️ ${item.name} (${item.cal} קל' | ${item.pro}ג' ל-${unitSuffix})</button>`;
+        listEl.appendChild(wrap);
       });
-      listHtml += '</div>';
-
-      block.innerHTML = headerHtml + listHtml;
       container.appendChild(block);
     });
-  }
-
-  function handleNameInput(val) {
-    const poolList = document.getElementById('poolDatalist');
-    poolList.innerHTML = '';
-    val = val.trim().toLowerCase();
-    if (!val) return;
-
-    presets.forEach(p => {
-      if (p.name.toLowerCase().includes(val)) {
-        const opt = document.createElement('option');
-        opt.value = p.name;
-        poolList.appendChild(opt);
-      }
-    });
-
-    BASE_FOODS.forEach(b => {
-      if (b.name.toLowerCase().includes(val)) {
-        const opt = document.createElement('option');
-        opt.value = b.name;
-        poolList.appendChild(opt);
-      }
-    });
-  }
-
-  function onNameSelected(val) {
-    const trimmed = val.trim();
-    if (!trimmed) return;
-
-    pushState();
-
-    const baseFound = BASE_FOODS.find(b => b.name === trimmed);
-    if (baseFound) {
-      loadBaseFoodForPortion(baseFound.name);
-      return;
-    }
-
-    const presetFound = presets.find(p => p.name === trimmed);
-    if (presetFound) {
-      closePortionCalculator();
-      calInput.value = presetFound.cal || '';
-      proInput.value = presetFound.pro || '';
-      entryCatInput.value = (presetFound.cat === 'כללי' ? '' : presetFound.cat);
-      updateClearBtnVisibility();
-    }
-  }
-
-  function loadBaseFoodForPortion(foodName) {
-    const item = BASE_FOODS.find(b => b.name === foodName);
-    if (!item) return;
-
-    pushState();
-
-    activePortionContext = {
-      name: item.name,
-      calPerUnit: item.cal / item.baseQty,
-      proPerUnit: item.pro / item.baseQty,
-      unit: item.unit,
-      baseQty: item.baseQty,
-      cat: item.cat
-    };
-
-    entryNameInput.value = item.name;
-    entryCatInput.value = item.cat || '';
-
-    const portionRow = document.getElementById('portionCalcRow');
-    const qtyInput = document.getElementById('portionQtyInput');
-    const unitTag = document.getElementById('portionUnitTag');
-
-    unitTag.textContent = item.unit;
-    qtyInput.value = item.baseQty;
-
-    portionRow.style.display = 'flex';
-    onPortionQtyChanged();
-    updateClearBtnVisibility();
-
-    document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
-    qtyInput.focus();
-    qtyInput.select();
-  }
-
-  function onPortionQtyChanged() {
-    if (!activePortionContext) return;
-    const qty = parseFloat(document.getElementById('portionQtyInput').value) || 0;
-
-    const finalCal = Math.round(activePortionContext.calPerUnit * qty);
-    const finalPro = Math.round((activePortionContext.proPerUnit * qty) * 10) / 10;
-
-    calInput.value = finalCal;
-    proInput.value = finalPro;
-    updateClearBtnVisibility();
-  }
-
-  function closePortionCalculator() {
-    activePortionContext = null;
-    document.getElementById('portionCalcRow').style.display = 'none';
   }
 
   function updateDatalists() {
     const catList = document.getElementById('categoryDatalist');
     catList.innerHTML = '';
-    const allCats = new Set([
-      ...presets.map(p => p.cat || 'כללי'),
-      ...BASE_FOODS.map(b => b.cat)
-    ]);
+    const allCats = new Set([...presets.map(p => p.cat || 'כללי'), ...BASE_FOODS.map(b => b.cat)]);
     allCats.forEach(cat => {
       const opt = document.createElement('option');
       opt.value = cat;
@@ -1372,165 +1427,123 @@
 
   function updateDisplay() {
     const remCal = targetCal - eatenCal;
-    const remPro = targetPro - eatenPro;
+    const remPro = Math.round((targetPro - eatenPro) * 10) / 10;
 
     const remCalEl = document.getElementById('remainingCal');
     remCalEl.textContent = remCal.toLocaleString();
-    remCalEl.className = 'num ' + (remCal < 0 ? 'negative' : '');
+    document.getElementById('cardRemCal').className = 'stat-card-focus cal ' + (remCal < 0 ? 'negative' : '');
 
     const remProEl = document.getElementById('remainingPro');
     remProEl.textContent = remPro + "ג'";
-    remProEl.className = 'num ' + (remPro < 0 ? 'negative' : '');
+    document.getElementById('cardRemPro').className = 'stat-card-focus pro ' + (remPro < 0 ? 'negative' : '');
 
-    document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
-    document.getElementById('eatenPro').textContent = eatenPro + "ג'";
+    document.getElementById('eatenSummary').textContent = `${eatenCal.toLocaleString()} קל' | ${eatenPro}ג'`;
 
     const bankEl = document.getElementById('weeklyBank');
     bankEl.textContent = (weeklyBank >= 0 ? '+' : '') + weeklyBank.toLocaleString();
-    bankEl.className = 'single-num ' + (weeklyBank >= 0 ? 'neutral' : 'negative');
+    bankEl.className = 'sub-val ' + (weeklyBank < 0 ? 'neg' : '');
 
-    const calEatenPercent = Math.min(100, Math.max(0, (eatenCal / targetCal) * 100));
-    const proEatenPercent = Math.min(100, Math.max(0, (eatenPro / targetPro) * 100));
     const calRemPercent = Math.min(100, Math.max(0, (remCal / targetCal) * 100));
     const proRemPercent = Math.min(100, Math.max(0, (remPro / targetPro) * 100));
 
-    document.getElementById('barEatenCal').style.width = calEatenPercent + '%';
-    document.getElementById('barEatenPro').style.width = proEatenPercent + '%';
-    document.getElementById('barRemainingCal').style.width = calRemPercent + '%';
-    document.getElementById('barRemainingPro').style.width = proRemPercent + '%';
+    const barCal = document.getElementById('barRemainingCal');
+    barCal.style.width = calRemPercent + '%';
+    barCal.style.background = remCal < 0 ? 'var(--danger)' : 'var(--sage-primary)';
 
-    document.getElementById('barRemainingCal').style.background = remCal < 0 ? '#ef5350' : '#4caf50';
-    document.getElementById('barRemainingPro').style.background = remPro < 0 ? '#ef5350' : '#81c784';
+    const barPro = document.getElementById('barRemainingPro');
+    barPro.style.width = proRemPercent + '%';
+    barPro.style.background = remPro < 0 ? 'var(--danger)' : 'var(--sage-accent)';
 
-    document.getElementById('archiveCountText').textContent = `בארכיון שמורות כרגע ${archiveLogs.length} הזנות תמידיות.`;
-
+    document.getElementById('archiveCountText').textContent = `בארכיון שמורות ${archiveLogs.length} הזנות תמידיות.`;
     saveData();
   }
 
   function formatLogDateTitle(dateStr) {
     if (!dateStr) return '';
     const d = new Date(dateStr + 'T00:00:00');
-    const dayName = d.toLocaleDateString('he-IL', { weekday: 'long' });
-    const day = String(d.getDate()).padStart(2, '0');
-    const month = String(d.getMonth() + 1).padStart(2, '0');
-    return `${dayName} ${day}.${month} ↓`;
+    return `${d.toLocaleDateString('he-IL', { weekday: 'long' })} ${String(d.getDate()).padStart(2, '0')}.${String(d.getMonth() + 1).padStart(2, '0')}`;
   }
 
   function getTodayLogsCount() {
     const today = new Date().toISOString().slice(0, 10);
-    let count = 0;
-    for (let i = 0; i < logs.length; i++) {
-      if (logs[i].date && logs[i].date === today) {
-        count++;
-      }
-    }
-    return count;
+    return logs.filter(l => (l.date || today) === today).length;
   }
 
   function renderLogs() {
     const logList = document.getElementById('logs');
     logList.innerHTML = '';
-    
-    document.getElementById('btnToggleLogs').textContent = '📜 היסטוריה שבועית (' + getTodayLogsCount() + ')';
+    document.getElementById('btnToggleLogs').textContent = `📜 היסטוריה שבועית (${getTodayLogsCount()})`;
 
     if (logs.length === 0) {
-      logList.innerHTML = '<div style="text-align:center; font-size:0.75rem; color:#666; padding:6px 0;">אין הזנות רשומות כרגע</div>';
+      logList.innerHTML = '<div style="text-align:center; font-size:0.78rem; color:var(--text-muted); padding:10px 0;">אין הזנות רשומות כרגע</div>';
       return;
     }
 
     const todayStr = new Date().toISOString().slice(0, 10);
-
     const groups = {};
-    logs.forEach(function(item) {
+    logs.forEach(item => {
       const d = item.date || todayStr;
       if (!groups[d]) groups[d] = [];
       groups[d].push(item);
     });
 
-    const sortedDates = Object.keys(groups).sort().reverse();
-
-    sortedDates.forEach(function(dStr) {
+    Object.keys(groups).sort().reverse().forEach(dStr => {
       const entries = groups[dStr];
       const isCurrentDay = (dStr === todayStr);
-
-      const dayTotalCal = entries.reduce((acc, cur) => acc + (cur.cal || 0), 0);
-      const dayTotalPro = Math.round(entries.reduce((acc, cur) => acc + (cur.pro || 0), 0) * 10) / 10;
+      const dayCal = entries.reduce((acc, c) => acc + (c.cal || 0), 0);
+      const dayPro = Math.round(entries.reduce((acc, c) => acc + (c.pro || 0), 0) * 10) / 10;
 
       const card = document.createElement('div');
       card.className = 'history-day-card';
       card.setAttribute('data-day', dStr);
-
-      const summaryText = isCurrentDay ? 'היום-פעיל' : `${dayTotalCal} קל' | ${dayTotalPro}ג'`;
-
-      let dayHtml = `
+      card.innerHTML = `
         <div class="history-day-header">
           <span class="history-day-title">${formatLogDateTitle(dStr)}</span>
-          <span class="history-day-summary">${summaryText}</span>
+          <span class="history-day-summary">${isCurrentDay ? 'היום פעיל' : `${dayCal} קל' | ${dayPro}ג'`}</span>
         </div>
         <div class="day-items-container" data-day="${dStr}"></div>
       `;
 
-      card.innerHTML = dayHtml;
-      const itemsContainer = card.querySelector('.day-items-container');
-
-      entries.forEach(function(item) {
+      const container = card.querySelector('.day-items-container');
+      entries.forEach(item => {
         const row = document.createElement('div');
         row.className = 'log-item';
         row.setAttribute('data-id', item.id);
-        const label = item.name ? ('<strong>' + item.name + '</strong> ') : '';
-
         row.innerHTML = `
-          <div class="log-item-content">
-            <span>${label}(+${item.cal} קל' | +${item.pro}ג')</span>
+          <div style="flex:1; pointer-events:none;">
+            <strong>${item.name || ''}</strong> (+${item.cal} קל' | +${item.pro}ג')
           </div>
-          <div class="log-actions">
-            <button class="btn-log-action btn-log-edit" title="ערוך בחלון ההזנה" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
-            <button class="btn-log-action btn-log-save" title="הוסף מנה זו למאגר" onclick="saveLogItemToPoolById('${item.id}')">📥</button>
-            <button class="btn-log-action btn-log-del" title="מחק שורה זו" onclick="deleteLogItemById('${item.id}')">✕</button>
+          <div style="display:flex; gap:4px;">
+            <button class="btn-log-action btn-log-edit" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
+            <button class="btn-log-action btn-log-save" onclick="saveLogItemToPoolById('${item.id}')">📥</button>
+            <button class="btn-log-action btn-log-del" onclick="deleteLogItemById('${item.id}')">✕</button>
           </div>
         `;
-
         setupFluidDragAndDrop(row, item.id);
-
-        itemsContainer.appendChild(row);
+        container.appendChild(row);
       });
 
       logList.appendChild(card);
     });
-
-    const resetBtn = document.createElement('button');
-    resetBtn.className = 'btn-clear-logs-subtle';
-    resetBtn.textContent = '🗑 איפוס היסטוריה (7 ימים)';
-    resetBtn.onclick = clearLogsOnly;
-    logList.appendChild(resetBtn);
   }
 
   function setupFluidDragAndDrop(rowEl, itemId) {
-    let holdTimer = null;
-    let isDragging = false;
-    let dragClone = null;
-    let placeholder = null;
-    let startX = 0, startY = 0;
-    let offsetX = 0, offsetY = 0;
+    let holdTimer = null, isDragging = false, dragClone = null, placeholder = null;
+    let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
 
     const onStart = function(e) {
-      if (e.target.closest('.log-actions')) return;
-
+      if (e.target.closest('.btn-log-action')) return;
       const point = e.touches ? e.touches[0] : e;
-      startX = point.clientX;
-      startY = point.clientY;
-
+      startX = point.clientX; startY = point.clientY;
       rowEl.classList.add('holding-active');
 
-      holdTimer = setTimeout(function() {
+      holdTimer = setTimeout(() => {
         isDragging = true;
         rowEl.classList.remove('holding-active');
-
-        if (navigator.vibrate) navigator.vibrate(60);
+        if (navigator.vibrate) navigator.vibrate(50);
 
         const rect = rowEl.getBoundingClientRect();
-        offsetX = startX - rect.left;
-        offsetY = startY - rect.top;
+        offsetX = startX - rect.left; offsetY = startY - rect.top;
 
         dragClone = document.createElement('div');
         dragClone.className = 'floating-drag-clone';
@@ -1543,14 +1556,12 @@
         placeholder = document.createElement('div');
         placeholder.className = 'drag-placeholder';
         rowEl.parentNode.insertBefore(placeholder, rowEl);
-
         rowEl.style.display = 'none';
       }, 1000);
     };
 
     const onMove = function(e) {
       const point = e.touches ? e.touches[0] : e;
-
       if (!isDragging) {
         if (Math.abs(point.clientX - startX) > 8 || Math.abs(point.clientY - startY) > 8) {
           clearTimeout(holdTimer);
@@ -1560,20 +1571,16 @@
       }
 
       if (e.cancelable) e.preventDefault();
-
       if (dragClone) {
         dragClone.style.left = (point.clientX - offsetX) + 'px';
         dragClone.style.top = (point.clientY - offsetY) + 'px';
       }
 
       const elBelow = document.elementFromPoint(point.clientX, point.clientY);
-      if (!elBelow) return;
-
-      const dayContainer = elBelow.closest('.day-items-container');
+      const dayContainer = elBelow?.closest('.day-items-container');
       if (dayContainer) {
         const siblings = Array.from(dayContainer.querySelectorAll('.log-item:not([style*="display: none"])'));
         let inserted = false;
-
         for (let sib of siblings) {
           const r = sib.getBoundingClientRect();
           if (point.clientY < r.top + r.height / 2) {
@@ -1582,31 +1589,20 @@
             break;
           }
         }
-
-        if (!inserted) {
-          dayContainer.appendChild(placeholder);
-        }
+        if (!inserted) dayContainer.appendChild(placeholder);
       }
     };
 
-    const onEnd = function(e) {
+    const onEnd = function() {
       clearTimeout(holdTimer);
       rowEl.classList.remove('holding-active');
-
       if (isDragging) {
         isDragging = false;
-
-        if (dragClone) {
-          dragClone.remove();
-          dragClone = null;
-        }
-
+        if (dragClone) { dragClone.remove(); dragClone = null; }
         if (placeholder && placeholder.parentNode) {
-          const targetContainer = placeholder.parentNode;
-          targetContainer.insertBefore(rowEl, placeholder);
+          placeholder.parentNode.insertBefore(rowEl, placeholder);
           placeholder.remove();
           rowEl.style.display = 'flex';
-
           finalizeDomReorder();
         } else {
           rowEl.style.display = 'flex';
@@ -1618,17 +1614,11 @@
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
     window.addEventListener('touchcancel', onEnd);
-
-    rowEl.addEventListener('mousedown', onStart);
-    window.addEventListener('mousemove', onMove);
-    window.addEventListener('mouseup', onEnd);
   }
 
   function finalizeDomReorder() {
     const todayStr = new Date().toISOString().slice(0, 10);
     const newLogs = [];
-    const containers = document.querySelectorAll('.day-items-container');
-
     pushState();
 
     let oldTodayCal = 0, oldTodayPro = 0;
@@ -1639,24 +1629,22 @@
       }
     });
 
-    containers.forEach(function(c) {
+    document.querySelectorAll('.day-items-container').forEach(c => {
       const day = c.getAttribute('data-day');
-      const itemRows = c.querySelectorAll('.log-item');
-      itemRows.forEach(function(row) {
+      c.querySelectorAll('.log-item').forEach(row => {
         const id = row.getAttribute('data-id');
-        const found = logs.find(l => l.id === id);
-        if (found) {
-          found.date = day;
-          newLogs.push(found);
-
-          const archItem = archiveLogs.find(a => a.id === id);
-          if (archItem) archItem.date = day;
+        const item = logs.find(l => l.id === id);
+        if (item) {
+          item.date = day;
+          newLogs.push(item);
+          // סנכרון תאריך בארכיון
+          const arch = archiveLogs.find(a => a.id === id);
+          if (arch) arch.date = day;
         }
       });
     });
 
     logs = newLogs;
-
     let newTodayCal = 0, newTodayPro = 0;
     logs.forEach(l => {
       if ((l.date || todayStr) === todayStr) {
@@ -1675,10 +1663,7 @@
   function confirmStartEditLogItem(itemId) {
     const idx = logs.findIndex(l => l.id === itemId);
     if (idx < 0) return;
-    const item = logs[idx];
-    const itemName = item.name ? ('"' + item.name + '"') : 'המנה';
-    
-    if (confirm(`האם לערוך את ${itemName} בחלון ההזנה הראשי?`)) {
+    if (confirm(`לערוך את "${logs[idx].name || 'המנה'}" בחלון ההזנה?`)) {
       startEditLogItem(idx);
     }
   }
@@ -1686,7 +1671,6 @@
   function startEditLogItem(index) {
     const item = logs[index];
     if (!item) return;
-
     if (editingPresetIndex >= 0) cancelEditPreset();
     closePortionCalculator();
 
@@ -1699,7 +1683,6 @@
     document.getElementById('entryTitle').textContent = '✎ עריכת הזנה מההיסטוריה';
     document.getElementById('defaultActionBtns').style.display = 'none';
     document.getElementById('logEditActionBtns').style.display = 'flex';
-
     document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
     entryNameInput.focus();
     updateClearBtnVisibility();
@@ -1719,13 +1702,12 @@
       eatenPro = Math.max(0, Math.round((eatenPro - item.pro + val.pro) * 10) / 10);
     }
 
-    if (item.id) {
-      const archItem = archiveLogs.find(a => a.id === item.id);
-      if (archItem) {
-        archItem.name = val.name;
-        archItem.cal = val.cal;
-        archItem.pro = val.pro;
-      }
+    // סנכרון עריכה מלא בארכיון
+    const arch = archiveLogs.find(a => a.id === item.id);
+    if (arch) {
+      arch.name = val.name;
+      arch.cal = val.cal;
+      arch.pro = val.pro;
     }
 
     item.name = val.name;
@@ -1740,52 +1722,50 @@
   function cancelLogEdit() {
     editingLogIndex = -1;
     clearEntryInputs();
-    document.getElementById('catRow').style.display = 'flex';
+    document.getElementById('catRow').style.display = 'block';
     document.getElementById('entryTitle').textContent = '🔍 חיפוש, הזנה ושמירה';
     document.getElementById('defaultActionBtns').style.display = 'flex';
     document.getElementById('logEditActionBtns').style.display = 'none';
   }
 
-  function clearLogsOnly() {
-    if (logs.length === 0) return;
-    if (confirm('לאפס את כל רשימת ההיסטוריה במסך הראשי? (נתוני הארכיון יישמרו במלואם)')) {
-      pushState();
-      logs = [];
-      renderLogs();
-      saveData();
+  function deleteLogItemById(itemId) {
+    const idx = logs.findIndex(l => l.id === itemId);
+    if (idx < 0) return;
+    const item = logs[idx];
+
+    if (!confirm(`למחוק את "${item.name || 'המנה'}"?`)) return;
+
+    pushState();
+    const today = new Date().toISOString().slice(0, 10);
+    if (!item.date || item.date === today) {
+      eatenCal = Math.max(0, eatenCal - item.cal);
+      eatenPro = Math.max(0, Math.round((eatenPro - item.pro) * 10) / 10);
     }
+
+    // סנכרון מחיקה מלא גם בארכיון
+    const archIdx = archiveLogs.findIndex(a => a.id === itemId);
+    if (archIdx >= 0) archiveLogs.splice(archIdx, 1);
+
+    logs.splice(idx, 1);
+    renderLogs();
+    updateDisplay();
   }
 
   function saveLogItemToPoolById(itemId) {
     const item = logs.find(l => l.id === itemId);
     if (!item) return;
-
-    let defaultName = item.name;
-    if (!defaultName) {
-      const res = prompt('הזן שם למנה זו למאגר:');
-      if (res === null) return;
-      defaultName = res.trim();
-      if (!defaultName) return;
-    }
-
-    const catPrompt = prompt('קטגוריה עבור המנה (ריק = כללי):', 'כללי');
-    if (catPrompt === null) return;
-    const cat = catPrompt.trim() || 'כללי';
+    const name = item.name || prompt('הזן שם למנה זו למאגר:');
+    if (!name) return;
+    const cat = prompt('קטגוריה עבור המנה:', 'כללי') || 'כללי';
 
     pushState();
-    presets.push({
-      name: defaultName,
-      cal: item.cal,
-      pro: item.pro,
-      cat: cat,
-      isFav: true
-    });
+    presets.push({ name: name.trim(), cal: item.cal, pro: item.pro, cat: cat.trim(), isFav: true });
+    if (!categoryOrder.includes(cat.trim())) categoryOrder.push(cat.trim());
 
-    if (!categoryOrder.includes(cat)) categoryOrder.push(cat);
     renderPresets();
     updateDatalists();
     saveData();
-    alert('המנה "' + defaultName + '" נוספה בהצלחה למאגר!');
+    showToast('נוסף למאגר!');
   }
 
   function toggleFavPreset(idx) {
@@ -1812,12 +1792,10 @@
       const qty = parseFloat(document.getElementById('portionQtyInput').value) || activePortionContext.baseQty;
       name = `${activePortionContext.name} (${qty} ${activePortionContext.unit})`;
     }
-
     const cal = parseInt(calInput.value) || 0;
     const pro = parseFloat(proInput.value) || 0;
-    let cat = entryCatInput.value.trim();
-    if (!cat) cat = 'כללי';
-    return { name: name, cal: cal, pro: Math.round(pro * 10) / 10, cat: cat };
+    let cat = entryCatInput.value.trim() || 'כללי';
+    return { name, cal, pro: Math.round(pro * 10) / 10, cat };
   }
 
   function clearEntryInputs() {
@@ -1826,7 +1804,7 @@
     proInput.value = '';
     entryCatInput.value = '';
     closePortionCalculator();
-    document.getElementById('poolDatalist').innerHTML = '';
+    searchDropdown.style.display = 'none';
     updateClearBtnVisibility();
   }
 
@@ -1842,49 +1820,36 @@
     pushState();
     eatenCal += val.cal;
     eatenPro = Math.round((eatenPro + val.pro) * 10) / 10;
-
     const today = new Date().toISOString().slice(0, 10);
-    const logObj = {
-      id: Date.now() + Math.random().toString(),
-      name: val.name,
-      cal: val.cal,
-      pro: val.pro,
-      date: today
-    };
+    const logObj = { id: Date.now() + Math.random().toString(), name: val.name, cal: val.cal, pro: val.pro, date: today };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
 
     clearEntryInputs();
     renderLogs();
     updateDisplay();
+    showToast();
   }
 
   function actionAddPool() {
     const val = getEntryValues();
     if (!val.name || (val.cal <= 0 && val.pro <= 0)) {
-      alert('נא להזין שם מנה וערכים (קלוריות או חלבון)');
+      alert('נא להזין שם מנה וערכים');
       return;
     }
-
     pushState();
     if (editingPresetIndex >= 0) {
-      presets[editingPresetIndex] = { 
-        name: val.name, 
-        cat: val.cat, 
-        cal: val.cal, 
-        pro: val.pro, 
-        isFav: presets[editingPresetIndex].isFav !== false 
-      };
+      presets[editingPresetIndex] = { name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isFav: presets[editingPresetIndex].isFav !== false };
       cancelEditPreset();
     } else {
       presets.push({ name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isFav: true });
     }
-
     if (!categoryOrder.includes(val.cat)) categoryOrder.push(val.cat);
     clearEntryInputs();
     renderPresets();
     updateDatalists();
     saveData();
+    showToast('נשמר במאגר!');
   }
 
   function actionAddBoth() {
@@ -1893,65 +1858,39 @@
       alert('נא להזין שם מנה וערכים');
       return;
     }
-
+    actionAddPool();
     pushState();
     eatenCal += val.cal;
     eatenPro = Math.round((eatenPro + val.pro) * 10) / 10;
     const today = new Date().toISOString().slice(0, 10);
-    const logObj = {
-      id: Date.now() + Math.random().toString(),
-      name: val.name,
-      cal: val.cal,
-      pro: val.pro,
-      date: today
-    };
+    const logObj = { id: Date.now() + Math.random().toString(), name: val.name, cal: val.cal, pro: val.pro, date: today };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
 
-    const existingIdx = presets.findIndex(function(p) { return p.name === val.name; });
-    if (existingIdx >= 0) {
-      presets[existingIdx].cal = val.cal;
-      presets[existingIdx].pro = val.pro;
-      presets[existingIdx].cat = val.cat;
-    } else {
-      presets.push({ name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isFav: true });
-      if (!categoryOrder.includes(val.cat)) categoryOrder.push(val.cat);
-    }
-
-    clearEntryInputs();
     renderLogs();
-    renderPresets();
-    updateDatalists();
     updateDisplay();
+    showToast();
   }
 
   function addPresetEntry(idx) {
     const p = presets[idx];
     if (!p) return;
 
-    const wrapper = document.getElementById('preset-wrapper-' + idx);
+    const wrapper = document.getElementById(`preset-wrapper-${idx}`);
     if (wrapper) {
       wrapper.classList.add('pulse-added');
-      setTimeout(function() { wrapper.classList.remove('pulse-added'); }, 300);
+      setTimeout(() => wrapper.classList.remove('pulse-added'), 300);
     }
 
     pushState();
     eatenCal += p.cal;
     eatenPro = Math.round((eatenPro + p.pro) * 10) / 10;
-
     const today = new Date().toISOString().slice(0, 10);
-    const logObj = {
-      id: Date.now() + Math.random().toString(),
-      name: p.name,
-      cal: p.cal,
-      pro: p.pro,
-      date: today
-    };
+    const logObj = { id: Date.now() + Math.random().toString(), name: p.name, cal: p.cal, pro: p.pro, date: today };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
 
-    showNeonToast('מנה נוספה לתפריט!');
-
+    showToast();
     renderLogs();
     updateDisplay();
   }
@@ -1959,7 +1898,6 @@
   function startEditPreset(idx) {
     const p = presets[idx];
     if (!p) return;
-
     if (editingLogIndex >= 0) cancelLogEdit();
     closePortionCalculator();
 
@@ -1969,7 +1907,6 @@
     calInput.value = p.cal;
     proInput.value = p.pro;
 
-    document.getElementById('btnAddPool').textContent = 'עדכן מנה במאגר';
     document.getElementById('cancelEditPoolBtn').style.display = 'block';
     entryNameInput.focus();
     updateClearBtnVisibility();
@@ -1978,12 +1915,11 @@
   function cancelEditPreset() {
     editingPresetIndex = -1;
     clearEntryInputs();
-    document.getElementById('btnAddPool').textContent = '+ הוסף למאגר';
     document.getElementById('cancelEditPoolBtn').style.display = 'none';
   }
 
   function deletePreset(idx) {
-    if (confirm('למחוק את המנה "' + presets[idx].name + '" מהמאגר?')) {
+    if (confirm(`למחוק את "${presets[idx].name}" מהמאגר?`)) {
       pushState();
       if (editingPresetIndex === idx) cancelEditPreset();
       presets.splice(idx, 1);
@@ -1993,115 +1929,42 @@
     }
   }
 
-  function deleteLogItemById(itemId) {
-    const index = logs.findIndex(l => l.id === itemId);
-    if (index < 0) return;
-    const item = logs[index];
-
-    const itemName = item.name ? ('"' + item.name + '" ') : '';
-    if (!confirm('למחוק את ההזנה ' + itemName + '(+' + item.cal + ' קלוריות, +' + item.pro + "ג' חלבון)?")) return;
-
-    pushState();
-    const today = new Date().toISOString().slice(0, 10);
-    if (!item.date || item.date === today) {
-      eatenCal = Math.max(0, eatenCal - item.cal);
-      eatenPro = Math.max(0, Math.round((eatenPro - item.pro) * 10) / 10);
-    }
-    logs.splice(index, 1);
-
-    renderLogs();
-    updateDisplay();
-  }
-
   function undoLastAction() {
     if (historyStack.length === 0) return;
-
     redoStack.push({
-      targetCal: targetCal,
-      targetPro: targetPro,
-      eatenCal: eatenCal,
-      eatenPro: eatenPro,
-      weeklyBank: weeklyBank,
+      targetCal, targetPro, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate: lastActiveDate,
-      inputState: {
-        name: entryNameInput.value,
-        cal: calInput.value,
-        pro: proInput.value,
-        cat: entryCatInput.value,
-        activePortion: activePortionContext ? JSON.parse(JSON.stringify(activePortionContext)) : null,
-        portionQty: document.getElementById('portionQtyInput').value
-      }
+      lastActiveDate
     });
-
-    const prev = historyStack.pop();
-    applyStateSilent(prev);
+    applyStateSilent(historyStack.pop());
   }
 
   function redoLastAction() {
     if (redoStack.length === 0) return;
-
     historyStack.push({
-      targetCal: targetCal,
-      targetPro: targetPro,
-      eatenCal: eatenCal,
-      eatenPro: eatenPro,
-      weeklyBank: weeklyBank,
+      targetCal, targetPro, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate: lastActiveDate,
-      inputState: {
-        name: entryNameInput.value,
-        cal: calInput.value,
-        pro: proInput.value,
-        cat: entryCatInput.value,
-        activePortion: activePortionContext ? JSON.parse(JSON.stringify(activePortionContext)) : null,
-        portionQty: document.getElementById('portionQtyInput').value
-      }
+      lastActiveDate
     });
-
-    const next = redoStack.pop();
-    applyStateSilent(next);
+    applyStateSilent(redoStack.pop());
   }
 
   function applyStateSilent(st) {
-    targetCal = st.targetCal;
-    targetPro = st.targetPro;
-    eatenCal = st.eatenCal;
-    eatenPro = st.eatenPro;
-    weeklyBank = st.weeklyBank;
-    logs = st.logs;
-    archiveLogs = st.archiveLogs || archiveLogs;
-    presets = st.presets || presets;
-    categoryOrder = st.categoryOrder || categoryOrder;
+    targetCal = st.targetCal; targetPro = st.targetPro;
+    eatenCal = st.eatenCal; eatenPro = st.eatenPro; weeklyBank = st.weeklyBank;
+    logs = st.logs; archiveLogs = st.archiveLogs || archiveLogs;
+    presets = st.presets || presets; categoryOrder = st.categoryOrder || categoryOrder;
     lastActiveDate = st.lastActiveDate || lastActiveDate;
 
     if (editingPresetIndex >= 0) cancelEditPreset();
     if (editingLogIndex >= 0) cancelLogEdit();
-
-    if (st.inputState) {
-      entryNameInput.value = st.inputState.name || '';
-      calInput.value = st.inputState.cal || '';
-      proInput.value = st.inputState.pro || '';
-      entryCatInput.value = st.inputState.cat || '';
-      activePortionContext = st.inputState.activePortion;
-      if (activePortionContext) {
-        document.getElementById('portionCalcRow').style.display = 'flex';
-        document.getElementById('portionUnitTag').textContent = activePortionContext.unit;
-        document.getElementById('portionQtyInput').value = st.inputState.portionQty || activePortionContext.baseQty;
-      } else {
-        closePortionCalculator();
-      }
-    } else {
-      clearEntryInputs();
-    }
-
-    updateClearBtnVisibility();
+    clearEntryInputs();
 
     document.getElementById('targetCalInput').value = targetCal;
     document.getElementById('targetProInput').value = targetPro;
@@ -2113,56 +1976,43 @@
   }
 
   function editSpareCalories() {
-    const currentVal = weeklyBank;
-    const newValStr = prompt('ערוך את ספייר הקלוריות המצטבר:', currentVal);
-    if (newValStr === null) return;
-
-    const newVal = parseInt(newValStr);
-    if (!isNaN(newVal)) {
+    const val = prompt('ערוך ספייר קלוריות מצטבר:', weeklyBank);
+    if (val === null) return;
+    const num = parseInt(val);
+    if (!isNaN(num)) {
       pushState();
-      weeklyBank = newVal;
+      weeklyBank = num;
       updateDisplay();
     }
   }
 
-  function closeDay(isAuto, transferBank) {
-    if (typeof isAuto === 'undefined') isAuto = false;
-    if (typeof transferBank === 'undefined') transferBank = true;
-
+  function closeDay(isAuto, transferBank = true) {
     const diffCal = targetCal - eatenCal;
-    const diffFormatted = diffCal >= 0 ? ('+' + diffCal) : diffCal;
-
     if (!isAuto) {
       const msg = transferBank 
-        ? ('להתחיל יום חדש?\nספייר שיועבר למצטבר: ' + diffFormatted + ' קלוריות.') 
-        : 'להתחיל יום חדש ללא ספייר?\n(עודף/חוסר של היום יוזנח ולא יועבר למצטבר)';
+        ? `להתחיל יום חדש?\nספייר שיועבר: ${diffCal >= 0 ? '+' : ''}${diffCal} קלוריות.` 
+        : 'להתחיל יום חדש ללא ספייר?\nהעודף/חוסר של היום יוזנח.';
       if (!confirm(msg)) return;
     }
-
     pushState();
-    if (transferBank) {
-      weeklyBank += diffCal;
-    }
-
-    eatenCal = 0;
-    eatenPro = 0;
+    if (transferBank) weeklyBank += diffCal;
+    eatenCal = 0; eatenPro = 0;
     lastActiveDate = new Date().toISOString().slice(0, 10);
     renderLogs();
     updateDisplay();
   }
 
   function resetDayOnly() {
-    if (confirm('לאפס רק את מה שנאכל היום ל-0?\n(הספייר, המאגר וההיסטוריה לא יימחקו)')) {
+    if (confirm('לאפס את נתוני היום ל-0?')) {
       pushState();
-      eatenCal = 0;
-      eatenPro = 0;
+      eatenCal = 0; eatenPro = 0;
       closeSettingsModal();
       updateDisplay();
     }
   }
 
   function clearAllPresets() {
-    if (confirm('האם אתה בטוח שברצונך למחוק את כל המנות והקטגוריות מהמאגר האישי שלך?\n(ניתן לבטל באמצעות "חזור")')) {
+    if (confirm('למחוק את כל המנות מהמאגר האישי שלך?')) {
       pushState();
       cancelEditPreset();
       presets = [];
@@ -2177,14 +2027,13 @@
   function updateTargets() {
     const newCal = parseInt(document.getElementById('targetCalInput').value);
     const newPro = parseInt(document.getElementById('targetProInput').value);
-
-    if ((newCal && newCal > 0) || (newPro && newPro > 0)) {
+    if (newCal > 0 || newPro > 0) {
       pushState();
-      if (newCal && newCal > 0) targetCal = newCal;
-      if (newPro && newPro > 0) targetPro = newPro;
+      if (newCal > 0) targetCal = newCal;
+      if (newPro > 0) targetPro = newPro;
       closeSettingsModal();
       updateDisplay();
-      alert('היעדים עודכנו בהצלחה');
+      alert('יעדים עודכנו!');
     }
   }
 
@@ -2197,7 +2046,6 @@
     document.getElementById('settingsModal').style.display = 'flex'; 
     updateDisplay();
   }
-  
   function closeSettingsModal(e) { 
     if (!e || e.target === document.getElementById('settingsModal') || e.target.classList.contains('modal-close-btn')) {
       document.getElementById('settingsModal').style.display = 'none'; 
@@ -2209,7 +2057,6 @@
     document.getElementById('settingsModal').style.display = 'none';
     document.getElementById('menuImportModal').style.display = 'flex';
   }
-  
   function closeMenuImportModal(e) { 
     if (!e || e.target === document.getElementById('menuImportModal') || e.target.classList.contains('modal-close-btn')) {
       document.getElementById('menuImportModal').style.display = 'none'; 
@@ -2220,178 +2067,98 @@
   function processBulkMenu() {
     const rawText = document.getElementById('bulkMenuInput').value.trim();
     if (!rawText) return;
-
-    const lines = rawText.split('\n');
-    let addedCount = 0;
-
     pushState();
-
-    lines.forEach(function(line) {
+    let count = 0;
+    rawText.split('\n').forEach(line => {
       line = line.trim();
       if (!line) return;
-
-      const parts = line.includes('\t') ? line.split('\t') : (line.includes(',') ? line.split(',') : line.split(';'));
-
+      const parts = line.includes('\t') ? line.split('\t') : line.split(',');
       if (parts.length >= 3) {
         const name = parts[0].trim();
         const cal = parseInt(parts[1].trim()) || 0;
         const pro = parseFloat(parts[2].trim()) || 0;
-        let cat = parts[3] ? parts[3].trim() : 'כללי';
-        if (!cat) cat = 'כללי';
-
+        const cat = (parts[3] ? parts[3].trim() : 'כללי') || 'כללי';
         if (name && (cal > 0 || pro > 0)) {
-          presets.push({ name: name, cat: cat, cal: cal, pro: Math.round(pro * 10) / 10, isFav: true });
+          presets.push({ name, cat, cal, pro: Math.round(pro * 10) / 10, isFav: true });
           if (!categoryOrder.includes(cat)) categoryOrder.push(cat);
-          addedCount++;
+          count++;
         }
       }
     });
-
-    if (addedCount > 0) {
+    if (count > 0) {
       document.getElementById('bulkMenuInput').value = '';
-      document.getElementById('menuImportModal').style.display = 'none';
-      document.getElementById('settingsModal').style.display = 'flex';
+      closeMenuImportModal();
       renderPresets();
       updateDatalists();
       saveData();
-      alert('נוספו בהצלחה ' + addedCount + ' מנות חדשות למאגר!');
-    } else {
-      alert('לא זוהו מנות בפורמט תקין (שם, קלוריות, חלבון, קטגוריה)');
+      alert(`נוספו ${count} מנות!`);
     }
   }
 
   function toggleArchiveViewer() {
     const box = document.getElementById('archiveViewerBox');
-    if (box.style.display === 'block') {
-      box.style.display = 'none';
-      return;
+    if (box.style.display === 'block') { box.style.display = 'none'; return; }
+    box.innerHTML = '';
+    if (archiveLogs.length === 0) {
+      box.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:8px;">הארכיון ריק</div>';
+    } else {
+      const groups = {};
+      archiveLogs.forEach(item => {
+        const d = item.date || 'לא ידוע';
+        if (!groups[d]) groups[d] = [];
+        groups[d].push(item);
+      });
+      Object.keys(groups).sort().reverse().forEach(dStr => {
+        const items = groups[dStr];
+        const dayCal = items.reduce((acc, cur) => acc + (cur.cal || 0), 0);
+        const dayPro = Math.round(items.reduce((acc, cur) => acc + (cur.pro || 0), 0) * 10) / 10;
+        const grp = document.createElement('div');
+        grp.className = 'archive-day-group';
+        grp.innerHTML = `<div class="archive-day-title"><span>📅 ${dStr}</span><span>${dayCal} קל' | ${dayPro}ג'</span></div>`;
+        items.forEach(it => {
+          grp.innerHTML += `<div class="archive-row"><span>${it.name}</span><span>+${it.cal} קל' | +${it.pro}ג'</span></div>`;
+        });
+        box.appendChild(grp);
+      });
     }
-
-    renderArchiveViewer();
     box.style.display = 'block';
   }
 
-  function renderArchiveViewer() {
-    const box = document.getElementById('archiveViewerBox');
-    box.innerHTML = '';
-
-    if (archiveLogs.length === 0) {
-      box.innerHTML = '<div style="text-align:center; color:#666; padding:8px;">הארכיון ריק כרגע</div>';
-      return;
-    }
-
-    const groups = {};
-    archiveLogs.forEach(function(item) {
-      const d = item.date || 'לא ידוע';
-      if (!groups[d]) groups[d] = [];
-      groups[d].push(item);
-    });
-
-    const sortedDates = Object.keys(groups).sort().reverse();
-
-    sortedDates.forEach(function(dStr) {
-      const items = groups[dStr];
-      const totalCal = items.reduce((acc, cur) => acc + (cur.cal || 0), 0);
-      const totalPro = Math.round(items.reduce((acc, cur) => acc + (cur.pro || 0), 0) * 10) / 10;
-
-      const groupEl = document.createElement('div');
-      groupEl.className = 'archive-day-group';
-
-      let titleText = dStr;
-      if (dStr !== 'לא ידוע') {
-        const dObj = new Date(dStr + 'T00:00:00');
-        titleText = dObj.toLocaleDateString('he-IL', { weekday: 'long', day: '2-digit', month: '2-digit' });
-      }
-
-      let groupHtml = `<div class="archive-day-title"><span>📅 ${titleText}</span><span style="color:#aaa; font-size:0.75rem;">${totalCal} קל' | ${totalPro}ג'</span></div>`;
-
-      items.forEach(function(item) {
-        groupHtml += `
-          <div class="archive-row">
-            <span>${item.name}</span>
-            <span>+${item.cal} קל' | +${item.pro}ג'</span>
-          </div>
-        `;
-      });
-
-      groupEl.innerHTML = groupHtml;
-      box.appendChild(groupEl);
-    });
-  }
-
   function exportBackupTxt() {
-    if (!confirm('לייצא ולהוריד קובץ גיבוי TXT מלא?')) return;
-    const data = { 
-      targetCal: targetCal, 
-      targetPro: targetPro, 
-      eatenCal: eatenCal, 
-      eatenPro: eatenPro, 
-      weeklyBank: weeklyBank, 
-      logs: logs, 
-      archiveLogs: archiveLogs, 
-      presets: presets, 
-      categoryOrder: categoryOrder, 
-      lastActiveDate: lastActiveDate, 
-      geminiApiKey: geminiApiKey,
-      isAiEnabled: isAiEnabled 
-    };
+    const data = { targetCal, targetPro, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'calorie_backup_full_' + new Date().toISOString().slice(0,10) + '.txt';
+    a.href = URL.createObjectURL(blob);
+    a.download = `calorie_backup_${new Date().toISOString().slice(0,10)}.txt`;
     a.click();
-    URL.revokeObjectURL(url);
     closeSettingsModal();
   }
 
   function exportArchiveOnly() {
-    if (archiveLogs.length === 0) {
-      alert('הארכיון ריק עדיין');
-      return;
-    }
-    if (!confirm(`האם להוריד קובץ ארכיון עם כל ${archiveLogs.length} ההזנות שנשמרו מאז ומעולם?`)) {
-      return;
-    }
+    if (archiveLogs.length === 0) { alert('הארכיון ריק'); return; }
     const blob = new Blob([JSON.stringify(archiveLogs, null, 2)], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'calorie_archive_logs_' + new Date().toISOString().slice(0,10) + '.txt';
+    a.href = URL.createObjectURL(blob);
+    a.download = `archive_logs_${new Date().toISOString().slice(0,10)}.txt`;
     a.click();
-    URL.revokeObjectURL(url);
   }
 
   function importBackupTxt(e) {
     const file = e.target.files[0];
     if (!file) return;
-
     const reader = new FileReader();
     reader.onload = function(evt) {
       try {
-        const data = JSON.parse(evt.target.result);
-        if (confirm('לייבא את נתוני הגיבוי ולדרוס את הנתונים הנוכחיים?')) {
+        const d = JSON.parse(evt.target.result);
+        if (confirm('לייבא גיבוי ולדרוס נתונים קיימים?')) {
           pushState();
-          targetCal = data.targetCal || 1800;
-          targetPro = data.targetPro || 140;
-          eatenCal = data.eatenCal || 0;
-          eatenPro = data.eatenPro || 0;
-          weeklyBank = data.weeklyBank || 0;
-          logs = data.logs || [];
-          archiveLogs = data.archiveLogs || (data.logs ? JSON.parse(JSON.stringify(data.logs)) : []);
-          presets = data.presets || [];
-          categoryOrder = data.categoryOrder || ['כללי'];
-          lastActiveDate = data.lastActiveDate || new Date().toISOString().slice(0, 10);
-          if (data.geminiApiKey) geminiApiKey = data.geminiApiKey;
-          if (typeof data.isAiEnabled !== 'undefined') isAiEnabled = data.isAiEnabled;
-
-          if (editingPresetIndex >= 0) cancelEditPreset();
-          if (editingLogIndex >= 0) cancelLogEdit();
-          clearEntryInputs();
-
-          document.getElementById('targetCalInput').value = targetCal;
-          document.getElementById('targetProInput').value = targetPro;
-          document.getElementById('geminiApiKeyInput').value = geminiApiKey;
+          targetCal = d.targetCal || 1800; targetPro = d.targetPro || 140;
+          eatenCal = d.eatenCal || 0; eatenPro = d.eatenPro || 0; weeklyBank = d.weeklyBank || 0;
+          logs = d.logs || []; archiveLogs = d.archiveLogs || (d.logs ? JSON.parse(JSON.stringify(d.logs)) : []);
+          presets = d.presets || []; categoryOrder = d.categoryOrder || ['כללי'];
+          lastActiveDate = d.lastActiveDate || new Date().toISOString().slice(0, 10);
+          if (d.geminiApiKey) geminiApiKey = d.geminiApiKey;
+          if (typeof d.isAiEnabled !== 'undefined') isAiEnabled = d.isAiEnabled;
 
           applyAiStateUI();
           closeSettingsModal();
@@ -2400,11 +2167,9 @@
           renderPresets();
           updateDatalists();
           updateDisplay();
-          alert('הגיבוי יובא בהצלחה!');
+          alert('גיבוי נטען בהצלחה!');
         }
-      } catch (err) {
-        alert('שגיאה בקריאת קובץ ה-TXT');
-      }
+      } catch (err) { alert('שגיאה בקובץ הגיבוי'); }
     };
     reader.readAsText(file);
     e.target.value = '';
@@ -2414,7 +2179,7 @@
     const today = new Date().toISOString().slice(0, 10);
     if (lastActiveDate && lastActiveDate !== today) {
       if (eatenCal > 0 || eatenPro > 0) {
-        alert(`שים לב: התחיל יום חדש (${today}) וטרם איפסת את אתמול!\n\nהערכים נשארו כפי שהם כדי שתוכל לבחור האם ללחוץ על "יום חדש (מעביר ספייר)" או "יום חדש (ללא ספייר)" במסך הראשי.`);
+        alert(`שים לב: התחיל יום חדש (${today}) וטרם איפסת את אתמול!`);
       }
       lastActiveDate = today;
       saveData();
@@ -2422,20 +2187,12 @@
   }
 
   function applySevenDayRollingWindow() {
-    const today = new Date();
-    const cutoffDate = new Date(today);
-    cutoffDate.setDate(today.getDate() - 7);
-    const cutoffIso = cutoffDate.toISOString().slice(0, 10);
-
-    const initialLen = logs.length;
-    logs = logs.filter(function(log) {
-      const logDate = log.date || new Date().toISOString().slice(0, 10);
-      return logDate >= cutoffIso;
-    });
-
-    if (logs.length !== initialLen) {
-      saveData();
-    }
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() - 7);
+    const cutoffIso = cutoff.toISOString().slice(0, 10);
+    const len = logs.length;
+    logs = logs.filter(l => (l.date || new Date().toISOString().slice(0, 10)) >= cutoffIso);
+    if (logs.length !== len) saveData();
   }
 
   applySevenDayRollingWindow();
