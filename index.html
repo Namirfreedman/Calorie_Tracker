@@ -17,25 +17,27 @@
 
 <style>
   :root {
-    --bg-page: #f1ede4;
+    --bg-page: #f2eee6;
     --card-bg: #ffffff;
-    --card-border: #24221f;
-    --card-shadow: 0 4px 0 #24221f;
+    --card-border: #2b2825;
+    --card-shadow: 0 4px 0 #2b2825;
     
     --text-main: #1c1917;
-    --text-muted: #57534e;
+    --text-muted: #615c56;
     
-    --cal-color: #059669;
-    --cal-bg: #d1fae5;
+    --cal-color: #047857;
+    --cal-surface: #e9f7f0;
     
-    --pro-color: #0284c7;
-    --pro-bg: #e0f2fe;
+    --pro-color: #0369a1;
+    --pro-surface: #e8f4fc;
     
-    --bank-color: #7c3aed;
-    --bank-bg: #ede9fe;
+    --bank-color: #6d28d9;
+    --bank-surface: #f1edfa;
     
-    --danger: #e11d48;
-    --danger-bg: #ffe4e6;
+    --danger: #be123c;
+    --danger-surface: #fde8ec;
+
+    --input-bg: #f9f7f2;
   }
 
   * { 
@@ -60,7 +62,7 @@
   .card { 
     background: var(--card-bg); 
     border: 2px solid var(--card-border);
-    border-radius: 20px; 
+    border-radius: 22px; 
     padding: 16px; 
     width: 100%; 
     max-width: 410px; 
@@ -76,7 +78,7 @@
     width: 100%;
     max-width: 410px;
     height: 56px;
-    background: rgba(241, 237, 228, 0.95);
+    background: rgba(242, 238, 230, 0.96);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     z-index: 900;
@@ -88,7 +90,7 @@
   }
 
   .header-title-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  h2 { margin: 0; font-size: 1.2rem; color: var(--text-main); font-weight: 900; }
+  h2 { margin: 0; font-size: 1.22rem; color: var(--text-main); font-weight: 900; }
 
   .topbar-center-slot {
     flex: 1;
@@ -151,56 +153,55 @@
   .btn-nav-circle svg { width: 18px; height: 18px; fill: currentColor; }
   .btn-nav-circle:active { transform: translateY(2px); box-shadow: none; }
 
-  .stat-box-large {
-    background: #fdfbf7;
+  /* תצוגת סטטיסטיקות עליונה נקייה עם משטחי צבע רכים */
+  .stats-board {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .stats-primary-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .stat-card-target {
     border: 2px solid var(--card-border);
     border-radius: 16px;
-    padding: 12px;
-    text-align: center;
-    margin-bottom: 12px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 90px;
     box-shadow: 0 3px 0 var(--card-border);
   }
-  .stat-box-large .box-headline {
-    font-size: 0.85rem;
-    font-weight: 900;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-  }
-  .dual-val { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: stretch; 
-    gap: 12px; 
-  }
-  .val-item { 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    flex: 1; 
-  }
-  .val-item .sub { 
-    font-size: 0.72rem; 
+  .stat-card-target.cal { background: var(--cal-surface); }
+  .stat-card-target.pro { background: var(--pro-surface); }
+
+  .stat-card-target .stat-head {
+    font-size: 0.76rem;
     font-weight: 800;
-    color: var(--text-muted); 
-    margin-bottom: 2px; 
+    color: var(--text-muted);
+    display: flex;
+    justify-content: space-between;
   }
-  .val-item .num { 
-    font-size: 1.55rem; 
-    font-weight: 900; 
-    line-height: 1.1; 
+  .stat-card-target .stat-number {
+    font-size: 1.6rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin: 2px 0;
   }
-  .val-item.cal .num { color: var(--cal-color); }
-  .val-item.pro .num { color: var(--pro-color); }
-  .val-item.cal.negative .num, .val-item.pro.negative .num { color: var(--danger) !important; }
+  .stat-card-target.cal .stat-number { color: var(--cal-color); }
+  .stat-card-target.pro .stat-number { color: var(--pro-color); }
+  .stat-card-target.negative .stat-number { color: var(--danger) !important; }
 
   .bar-container { 
     width: 100%; 
-    background: #e7e2d7; 
-    height: 8px; 
+    background: rgba(0, 0, 0, 0.08); 
+    height: 7px; 
     border-radius: 4px; 
-    border: 1px solid var(--card-border);
     overflow: hidden; 
-    margin-top: 6px; 
+    margin-top: 4px; 
   }
   .bar-fill { 
     height: 100%; 
@@ -209,63 +210,58 @@
     transition: width 0.3s ease, background-color 0.3s ease; 
   }
 
-  .grid-bottom-stats {
+  .stats-secondary-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-bottom: 12px;
   }
-  .stat-box-small {
-    background: #fdfbf7;
+  .stat-chip-box {
     border: 2px solid var(--card-border);
     box-shadow: 0 3px 0 var(--card-border);
-    border-radius: 16px;
-    padding: 10px;
+    border-radius: 14px;
+    padding: 8px 10px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 84px;
+    min-height: 74px;
     text-align: center;
   }
-  .stat-box-small .title {
-    font-size: 0.78rem;
-    font-weight: 900;
+  .stat-chip-box.eaten { background: #faf6ed; }
+  .stat-chip-box.bank { background: var(--bank-surface); }
+
+  .stat-chip-box .chip-title {
+    font-size: 0.74rem;
+    font-weight: 800;
     color: var(--text-muted);
   }
-  .stat-box-small .single-num-wrap {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin: auto 0;
-  }
-  .stat-box-small .single-num {
-    font-size: 1.5rem;
+  .stat-chip-box .chip-num {
+    font-size: 1.45rem;
     font-weight: 900;
     line-height: 1.1;
+    color: var(--bank-color);
   }
-  .stat-box-small .single-num.bank { color: var(--bank-color); }
-  .stat-box-small .single-num.negative { color: var(--danger); }
+  .stat-chip-box .chip-num.negative { color: var(--danger); }
 
-  .entry-highlight-box {
-    background: #ffffff;
-    border: 2px solid var(--card-border);
-    box-shadow: 0 4px 0 var(--card-border);
-    border-radius: 18px;
-    padding: 14px;
+  /* אזור ההזנה - עיצוב שטוח ומרווח ללא ריבוע-בתוך-ריבוע */
+  .entry-flat-section {
+    border-top: 2px solid #e5dfd5;
+    padding-top: 12px;
+    margin-top: 4px;
     margin-bottom: 12px;
   }
-  .entry-highlight-title { 
-    font-size: 0.88rem; 
+  .entry-flat-title { 
+    font-size: 0.86rem; 
     font-weight: 900; 
     color: var(--text-main); 
     margin-bottom: 10px; 
-    text-align: center; 
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
   .search-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
   input[type="text"], input[type="number"], textarea, select { 
-    background: #faf8f4; 
+    background: var(--input-bg); 
     border: 2px solid var(--card-border); 
     border-radius: 12px; 
     color: var(--text-main); 
@@ -307,13 +303,13 @@
     font-weight: 700;
   }
   .dropdown-item:last-child { border-bottom: none; }
-  .dropdown-item:active { background: var(--cal-bg); color: var(--cal-color); }
+  .dropdown-item:active { background: var(--cal-surface); color: var(--cal-color); }
   .dropdown-item-meta { font-size: 0.74rem; color: var(--text-muted); font-weight: normal; }
 
   /* מחשבון כמויות דו-כיווני */
-  .portion-row {
+  .portion-panel {
     display: none;
-    background: var(--pro-bg);
+    background: var(--pro-surface);
     border: 2px dashed var(--pro-color);
     border-radius: 12px;
     padding: 10px;
@@ -342,6 +338,7 @@
     text-align: center;
     font-weight: 900;
     border-radius: 8px;
+    background: #ffffff;
   }
 
   .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
@@ -365,7 +362,7 @@
   .btn-add-menu { background: var(--cal-color); color: #ffffff; }
   .btn-add-pool { background: #faf8f4; color: var(--text-main); }
   .btn-add-both { background: var(--pro-color); color: #ffffff; }
-  .btn-clear-sel { background: #f3efe6; color: var(--text-muted); font-size: 0.8rem; padding: 8px; display: none; }
+  .btn-clear-sel { background: #ede8df; color: var(--text-muted); font-size: 0.8rem; padding: 8px; display: none; }
 
   .day-actions-grid {
     display: grid;
@@ -384,8 +381,8 @@
     outline: none;
     box-shadow: 0 3px 0 var(--card-border);
   }
-  .btn-day-neo.bank { background: var(--cal-bg); color: var(--cal-color); }
-  .btn-day-neo.nobank { background: #fff1f2; color: var(--danger); }
+  .btn-day-neo.bank { background: var(--cal-surface); color: var(--cal-color); }
+  .btn-day-neo.nobank { background: var(--danger-surface); color: var(--danger); }
   .btn-day-neo:active { transform: translateY(3px); box-shadow: none; }
 
   .collapsible-wrapper { margin-top: 4px; }
@@ -447,13 +444,13 @@
     touch-action: pan-y;
   }
   .log-item.holding-active {
-    background: var(--cal-bg) !important;
+    background: var(--cal-surface) !important;
     border-color: var(--cal-color) !important;
   }
   .drag-placeholder {
     height: 38px;
     border: 2px dashed var(--cal-color);
-    background: var(--cal-bg);
+    background: var(--cal-surface);
     border-radius: 10px;
     margin: 2px 0;
     pointer-events: none;
@@ -573,7 +570,7 @@
   }
   .preset-edit-btn { color: var(--cal-color); }
   .preset-del-btn { color: var(--danger); }
-  .preset-btn-wrapper.pulse-added { background: var(--cal-bg) !important; transform: scale(0.96); }
+  .preset-btn-wrapper.pulse-added { background: var(--cal-surface) !important; transform: scale(0.96); }
 
   .ai-card {
     background: #ffffff;
@@ -707,66 +704,63 @@
 </div>
 
 <div class="card">
-  <div class="stat-box-large">
-    <div class="box-headline">🎯 נשאר להיום</div>
-    <div class="dual-val">
-      <div class="val-item cal" id="boxRemCal">
-        <span class="sub">קלוריות</span>
-        <span id="remainingCal" class="num">1,800</span>
+  <!-- לוח עליון נקי עם הפרדת גוונים -->
+  <div class="stats-board">
+    <div class="stats-primary-row">
+      <div class="stat-card-target cal" id="boxRemCal">
+        <div class="stat-head"><span>נשאר להיום</span><span>קלוריות</span></div>
+        <div id="remainingCal" class="stat-number">1,800</div>
         <div class="bar-container">
           <div id="barRemainingCal" class="bar-fill" style="background: var(--cal-color);"></div>
         </div>
       </div>
-      <div class="val-item pro" id="boxRemPro">
-        <span class="sub">חלבון</span>
-        <span id="remainingPro" class="num">140ג'</span>
+
+      <div class="stat-card-target pro" id="boxRemPro">
+        <div class="stat-head"><span>נשאר להיום</span><span>חלבון</span></div>
+        <div id="remainingPro" class="stat-number">140ג'</div>
         <div class="bar-container">
           <div id="barRemainingPro" class="bar-fill" style="background: var(--pro-color);"></div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="grid-bottom-stats">
-    <div class="stat-box-small" style="text-align: right;">
-      <div class="title" style="text-align: center;">🍽️ נאכל היום</div>
-      <div style="display:flex; justify-content:space-around; margin-top:4px;">
-        <div style="text-align:center;">
-          <div style="font-size:0.7rem; font-weight:800; color:var(--text-muted);">קלוריות</div>
-          <div id="eatenCal" style="font-size:1.15rem; font-weight:900; color:var(--cal-color);">0</div>
+    <div class="stats-secondary-row">
+      <div class="stat-chip-box eaten">
+        <div class="chip-title">🍽️ נאכל היום</div>
+        <div style="display:flex; justify-content:space-around; align-items:baseline; margin-top:2px;">
+          <span style="font-size:1.1rem; font-weight:900; color:var(--cal-color);" id="eatenCal">0</span>
+          <span style="font-size:0.8rem; color:var(--text-muted);">|</span>
+          <span style="font-size:1.1rem; font-weight:900; color:var(--pro-color);" id="eatenPro">0ג'</span>
         </div>
-        <div style="text-align:center;">
-          <div style="font-size:0.7rem; font-weight:800; color:var(--text-muted);">חלבון</div>
-          <div id="eatenPro" style="font-size:1.15rem; font-weight:900; color:var(--pro-color);">0ג'</div>
+        <div class="bar-container" style="height:5px; margin-top:4px;">
+          <div id="barEatenCal" class="bar-fill" style="background: var(--cal-color);"></div>
         </div>
       </div>
-      <div class="bar-container" style="margin-top:6px; height:6px;">
-        <div id="barEatenCal" class="bar-fill" style="background: var(--cal-color);"></div>
-      </div>
-    </div>
 
-    <div class="stat-box-small">
-      <div class="title">🏦 ספייר מצטבר</div>
-      <div class="single-num-wrap">
-        <div id="weeklyBank" class="single-num bank">0</div>
-        <button class="btn-icon-top" onclick="editSpareCalories()" style="font-size:0.95rem; color:var(--bank-color);" title="ערוך ספייר">✎</button>
+      <div class="stat-chip-box bank">
+        <div class="chip-title">🏦 ספייר מצטבר</div>
+        <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+          <span id="weeklyBank" class="chip-num">0</span>
+          <button class="btn-icon-top" onclick="editSpareCalories()" style="font-size:0.95rem; color:var(--bank-color);" title="ערוך ספייר">✎</button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="entry-highlight-box" id="entryBox">
-    <div class="entry-highlight-title" id="entryTitle">🔍 חיפוש, הזנה ושמירה</div>
+  <!-- הזנה ישירה וחלקה ללא ריבוע-בתוך-ריבוע -->
+  <div class="entry-flat-section" id="entryBox">
+    <div class="entry-flat-title" id="entryTitle">🔍 הזנה, חיפוש ושמירת מנה</div>
     
     <div class="search-wrapper">
       <input type="text" id="entryNameInput" placeholder="חפש מנה במאגר או הקלד חדשה..." autocomplete="off" oninput="handleLiveSearch(this.value)">
       <div class="custom-search-dropdown" id="searchDropdown"></div>
     </div>
 
-    <!-- מחשבון כמויות דו-כיווני (גרם מול יחידה/כף) -->
-    <div class="portion-row" id="portionCalcRow">
+    <!-- מחשבון כמויות גמיש (משקל / יחידות) -->
+    <div class="portion-panel" id="portionCalcRow">
       <div class="portion-dual-inputs">
         <div class="portion-input-cell" id="unitInputCell">
-          <label id="portionUnitLabel">יחידות:</label>
+          <label id="portionUnitLabel">יחידות / כמות:</label>
           <input type="number" id="portionUnitsInput" value="1" step="any" oninput="onPortionUnitsChanged()" inputmode="decimal">
         </div>
         <div class="portion-input-cell">
@@ -781,11 +775,17 @@
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
     </div>
 
+    <!-- בחירת אופן שמירה למאגר האישי -->
     <div class="input-row" id="saveTypeRow" style="margin-bottom:8px;">
-      <select id="entryPortionModeSelect">
+      <select id="entryPortionModeSelect" onchange="onSaveModeSelectionChanged()">
         <option value="fixed">מנה קבועה (ללא חישוב משקל)</option>
-        <option value="per100g">שמור לפי 100 גרם (תבשיל / Batch)</option>
+        <option value="per100g">לפי 100 גרם (תבשיל שקיל / Batch)</option>
+        <option value="customUnit">לפי יחידה עם משקל מוגדר (גרם ליחידה)</option>
       </select>
+    </div>
+
+    <div class="input-row" id="customUnitWeightRow" style="display:none; margin-bottom:8px;">
+      <input type="number" id="customUnitGramsInput" placeholder="כמה גרם שוקלת יחידה אחת ממוצעת?">
     </div>
 
     <div style="margin-bottom:8px;" id="catRow">
@@ -800,7 +800,7 @@
         <button class="btn-neo btn-add-both" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
       </div>
       <button class="btn-neo btn-clear-sel" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
-      <button id="cancelEditPoolBtn" class="btn-neo" style="display:none; background:#f3efe6;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
+      <button id="cancelEditPoolBtn" class="btn-neo" style="display:none; background:#ede8df;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
     </div>
 
     <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
@@ -927,8 +927,6 @@
 </div>
 
 <script>
-  // מאגר בסיס טבעוני מקיף ללא כפילויות שמות
-  // כל פריט מוגדר לפי 100 גרם, ובעל unitWeight עבור פריטים עם משקל יחידה טבעי/ממוצע
   const BASE_FOODS = [
     // ירקות
     { name: "עגבנייה", cal: 18, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 130 },
@@ -1071,6 +1069,13 @@
   const entryCatInput = document.getElementById('entryCatInput');
   const searchDropdown = document.getElementById('searchDropdown');
   const entryPortionModeSelect = document.getElementById('entryPortionModeSelect');
+  const customUnitWeightRow = document.getElementById('customUnitWeightRow');
+  const customUnitGramsInput = document.getElementById('customUnitGramsInput');
+
+  function onSaveModeSelectionChanged() {
+    const val = entryPortionModeSelect.value;
+    customUnitWeightRow.style.display = (val === 'customUnit') ? 'flex' : 'none';
+  }
 
   function updateClearBtnVisibility() {
     const btn = document.getElementById('btnClearSelection');
@@ -1132,7 +1137,7 @@
       row.className = 'dropdown-item';
 
       if (m.type === 'base') {
-        const unitSuffix = m.unitWeight ? `100ג / ${m.data.unitName || 'יח'}` : '100ג';
+        const unitSuffix = m.data.unitWeight ? `100ג / ${m.data.unitName || 'יח'}` : '100ג';
         row.innerHTML = `
           <span>⚖️ ${m.data.name}</span>
           <span class="dropdown-item-meta">${m.data.cal} קל' | ${m.data.pro}ג' (${unitSuffix})</span>
@@ -1142,8 +1147,10 @@
           searchDropdown.style.display = 'none';
         };
       } else {
-        const isBatch = (m.data.isPer100g === true);
-        const meta = isBatch ? `${m.data.cal} קל' | ${m.data.pro}ג' (ל-100ג)` : `${m.data.cal} קל' | ${m.data.pro}ג'`;
+        let meta = `${m.data.cal} קל' | ${m.data.pro}ג'`;
+        if (m.data.portionMode === 'per100g') meta += ' (ל-100ג)';
+        if (m.data.portionMode === 'customUnit') meta += ` (ליח' ~${m.data.unitWeight}ג)`;
+
         row.innerHTML = `
           <span>⭐ ${m.data.name}</span>
           <span class="dropdown-item-meta">${meta}</span>
@@ -1161,18 +1168,21 @@
 
   function selectCustomPreset(preset) {
     pushState();
-    if (preset.isPer100g) {
+    const mode = preset.portionMode || (preset.isPer100g ? 'per100g' : 'fixed');
+
+    if (mode === 'per100g') {
       activePortionContext = {
         name: preset.name,
         calPerGram: preset.cal / 100,
         proPerGram: preset.pro / 100,
         unitWeight: null,
         unitName: null,
-        isCustomPer100: true
+        isCustom: true
       };
       entryNameInput.value = preset.name;
       entryCatInput.value = (preset.cat === 'כללי' ? '' : (preset.cat || ''));
       entryPortionModeSelect.value = "per100g";
+      onSaveModeSelectionChanged();
 
       document.getElementById('unitInputCell').style.display = 'none';
       document.getElementById('portionGramsInput').value = 100;
@@ -1181,6 +1191,32 @@
       onPortionGramsChanged();
       document.getElementById('portionGramsInput').focus();
       document.getElementById('portionGramsInput').select();
+    } else if (mode === 'customUnit' && preset.unitWeight) {
+      activePortionContext = {
+        name: preset.name,
+        calPerGram: preset.cal / preset.unitWeight,
+        proPerGram: preset.pro / preset.unitWeight,
+        unitWeight: preset.unitWeight,
+        unitName: "יחידה",
+        isCustom: true
+      };
+      entryNameInput.value = preset.name;
+      entryCatInput.value = (preset.cat === 'כללי' ? '' : (preset.cat || ''));
+      entryPortionModeSelect.value = "customUnit";
+      customUnitGramsInput.value = preset.unitWeight;
+      onSaveModeSelectionChanged();
+
+      const unitCell = document.getElementById('unitInputCell');
+      const unitLabel = document.getElementById('portionUnitLabel');
+      unitCell.style.display = 'flex';
+      unitLabel.textContent = `יחידה (~${preset.unitWeight}ג):`;
+      document.getElementById('portionUnitsInput').value = 1;
+      document.getElementById('portionGramsInput').value = preset.unitWeight;
+      document.getElementById('portionCalcRow').style.display = 'flex';
+
+      onPortionUnitsChanged();
+      document.getElementById('portionUnitsInput').focus();
+      document.getElementById('portionUnitsInput').select();
     } else {
       closePortionCalculator();
       entryNameInput.value = preset.name;
@@ -1188,6 +1224,7 @@
       proInput.value = preset.pro;
       entryCatInput.value = (preset.cat === 'כללי' ? '' : (preset.cat || ''));
       entryPortionModeSelect.value = "fixed";
+      onSaveModeSelectionChanged();
     }
     updateClearBtnVisibility();
   }
@@ -1203,12 +1240,14 @@
       proPerGram: item.pro / 100,
       unitWeight: item.unitWeight || null,
       unitName: item.unitName || "יחידה",
-      isCustomPer100: false
+      isCustom: false
     };
 
     entryNameInput.value = item.name;
     entryCatInput.value = item.cat || '';
-    entryPortionModeSelect.value = "per100g";
+    entryPortionModeSelect.value = item.unitWeight ? "customUnit" : "per100g";
+    if (item.unitWeight) customUnitGramsInput.value = item.unitWeight;
+    onSaveModeSelectionChanged();
 
     const portionRow = document.getElementById('portionCalcRow');
     const unitCell = document.getElementById('unitInputCell');
@@ -1417,7 +1456,7 @@
     const cat = prompt('קטגוריה עבור המנה:', 'כללי') || 'כללי';
 
     pushState();
-    presets.push({ name, cal, pro, cat: cat.trim(), isPer100g: false });
+    presets.push({ name, cal, pro, cat: cat.trim(), portionMode: 'fixed' });
     if (!categoryOrder.includes(cat.trim())) categoryOrder.push(cat.trim());
 
     renderPresets();
@@ -1508,12 +1547,14 @@
         itemWrap.className = 'preset-btn-wrapper';
         itemWrap.id = `preset-wrapper-${realIdx}`;
         
-        const isBatch = (p.isPer100g === true);
-        const labelText = isBatch ? `⚖️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ל-100ג)` : `${p.name} (${p.cal} קל' | ${p.pro}ג')`;
+        const mode = p.portionMode || (p.isPer100g ? 'per100g' : 'fixed');
+        let labelText = `${p.name} (${p.cal} קל' | ${p.pro}ג')`;
+        if (mode === 'per100g') labelText = `⚖️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ל-100ג)`;
+        if (mode === 'customUnit') labelText = `⚖️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ליח' ~${p.unitWeight}ג)`;
 
         itemWrap.innerHTML = `
           <button class="preset-btn" onclick="handlePresetClick(${realIdx})">${labelText}</button>
-          <button class="preset-sub-btn preset-edit-btn" onclick="startEditPreset(${realIdx})">✎</button>
+          <button class="preset-sub-btn preset-edit-btn" onclick="confirmStartEditPreset(${realIdx})">✎</button>
           <button class="preset-sub-btn preset-del-btn" onclick="deletePreset(${realIdx})">✕</button>
         `;
         listEl.appendChild(itemWrap);
@@ -1527,10 +1568,12 @@
     const p = presets[idx];
     if (!p) return;
 
-    if (p.isPer100g) {
+    const mode = p.portionMode || (p.isPer100g ? 'per100g' : 'fixed');
+
+    if (mode === 'per100g' || mode === 'customUnit') {
       selectCustomPreset(p);
       document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
-      showToast('הזן כמות בגרמים');
+      showToast('הזן כמות או משקל');
     } else {
       addPresetEntry(idx);
     }
@@ -1596,18 +1639,18 @@
 
     const remCalEl = document.getElementById('remainingCal');
     remCalEl.textContent = remCal.toLocaleString();
-    document.getElementById('boxRemCal').className = 'val-item cal ' + (remCal < 0 ? 'negative' : '');
+    document.getElementById('boxRemCal').className = 'stat-card-target cal ' + (remCal < 0 ? 'negative' : '');
 
     const remProEl = document.getElementById('remainingPro');
     remProEl.textContent = remPro + "ג'";
-    document.getElementById('boxRemPro').className = 'val-item pro ' + (remPro < 0 ? 'negative' : '');
+    document.getElementById('boxRemPro').className = 'stat-card-target pro ' + (remPro < 0 ? 'negative' : '');
 
     document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
     document.getElementById('eatenPro').textContent = eatenPro + "ג'";
 
     const bankEl = document.getElementById('weeklyBank');
     bankEl.textContent = (weeklyBank >= 0 ? '+' : '') + weeklyBank.toLocaleString();
-    bankEl.className = 'single-num bank ' + (weeklyBank < 0 ? 'negative' : '');
+    bankEl.className = 'chip-num ' + (weeklyBank < 0 ? 'negative' : '');
 
     const calRemPercent = Math.min(100, Math.max(0, (remCal / targetCal) * 100));
     const proRemPercent = Math.min(100, Math.max(0, (remPro / targetPro) * 100));
@@ -1849,6 +1892,7 @@
     proInput.value = item.pro;
     document.getElementById('catRow').style.display = 'none';
     document.getElementById('saveTypeRow').style.display = 'none';
+    customUnitWeightRow.style.display = 'none';
 
     document.getElementById('entryTitle').textContent = '✎ עריכת הזנה מההיסטוריה';
     document.getElementById('defaultActionBtns').style.display = 'none';
@@ -1893,7 +1937,7 @@
     clearEntryInputs();
     document.getElementById('catRow').style.display = 'block';
     document.getElementById('saveTypeRow').style.display = 'flex';
-    document.getElementById('entryTitle').textContent = '🔍 חיפוש, הזנה ושמירה';
+    document.getElementById('entryTitle').textContent = '🔍 הזנה, חיפוש ושמירת מנה';
     document.getElementById('defaultActionBtns').style.display = 'flex';
     document.getElementById('logEditActionBtns').style.display = 'none';
   }
@@ -1928,7 +1972,7 @@
     const cat = prompt('קטגוריה עבור המנה:', 'כללי') || 'כללי';
 
     pushState();
-    presets.push({ name: name.trim(), cal: item.cal, pro: item.pro, cat: cat.trim(), isPer100g: false });
+    presets.push({ name: name.trim(), cal: item.cal, pro: item.pro, cat: cat.trim(), portionMode: 'fixed' });
     if (!categoryOrder.includes(cat.trim())) categoryOrder.push(cat.trim());
 
     renderPresets();
@@ -1962,8 +2006,10 @@
     const cal = parseInt(calInput.value) || 0;
     const pro = parseFloat(proInput.value) || 0;
     let cat = entryCatInput.value.trim() || 'כללי';
-    const isPer100g = (entryPortionModeSelect.value === 'per100g');
-    return { name, cal, pro: Math.round(pro * 10) / 10, cat, isPer100g };
+    const portionMode = entryPortionModeSelect.value;
+    const unitWeight = (portionMode === 'customUnit') ? (parseFloat(customUnitGramsInput.value) || 100) : null;
+
+    return { name, cal, pro: Math.round(pro * 10) / 10, cat, portionMode, unitWeight };
   }
 
   function clearEntryInputs() {
@@ -1972,6 +2018,8 @@
     proInput.value = '';
     entryCatInput.value = '';
     entryPortionModeSelect.value = 'fixed';
+    customUnitGramsInput.value = '';
+    onSaveModeSelectionChanged();
     closePortionCalculator();
     searchDropdown.style.display = 'none';
     updateClearBtnVisibility();
@@ -2007,17 +2055,20 @@
       return;
     }
     pushState();
+    const newPreset = { 
+      name: val.name, 
+      cat: val.cat, 
+      cal: val.cal, 
+      pro: val.pro, 
+      portionMode: val.portionMode,
+      unitWeight: val.unitWeight
+    };
+
     if (editingPresetIndex >= 0) {
-      presets[editingPresetIndex] = { 
-        name: val.name, 
-        cat: val.cat, 
-        cal: val.cal, 
-        pro: val.pro, 
-        isPer100g: val.isPer100g
-      };
+      presets[editingPresetIndex] = newPreset;
       cancelEditPreset();
     } else {
-      presets.push({ name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isPer100g: val.isPer100g });
+      presets.push(newPreset);
     }
     if (!categoryOrder.includes(val.cat)) categoryOrder.push(val.cat);
     clearEntryInputs();
@@ -2070,6 +2121,14 @@
     updateDisplay();
   }
 
+  function confirmStartEditPreset(idx) {
+    const p = presets[idx];
+    if (!p) return;
+    if (confirm(`האם לערוך את המנה "${p.name}" בהגדרות המאגר?`)) {
+      startEditPreset(idx);
+    }
+  }
+
   function startEditPreset(idx) {
     const p = presets[idx];
     if (!p) return;
@@ -2081,9 +2140,16 @@
     entryCatInput.value = (p.cat === 'כללי' ? '' : (p.cat || ''));
     calInput.value = p.cal;
     proInput.value = p.pro;
-    entryPortionModeSelect.value = p.isPer100g ? "per100g" : "fixed";
+
+    const mode = p.portionMode || (p.isPer100g ? 'per100g' : 'fixed');
+    entryPortionModeSelect.value = mode;
+    if (mode === 'customUnit' && p.unitWeight) {
+      customUnitGramsInput.value = p.unitWeight;
+    }
+    onSaveModeSelectionChanged();
 
     document.getElementById('cancelEditPoolBtn').style.display = 'block';
+    document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
     entryNameInput.focus();
     updateClearBtnVisibility();
   }
@@ -2255,7 +2321,7 @@
         const pro = parseFloat(parts[2].trim()) || 0;
         const cat = (parts[3] ? parts[3].trim() : 'כללי') || 'כללי';
         if (name && (cal > 0 || pro > 0)) {
-          presets.push({ name, cat, cal, pro: Math.round(pro * 10) / 10, isPer100g: false });
+          presets.push({ name, cat, cal, pro: Math.round(pro * 10) / 10, portionMode: 'fixed' });
           if (!categoryOrder.includes(cat)) categoryOrder.push(cat);
           count++;
         }
@@ -2271,7 +2337,7 @@
     }
   }
 
-  // תצוגת ארכיון משוקמת עם כרטיסי יום מופרדים
+  // תצוגת ארכיון משוקמת עם כרטיסי יום מופרדים וברורים
   function toggleArchiveViewer() {
     const box = document.getElementById('archiveViewerBox');
     if (box.style.display === 'block') { box.style.display = 'none'; return; }
