@@ -6,6 +6,10 @@
 <title>מעקב תזונה יומי</title>
 <link rel="manifest" href="manifest.json?v=2">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="תזונה">
@@ -36,7 +40,7 @@
 
   * { 
     box-sizing: border-box; 
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+    font-family: 'Heebo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
     -webkit-tap-highlight-color: transparent;
   }
 
@@ -94,7 +98,7 @@
     padding: 0 6px;
   }
   .toast-pill {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     font-weight: 800;
     color: #ffffff;
     background: var(--cal-color);
@@ -147,7 +151,6 @@
   .btn-nav-circle svg { width: 18px; height: 18px; fill: currentColor; }
   .btn-nav-circle:active { transform: translateY(2px); box-shadow: none; }
 
-  /* שני הריבועים העליונים עם סרגלי ההתקדמות */
   .stat-box-large {
     background: #fdfbf7;
     border: 2px solid var(--card-border);
@@ -244,7 +247,6 @@
   .stat-box-small .single-num.bank { color: var(--bank-color); }
   .stat-box-small .single-num.negative { color: var(--danger); }
 
-  /* תיבת הזנה */
   .entry-highlight-box {
     background: #ffffff;
     border: 2px solid var(--card-border);
@@ -254,7 +256,7 @@
     margin-bottom: 12px;
   }
   .entry-highlight-title { 
-    font-size: 0.85rem; 
+    font-size: 0.88rem; 
     font-weight: 900; 
     color: var(--text-main); 
     margin-bottom: 10px; 
@@ -262,7 +264,7 @@
   }
 
   .search-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
-  input[type="text"], input[type="number"], textarea { 
+  input[type="text"], input[type="number"], textarea, select { 
     background: #faf8f4; 
     border: 2px solid var(--card-border); 
     border-radius: 12px; 
@@ -274,7 +276,7 @@
     outline: none; 
     direction: rtl;
   }
-  input:focus, textarea:focus { 
+  input:focus, textarea:focus, select:focus { 
     background: #ffffff;
     border-color: var(--pro-color);
   }
@@ -288,7 +290,7 @@
     border: 2px solid var(--card-border);
     border-radius: 14px;
     margin-top: 4px;
-    max-height: 220px;
+    max-height: 240px;
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 0 8px 16px rgba(0,0,0,0.12);
@@ -318,9 +320,9 @@
     align-items: center;
     justify-content: space-between;
   }
-  .portion-row .portion-label { font-size: 0.8rem; font-weight: 900; color: var(--pro-color); }
+  .portion-row .portion-label { font-size: 0.82rem; font-weight: 900; color: var(--pro-color); }
   .portion-row input {
-    width: 80px !important;
+    width: 84px !important;
     padding: 6px !important;
     text-align: center;
     font-weight: 900;
@@ -412,8 +414,8 @@
     margin-bottom: 6px;
     pointer-events: none;
   }
-  .history-day-title { font-size: 0.82rem; font-weight: 900; color: var(--cal-color); }
-  .history-day-summary { font-size: 0.74rem; color: var(--pro-color); font-weight: 900; }
+  .history-day-title { font-size: 0.84rem; font-weight: 900; color: var(--cal-color); }
+  .history-day-summary { font-size: 0.76rem; color: var(--pro-color); font-weight: 900; }
 
   .day-items-container { min-height: 28px; display: flex; flex-direction: column; gap: 4px; }
   .log-item { 
@@ -427,7 +429,6 @@
     border-radius: 10px;
     user-select: none;
     -webkit-user-select: none;
-    -webkit-touch-callout: none;
     touch-action: pan-y;
   }
   .log-item.holding-active {
@@ -463,7 +464,7 @@
   .btn-log-save { color: var(--pro-color); }
   .btn-log-del { color: var(--danger); }
 
-  .pool-tabs { display: flex; gap: 6px; margin-bottom: 10px; }
+  .pool-tabs { display: flex; gap: 8px; margin-bottom: 10px; }
   .pool-tab-btn {
     flex: 1;
     background: #fdfbf7;
@@ -471,8 +472,8 @@
     border: 2px solid var(--card-border);
     box-shadow: 0 3px 0 var(--card-border);
     border-radius: 12px;
-    padding: 8px 2px;
-    font-size: 0.78rem;
+    padding: 9px 4px;
+    font-size: 0.82rem;
     font-weight: 900;
     cursor: pointer;
     outline: none;
@@ -499,7 +500,7 @@
     padding-bottom: 4px;
     border-bottom: 1.5px solid #e7e2d7;
   }
-  .category-title { font-size: 0.84rem; font-weight: 900; color: var(--text-main); }
+  .category-title { font-size: 0.85rem; font-weight: 900; color: var(--text-main); }
   .btn-cat-order {
     background: #ffffff;
     color: var(--text-main);
@@ -524,7 +525,7 @@
   .preset-btn {
     background: transparent;
     color: var(--text-main);
-    font-size: 0.8rem;
+    font-size: 0.82rem;
     padding: 8px 10px;
     border: none;
     cursor: pointer;
@@ -556,7 +557,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.85rem;
+    font-size: 0.88rem;
     font-weight: 900;
     color: var(--pro-color);
     margin-bottom: 8px;
@@ -643,7 +644,6 @@
 </div>
 
 <div class="card">
-  <!-- ריבוע 1: נשאר להיום (קלוריות וחלבון עם סרגלים) -->
   <div class="stat-box-large">
     <div class="box-headline">🎯 נשאר להיום</div>
     <div class="dual-val">
@@ -664,7 +664,6 @@
     </div>
   </div>
 
-  <!-- ריבוע 2: נאכל היום (קלוריות וחלבון עם סרגלים) + ספייר מצטבר -->
   <div class="grid-bottom-stats">
     <div class="stat-box-small" style="text-align: right;">
       <div class="title" style="text-align: center;">🍽️ נאכל היום</div>
@@ -692,7 +691,6 @@
     </div>
   </div>
 
-  <!-- תיבת הזנה ראשית -->
   <div class="entry-highlight-box" id="entryBox">
     <div class="entry-highlight-title" id="entryTitle">🔍 חיפוש, הזנה ושמירה</div>
     
@@ -705,13 +703,20 @@
       <span class="portion-label">כמות לפי שקילה/מנה:</span>
       <div style="display:flex; align-items:center; gap:6px;">
         <input type="number" id="portionQtyInput" value="100" step="any" oninput="onPortionQtyChanged()" inputmode="decimal">
-        <span style="font-size:0.8rem; font-weight:bold; color:var(--text-main);" id="portionUnitTag">גרם</span>
+        <span style="font-size:0.82rem; font-weight:bold; color:var(--text-main);" id="portionUnitTag">גרם</span>
       </div>
     </div>
 
     <div class="input-row">
       <input type="number" id="calInput" placeholder="קלוריות" inputmode="numeric" enterkeyhint="next">
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
+    </div>
+
+    <div class="input-row" id="saveTypeRow" style="margin-bottom:8px;">
+      <select id="entryPortionModeSelect">
+        <option value="fixed">מנה קבועה (ללא חישוב משקל)</option>
+        <option value="per100g">שמור לפי 100 גרם (תבשיל / Batch)</option>
+      </select>
     </div>
 
     <div style="margin-bottom:8px;" id="catRow">
@@ -750,13 +755,12 @@
 
 <div class="card" id="poolCard">
   <div class="pool-tabs">
-    <button class="pool-tab-btn" id="tabFavs" onclick="handlePoolTabClick('favs')">⭐ מועדפים (0)</button>
-    <button class="pool-tab-btn" id="tabAll" onclick="handlePoolTabClick('all')">📦 המאגר שלי (0)</button>
+    <button class="pool-tab-btn" id="tabMyFood" onclick="handlePoolTabClick('myfood')">📦 האוכל שלי (0)</button>
     <button class="pool-tab-btn" id="tabBase" onclick="handlePoolTabClick('base')">⚖️ מאגר בסיס (0)</button>
   </div>
 
   <div id="allSearchRow" style="display:none; margin-bottom:8px;">
-    <input type="text" id="allSearchInput" placeholder="סינון במאגר..." oninput="renderPresets()">
+    <input type="text" id="allSearchInput" placeholder="סינון ברשימה..." oninput="renderPresets()">
   </div>
 
   <div id="categoryContainer"></div>
@@ -854,47 +858,130 @@
 </div>
 
 <script>
+  // מאגר בסיס מורחב ופרקטי - מעל 100 פריטים טבעוניים (חלבון נספר רק במקורות משמעותיים)
   const BASE_FOODS = [
+    // ירקות
+    { name: "עגבנייה", cal: 18, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "עגבנייה (בינונית ~130ג)", cal: 23, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "עגבניית שרי", cal: 18, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "עגבניית שרי (יחידה ~15ג)", cal: 3, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "מלפפון", cal: 15, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "מלפפון (בינוני ~120ג)", cal: 18, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "פלפל אדום (גמבה)", cal: 31, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "פלפל אדום (בינוני ~150ג)", cal: 46, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "פלפל צהוב / כתום", cal: 27, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "גזר", cal: 41, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "גזר (בינוני ~80ג)", cal: 33, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "בצל יבש", cal: 40, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "בצל יבש (בינוני ~110ג)", cal: 44, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "בצל ירוק", cal: 32, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "שום (שן ~4ג)", cal: 6, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "חסה ערבית / אייסברג", cal: 15, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "כרוב לבן", cal: 25, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "כרוב סגול", cal: 31, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "תרד חי", cal: 23, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "קישוא / זוקיני", cal: 17, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "חציל אפוי / קלוי", cal: 35, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "ברוקולי מבושל", cal: 35, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "כרובית מבושלת / אפויה", cal: 25, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "פטריות שמפיניון", cal: 22, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "פטריות פורטובלו", cal: 22, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "בטטה אפויה", cal: 90, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "בטטה (בינונית ~180ג)", cal: 162, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "תפוח אדמה מבושל", cal: 87, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "תפוח אדמה (בינוני ~170ג)", cal: 148, pro: 0, cat: "ירקות", unit: "יח'", baseQty: 1 },
+    { name: "דלעת מבושלת / אפויה", cal: 26, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "סלק מבושל", cal: 44, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+    { name: "שעועית ירוקה עדינה מבושלת", cal: 31, pro: 0, cat: "ירקות", unit: "גרם", baseQty: 100 },
+
+    // פירות
+    { name: "מנגו", cal: 60, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "בננה", cal: 89, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "בננה (בינונית קלופה ~110ג)", cal: 98, pro: 0, cat: "פירות", unit: "יח'", baseQty: 1 },
+    { name: "תפוח עץ", cal: 52, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "תפוח עץ (בינוני ~160ג)", cal: 83, pro: 0, cat: "פירות", unit: "יח'", baseQty: 1 },
+    { name: "אגס", cal: 57, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "תות שדה", cal: 32, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "אוכמניות טריות / קפואות", cal: 57, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "אבטיח", cal: 30, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "מלון", cal: 34, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "ענבים", cal: 69, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "תפוז", cal: 47, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "קלמנטינה (יחידה ~85ג)", cal: 40, pro: 0, cat: "פירות", unit: "יח'", baseQty: 1 },
+    { name: "אפרסק / נקטרינה", cal: 44, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+    { name: "קיווי (יחידה ~75ג)", cal: 46, pro: 0, cat: "פירות", unit: "יח'", baseQty: 1 },
+    { name: "תמר מג'הול (יחידה ~20ג)", cal: 55, pro: 0, cat: "פירות", unit: "יח'", baseQty: 1 },
+    { name: "צימוקים", cal: 299, pro: 0, cat: "פירות", unit: "גרם", baseQty: 100 },
+
+    // חלבונים מובחרים
     { name: "טופו קשה", cal: 144, pro: 15.5, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
     { name: "טופו משי", cal: 55, pro: 5.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
     { name: "טמפה", cal: 192, pro: 20.3, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
     { name: "סייטן", cal: 140, pro: 24.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
-    { name: "שבבי סויה יבשים", cal: 330, pro: 50.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "שבבי סויה יבשים (TVP)", cal: 330, pro: 50.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
     { name: "יובה (עור טופו יבש)", cal: 420, pro: 52.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
-    { name: "אדממה (פולי סויה)", cal: 122, pro: 11.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
-    { name: "אבקת חלבון צמחית", cal: 120, pro: 24.0, cat: "חלבונים מובחרים", unit: "סקופ", baseQty: 1 },
+    { name: "אדממה (פולי סויה מבושלים)", cal: 122, pro: 11.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "אבקת חלבון צמחית (סקופ ~30ג)", cal: 120, pro: 24.0, cat: "חלבונים מובחרים", unit: "סקופ", baseQty: 1 },
+    { name: "שמרי בירה (פתיתים)", cal: 360, pro: 48.0, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "שמרי בירה (כף ~8ג)", cal: 29, pro: 3.8, cat: "חלבונים מובחרים", unit: "כף", baseQty: 1 },
+    { name: "חלב סויה ללא תוספת סוכר", cal: 35, pro: 3.3, cat: "חלבונים מובחרים", unit: "גרם", baseQty: 100 },
+    { name: "חלב סויה (כוס ~200מל)", cal: 70, pro: 6.6, cat: "חלבונים מובחרים", unit: "כוס", baseQty: 1 },
+    { name: "יוגורט סויה טבעי (גביע ~150ג)", cal: 75, pro: 6.0, cat: "חלבונים מובחרים", unit: "גביע", baseQty: 1 },
 
-    { name: "עדשים מבושלות (חומות/ירוקות)", cal: 116, pro: 9.0, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "עדשים כתומות מבושלות", cal: 112, pro: 8.5, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "גרגרי חומוס מבושלים", cal: 164, pro: 8.9, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "שעועית שחורה מבושלת", cal: 132, pro: 8.9, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "שעועית לבנה מבושלת", cal: 139, pro: 9.7, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "שיבולת שועל (יבשה)", cal: 389, pro: 16.9, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "קינואה מבושלת", cal: 120, pro: 4.4, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "כוסמת מבושלת", cal: 92, pro: 3.4, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "אורז בסמטי מבושל", cal: 130, pro: 2.7, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "פסטה מבושלת", cal: 158, pro: 5.8, cat: "קטניות ודגנים", unit: "גרם", baseQty: 100 },
-    { name: "פיתה רגילה", cal: 230, pro: 8.0, cat: "קטניות ודגנים", unit: "יח'", baseQty: 1 },
-    { name: "פרוסת לחם מלא", cal: 75, pro: 3.5, cat: "קטניות ודגנים", unit: "יח'", baseQty: 1 },
+    // קטניות
+    { name: "עדשים חומות / ירוקות מבושלות", cal: 116, pro: 9.0, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "עדשים כתומות מבושלות", cal: 112, pro: 8.5, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "עדשים שחורות (בלוגה) מבושלות", cal: 120, pro: 9.5, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "גרגרי חומוס מבושלים", cal: 164, pro: 8.9, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "שעועית שחורה מבושלת", cal: 132, pro: 8.9, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "שעועית לבנה מבושלת", cal: 139, pro: 9.7, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "שעועית אדומה (קידני) מבושלת", cal: 127, pro: 8.7, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "אפונה ירוקה מבושלת", cal: 81, pro: 5.4, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "פול מצרי מבושל", cal: 110, pro: 7.6, cat: "קטניות", unit: "גרם", baseQty: 100 },
+    { name: "תורמוס מבושל", cal: 119, pro: 15.6, cat: "קטניות", unit: "גרם", baseQty: 100 },
 
-    { name: "מנגו", cal: 60, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "בננה", cal: 89, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "תפוח עץ", cal: 52, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "תות שדה", cal: 32, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "אבטיח", cal: 30, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "עגבנייה", cal: 18, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "מלפפון", cal: 15, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "בטטה אפויה", cal: 90, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "תפוח אדמה מבושל", cal: 87, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
-    { name: "ברוקולי מבושל", cal: 35, pro: 0, cat: "פירות וירקות", unit: "גרם", baseQty: 100 },
+    // דגנים ופחמימות
+    { name: "שיבולת שועל (קוואקר יבש)", cal: 389, pro: 16.9, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "שיבולת שועל (כף מלאה ~12ג)", cal: 47, pro: 2.0, cat: "דגנים ופחמימות", unit: "כף", baseQty: 1 },
+    { name: "אורז בסמטי מבושל", cal: 130, pro: 2.7, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "אורז יסמין מבושל", cal: 130, pro: 2.5, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "אורז מלא מבושל", cal: 112, pro: 2.6, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "פסטה רגילה מבושלת", cal: 158, pro: 5.8, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "פסטה מקמח מלא מבושלת", cal: 145, pro: 6.0, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "פסטה מקמח עדשים מבושלת", cal: 160, pro: 13.0, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "קינואה מבושלת", cal: 120, pro: 4.4, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "כוסמת מבושלת", cal: 92, pro: 3.4, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "בורגול מבושל", cal: 83, pro: 3.1, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "קוסקוס מבושל", cal: 112, pro: 3.8, cat: "דגנים ופחמימות", unit: "גרם", baseQty: 100 },
+    { name: "פיתה רגילה", cal: 230, pro: 8.0, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
+    { name: "פיתה מקמח מלא", cal: 210, pro: 9.0, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
+    { name: "פרוסת לחם אחיד", cal: 75, pro: 2.5, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
+    { name: "פרוסת לחם מלא / מחמצת", cal: 80, pro: 3.8, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
+    { name: "פרוסת לחם קל", cal: 45, pro: 2.0, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
+    { name: "טורטיה בינונית (~40ג)", cal: 120, pro: 3.0, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
+    { name: "פריכית אורז גדולה (יחידה ~8ג)", cal: 30, pro: 0.6, cat: "דגנים ופחמימות", unit: "יח'", baseQty: 1 },
 
-    { name: "טחינה גולמית", cal: 595, pro: 17.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
-    { name: "שקדים טבעיים", cal: 579, pro: 21.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
-    { name: "אגוזי מלך", cal: 654, pro: 15.2, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
-    { name: "חמאת בוטנים טבעית", cal: 588, pro: 25.0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
-    { name: "שמן זית", cal: 884, pro: 0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 },
-    { name: "שמן זית (כף)", cal: 120, pro: 0, cat: "שומנים ואגוזים", unit: "יח'", baseQty: 1 },
-    { name: "אבוקדו", cal: 160, pro: 0, cat: "שומנים ואגוזים", unit: "גרם", baseQty: 100 }
+    // שומנים וממרחים
+    { name: "טחינה מוכנה (לפי 100 גרם)", cal: 210, pro: 6.5, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "טחינה מוכנה (כף ~15ג)", cal: 32, pro: 1.0, cat: "שומנים וממרחים", unit: "כף", baseQty: 1 },
+    { name: "טחינה גולמית", cal: 595, pro: 17.0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "טחינה גולמית (כף ~15ג)", cal: 89, pro: 2.5, cat: "שומנים וממרחים", unit: "כף", baseQty: 1 },
+    { name: "חומוס ממרח מוכן", cal: 240, pro: 7.0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "חומוס ממרח (כף ~25ג)", cal: 60, pro: 1.8, cat: "שומנים וממרחים", unit: "כף", baseQty: 1 },
+    { name: "חמאת בוטנים טבעית", cal: 588, pro: 25.0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "חמאת בוטנים (כף שטוחה ~15ג)", cal: 88, pro: 3.8, cat: "שומנים וממרחים", unit: "כף", baseQty: 1 },
+    { name: "שקדים טבעיים", cal: 579, pro: 21.0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "אגוזי מלך", cal: 654, pro: 15.2, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "אגוזי קשיו", cal: 553, pro: 18.0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "גרעיני דלעת קלופים", cal: 559, pro: 30.0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "זרעי צ'יה", cal: 486, pro: 16.5, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "זרעי פשתן טחונים", cal: 534, pro: 18.3, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "שמן זית", cal: 884, pro: 0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "שמן זית (כף ~10מל)", cal: 88, pro: 0, cat: "שומנים וממרחים", unit: "כף", baseQty: 1 },
+    { name: "שמן זית (כפית ~5מל)", cal: 44, pro: 0, cat: "שומנים וממרחים", unit: "כפית", baseQty: 1 },
+    { name: "אבוקדו", cal: 160, pro: 0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 },
+    { name: "אבוקדו (חצי בינוני ~75ג)", cal: 120, pro: 0, cat: "שומנים וממרחים", unit: "יח'", baseQty: 1 },
+    { name: "זיתים ירוקים / שחורים", cal: 145, pro: 0, cat: "שומנים וממרחים", unit: "גרם", baseQty: 100 }
   ];
 
   let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
@@ -910,7 +997,7 @@
   let geminiApiKey = localStorage.getItem('cal_geminiApiKey') || '';
   let isAiEnabled = localStorage.getItem('cal_isAiEnabled') !== 'false';
   
-  let currentPoolTab = localStorage.getItem('cal_poolTabState') || 'none';
+  let currentPoolTab = localStorage.getItem('cal_poolTabState') || 'myfood';
   let activePortionContext = null;
 
   let historyStack = JSON.parse(localStorage.getItem('cal_historyStack') || '[]');
@@ -932,6 +1019,7 @@
   const proInput = document.getElementById('proInput');
   const entryCatInput = document.getElementById('entryCatInput');
   const searchDropdown = document.getElementById('searchDropdown');
+  const entryPortionModeSelect = document.getElementById('entryPortionModeSelect');
 
   function updateClearBtnVisibility() {
     const btn = document.getElementById('btnClearSelection');
@@ -988,7 +1076,7 @@
       return;
     }
 
-    matches.slice(0, 10).forEach(m => {
+    matches.slice(0, 12).forEach(m => {
       const row = document.createElement('div');
       row.className = 'dropdown-item';
 
@@ -1003,9 +1091,11 @@
           searchDropdown.style.display = 'none';
         };
       } else {
+        const isBatch = (m.data.isPer100g === true);
+        const meta = isBatch ? `${m.data.cal} קל' | ${m.data.pro}ג' (ל-100ג)` : `${m.data.cal} קל' | ${m.data.pro}ג'`;
         row.innerHTML = `
           <span>📦 ${m.data.name}</span>
-          <span class="dropdown-item-meta">${m.data.cal} קל' | ${m.data.pro}ג'</span>
+          <span class="dropdown-item-meta">${meta}</span>
         `;
         row.onclick = () => {
           selectCustomPreset(m.data);
@@ -1020,11 +1110,36 @@
 
   function selectCustomPreset(preset) {
     pushState();
-    closePortionCalculator();
-    entryNameInput.value = preset.name;
-    calInput.value = preset.cal;
-    proInput.value = preset.pro;
-    entryCatInput.value = (preset.cat === 'כללי' ? '' : preset.cat);
+    if (preset.isPer100g) {
+      activePortionContext = {
+        name: preset.name,
+        calPerUnit: preset.cal / 100,
+        proPerUnit: preset.pro / 100,
+        unit: "גרם",
+        baseQty: 100,
+        cat: preset.cat || "האוכל שלי"
+      };
+      entryNameInput.value = preset.name;
+      entryCatInput.value = (preset.cat === 'כללי' ? '' : (preset.cat || ''));
+      entryPortionModeSelect.value = "per100g";
+
+      const portionRow = document.getElementById('portionCalcRow');
+      const qtyInput = document.getElementById('portionQtyInput');
+      const unitTag = document.getElementById('portionUnitTag');
+      unitTag.textContent = "גרם";
+      qtyInput.value = 100;
+      portionRow.style.display = 'flex';
+      onPortionQtyChanged();
+      qtyInput.focus();
+      qtyInput.select();
+    } else {
+      closePortionCalculator();
+      entryNameInput.value = preset.name;
+      calInput.value = preset.cal;
+      proInput.value = preset.pro;
+      entryCatInput.value = (preset.cat === 'כללי' ? '' : (preset.cat || ''));
+      entryPortionModeSelect.value = "fixed";
+    }
     updateClearBtnVisibility();
   }
 
@@ -1044,6 +1159,7 @@
 
     entryNameInput.value = item.name;
     entryCatInput.value = item.cat || '';
+    entryPortionModeSelect.value = (item.unit === "גרם" && item.baseQty === 100) ? "per100g" : "fixed";
 
     const portionRow = document.getElementById('portionCalcRow');
     const qtyInput = document.getElementById('portionQtyInput');
@@ -1222,7 +1338,7 @@
     const cat = prompt('קטגוריה עבור המנה:', 'כללי') || 'כללי';
 
     pushState();
-    presets.push({ name, cal, pro, cat: cat.trim(), isFav: true });
+    presets.push({ name, cal, pro, cat: cat.trim(), isFav: true, isPer100g: false });
     if (!categoryOrder.includes(cat.trim())) categoryOrder.push(cat.trim());
 
     renderPresets();
@@ -1241,10 +1357,9 @@
   }
 
   function applyPoolTabUI() {
-    document.getElementById('tabFavs').className = 'pool-tab-btn ' + (currentPoolTab === 'favs' ? 'active' : '');
-    document.getElementById('tabAll').className = 'pool-tab-btn ' + (currentPoolTab === 'all' ? 'active' : '');
+    document.getElementById('tabMyFood').className = 'pool-tab-btn ' + (currentPoolTab === 'myfood' ? 'active' : '');
     document.getElementById('tabBase').className = 'pool-tab-btn ' + (currentPoolTab === 'base' ? 'active' : '');
-    document.getElementById('allSearchRow').style.display = (currentPoolTab === 'all' || currentPoolTab === 'base') ? 'block' : 'none';
+    document.getElementById('allSearchRow').style.display = (currentPoolTab !== 'none') ? 'block' : 'none';
   }
 
   function renderPresets() {
@@ -1252,9 +1367,7 @@
     container.innerHTML = '';
     updateDatalists();
 
-    const favCount = presets.filter(p => p.isFav !== false).length;
-    document.getElementById('tabFavs').textContent = `⭐ מועדפים (${favCount})`;
-    document.getElementById('tabAll').textContent = `📦 המאגר שלי (${presets.length})`;
+    document.getElementById('tabMyFood').textContent = `📦 האוכל שלי (${presets.length})`;
     document.getElementById('tabBase').textContent = `⚖️ מאגר בסיס (${BASE_FOODS.length})`;
 
     if (currentPoolTab === 'none') {
@@ -1271,13 +1384,12 @@
     }
 
     const filtered = presets.filter(p => {
-      if (currentPoolTab === 'favs') return (p.isFav !== false);
       if (searchTerm) return p.name.toLowerCase().includes(searchTerm) || (p.cat || '').toLowerCase().includes(searchTerm);
       return true;
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div style="text-align:center; font-size:0.8rem; color:var(--text-muted); padding:12px;">${currentPoolTab === 'favs' ? 'אין מועדפים' : 'המאגר ריק'}</div>`;
+      container.innerHTML = `<div style="text-align:center; font-size:0.82rem; color:var(--text-muted); padding:14px;">אין מנות שמורות ב"האוכל שלי"</div>`;
       return;
     }
 
@@ -1309,8 +1421,12 @@
         const itemWrap = document.createElement('div');
         itemWrap.className = 'preset-btn-wrapper';
         itemWrap.id = `preset-wrapper-${realIdx}`;
+        
+        const isBatch = (p.isPer100g === true);
+        const labelText = isBatch ? `⚖️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ל-100ג)` : `${p.name} (${p.cal} קל' | ${p.pro}ג')`;
+
         itemWrap.innerHTML = `
-          <button class="preset-btn" onclick="addPresetEntry(${realIdx})">${p.name} (${p.cal} קל' | ${p.pro}ג')</button>
+          <button class="preset-btn" onclick="handlePresetClick(${realIdx})">${labelText}</button>
           <button class="preset-sub-btn preset-fav-btn" onclick="toggleFavPreset(${realIdx})">${p.isFav !== false ? '⭐' : '☆'}</button>
           <button class="preset-sub-btn preset-edit-btn" onclick="startEditPreset(${realIdx})">✎</button>
           <button class="preset-sub-btn preset-del-btn" onclick="deletePreset(${realIdx})">✕</button>
@@ -1322,6 +1438,19 @@
     });
   }
 
+  function handlePresetClick(idx) {
+    const p = presets[idx];
+    if (!p) return;
+
+    if (p.isPer100g) {
+      selectCustomPreset(p);
+      document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      showToast('הזן כמות בגרמים');
+    } else {
+      addPresetEntry(idx);
+    }
+  }
+
   function renderBaseFoodTab(container, searchTerm) {
     const filtered = BASE_FOODS.filter(b => {
       if (!searchTerm) return true;
@@ -1329,7 +1458,7 @@
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = '<div style="text-align:center; font-size:0.8rem; color:var(--text-muted); padding:12px;">לא נמצאו תוצאות</div>';
+      container.innerHTML = '<div style="text-align:center; font-size:0.82rem; color:var(--text-muted); padding:14px;">לא נמצאו תוצאות תואמות</div>';
       return;
     }
 
@@ -1623,6 +1752,7 @@
     calInput.value = item.cal;
     proInput.value = item.pro;
     document.getElementById('catRow').style.display = 'none';
+    document.getElementById('saveTypeRow').style.display = 'none';
 
     document.getElementById('entryTitle').textContent = '✎ עריכת הזנה מההיסטוריה';
     document.getElementById('defaultActionBtns').style.display = 'none';
@@ -1666,6 +1796,7 @@
     editingLogIndex = -1;
     clearEntryInputs();
     document.getElementById('catRow').style.display = 'block';
+    document.getElementById('saveTypeRow').style.display = 'flex';
     document.getElementById('entryTitle').textContent = '🔍 חיפוש, הזנה ושמירה';
     document.getElementById('defaultActionBtns').style.display = 'flex';
     document.getElementById('logEditActionBtns').style.display = 'none';
@@ -1701,7 +1832,7 @@
     const cat = prompt('קטגוריה עבור המנה:', 'כללי') || 'כללי';
 
     pushState();
-    presets.push({ name: name.trim(), cal: item.cal, pro: item.pro, cat: cat.trim(), isFav: true });
+    presets.push({ name: name.trim(), cal: item.cal, pro: item.pro, cat: cat.trim(), isFav: true, isPer100g: false });
     if (!categoryOrder.includes(cat.trim())) categoryOrder.push(cat.trim());
 
     renderPresets();
@@ -1737,7 +1868,8 @@
     const cal = parseInt(calInput.value) || 0;
     const pro = parseFloat(proInput.value) || 0;
     let cat = entryCatInput.value.trim() || 'כללי';
-    return { name, cal, pro: Math.round(pro * 10) / 10, cat };
+    const isPer100g = (entryPortionModeSelect.value === 'per100g');
+    return { name, cal, pro: Math.round(pro * 10) / 10, cat, isPer100g };
   }
 
   function clearEntryInputs() {
@@ -1745,6 +1877,7 @@
     calInput.value = '';
     proInput.value = '';
     entryCatInput.value = '';
+    entryPortionModeSelect.value = 'fixed';
     closePortionCalculator();
     searchDropdown.style.display = 'none';
     updateClearBtnVisibility();
@@ -1781,10 +1914,17 @@
     }
     pushState();
     if (editingPresetIndex >= 0) {
-      presets[editingPresetIndex] = { name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isFav: presets[editingPresetIndex].isFav !== false };
+      presets[editingPresetIndex] = { 
+        name: val.name, 
+        cat: val.cat, 
+        cal: val.cal, 
+        pro: val.pro, 
+        isFav: presets[editingPresetIndex].isFav !== false,
+        isPer100g: val.isPer100g
+      };
       cancelEditPreset();
     } else {
-      presets.push({ name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isFav: true });
+      presets.push({ name: val.name, cat: val.cat, cal: val.cal, pro: val.pro, isFav: true, isPer100g: val.isPer100g });
     }
     if (!categoryOrder.includes(val.cat)) categoryOrder.push(val.cat);
     clearEntryInputs();
@@ -1845,9 +1985,10 @@
 
     editingPresetIndex = idx;
     entryNameInput.value = p.name;
-    entryCatInput.value = (p.cat === 'כללי' ? '' : p.cat);
+    entryCatInput.value = (p.cat === 'כללי' ? '' : (p.cat || ''));
     calInput.value = p.cal;
     proInput.value = p.pro;
+    entryPortionModeSelect.value = p.isPer100g ? "per100g" : "fixed";
 
     document.getElementById('cancelEditPoolBtn').style.display = 'block';
     entryNameInput.focus();
@@ -2021,7 +2162,7 @@
         const pro = parseFloat(parts[2].trim()) || 0;
         const cat = (parts[3] ? parts[3].trim() : 'כללי') || 'כללי';
         if (name && (cal > 0 || pro > 0)) {
-          presets.push({ name, cat, cal, pro: Math.round(pro * 10) / 10, isFav: true });
+          presets.push({ name, cat, cal, pro: Math.round(pro * 10) / 10, isFav: true, isPer100g: false });
           if (!categoryOrder.includes(cat)) categoryOrder.push(cat);
           count++;
         }
