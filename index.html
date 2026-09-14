@@ -19,7 +19,7 @@
   :root {
     --bg-page: #f8f9fa;
     --card-bg: #ffffff;
-    --card-border: #e9ecef;
+    --card-border: #dbe0e6;
     --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     
     --text-main: #1a1d20;
@@ -27,6 +27,7 @@
     --text-subtle: #adb5bd;
     
     --accent-primary: #3b5bdb;
+    --accent-primary-shadow: #2b44a8;
     --primary-surface: #edf2ff;
     
     --accent-secondary: #1c7ed6;
@@ -35,14 +36,16 @@
     --bank-color: #7048e8;
     --bank-surface: #f3f0ff;
     
-    --neutral-btn-bg: #f1f3f5;
-    --neutral-btn-text: #495057;
+    --neutral-btn-bg: #ffffff;
+    --neutral-btn-border: #ced4da;
+    --neutral-btn-shadow: #adb5bd;
+    --neutral-btn-text: #343a40;
 
     --danger: #e03131;
     --danger-surface: #fff5f5;
 
     --input-bg: #f8f9fa;
-    --input-border: #dee2e6;
+    --input-border: #ced4da;
   }
 
   * { 
@@ -71,7 +74,7 @@
 
   .card { 
     background: var(--card-bg); 
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 20px; 
     padding: 16px; 
     width: 100%; 
@@ -96,7 +99,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 16px;
-    border-bottom: 1px solid var(--card-border);
+    border-bottom: 1.5px solid var(--card-border);
   }
 
   .header-title-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -146,9 +149,9 @@
     align-items: center; 
   }
   .btn-nav-circle {
-    background: var(--input-bg);
+    background: var(--neutral-btn-bg);
     color: var(--text-muted);
-    border: 1px solid var(--input-border);
+    border: 1.5px solid var(--neutral-btn-border);
     border-radius: 50%;
     width: 36px;
     height: 36px;
@@ -158,12 +161,18 @@
     cursor: pointer;
     outline: none;
     padding: 0;
-    transition: all 0.15s;
+    box-shadow: 0 2px 0 var(--neutral-btn-shadow);
+    transition: all 0.1s ease;
   }
   .btn-nav-circle svg { width: 17px; height: 17px; fill: currentColor; }
-  .btn-nav-circle:active { color: var(--accent-primary); border-color: var(--accent-primary); transform: scale(0.94); }
+  .btn-nav-circle:active {
+    transform: translateY(2px);
+    box-shadow: none;
+    color: var(--accent-primary);
+    border-color: var(--accent-primary);
+  }
 
-  /* מלבן מאוחד אחד עליון עם מספרים מוגדלים */
+  /* מלבן אחד גדול ומאוחד עבור נשאר להיום */
   .stats-board {
     display: flex;
     flex-direction: column;
@@ -171,10 +180,11 @@
     margin-bottom: 14px;
   }
   .stat-card-target-unified {
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 18px;
     padding: 14px 16px;
     background: #fbfbfc;
+    box-shadow: 0 2px 0 var(--card-border);
   }
   .unified-headline {
     text-align: center;
@@ -233,7 +243,7 @@
     gap: 10px;
   }
   .stat-chip-box {
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 14px;
     padding: 10px 12px;
     display: flex;
@@ -242,6 +252,7 @@
     min-height: 80px;
     background: #fbfbfc;
     text-align: center;
+    box-shadow: 0 2px 0 var(--card-border);
   }
   .stat-chip-box.bank { background: var(--bank-surface); }
 
@@ -278,9 +289,11 @@
   }
 
   .search-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
-  input[type="text"], input[type="number"], textarea, select { 
+  
+  /* טיפול ממוקד בשדות קלט ומקלדת מספרים */
+  input[type="text"], textarea, select { 
     background: var(--input-bg); 
-    border: 1px solid var(--input-border); 
+    border: 1.5px solid var(--input-border); 
     border-radius: 12px; 
     color: var(--text-main); 
     padding: 11px 12px; 
@@ -291,6 +304,24 @@
     direction: rtl;
     transition: all 0.2s;
   }
+
+  /* שדות מספרים: מרכוז מוחלט, LTR פנימי לעריכה/מחיקה תקינה ללא שיגועי RTL */
+  input[type="number"] {
+    background: var(--input-bg); 
+    border: 1.5px solid var(--input-border); 
+    border-radius: 12px; 
+    color: var(--text-main); 
+    padding: 11px 12px; 
+    width: 100%; 
+    font-size: 0.95rem; 
+    font-weight: 700;
+    outline: none; 
+    direction: ltr !important;
+    text-align: center !important;
+    unicode-bidi: plaintext;
+    transition: all 0.2s;
+  }
+
   input:focus, textarea:focus, select:focus { 
     background: #ffffff;
     border-color: var(--accent-primary);
@@ -303,7 +334,7 @@
     left: 0;
     right: 0;
     background: #ffffff;
-    border: 1px solid var(--input-border);
+    border: 1.5px solid var(--input-border);
     border-radius: 14px;
     margin-top: 4px;
     max-height: 240px;
@@ -330,7 +361,7 @@
   .portion-panel {
     display: none;
     background: var(--secondary-surface);
-    border: 1px dashed var(--accent-secondary);
+    border: 1.5px dashed var(--accent-secondary);
     border-radius: 12px;
     padding: 10px;
     margin-bottom: 8px;
@@ -347,55 +378,77 @@
     display: flex;
     flex-direction: column;
     gap: 3px;
+    text-align: center;
   }
   .portion-input-cell label {
     font-size: 0.74rem;
     font-weight: 700;
     color: var(--accent-secondary);
+    text-align: center;
   }
   .portion-input-cell input {
     padding: 8px !important;
-    text-align: center;
+    text-align: center !important;
     font-weight: 800;
     border-radius: 8px;
     background: #ffffff;
+    direction: ltr !important;
   }
 
   .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
 
-  .action-buttons-stack { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; }
+  /* כפתורים עם שקיעה פיזית עדינה ותלת-ממדית */
+  .action-buttons-stack { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
+  
   .btn-action-primary {
     background: var(--accent-primary);
     color: #ffffff;
-    border: none;
+    border: 1.5px solid var(--accent-primary-shadow);
     border-radius: 12px;
-    padding: 12px;
+    padding: 11px;
     font-size: 0.92rem;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
     width: 100%;
     text-align: center;
     outline: none;
-    box-shadow: 0 2px 8px rgba(59, 91, 219, 0.2);
-    transition: opacity 0.15s, transform 0.1s;
+    box-shadow: 0 3px 0 var(--accent-primary-shadow);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
-  .btn-action-primary:active { opacity: 0.9; transform: scale(0.98); }
+  .btn-action-primary:active {
+    transform: translateY(3px);
+    box-shadow: none;
+  }
 
   .btn-action-secondary {
-    background: var(--input-bg);
-    color: var(--text-main);
-    border: 1px solid var(--input-border);
+    background: var(--neutral-btn-bg);
+    color: var(--neutral-btn-text);
+    border: 1.5px solid var(--neutral-btn-border);
     border-radius: 12px;
-    padding: 11px;
+    padding: 10px;
     font-size: 0.88rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     text-align: center;
     outline: none;
-    transition: background 0.15s;
+    box-shadow: 0 3px 0 var(--neutral-btn-shadow);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
-  .btn-action-secondary:active { background: #e9ecef; }
-  .btn-clear-sel { background: transparent; color: var(--text-muted); font-size: 0.8rem; padding: 6px; display: none; border: none; }
+  .btn-action-secondary:active {
+    transform: translateY(3px);
+    box-shadow: none;
+    background: #f8f9fa;
+  }
+
+  .btn-clear-sel { 
+    background: transparent; 
+    color: var(--text-muted); 
+    font-size: 0.8rem; 
+    padding: 6px; 
+    display: none; 
+    border: none; 
+    cursor: pointer;
+  }
 
   .day-actions-grid {
     display: grid;
@@ -404,25 +457,37 @@
     margin-bottom: 10px;
   }
   .btn-day-card {
-    border: 1px solid var(--card-border);
     border-radius: 14px;
     padding: 10px 8px;
     font-size: 0.82rem;
-    font-weight: 700;
+    font-weight: 800;
     cursor: pointer;
     text-align: center;
     outline: none;
-    transition: all 0.15s;
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
-  .btn-day-card.bank { background: var(--primary-surface); color: var(--accent-primary); border-color: #d0ebff; }
-  .btn-day-card.nobank { background: var(--neutral-btn-bg); color: var(--neutral-btn-text); border-color: var(--input-border); }
-  .btn-day-card:active { transform: scale(0.97); }
+  .btn-day-card.bank { 
+    background: var(--primary-surface); 
+    color: var(--accent-primary); 
+    border: 1.5px solid #bac8ff; 
+    box-shadow: 0 3px 0 #bac8ff;
+  }
+  .btn-day-card.nobank { 
+    background: #f1f3f5; 
+    color: #495057; 
+    border: 1.5px solid #ced4da; 
+    box-shadow: 0 3px 0 #ced4da;
+  }
+  .btn-day-card:active {
+    transform: translateY(3px);
+    box-shadow: none;
+  }
 
   .collapsible-wrapper { margin-top: 4px; }
   .btn-toggle-box {
     background: #ffffff;
     color: var(--text-main);
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 14px;
     font-size: 0.84rem;
     font-weight: 700;
@@ -433,6 +498,12 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    box-shadow: 0 2px 0 var(--card-border);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+  }
+  .btn-toggle-box:active {
+    transform: translateY(2px);
+    box-shadow: none;
   }
   .collapsible-box {
     display: none;
@@ -449,10 +520,11 @@
   }
   .history-day-card {
     background: #ffffff;
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 16px;
     margin-bottom: 10px;
     padding: 10px 14px;
+    box-shadow: 0 2px 0 var(--card-border);
   }
   .history-day-header {
     display: flex;
@@ -495,7 +567,7 @@
     pointer-events: none;
     z-index: 9999;
     background: #ffffff;
-    border: 1px solid var(--accent-primary);
+    border: 1.5px solid var(--accent-primary);
     box-shadow: 0 10px 25px rgba(0,0,0,0.12);
     border-radius: 10px;
     padding: 8px 14px;
@@ -513,30 +585,38 @@
   .pool-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
   .pool-tab-btn {
     flex: 1;
-    background: var(--input-bg);
-    color: var(--text-muted);
-    border: 1px solid var(--input-border);
+    background: var(--neutral-btn-bg);
+    color: var(--neutral-btn-text);
+    border: 1.5px solid var(--neutral-btn-border);
     border-radius: 12px;
     padding: 9px 4px;
     font-size: 0.82rem;
     font-weight: 700;
     cursor: pointer;
     outline: none;
-    transition: all 0.15s;
+    box-shadow: 0 2px 0 var(--neutral-btn-shadow);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
   .pool-tab-btn.active {
     background: var(--accent-primary);
     color: #ffffff;
-    border-color: var(--accent-primary);
+    border-color: var(--accent-primary-shadow);
+    box-shadow: 0 2px 0 var(--accent-primary-shadow);
+    transform: translateY(1px);
+  }
+  .pool-tab-btn:active {
+    transform: translateY(2px);
+    box-shadow: none;
   }
 
-  /* אקורדיון קטגוריות מעודן עם תמיכת גרירה בין קטגוריות */
+  /* אקורדיון קטגוריות מעודן */
   .category-block {
     background: #ffffff;
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 14px;
     margin-bottom: 8px;
     overflow: hidden;
+    box-shadow: 0 2px 0 var(--card-border);
   }
   .category-header {
     display: flex;
@@ -560,14 +640,19 @@
   .category-block.open .category-content { display: block; }
 
   .btn-cat-order {
-    background: var(--input-bg);
-    color: var(--text-muted);
-    border: 1px solid var(--input-border);
+    background: var(--neutral-btn-bg);
+    color: var(--neutral-btn-text);
+    border: 1.5px solid var(--neutral-btn-border);
     border-radius: 6px;
     width: 24px;
     height: 24px;
     font-size: 0.75rem;
     cursor: pointer;
+    box-shadow: 0 1px 0 var(--neutral-btn-shadow);
+  }
+  .btn-cat-order:active {
+    transform: translateY(1px);
+    box-shadow: none;
   }
 
   .preset-list { 
@@ -581,12 +666,18 @@
     display: flex; 
     align-items: center; 
     background: #ffffff; 
-    border: 1px solid var(--input-border); 
+    border: 1.5px solid var(--input-border); 
     border-radius: 10px; 
     overflow: hidden; 
     user-select: none;
     -webkit-user-select: none;
     touch-action: pan-y;
+    box-shadow: 0 2px 0 var(--neutral-btn-shadow);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+  }
+  .preset-btn-wrapper:active {
+    transform: translateY(2px);
+    box-shadow: none;
   }
   .preset-btn-wrapper.holding-active {
     background: var(--primary-surface) !important;
@@ -615,11 +706,12 @@
 
   .ai-card {
     background: #ffffff;
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 20px;
     padding: 16px;
     width: 100%;
     max-width: 410px;
+    box-shadow: var(--card-shadow);
   }
   .ai-header {
     display: flex;
@@ -644,7 +736,7 @@
   }
   .modal-box {
     background: #ffffff;
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 20px;
     padding: 20px;
     width: 100%;
@@ -662,7 +754,7 @@
 
   .switch-btn {
     background: var(--input-bg);
-    border: 1px solid var(--input-border);
+    border: 1.5px solid var(--input-border);
     border-radius: 16px;
     padding: 4px 12px;
     color: var(--text-muted);
@@ -670,13 +762,13 @@
     font-size: 0.78rem;
     cursor: pointer;
   }
-  .switch-btn.active { background: var(--accent-primary); color: #ffffff; border-color: var(--accent-primary); }
+  .switch-btn.active { background: var(--accent-primary); color: #ffffff; border-color: var(--accent-primary-shadow); }
 
   /* ארכיון בשורות מופרדות ללא קופסאות כפולות */
   .archive-viewer-box {
     display: none;
     background: #fbfbfc;
-    border: 1px solid var(--card-border);
+    border: 1.5px solid var(--card-border);
     border-radius: 14px;
     padding: 10px 14px;
     max-height: 260px;
@@ -880,7 +972,7 @@
     <input type="text" id="aiFoodQuery" placeholder="מה אכלת וכמה? (למשל: 150ג סייטן)" onkeydown="if(event.key==='Enter') askAI()">
     <button class="btn-action-primary" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
   </div>
-  <div id="aiResultBox" style="display:none; margin-top:10px; background:#fbfbfc; padding:12px; border-radius:14px; border:1px solid var(--card-border);">
+  <div id="aiResultBox" style="display:none; margin-top:10px; background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
     <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:800; margin-bottom:6px;">ערוך לפני שמירה:</div>
     <input type="text" id="aiEditName" style="margin-bottom:6px;">
     <div class="input-row" style="margin-bottom:8px;">
@@ -901,7 +993,7 @@
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1px solid var(--card-border);">
+    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <span style="font-size:0.85rem; font-weight:800;">עוזר AI (צ'אט)</span>
         <button id="btnAiToggle" class="switch-btn active" onclick="toggleAiEnabled()">ON</button>
@@ -913,7 +1005,7 @@
       </div>
     </div>
 
-    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1px solid var(--card-border);">
+    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
       <div style="font-size:0.82rem; font-weight:800; margin-bottom:6px;">יעדים יומיים:</div>
       <div class="input-row" style="margin-bottom:6px;">
         <input type="number" id="targetCalInput" placeholder="קלוריות">
@@ -930,7 +1022,7 @@
       <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
     </div>
 
-    <div style="background:#fbfbfc; border:1px solid var(--card-border); border-radius:14px; padding:12px;">
+    <div style="background:#fbfbfc; border:1.5px solid var(--card-border); border-radius:14px; padding:12px;">
       <div style="font-size:0.82rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
       <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
       <div style="display:flex; gap:6px;">
@@ -1049,7 +1141,7 @@
     { name: "לחם אחיד", cal: 250, pro: 8.3, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 30 },
     { name: "לחם מלא / מחמצת", cal: 240, pro: 10.0, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 35 },
     { name: "לחם קל", cal: 180, pro: 8.0, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 25 },
-    { name: "טורטיה", cal: 300, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 40 },
+    { name: "טורטיה", cal: 300, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה בינונית", unitWeight: 40 },
     { name: "פריכיות אורז", cal: 375, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 8 },
 
     // שומנים וממרחים
@@ -1207,7 +1299,6 @@
     searchDropdown.style.display = 'block';
   }
 
-  // חיפוש חי לקטגוריות עם רשימת גלילה צפה
   function handleCategoryLiveSearch(val) {
     val = val.trim().toLowerCase();
     categoryDropdown.innerHTML = '';
@@ -1643,7 +1734,6 @@
     });
   }
 
-  // גרירה ומיקום של מנות ב"האוכל שלי" (בתוך אותה קטגוריה ובין קטגוריות)
   function setupPresetDragAndDrop(rowEl, presetIndex, currentCategory) {
     let holdTimer = null, isDragging = false, dragClone = null, placeholder = null;
     let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
@@ -2516,6 +2606,7 @@
     }
   }
 
+  // תצוגת ארכיון בשורות מופרדות ללא קופסאות כפולות
   function toggleArchiveViewer() {
     const box = document.getElementById('archiveViewerBox');
     if (box.style.display === 'block') { box.style.display = 'none'; return; }
