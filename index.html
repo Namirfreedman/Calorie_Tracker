@@ -172,7 +172,6 @@
     border-color: var(--accent-primary);
   }
 
-  /* מלבן אחד גדול ומאוחד עבור נשאר להיום */
   .stats-board {
     display: flex;
     flex-direction: column;
@@ -271,7 +270,6 @@
   }
   .stat-chip-box .chip-num.negative { color: var(--danger); }
 
-  /* אזור הזנה שטוח ומובנה ללא ריבועים מיותרים */
   .entry-flat-section {
     border-top: 1px solid var(--card-border);
     padding-top: 14px;
@@ -290,7 +288,6 @@
 
   .search-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
   
-  /* טיפול ממוקד בשדות קלט ומקלדת מספרים */
   input[type="text"], textarea, select { 
     background: var(--input-bg); 
     border: 1.5px solid var(--input-border); 
@@ -305,7 +302,6 @@
     transition: all 0.2s;
   }
 
-  /* שדות מספרים: מרכוז מוחלט, LTR פנימי לעריכה/מחיקה תקינה ללא שיגועי RTL */
   input[type="number"] {
     background: var(--input-bg); 
     border: 1.5px solid var(--input-border); 
@@ -357,7 +353,6 @@
   .dropdown-item:active { background: var(--primary-surface); color: var(--accent-primary); }
   .dropdown-item-meta { font-size: 0.74rem; color: var(--text-muted); font-weight: normal; }
 
-  /* מחשבון כמויות זורם */
   .portion-panel {
     display: none;
     background: var(--secondary-surface);
@@ -397,7 +392,6 @@
 
   .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
 
-  /* כפתורים עם שקיעה פיזית עדינה ותלת-ממדית */
   .action-buttons-stack { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
   
   .btn-action-primary {
@@ -511,7 +505,6 @@
     padding: 4px 0;
   }
 
-  /* היסטוריה נקייה עם גלילה מלאה */
   .log-scroll-area {
     max-height: 340px;
     overflow-y: auto;
@@ -609,14 +602,19 @@
     box-shadow: none;
   }
 
-  /* אקורדיון קטגוריות מעודן */
   .category-block {
     background: #ffffff;
     border: 1.5px solid var(--card-border);
     border-radius: 14px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     overflow: hidden;
     box-shadow: 0 2px 0 var(--card-border);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .category-block.category-holding {
+    border-color: var(--accent-primary) !important;
+    background: var(--primary-surface) !important;
+    box-shadow: 0 0 12px rgba(59, 91, 219, 0.3) !important;
   }
   .category-header {
     display: flex;
@@ -626,9 +624,10 @@
     cursor: pointer;
     user-select: none;
     background: #ffffff;
+    touch-action: pan-y;
   }
   .category-header:active { background: var(--input-bg); }
-  .category-title { font-size: 0.85rem; font-weight: 700; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
+  .category-title { font-size: 0.88rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
   .category-chevron { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
   .category-block.open .category-chevron { transform: rotate(180deg); }
   .category-content {
@@ -638,22 +637,6 @@
     background: #fafbfc;
   }
   .category-block.open .category-content { display: block; }
-
-  .btn-cat-order {
-    background: var(--neutral-btn-bg);
-    color: var(--neutral-btn-text);
-    border: 1.5px solid var(--neutral-btn-border);
-    border-radius: 6px;
-    width: 24px;
-    height: 24px;
-    font-size: 0.75rem;
-    cursor: pointer;
-    box-shadow: 0 1px 0 var(--neutral-btn-shadow);
-  }
-  .btn-cat-order:active {
-    transform: translateY(1px);
-    box-shadow: none;
-  }
 
   .preset-list { 
     display: flex; 
@@ -673,7 +656,7 @@
     -webkit-user-select: none;
     touch-action: pan-y;
     box-shadow: 0 2px 0 var(--neutral-btn-shadow);
-    transition: transform 0.08s ease, box-shadow 0.08s ease;
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.3s ease;
   }
   .preset-btn-wrapper:active {
     transform: translateY(2px);
@@ -702,7 +685,54 @@
     color: var(--text-subtle);
   }
   .preset-sub-btn:active { color: var(--accent-primary); }
-  .preset-btn-wrapper.pulse-added { background: var(--primary-surface) !important; border-color: var(--accent-primary); }
+
+  /* כפתורי מאגר בסיס מורחבים ונוחים */
+  .base-food-list {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  .base-food-btn-wrap {
+    display: flex;
+    width: 100%;
+    background: #ffffff;
+    border: 1.5px solid var(--input-border);
+    border-radius: 12px;
+    box-shadow: 0 2px 0 var(--neutral-btn-shadow);
+    overflow: hidden;
+    transition: all 0.25s ease;
+  }
+  .base-food-btn-wrap:active {
+    transform: translateY(2px);
+    box-shadow: none;
+  }
+  .base-food-btn {
+    width: 100%;
+    text-align: right;
+    padding: 10px 14px;
+    background: transparent;
+    border: none;
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--text-main);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .base-food-btn .meta-tag {
+    font-size: 0.76rem;
+    font-weight: normal;
+    color: var(--text-muted);
+  }
+
+  /* אפקט זוהר משותף בלחיצה */
+  .pulse-active-glow {
+    background: var(--primary-surface) !important;
+    border-color: var(--accent-primary) !important;
+    box-shadow: 0 0 12px rgba(59, 91, 219, 0.4) !important;
+    transform: scale(0.98);
+  }
 
   .ai-card {
     background: #ffffff;
@@ -764,7 +794,6 @@
   }
   .switch-btn.active { background: var(--accent-primary); color: #ffffff; border-color: var(--accent-primary-shadow); }
 
-  /* ארכיון בשורות מופרדות ללא קופסאות כפולות */
   .archive-viewer-box {
     display: none;
     background: #fbfbfc;
@@ -825,7 +854,7 @@
 </div>
 
 <div class="card">
-  <!-- מלבן אחד גדול ומאוחד עבור נשאר להיום -->
+  <!-- מלבן מאוחד עליון -->
   <div class="stats-board">
     <div class="stat-card-target-unified">
       <div class="unified-headline">נשאר להיום</div>
@@ -871,7 +900,7 @@
     </div>
   </div>
 
-  <!-- הזנה זורמת ושטוחה -->
+  <!-- הזנה זורמת -->
   <div class="entry-flat-section" id="entryBox">
     <div class="entry-flat-title" id="entryTitle">🔍 הזנה, חיפוש ושמירת מנה</div>
     
@@ -899,7 +928,6 @@
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
     </div>
 
-    <!-- ניסוחים קצרים ופשוטים בעברית בלבד ללא חפירות -->
     <div class="input-row" id="saveTypeRow" style="margin-bottom:8px;">
       <select id="entryPortionModeSelect" onchange="onSaveModeSelectionChanged()">
         <option value="fixed">מנה קבועה</option>
@@ -912,7 +940,6 @@
       <input type="number" id="customUnitGramsInput" placeholder="משקל ממוצע ליחידה (גרם)">
     </div>
 
-    <!-- שדה קטגוריה עם רשימת גלילה צפה ייעודית (ללא datalist של הטלפון) -->
     <div class="search-wrapper" id="catRow">
       <input type="text" id="entryCatInput" placeholder="קטגוריה (ברירת מחדל: כללי)" autocomplete="off" oninput="handleCategoryLiveSearch(this.value)" enterkeyhint="done">
       <div class="custom-dropdown-panel" id="categoryDropdown"></div>
@@ -1276,7 +1303,7 @@
           <span class="dropdown-item-meta">${m.data.cal} קל' | ${m.data.pro}ג' (${unitSuffix})</span>
         `;
         row.onclick = () => {
-          loadBaseFoodForPortion(m.data.name);
+          loadBaseFoodForPortion(m.data.name, false);
           searchDropdown.style.display = 'none';
         };
       } else {
@@ -1357,8 +1384,6 @@
       document.getElementById('portionCalcRow').style.display = 'flex';
 
       onPortionGramsChanged();
-      document.getElementById('portionGramsInput').focus();
-      document.getElementById('portionGramsInput').select();
     } else if (mode === 'customUnit' && preset.unitWeight) {
       activePortionContext = {
         name: preset.name,
@@ -1383,8 +1408,6 @@
       document.getElementById('portionCalcRow').style.display = 'flex';
 
       onPortionUnitsChanged();
-      document.getElementById('portionUnitsInput').focus();
-      document.getElementById('portionUnitsInput').select();
     } else {
       closePortionCalculator();
       entryNameInput.value = preset.name;
@@ -1397,7 +1420,8 @@
     updateClearBtnVisibility();
   }
 
-  function loadBaseFoodForPortion(foodName) {
+  // טעינת מנה ללא הקפצת מקלדת (ללא פוקוס אוטומטי)
+  function loadBaseFoodForPortion(foodName, shouldGlow = true) {
     const item = BASE_FOODS.find(b => b.name === foodName);
     if (!item) return;
 
@@ -1429,18 +1453,17 @@
       unitsInput.value = 1;
       gramsInput.value = item.unitWeight;
       onPortionUnitsChanged();
-      unitsInput.focus();
-      unitsInput.select();
     } else {
       unitCell.style.display = 'none';
       gramsInput.value = 100;
       onPortionGramsChanged();
-      gramsInput.focus();
-      gramsInput.select();
     }
 
     portionRow.style.display = 'flex';
     updateClearBtnVisibility();
+
+    // גלילה חלקה למעלה ללא פוקוס שמקפיץ מקלדת
+    document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   function onPortionUnitsChanged() {
@@ -1685,27 +1708,27 @@
     const activeCats = new Set(filtered.map(p => p.cat || 'כללי'));
     const visibleCategories = categoryOrder.filter(c => activeCats.has(c));
 
-    visibleCategories.forEach(catName => {
+    visibleCategories.forEach((catName, catIdx) => {
       const catPresets = filtered.filter(p => (p.cat || 'כללי') === catName);
       if (catPresets.length === 0) return;
 
       const block = document.createElement('div');
       block.className = 'category-block open';
       block.setAttribute('data-category', catName);
-      const catIdx = categoryOrder.indexOf(catName);
 
       block.innerHTML = `
-        <div class="category-header">
-          <span class="category-title">${catName} (${catPresets.length})</span>
-          <div style="display:flex; gap:4px;">
-            <button class="btn-cat-order" onclick="moveCategory(${catIdx}, -1)">↑</button>
-            <button class="btn-cat-order" onclick="moveCategory(${catIdx}, 1)">↓</button>
-          </div>
+        <div class="category-header" data-cat-idx="${catIdx}">
+          <span class="category-title">📂 ${catName} (${catPresets.length})</span>
+          <span style="font-size:0.75rem; color:var(--text-subtle);">⋮⋮</span>
         </div>
         <div class="category-content">
           <div class="preset-list" data-category="${catName}" id="cat-list-${catIdx}"></div>
         </div>
       `;
+
+      // גרירת קטגוריה שלמה לשינוי סדר
+      const catHeader = block.querySelector('.category-header');
+      setupCategoryDragAndDrop(catHeader, block, catName);
 
       const listEl = block.querySelector(`#cat-list-${catIdx}`);
       catPresets.forEach(p => {
@@ -1732,6 +1755,91 @@
 
       container.appendChild(block);
     });
+  }
+
+  // גרירה ושינוי סדר של קטגוריות שלמות בלחיצה של כ-700ms
+  function setupCategoryDragAndDrop(headerEl, blockEl, catName) {
+    let timer = null;
+    let isDragging = false;
+    let startY = 0;
+    let placeholder = null;
+
+    const onStart = function(e) {
+      const point = e.touches ? e.touches[0] : e;
+      startY = point.clientY;
+
+      timer = setTimeout(() => {
+        isDragging = true;
+        blockEl.classList.add('category-holding');
+        if (navigator.vibrate) navigator.vibrate(60);
+
+        placeholder = document.createElement('div');
+        placeholder.className = 'drag-placeholder';
+        placeholder.style.height = blockEl.offsetHeight + 'px';
+        blockEl.parentNode.insertBefore(placeholder, blockEl);
+        blockEl.style.display = 'none';
+      }, 700);
+    };
+
+    const onMove = function(e) {
+      const point = e.touches ? e.touches[0] : e;
+      if (!isDragging) {
+        if (Math.abs(point.clientY - startY) > 8) clearTimeout(timer);
+        return;
+      }
+      if (e.cancelable) e.preventDefault();
+
+      const elBelow = document.elementFromPoint(point.clientX, point.clientY);
+      const targetBlock = elBelow?.closest('.category-block:not(.category-holding)');
+      if (targetBlock && placeholder) {
+        const r = targetBlock.getBoundingClientRect();
+        if (point.clientY < r.top + r.height / 2) {
+          targetBlock.parentNode.insertBefore(placeholder, targetBlock);
+        } else {
+          targetBlock.parentNode.insertBefore(placeholder, targetBlock.nextSibling);
+        }
+      }
+    };
+
+    const onEnd = function() {
+      clearTimeout(timer);
+      if (isDragging) {
+        isDragging = false;
+        blockEl.classList.remove('category-holding');
+        if (placeholder && placeholder.parentNode) {
+          placeholder.parentNode.insertBefore(blockEl, placeholder);
+          placeholder.remove();
+          blockEl.style.display = 'block';
+          finalizeCategoryDomReorder();
+        } else {
+          blockEl.style.display = 'block';
+        }
+      }
+    };
+
+    headerEl.addEventListener('touchstart', onStart, { passive: false });
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+    window.addEventListener('touchcancel', onEnd);
+  }
+
+  function finalizeCategoryDomReorder() {
+    pushState();
+    const newOrder = [];
+    document.querySelectorAll('.category-block').forEach(b => {
+      const c = b.getAttribute('data-category');
+      if (c && !newOrder.includes(c)) newOrder.push(c);
+    });
+
+    // שימור כל הקטגוריות שלא הוצגו כרגע
+    categoryOrder.forEach(c => {
+      if (!newOrder.includes(c)) newOrder.push(c);
+    });
+
+    categoryOrder = newOrder;
+    renderPresets();
+    saveData();
+    showToast('סדר הקטגוריות עודכן!');
   }
 
   function setupPresetDragAndDrop(rowEl, presetIndex, currentCategory) {
@@ -1765,7 +1873,7 @@
         placeholder.style.width = rect.width + 'px';
         rowEl.parentNode.insertBefore(placeholder, rowEl);
         rowEl.style.display = 'none';
-      }, 900);
+      }, 700);
     };
 
     const onMove = function(e) {
@@ -1851,11 +1959,17 @@
     const p = presets[idx];
     if (!p) return;
 
+    const wrapper = document.getElementById(`preset-wrapper-${idx}`);
+    if (wrapper) {
+      wrapper.classList.add('pulse-active-glow');
+      setTimeout(() => wrapper.classList.remove('pulse-active-glow'), 350);
+    }
+
     const mode = p.portionMode || (p.isPer100g ? 'per100g' : 'fixed');
 
     if (mode === 'per100g' || mode === 'customUnit') {
       selectCustomPreset(p);
-      document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
       showToast('הזן כמות או משקל');
     } else {
       addPresetEntry(idx);
@@ -1888,16 +2002,30 @@
           <span class="category-chevron">${isOpen ? '▲' : '▼'}</span>
         </div>
         <div class="category-content">
-          <div class="preset-list"></div>
+          <div class="base-food-list"></div>
         </div>
       `;
 
-      const listEl = block.querySelector('.preset-list');
+      const listEl = block.querySelector('.base-food-list');
       catItems.forEach(item => {
         const wrap = document.createElement('div');
-        wrap.className = 'preset-btn-wrapper';
+        wrap.className = 'base-food-btn-wrap';
         const unitSuffix = item.unitWeight ? `100ג / ${item.unitName || 'יח'}` : '100ג';
-        wrap.innerHTML = `<button class="preset-btn" onclick="loadBaseFoodForPortion('${item.name}')">⚖️ ${item.name} (${item.cal} קל' | ${item.pro}ג' ל-${unitSuffix})</button>`;
+        
+        wrap.innerHTML = `
+          <button class="base-food-btn">
+            <span>⚖️ ${item.name}</span>
+            <span class="meta-tag">${item.cal} קל' | ${item.pro}ג' (${unitSuffix})</span>
+          </button>
+        `;
+
+        wrap.onclick = () => {
+          wrap.classList.add('pulse-active-glow');
+          setTimeout(() => wrap.classList.remove('pulse-active-glow'), 350);
+          loadBaseFoodForPortion(item.name);
+          showToast(`נטען: ${item.name}`);
+        };
+
         listEl.appendChild(wrap);
       });
 
@@ -2042,7 +2170,7 @@
         placeholder.className = 'drag-placeholder';
         rowEl.parentNode.insertBefore(placeholder, rowEl);
         rowEl.style.display = 'none';
-      }, 1000);
+      }, 700);
     };
 
     const onMove = function(e) {
@@ -2252,17 +2380,6 @@
     showToast('נוסף למאגר!');
   }
 
-  function moveCategory(index, direction) {
-    const newIdx = index + direction;
-    if (newIdx < 0 || newIdx >= categoryOrder.length) return;
-    pushState();
-    const temp = categoryOrder[index];
-    categoryOrder[index] = categoryOrder[newIdx];
-    categoryOrder[newIdx] = temp;
-    renderPresets();
-    saveData();
-  }
-
   function getEntryValues() {
     let name = entryNameInput.value.trim();
     if (activePortionContext) {
@@ -2372,12 +2489,6 @@
   function addPresetEntry(idx) {
     const p = presets[idx];
     if (!p) return;
-
-    const wrapper = document.getElementById(`preset-wrapper-${idx}`);
-    if (wrapper) {
-      wrapper.classList.add('pulse-added');
-      setTimeout(() => wrapper.classList.remove('pulse-added'), 300);
-    }
 
     pushState();
     eatenCal += p.cal;
@@ -2606,7 +2717,6 @@
     }
   }
 
-  // תצוגת ארכיון בשורות מופרדות ללא קופסאות כפולות
   function toggleArchiveViewer() {
     const box = document.getElementById('archiveViewerBox');
     if (box.style.display === 'block') { box.style.display = 'none'; return; }
