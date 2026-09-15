@@ -36,6 +36,26 @@
     --bank-color: #7048e8;
     --bank-surface: #f3f0ff;
     
+    --tint-green-bg: #ebfbee;
+    --tint-green-border: #b2f2bb;
+    --tint-green-text: #2b8a3e;
+    --tint-green-shadow: #8ce99a;
+
+    --tint-blue-bg: #e7f5ff;
+    --tint-blue-border: #a5d8ff;
+    --tint-blue-text: #1971c2;
+    --tint-blue-shadow: #74c0fc;
+
+    --tint-mint-bg: #e6fcf5;
+    --tint-mint-border: #96f2d7;
+    --tint-mint-text: #099268;
+    --tint-mint-shadow: #63e6be;
+
+    --tint-orange-bg: #fff4e6;
+    --tint-orange-border: #ffd8a8;
+    --tint-orange-text: #d9480f;
+    --tint-orange-shadow: #ffc078;
+
     --neutral-btn-bg: #ffffff;
     --neutral-btn-border: #ced4da;
     --neutral-btn-shadow: #adb5bd;
@@ -172,6 +192,7 @@
     border-color: var(--accent-primary);
   }
 
+  /* מלבן מאוחד עליון עם מספרים מוגדלים */
   .stats-board {
     display: flex;
     flex-direction: column;
@@ -270,6 +291,7 @@
   }
   .stat-chip-box .chip-num.negative { color: var(--danger); }
 
+  /* אזור הזנה שטוח ומובנה */
   .entry-flat-section {
     border-top: 1px solid var(--card-border);
     padding-top: 14px;
@@ -392,46 +414,65 @@
 
   .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
 
+  /* כפתורים עם צבעי פסטל-חי (Tinted 3D) */
   .action-buttons-stack { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
   
-  .btn-action-primary {
-    background: var(--accent-primary);
-    color: #ffffff;
-    border: 1.5px solid var(--accent-primary-shadow);
+  .btn-tint {
     border-radius: 12px;
-    padding: 11px;
-    font-size: 0.92rem;
+    padding: 11px 12px;
+    font-size: 0.9rem;
     font-weight: 800;
     cursor: pointer;
     width: 100%;
     text-align: center;
     outline: none;
-    box-shadow: 0 3px 0 var(--accent-primary-shadow);
     transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
-  .btn-action-primary:active {
+  .btn-tint:active {
     transform: translateY(3px);
-    box-shadow: none;
+    box-shadow: none !important;
   }
 
-  .btn-action-secondary {
+  .btn-tint-primary {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border: 1.5px solid var(--accent-primary-shadow);
+    box-shadow: 0 3px 0 var(--accent-primary-shadow);
+  }
+
+  .btn-tint-blue {
+    background: var(--tint-blue-bg);
+    color: var(--tint-blue-text);
+    border: 1.5px solid var(--tint-blue-border);
+    box-shadow: 0 3px 0 var(--tint-blue-shadow);
+  }
+
+  .btn-tint-mint {
+    background: var(--tint-mint-bg);
+    color: var(--tint-mint-text);
+    border: 1.5px solid var(--tint-mint-border);
+    box-shadow: 0 3px 0 var(--tint-mint-shadow);
+  }
+
+  .btn-tint-green {
+    background: var(--tint-green-bg);
+    color: var(--tint-green-text);
+    border: 1.5px solid var(--tint-green-border);
+    box-shadow: 0 3px 0 var(--tint-green-shadow);
+  }
+
+  .btn-tint-orange {
+    background: var(--tint-orange-bg);
+    color: var(--tint-orange-text);
+    border: 1.5px solid var(--tint-orange-border);
+    box-shadow: 0 3px 0 var(--tint-orange-shadow);
+  }
+
+  .btn-tint-neutral {
     background: var(--neutral-btn-bg);
     color: var(--neutral-btn-text);
     border: 1.5px solid var(--neutral-btn-border);
-    border-radius: 12px;
-    padding: 10px;
-    font-size: 0.88rem;
-    font-weight: 700;
-    cursor: pointer;
-    text-align: center;
-    outline: none;
     box-shadow: 0 3px 0 var(--neutral-btn-shadow);
-    transition: transform 0.08s ease, box-shadow 0.08s ease;
-  }
-  .btn-action-secondary:active {
-    transform: translateY(3px);
-    box-shadow: none;
-    background: #f8f9fa;
   }
 
   .btn-clear-sel { 
@@ -449,32 +490,6 @@
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     margin-bottom: 10px;
-  }
-  .btn-day-card {
-    border-radius: 14px;
-    padding: 10px 8px;
-    font-size: 0.82rem;
-    font-weight: 800;
-    cursor: pointer;
-    text-align: center;
-    outline: none;
-    transition: transform 0.08s ease, box-shadow 0.08s ease;
-  }
-  .btn-day-card.bank { 
-    background: var(--primary-surface); 
-    color: var(--accent-primary); 
-    border: 1.5px solid #bac8ff; 
-    box-shadow: 0 3px 0 #bac8ff;
-  }
-  .btn-day-card.nobank { 
-    background: #f1f3f5; 
-    color: #495057; 
-    border: 1.5px solid #ced4da; 
-    box-shadow: 0 3px 0 #ced4da;
-  }
-  .btn-day-card:active {
-    transform: translateY(3px);
-    box-shadow: none;
   }
 
   .collapsible-wrapper { margin-top: 4px; }
@@ -686,7 +701,6 @@
   }
   .preset-sub-btn:active { color: var(--accent-primary); }
 
-  /* כפתורי מאגר בסיס מורחבים ונוחים */
   .base-food-list {
     display: flex;
     flex-direction: column;
@@ -726,12 +740,94 @@
     color: var(--text-muted);
   }
 
-  /* אפקט זוהר משותף בלחיצה */
   .pulse-active-glow {
     background: var(--primary-surface) !important;
     border-color: var(--accent-primary) !important;
     box-shadow: 0 0 12px rgba(59, 91, 219, 0.4) !important;
     transform: scale(0.98);
+  }
+
+  /* כרטיס מטרות אישיות תחתון מתקפל */
+  .goals-card-wrapper {
+    background: #ffffff;
+    border: 1.5px solid var(--card-border);
+    border-radius: 20px;
+    padding: 14px 16px;
+    width: 100%;
+    max-width: 410px;
+    box-shadow: var(--card-shadow);
+    cursor: pointer;
+    user-select: none;
+  }
+  .goals-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .goals-title {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .goals-body {
+    display: none;
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--card-border);
+    cursor: default;
+  }
+  .goals-card-wrapper.open .goals-body { display: block; }
+  .goals-card-wrapper.open .goals-chevron { transform: rotate(180deg); }
+  .goals-chevron { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
+
+  .goal-status-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    background: var(--primary-surface);
+    color: var(--accent-primary);
+  }
+
+  .weekly-avg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+  }
+  .weekly-avg-item {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+  }
+  .weekly-avg-item .val {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--text-main);
+  }
+  .weekly-avg-item .lbl {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .cheat-count-banner {
+    background: var(--tint-orange-bg);
+    border: 1px solid var(--tint-orange-border);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--tint-orange-text);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   .ai-card {
@@ -854,7 +950,7 @@
 </div>
 
 <div class="card">
-  <!-- מלבן מאוחד עליון -->
+  <!-- מלבן אחד גדול ומאוחד עבור נשאר להיום -->
   <div class="stats-board">
     <div class="stat-card-target-unified">
       <div class="unified-headline">נשאר להיום</div>
@@ -909,7 +1005,6 @@
       <div class="custom-dropdown-panel" id="searchDropdown"></div>
     </div>
 
-    <!-- מחשבון כמויות דו-כיווני (גרם מול יחידה) -->
     <div class="portion-panel" id="portionCalcRow">
       <div class="portion-dual-inputs">
         <div class="portion-input-cell" id="unitInputCell">
@@ -946,24 +1041,25 @@
     </div>
 
     <div class="action-buttons-stack" id="defaultActionBtns">
-      <button class="btn-action-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
+      <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
       <div style="display:flex; gap:8px;">
-        <button class="btn-action-secondary" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
-        <button class="btn-action-secondary" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
+        <button class="btn-tint btn-tint-blue" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
+        <button class="btn-tint btn-tint-mint" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
       </div>
+      <button class="btn-tint btn-tint-orange" onclick="triggerCheatMealDay()">🍔 ארוחת צ'יט / השלם יעד</button>
       <button class="btn-clear-sel" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
-      <button id="cancelEditPoolBtn" class="btn-action-secondary" style="display:none;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
+      <button id="cancelEditPoolBtn" class="btn-tint btn-tint-neutral" style="display:none;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
     </div>
 
     <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
-      <button class="btn-action-primary" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
-      <button class="btn-action-secondary" onclick="cancelLogEdit()">ביטול עריכה</button>
+      <button class="btn-tint btn-tint-primary" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
+      <button class="btn-tint btn-tint-neutral" onclick="cancelLogEdit()">ביטול עריכה</button>
     </div>
   </div>
 
   <div class="day-actions-grid">
-    <button class="btn-day-card bank" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(מעביר ספייר)</span></button>
-    <button class="btn-day-card nobank" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.7rem; opacity:0.8;">(ללא ספייר)</span></button>
+    <button class="btn-tint btn-tint-green" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.72rem; opacity:0.85;">(מעביר ספייר)</span></button>
+    <button class="btn-tint btn-tint-neutral" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.72rem; opacity:0.85;">(ללא ספייר)</span></button>
   </div>
 
   <div class="collapsible-wrapper">
@@ -990,6 +1086,40 @@
   <div id="categoryContainer"></div>
 </div>
 
+<!-- כרטיס מטרות אישיות מתקפל בתחתית המסך -->
+<div class="goals-card-wrapper" id="goalsCard" onclick="toggleGoalsCard(event)">
+  <div class="goals-card-header">
+    <div class="goals-title">
+      <span>🎯 מטרות אישיות</span>
+      <span class="goal-status-badge" id="goalBadgeText">חיטוב</span>
+    </div>
+    <span class="goals-chevron" id="goalsChevron">▼</span>
+  </div>
+
+  <div class="goals-body" id="goalsBody" onclick="event.stopPropagation()">
+    <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between; margin-bottom:6px;">
+      <span>יעד יומי שהוגדר:</span>
+      <span style="color:var(--text-main); font-weight:900;" id="goalsTargetSummary">1,800 קל' | 140ג' חלבון</span>
+    </div>
+
+    <div class="weekly-avg-grid">
+      <div class="weekly-avg-item">
+        <div class="lbl">ממוצע שבועי קלוריות</div>
+        <div class="val" id="weeklyAvgCal">0</div>
+      </div>
+      <div class="weekly-avg-item">
+        <div class="lbl">ממוצע שבועי חלבון</div>
+        <div class="val" id="weeklyAvgPro">0ג'</div>
+      </div>
+    </div>
+
+    <div class="cheat-count-banner">
+      <span>🍔 ארוחות צ'יט ב-7 הימים האחרונים:</span>
+      <span id="cheatCountWeekly" style="font-size:1rem;">0</span>
+    </div>
+  </div>
+</div>
+
 <div class="ai-card" id="aiAssistantCard">
   <div class="ai-header">
     <span>🤖 עוזר AI</span>
@@ -997,7 +1127,7 @@
   </div>
   <div style="display:flex; gap:6px;">
     <input type="text" id="aiFoodQuery" placeholder="מה אכלת וכמה? (למשל: 150ג סייטן)" onkeydown="if(event.key==='Enter') askAI()">
-    <button class="btn-action-primary" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
+    <button class="btn-tint btn-tint-primary" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
   </div>
   <div id="aiResultBox" style="display:none; margin-top:10px; background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
     <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:800; margin-bottom:6px;">ערוך לפני שמירה:</div>
@@ -1007,8 +1137,8 @@
       <input type="number" id="aiEditPro" placeholder="חלבון">
     </div>
     <div style="display:flex; gap:6px;">
-      <button class="btn-action-primary" style="flex:1;" onclick="addAiToDaily()">+ ליומי</button>
-      <button class="btn-action-secondary" style="flex:1;" onclick="addAiToPool()">+ למאגר</button>
+      <button class="btn-tint btn-tint-primary" style="flex:1;" onclick="addAiToDaily()">+ ליומי</button>
+      <button class="btn-tint btn-tint-blue" style="flex:1;" onclick="addAiToPool()">+ למאגר</button>
     </div>
   </div>
 </div>
@@ -1020,6 +1150,25 @@
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
+    <!-- הגדרת מטרות מרוכזת -->
+    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
+      <div style="font-size:0.84rem; font-weight:900; margin-bottom:8px; color:var(--accent-primary);">🎯 מטרות ויעדים:</div>
+      
+      <div style="margin-bottom:8px;">
+        <select id="userGoalTypeSelect" style="font-weight:700;">
+          <option value="cut">חיטוב (גירעון קלורי)</option>
+          <option value="bulk">מסה (עודף קלורי)</option>
+          <option value="maintain">ניטרלי / שמירה</option>
+        </select>
+      </div>
+
+      <div class="input-row" style="margin-bottom:8px;">
+        <input type="number" id="targetCalInput" placeholder="יעד קלוריות">
+        <input type="number" id="targetProInput" placeholder="יעד חלבון (ג')">
+      </div>
+      <button class="btn-tint btn-tint-primary" onclick="updateTargets()">שמור יעדים ומטרה</button>
+    </div>
+
     <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <span style="font-size:0.85rem; font-weight:800;">עוזר AI (צ'אט)</span>
@@ -1028,24 +1177,15 @@
       <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:6px;">מפתח Gemini API:</div>
       <div style="display:flex; gap:6px;">
         <input type="text" id="geminiApiKeyInput" placeholder="הדבק מפתח API..." style="font-size:0.8rem; direction:ltr;">
-        <button class="btn-action-primary" style="width:auto; padding:0 12px;" onclick="saveApiKey()">שמור</button>
+        <button class="btn-tint btn-tint-primary" style="width:auto; padding:0 14px;" onclick="saveApiKey()">שמור</button>
       </div>
     </div>
 
-    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
-      <div style="font-size:0.82rem; font-weight:800; margin-bottom:6px;">יעדים יומיים:</div>
-      <div class="input-row" style="margin-bottom:6px;">
-        <input type="number" id="targetCalInput" placeholder="קלוריות">
-        <input type="number" id="targetProInput" placeholder="חלבון">
-      </div>
-      <button class="btn-action-primary" onclick="updateTargets()">שמור יעדים</button>
-    </div>
-
-    <button class="btn-action-secondary" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
+    <button class="btn-tint btn-tint-neutral" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
 
     <div style="display:flex; gap:6px;">
-      <button class="btn-action-secondary" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
-      <button class="btn-action-secondary" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
+      <button class="btn-tint btn-tint-neutral" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
+      <button class="btn-tint btn-tint-neutral" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
       <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
     </div>
 
@@ -1053,15 +1193,15 @@
       <div style="font-size:0.82rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
       <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
       <div style="display:flex; gap:6px;">
-        <button class="btn-action-secondary" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
-        <button class="btn-action-secondary" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
+        <button class="btn-tint btn-tint-neutral" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
+        <button class="btn-tint btn-tint-neutral" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
       </div>
       <div class="archive-viewer-box" id="archiveViewerBox"></div>
     </div>
 
     <div style="display:flex; flex-direction:column; gap:6px;">
-      <button class="btn-action-secondary" style="color:var(--danger); border-color:#ffc9c9;" onclick="resetDayOnly()">איפוס יום נוכחי בלבד</button>
-      <button class="btn-action-secondary" style="color:var(--danger); border-color:#ffc9c9;" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
+      <button class="btn-tint" style="background:#fff5f5; color:var(--danger); border:1.5px solid #ffc9c9; box-shadow:0 3px 0 #ffa8a8;" onclick="resetDayOnly()">איפוס יום נוכחי בלבד</button>
+      <button class="btn-tint" style="background:#fff5f5; color:var(--danger); border:1.5px solid #ffc9c9; box-shadow:0 3px 0 #ffa8a8;" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
     </div>
   </div>
 </div>
@@ -1077,7 +1217,7 @@
       <code>שם המנה, קלוריות, חלבון, קטגוריה</code>
     </div>
     <textarea id="bulkMenuInput" placeholder="טופו צרוב, 350, 27, ארוחת ערב"></textarea>
-    <button class="btn-action-primary" onclick="processBulkMenu()">טען מנות למאגר</button>
+    <button class="btn-tint btn-tint-primary" onclick="processBulkMenu()">טען מנות למאגר</button>
   </div>
 </div>
 
@@ -1168,7 +1308,7 @@
     { name: "לחם אחיד", cal: 250, pro: 8.3, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 30 },
     { name: "לחם מלא / מחמצת", cal: 240, pro: 10.0, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 35 },
     { name: "לחם קל", cal: 180, pro: 8.0, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 25 },
-    { name: "טורטיה", cal: 300, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה בינונית", unitWeight: 40 },
+    { name: "טורטיה", cal: 300, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 40 },
     { name: "פריכיות אורז", cal: 375, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 8 },
 
     // שומנים וממרחים
@@ -1189,6 +1329,7 @@
 
   let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
   let targetPro = parseInt(localStorage.getItem('cal_targetPro')) || 140;
+  let userGoalType = localStorage.getItem('cal_userGoalType') || 'cut';
   let eatenCal = parseInt(localStorage.getItem('cal_eatenCal')) || 0;
   let eatenPro = parseFloat(localStorage.getItem('cal_eatenPro')) || 0;
   let weeklyBank = parseInt(localStorage.getItem('cal_weeklyBank')) || 0;
@@ -1214,9 +1355,11 @@
 
   document.getElementById('targetCalInput').value = targetCal;
   document.getElementById('targetProInput').value = targetPro;
+  document.getElementById('userGoalTypeSelect').value = userGoalType;
   document.getElementById('geminiApiKeyInput').value = geminiApiKey;
 
   applyAiStateUI();
+  applyUserGoalBadge();
 
   const entryNameInput = document.getElementById('entryNameInput');
   const calInput = document.getElementById('calInput');
@@ -1227,6 +1370,19 @@
   const entryPortionModeSelect = document.getElementById('entryPortionModeSelect');
   const customUnitWeightRow = document.getElementById('customUnitWeightRow');
   const customUnitGramsInput = document.getElementById('customUnitGramsInput');
+
+  function applyUserGoalBadge() {
+    const badge = document.getElementById('goalBadgeText');
+    if (userGoalType === 'cut') badge.textContent = 'חיטוב';
+    else if (userGoalType === 'bulk') badge.textContent = 'מסה';
+    else badge.textContent = 'ניטרלי';
+    document.getElementById('goalsTargetSummary').textContent = `${targetCal.toLocaleString()} קל' | ${targetPro}ג' חלבון`;
+  }
+
+  function toggleGoalsCard(e) {
+    const card = document.getElementById('goalsCard');
+    card.classList.toggle('open');
+  }
 
   function onSaveModeSelectionChanged() {
     const val = entryPortionModeSelect.value;
@@ -1420,7 +1576,6 @@
     updateClearBtnVisibility();
   }
 
-  // טעינת מנה ללא הקפצת מקלדת (ללא פוקוס אוטומטי)
   function loadBaseFoodForPortion(foodName, shouldGlow = true) {
     const item = BASE_FOODS.find(b => b.name === foodName);
     if (!item) return;
@@ -1462,7 +1617,6 @@
     portionRow.style.display = 'flex';
     updateClearBtnVisibility();
 
-    // גלילה חלקה למעלה ללא פוקוס שמקפיץ מקלדת
     document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -1496,6 +1650,38 @@
   function closePortionCalculator() {
     activePortionContext = null;
     document.getElementById('portionCalcRow').style.display = 'none';
+  }
+
+  // פונקציית ארוחת צ'יט: משלימה את הקלוריות בדיוק ליעד (ספייר מתאפס), חלבון ללא שינוי
+  function triggerCheatMealDay() {
+    const diff = targetCal - eatenCal;
+    if (diff <= 0) {
+      alert('כבר השלמת או עברת את יעד הקלוריות היומי להיום!');
+      return;
+    }
+
+    if (!confirm(`להוסיף ארוחת צ'יט של ${diff} קלוריות כדי להשלים בדיוק ליעד היומי (${targetCal})?\n\n* ערך החלבון לא ישתנה.`)) {
+      return;
+    }
+
+    pushState();
+    eatenCal += diff;
+    const today = new Date().toISOString().slice(0, 10);
+    const logObj = { 
+      id: Date.now() + Math.random().toString(), 
+      name: "ארוחת צ'יט", 
+      cal: diff, 
+      pro: 0, 
+      date: today,
+      isCheat: true 
+    };
+    logs.unshift(logObj);
+    archiveLogs.unshift(logObj);
+
+    clearEntryInputs();
+    renderLogs();
+    updateDisplay();
+    showToast("ארוחת צ'יט נרשמה והיעד הושלם!");
   }
 
   function toggleAiEnabled() {
@@ -1533,7 +1719,7 @@
 
   function pushState() {
     historyStack.push({
-      targetCal, targetPro, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -1547,6 +1733,7 @@
   function saveData() {
     localStorage.setItem('cal_targetCal', targetCal);
     localStorage.setItem('cal_targetPro', targetPro);
+    localStorage.setItem('cal_userGoalType', userGoalType);
     localStorage.setItem('cal_eatenCal', eatenCal);
     localStorage.setItem('cal_eatenPro', eatenPro);
     localStorage.setItem('cal_weeklyBank', weeklyBank);
@@ -1726,7 +1913,6 @@
         </div>
       `;
 
-      // גרירת קטגוריה שלמה לשינוי סדר
       const catHeader = block.querySelector('.category-header');
       setupCategoryDragAndDrop(catHeader, block, catName);
 
@@ -1757,7 +1943,6 @@
     });
   }
 
-  // גרירה ושינוי סדר של קטגוריות שלמות בלחיצה של כ-700ms
   function setupCategoryDragAndDrop(headerEl, blockEl, catName) {
     let timer = null;
     let isDragging = false;
@@ -1831,7 +2016,6 @@
       if (c && !newOrder.includes(c)) newOrder.push(c);
     });
 
-    // שימור כל הקטגוריות שלא הוצגו כרגע
     categoryOrder.forEach(c => {
       if (!newOrder.includes(c)) newOrder.push(c);
     });
@@ -2033,6 +2217,43 @@
     });
   }
 
+  function calculateWeeklyStats() {
+    const today = new Date();
+    const cutoff = new Date(today);
+    cutoff.setDate(today.getDate() - 7);
+    const cutoffStr = cutoff.toISOString().slice(0, 10);
+
+    const relevant = archiveLogs.filter(l => (l.date || '') >= cutoffStr);
+    
+    // חישוב צ'יטים שבועי
+    const cheatCount = relevant.filter(l => l.isCheat === true).length;
+    document.getElementById('cheatCountWeekly').textContent = cheatCount;
+
+    // חישוב ממוצע קלוריות וחלבון יומי ב-7 ימים
+    const dayGroups = {};
+    relevant.forEach(l => {
+      const d = l.date || 'today';
+      if (!dayGroups[d]) dayGroups[d] = { cal: 0, pro: 0 };
+      dayGroups[d].cal += (l.cal || 0);
+      dayGroups[d].pro += (l.pro || 0);
+    });
+
+    const recordedDays = Object.keys(dayGroups).length;
+    const divider = Math.max(1, recordedDays);
+
+    let sumCal = 0, sumPro = 0;
+    Object.values(dayGroups).forEach(g => {
+      sumCal += g.cal;
+      sumPro += g.pro;
+    });
+
+    const avgCal = Math.round(sumCal / divider);
+    const avgPro = Math.round((sumPro / divider) * 10) / 10;
+
+    document.getElementById('weeklyAvgCal').textContent = avgCal.toLocaleString();
+    document.getElementById('weeklyAvgPro').textContent = avgPro + "ג'";
+  }
+
   function updateDisplay() {
     const remCal = targetCal - eatenCal;
     const remPro = Math.round((targetPro - eatenPro) * 10) / 10;
@@ -2068,6 +2289,8 @@
     barEatCal.style.width = calEatenPercent + '%';
 
     document.getElementById('archiveCountText').textContent = `בארכיון שמורות ${archiveLogs.length} הזנות תמידיות.`;
+    
+    calculateWeeklyStats();
     saveData();
   }
 
@@ -2122,9 +2345,11 @@
         const row = document.createElement('div');
         row.className = 'log-item-row';
         row.setAttribute('data-id', item.id);
+        const cheatBadge = item.isCheat ? ' <span style="color:var(--tint-orange-text); font-weight:800;">(צ\'יט)</span>' : '';
+
         row.innerHTML = `
           <div style="flex:1; pointer-events:none; font-size:0.82rem;">
-            <strong>${item.name || ''}</strong> <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro}ג')</span>
+            <strong>${item.name || ''}</strong>${cheatBadge} <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro}ג')</span>
           </div>
           <div style="display:flex; gap:2px;">
             <button class="btn-log-action" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
@@ -2555,7 +2780,7 @@
   function undoLastAction() {
     if (historyStack.length === 0) return;
     redoStack.push({
-      targetCal, targetPro, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -2568,7 +2793,7 @@
   function redoLastAction() {
     if (redoStack.length === 0) return;
     historyStack.push({
-      targetCal, targetPro, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -2580,6 +2805,7 @@
 
   function applyStateSilent(st) {
     targetCal = st.targetCal; targetPro = st.targetPro;
+    userGoalType = st.userGoalType || 'cut';
     eatenCal = st.eatenCal; eatenPro = st.eatenPro; weeklyBank = st.weeklyBank;
     logs = st.logs; archiveLogs = st.archiveLogs || archiveLogs;
     presets = st.presets || presets; categoryOrder = st.categoryOrder || categoryOrder;
@@ -2591,7 +2817,9 @@
 
     document.getElementById('targetCalInput').value = targetCal;
     document.getElementById('targetProInput').value = targetPro;
+    document.getElementById('userGoalTypeSelect').value = userGoalType;
 
+    applyUserGoalBadge();
     renderLogs();
     renderPresets();
     updateDisplay();
@@ -2648,13 +2876,18 @@
   function updateTargets() {
     const newCal = parseInt(document.getElementById('targetCalInput').value);
     const newPro = parseInt(document.getElementById('targetProInput').value);
+    const newGoal = document.getElementById('userGoalTypeSelect').value;
+
     if (newCal > 0 || newPro > 0) {
       pushState();
       if (newCal > 0) targetCal = newCal;
       if (newPro > 0) targetPro = newPro;
+      userGoalType = newGoal;
+
+      applyUserGoalBadge();
       closeSettingsModal();
       updateDisplay();
-      alert('יעדים עודכנו!');
+      alert('יעדים ומטרות עודכנו בהצלחה!');
     }
   }
 
@@ -2753,9 +2986,10 @@
         `;
         
         items.forEach(it => {
+          const cheatTxt = it.isCheat ? ' (צ\'יט)' : '';
           grp.innerHTML += `
             <div class="archive-item-row">
-              <span>${it.name || 'ללא שם'}</span>
+              <span>${it.name || 'ללא שם'}${cheatTxt}</span>
               <span style="color:var(--text-muted);">+${it.cal} קל' | +${it.pro}ג'</span>
             </div>
           `;
@@ -2767,7 +3001,7 @@
   }
 
   function exportBackupTxt() {
-    const data = { targetCal, targetPro, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
+    const data = { targetCal, targetPro, userGoalType, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -2795,6 +3029,7 @@
         if (confirm('לייבא גיבוי ולדרוס נתונים קיימים?')) {
           pushState();
           targetCal = d.targetCal || 1800; targetPro = d.targetPro || 140;
+          userGoalType = d.userGoalType || 'cut';
           eatenCal = d.eatenCal || 0; eatenPro = d.eatenPro || 0; weeklyBank = d.weeklyBank || 0;
           logs = d.logs || []; archiveLogs = d.archiveLogs || (d.logs ? JSON.parse(JSON.stringify(d.logs)) : []);
           presets = d.presets || []; categoryOrder = d.categoryOrder || ['כללי'];
@@ -2803,6 +3038,7 @@
           if (typeof d.isAiEnabled !== 'undefined') isAiEnabled = d.isAiEnabled;
 
           applyAiStateUI();
+          applyUserGoalBadge();
           closeSettingsModal();
           renderLogs();
           applyPoolTabUI();
