@@ -34,8 +34,8 @@
     --accent-secondary-shadow: #1864ab;
     --secondary-surface: #e7f5ff;
     
-    --bank-color: #7048e8;
-    --bank-surface: #f3f0ff;
+    --bank-color: #1971c2;
+    --bank-surface: #e7f5ff;
     
     --tint-blue-bg: #edf2ff;
     --tint-blue-border: #bac8ff;
@@ -252,7 +252,6 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
-    margin-bottom: 10px;
   }
   .weekly-avg-item {
     background: var(--input-bg);
@@ -272,20 +271,7 @@
     font-weight: 700;
   }
 
-  .cheat-count-banner {
-    background: var(--primary-surface);
-    border: 1px solid var(--tint-blue-border);
-    border-radius: 12px;
-    padding: 8px 12px;
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--accent-primary);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  /* לוח עליון ממוזג וסימטרי */
+  /* לוח עליון: נשאר להיום מובדל בצבעו מנאכל היום והספייר */
   .stats-board {
     display: flex;
     flex-direction: column;
@@ -293,17 +279,17 @@
     margin-bottom: 14px;
   }
   .stat-card-target-unified {
-    border: 1.5px solid var(--card-border);
+    border: 1.5px solid var(--tint-blue-border);
     border-radius: 18px;
     padding: 14px 16px;
-    background: #fbfbfc;
-    box-shadow: 0 2px 0 var(--card-border);
+    background: var(--primary-surface);
+    box-shadow: 0 2px 0 var(--tint-blue-border);
   }
   .unified-headline {
     text-align: center;
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--text-muted);
+    font-size: 0.84rem;
+    font-weight: 900;
+    color: var(--accent-primary);
     margin-bottom: 10px;
   }
   .unified-columns {
@@ -340,7 +326,7 @@
 
   .bar-container { 
     width: 100%; 
-    background: rgba(0, 0, 0, 0.06); 
+    background: rgba(0, 0, 0, 0.08); 
     height: 6px; 
     border-radius: 3px; 
     overflow: hidden; 
@@ -352,29 +338,29 @@
     transition: width 0.3s ease, background-color 0.3s ease; 
   }
 
+  /* נאכל היום והספייר באותו גוון תכלת פסטלי תואם */
   .stats-secondary-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
   }
   .stat-chip-box {
-    border: 1.5px solid var(--card-border);
+    border: 1.5px solid var(--tint-cyan-border);
     border-radius: 14px;
     padding: 10px 12px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     min-height: 80px;
-    background: #fbfbfc;
+    background: var(--secondary-surface);
     text-align: center;
-    box-shadow: 0 2px 0 var(--card-border);
+    box-shadow: 0 2px 0 var(--tint-cyan-border);
   }
-  .stat-chip-box.bank { background: var(--bank-surface); }
 
   .stat-chip-box .chip-title {
     font-size: 0.78rem;
     font-weight: 800;
-    color: var(--text-muted);
+    color: var(--accent-secondary);
     text-align: center;
     margin-bottom: 2px;
   }
@@ -382,12 +368,12 @@
     font-size: 1.55rem;
     font-weight: 900;
     line-height: 1.1;
-    color: var(--bank-color);
+    color: var(--accent-secondary);
     text-align: center;
   }
-  .stat-chip-box .chip-num.negative { color: var(--danger); }
+  .stat-chip-box .chip-num.negative { color: var(--danger) !important; }
 
-  /* אזור הזנה שטוח */
+  /* אזור הזנה נקי ללא עומס */
   .entry-flat-section {
     border-top: 1px solid var(--card-border);
     padding-top: 14px;
@@ -519,8 +505,8 @@
   
   .btn-tint {
     border-radius: 12px;
-    padding: 11px 12px;
-    font-size: 0.9rem;
+    padding: 12px 14px;
+    font-size: 0.95rem;
     font-weight: 800;
     cursor: pointer;
     width: 100%;
@@ -538,22 +524,71 @@
     color: #ffffff;
     border: 1.5px solid var(--accent-primary-shadow);
     box-shadow: 0 3px 0 var(--accent-primary-shadow);
+    font-size: 1rem;
+    padding: 13px 14px;
   }
 
-  /* זוג עליון אחיד */
   .btn-tint-pair-top {
     background: var(--tint-blue-bg);
     color: var(--tint-blue-text);
     border: 1.5px solid var(--tint-blue-border);
     box-shadow: 0 3px 0 var(--tint-blue-shadow);
+    font-size: 0.88rem;
+    padding: 10px 8px;
   }
 
-  /* זוג תחתון אחיד */
   .btn-tint-pair-bottom {
     background: var(--tint-cyan-bg);
     color: var(--tint-cyan-text);
     border: 1.5px solid var(--tint-cyan-border);
     box-shadow: 0 3px 0 var(--tint-cyan-shadow);
+  }
+
+  /* כפתור יום חדש ארוך ודק */
+  .btn-day-single {
+    background: var(--tint-cyan-bg);
+    color: var(--tint-cyan-text);
+    border: 1.5px solid var(--tint-cyan-border);
+    box-shadow: 0 3px 0 var(--tint-cyan-shadow);
+    border-radius: 14px;
+    padding: 9px 12px;
+    font-size: 0.86rem;
+    font-weight: 800;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    outline: none;
+    margin-bottom: 10px;
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+  }
+  .btn-day-single:active {
+    transform: translateY(3px);
+    box-shadow: none;
+  }
+
+  /* כפתור פתיחת אפשרויות שמירה למאגר */
+  .btn-pool-opts-toggle {
+    background: var(--input-bg);
+    color: var(--text-muted);
+    border: 1px dashed var(--input-border);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 4px;
+  }
+  .pool-options-drawer {
+    display: none;
+    margin-top: 8px;
+    padding: 10px;
+    background: #fbfbfc;
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
   }
 
   .btn-clear-sel { 
@@ -565,14 +600,6 @@
     border: none; 
     cursor: pointer;
     text-align: center;
-  }
-
-  /* כפתורי יום חדש סימטריים בצבע אחיד */
-  .day-actions-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 10px;
   }
 
   .collapsible-wrapper { margin-top: 4px; }
@@ -700,14 +727,12 @@
     box-shadow: none;
   }
 
-  /* כרטיסי מנות מהירות בראש האוכל שלי (זוג סימטרי אחיד) */
-  .quick-special-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+  /* כפתור אימון / קיזוז מינוס בראש האוכל שלי */
+  .burn-action-wrap {
     margin-bottom: 12px;
   }
 
+  /* המאגר מיושר לימין */
   .category-block {
     background: #ffffff;
     border: 1.5px solid var(--card-border);
@@ -716,6 +741,7 @@
     overflow: hidden;
     box-shadow: 0 2px 0 var(--card-border);
     transition: border-color 0.2s, box-shadow 0.2s;
+    text-align: right;
   }
   .category-block.category-holding {
     border-color: var(--accent-primary) !important;
@@ -731,6 +757,7 @@
     user-select: none;
     background: #ffffff;
     touch-action: pan-y;
+    text-align: right;
   }
   .category-header:active { background: var(--input-bg); }
   .category-title { font-size: 0.88rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
@@ -741,6 +768,7 @@
     padding: 10px 14px;
     border-top: 1px solid #f1f3f5;
     background: #fafbfc;
+    text-align: right;
   }
   .category-block.open .category-content { display: block; }
 
@@ -750,7 +778,8 @@
     gap: 6px; 
     min-height: 28px;
     padding: 2px 0;
-    justify-content: center;
+    justify-content: flex-start;
+    text-align: right;
   }
   .preset-btn-wrapper { 
     display: flex; 
@@ -781,6 +810,7 @@
     border: none;
     cursor: pointer;
     font-weight: 600;
+    text-align: right;
   }
   .preset-sub-btn {
     background: transparent;
@@ -797,6 +827,7 @@
     display: flex;
     flex-direction: column;
     gap: 7px;
+    text-align: right;
   }
   .base-food-btn-wrap {
     display: flex;
@@ -971,7 +1002,7 @@
   </div>
 
   <div class="goals-body" id="goalsBody" onclick="event.stopPropagation()">
-    <!-- זמן בחיטוב/מסה בפורמט שבועות וימים מסודר -->
+    <!-- זמן בחיטוב/מסה בפורמט מסודר -->
     <div class="program-duration-box">
       <span class="label" id="programDurationLabel">זמן בחיטוב:</span>
       <span class="val" id="programDurationValue">יום 1</span>
@@ -992,16 +1023,11 @@
         <div class="val" id="weeklyAvgPro">0ג'</div>
       </div>
     </div>
-
-    <div class="cheat-count-banner">
-      <span>🍔 ארוחות צ'יט ב-7 הימים האחרונים:</span>
-      <span id="cheatCountWeekly" style="font-size:1.05rem;">0</span>
-    </div>
   </div>
 </div>
 
 <div class="card">
-  <!-- מלבן מאוחד עליון: נשאר להיום (סימטרי וממורכז) -->
+  <!-- מלבן מאוחד עליון: נשאר להיום (בצבע אינדיגו בהיר וייחודי) -->
   <div class="stats-board">
     <div class="stat-card-target-unified">
       <div class="unified-headline">נשאר להיום</div>
@@ -1024,33 +1050,33 @@
       </div>
     </div>
 
-    <!-- נאכל היום וספייר מצטבר (סימטריים וממורכזים) -->
+    <!-- נאכל היום וספייר מצטבר (באותו גוון תכלת פסטלי תואם) -->
     <div class="stats-secondary-row">
       <div class="stat-chip-box">
         <div class="chip-title">🍽️ נאכל היום</div>
         <div style="display:flex; justify-content:space-around; align-items:baseline; margin-top:2px;">
-          <span style="font-size:1.22rem; font-weight:800; color:var(--accent-primary);" id="eatenCal">0</span>
+          <span style="font-size:1.22rem; font-weight:800; color:var(--accent-secondary);" id="eatenCal">0</span>
           <span style="font-size:0.85rem; color:var(--text-subtle);">|</span>
           <span style="font-size:1.22rem; font-weight:800; color:var(--accent-secondary);" id="eatenPro">0ג'</span>
         </div>
         <div class="bar-container" style="height:5px; margin-top:4px;">
-          <div id="barEatenCal" class="bar-fill" style="background: var(--accent-primary);"></div>
+          <div id="barEatenCal" class="bar-fill" style="background: var(--accent-secondary);"></div>
         </div>
       </div>
 
-      <div class="stat-chip-box bank">
+      <div class="stat-chip-box">
         <div class="chip-title">🏦 ספייר מצטבר</div>
         <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
           <span id="weeklyBank" class="chip-num">0</span>
-          <button class="btn-icon-top" onclick="editSpareCalories()" style="font-size:0.95rem; color:var(--bank-color);" title="ערוך ספייר">✎</button>
+          <button class="btn-icon-top" onclick="editSpareCalories()" style="font-size:0.95rem; color:var(--accent-secondary);" title="ערוך ספייר">✎</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- הזנה זורמת -->
+  <!-- הזנה זורמת, נקייה וקומפקטית -->
   <div class="entry-flat-section" id="entryBox">
-    <div class="entry-flat-title" id="entryTitle">🔍 הזנה, חיפוש ושמירת מנה</div>
+    <div class="entry-flat-title" id="entryTitle">🔍 הזנת מנה מהירה</div>
     
     <div class="search-wrapper">
       <input type="text" id="entryNameInput" placeholder="חפש מנה במאגר או הקלד חדשה..." autocomplete="off" oninput="handleLiveSearch(this.value)">
@@ -1076,30 +1102,40 @@
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
     </div>
 
-    <div class="input-row" id="saveTypeRow" style="margin-bottom:8px;">
-      <select id="entryPortionModeSelect" onchange="onSaveModeSelectionChanged()">
-        <option value="fixed">מנה קבועה</option>
-        <option value="per100g">לפי 100 גרם</option>
-        <option value="customUnit">לפי יחידה</option>
-      </select>
-    </div>
-
-    <div class="input-row" id="customUnitWeightRow" style="display:none; margin-bottom:8px;">
-      <input type="number" id="customUnitGramsInput" placeholder="משקל ממוצע ליחידה (גרם)">
-    </div>
-
-    <div class="search-wrapper" id="catRow">
-      <input type="text" id="entryCatInput" placeholder="קטגוריה (ברירת מחדל: כללי)" autocomplete="off" oninput="handleCategoryLiveSearch(this.value)" enterkeyhint="done">
-      <div class="custom-dropdown-panel" id="categoryDropdown"></div>
-    </div>
-
-    <!-- מערך כפתורים סימטרי: 2 עליונים אחידים -->
+    <!-- כפתור הוספה ראשי מודגש מיד מתחת לקלוריות והחלבון -->
     <div class="action-buttons-stack" id="defaultActionBtns">
       <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
-      <div style="display:flex; gap:8px;">
-        <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
-        <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
+
+      <!-- אפשרויות שמירה למאגר במגירה מתקפלת לקבלת מסך נקי -->
+      <button type="button" class="btn-pool-opts-toggle" onclick="togglePoolOptionsDrawer()">
+        <span id="poolDrawerBtnText">📦 אפשרויות שמירה למאגר</span>
+        <span id="poolDrawerChevron" style="font-size:0.75rem;">▼</span>
+      </button>
+
+      <div class="pool-options-drawer" id="poolOptionsDrawer">
+        <div class="input-row" id="saveTypeRow" style="margin-bottom:8px;">
+          <select id="entryPortionModeSelect" onchange="onSaveModeSelectionChanged()">
+            <option value="fixed">מנה קבועה</option>
+            <option value="per100g">לפי 100 גרם</option>
+            <option value="customUnit">לפי יחידה</option>
+          </select>
+        </div>
+
+        <div class="input-row" id="customUnitWeightRow" style="display:none; margin-bottom:8px;">
+          <input type="number" id="customUnitGramsInput" placeholder="משקל ממוצע ליחידה (גרם)">
+        </div>
+
+        <div class="search-wrapper" id="catRow" style="margin-bottom:8px;">
+          <input type="text" id="entryCatInput" placeholder="קטגוריה" autocomplete="off" oninput="handleCategoryLiveSearch(this.value)" enterkeyhint="done">
+          <div class="custom-dropdown-panel" id="categoryDropdown"></div>
+        </div>
+
+        <div style="display:flex; gap:8px;">
+          <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
+          <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
+        </div>
       </div>
+
       <button class="btn-clear-sel" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
       <button id="cancelEditPoolBtn" class="btn-tint btn-tint-pair-top" style="display:none;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
     </div>
@@ -1110,11 +1146,10 @@
     </div>
   </div>
 
-  <!-- מערך כפתורים סימטרי: 2 תחתונים אחידים -->
-  <div class="day-actions-grid">
-    <button class="btn-tint btn-tint-pair-bottom" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.72rem; opacity:0.85;">(מעביר ספייר)</span></button>
-    <button class="btn-tint btn-tint-pair-bottom" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.72rem; opacity:0.85;">(ללא ספייר)</span></button>
-  </div>
+  <!-- כפתור יום חדש יחיד, דק וארוך שמעביר ספייר כרגיל -->
+  <button class="btn-day-single" onclick="closeDay(false, true)">
+    🌅 יום חדש (מעביר ספייר לחישוב שבועי)
+  </button>
 
   <div class="collapsible-wrapper">
     <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">
@@ -1137,10 +1172,9 @@
     <input type="text" id="allSearchInput" placeholder="סינון ברשימה..." oninput="renderPresets()">
   </div>
 
-  <!-- כפתורי צ'יט והשלמה בראש "האוכל שלי" (צבע אחיד וסימטרי) -->
-  <div class="quick-special-actions" id="myFoodSpecialActions">
-    <button class="btn-tint btn-tint-pair-bottom" onclick="triggerCheatMealDay()">🍔 ארוחת צ'יט</button>
-    <button class="btn-tint btn-tint-pair-bottom" onclick="triggerFillToGoalDay()">⚡ השלם יעד</button>
+  <!-- כפתור אימון / קיזוז מינוס בראש לשונית האוכל שלי -->
+  <div class="burn-action-wrap" id="myFoodSpecialActions">
+    <button class="btn-tint btn-tint-pair-bottom" onclick="openExerciseBurnModal()">🏃 אימון / קיזוז מינוס (הוסף קלוריות לספייר)</button>
   </div>
 
   <div id="categoryContainer"></div>
@@ -1406,7 +1440,21 @@
   const customUnitWeightRow = document.getElementById('customUnitWeightRow');
   const customUnitGramsInput = document.getElementById('customUnitGramsInput');
 
-  // חישוב מדויק ומנוסח נכון של משך התוכנית
+  function togglePoolOptionsDrawer() {
+    const drawer = document.getElementById('poolOptionsDrawer');
+    const chevron = document.getElementById('poolDrawerChevron');
+    const isOpen = drawer.style.display === 'block';
+    drawer.style.display = isOpen ? 'none' : 'block';
+    chevron.textContent = isOpen ? '▼' : '▲';
+  }
+
+  function openPoolOptionsDrawer() {
+    const drawer = document.getElementById('poolOptionsDrawer');
+    const chevron = document.getElementById('poolDrawerChevron');
+    drawer.style.display = 'block';
+    chevron.textContent = '▲';
+  }
+
   function updateProgramDurationDisplay() {
     const start = new Date(programStartDate + 'T00:00:00');
     const now = new Date();
@@ -1725,74 +1773,33 @@
     document.getElementById('portionCalcRow').style.display = 'none';
   }
 
-  // ארוחת צ'יט: משלימה קלוריות ומשלימה גם חלבון ליעד המלא, ונספרת במונה
-  function triggerCheatMealDay() {
-    const diffCal = Math.max(0, targetCal - eatenCal);
-    const diffPro = Math.max(0, Math.round((targetPro - eatenPro) * 10) / 10);
-
-    if (diffCal <= 0 && diffPro <= 0) {
-      alert('כבר השלמת או עברת את יעדי הקלוריות והחלבון להיום!');
-      return;
-    }
-
-    if (!confirm(`להוסיף ארוחת צ'יט שתשלים ליעד היומי?\n(+${diffCal} קלוריות, +${diffPro}ג' חלבון)\n\n* תירשם כארוחת צ'יט במעקב השבועי.`)) {
+  // אימון / קיזוז מינוס: מוסיף קלוריות ישירות לספייר
+  function openExerciseBurnModal() {
+    const val = prompt('כמה קלוריות שרפת באימון האקסטרה? (יוזן כתוספת לספייר)');
+    if (val === null) return;
+    const burned = parseInt(val);
+    if (isNaN(burned) || burned <= 0) {
+      alert('נא להזין מספר קלוריות חיובי');
       return;
     }
 
     pushState();
-    eatenCal += diffCal;
-    eatenPro = Math.round((eatenPro + diffPro) * 10) / 10;
+    weeklyBank += burned;
+
     const today = new Date().toISOString().slice(0, 10);
     const logObj = { 
       id: Date.now() + Math.random().toString(), 
-      name: "ארוחת צ'יט", 
-      cal: diffCal, 
-      pro: diffPro, 
-      date: today,
-      isCheat: true 
+      name: `קיזוז אימון (${burned} קל' לספייר)`, 
+      cal: 0, 
+      pro: 0, 
+      date: today 
     };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
 
-    clearEntryInputs();
     renderLogs();
     updateDisplay();
-    showToast("ארוחת צ'יט נרשמה והיעד הושלם!");
-  }
-
-  // השלמת יום: משלימה קלוריות ומשלימה חלבון ליעד המלא, ללא ספירה כצ'יט
-  function triggerFillToGoalDay() {
-    const diffCal = Math.max(0, targetCal - eatenCal);
-    const diffPro = Math.max(0, Math.round((targetPro - eatenPro) * 10) / 10);
-
-    if (diffCal <= 0 && diffPro <= 0) {
-      alert('כבר השלמת או עברת את יעדי הקלוריות והחלבון להיום!');
-      return;
-    }
-
-    if (!confirm(`להשלים את היום עד ליעדים?\n(+${diffCal} קלוריות, +${diffPro}ג' חלבון)\n\n* לא ייספר כארוחת צ'יט.`)) {
-      return;
-    }
-
-    pushState();
-    eatenCal += diffCal;
-    eatenPro = Math.round((eatenPro + diffPro) * 10) / 10;
-    const today = new Date().toISOString().slice(0, 10);
-    const logObj = { 
-      id: Date.now() + Math.random().toString(), 
-      name: "השלמת יעד יומי", 
-      cal: diffCal, 
-      pro: diffPro, 
-      date: today,
-      isCheat: false 
-    };
-    logs.unshift(logObj);
-    archiveLogs.unshift(logObj);
-
-    clearEntryInputs();
-    renderLogs();
-    updateDisplay();
-    showToast("היעדים הושלמו להיום!");
+    showToast(`נוספו +${burned} קלוריות לספייר!`);
   }
 
   function toggleAiEnabled() {
@@ -1967,7 +1974,7 @@
     document.getElementById('tabMyFood').className = 'pool-tab-btn ' + (currentPoolTab === 'myfood' ? 'active' : '');
     document.getElementById('tabBase').className = 'pool-tab-btn ' + (currentPoolTab === 'base' ? 'active' : '');
     document.getElementById('allSearchRow').style.display = (currentPoolTab !== 'none') ? 'block' : 'none';
-    document.getElementById('myFoodSpecialActions').style.display = (currentPoolTab === 'myfood') ? 'grid' : 'none';
+    document.getElementById('myFoodSpecialActions').style.display = (currentPoolTab === 'myfood') ? 'block' : 'none';
   }
 
   function toggleCategoryAccordion(catKey) {
@@ -2001,7 +2008,7 @@
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div style="text-align:center; font-size:0.82rem; color:var(--text-muted); padding:14px;">אין מנות שמורות ב"האוכל שלי"</div>`;
+      container.innerHTML = `<div style="text-align:right; font-size:0.82rem; color:var(--text-muted); padding:14px;">אין מנות שמורות ב"האוכל שלי"</div>`;
       return;
     }
 
@@ -2304,7 +2311,7 @@
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = '<div style="text-align:center; font-size:0.82rem; color:var(--text-muted); padding:14px;">לא נמצאו תוצאות תואמות</div>';
+      container.innerHTML = '<div style="text-align:right; font-size:0.82rem; color:var(--text-muted); padding:14px;">לא נמצאו תוצאות תואמות</div>';
       return;
     }
 
@@ -2362,9 +2369,6 @@
 
     const relevant = archiveLogs.filter(l => (l.date || '') >= cutoffStr);
     
-    const cheatCount = relevant.filter(l => l.isCheat === true).length;
-    document.getElementById('cheatCountWeekly').textContent = cheatCount;
-
     const dayGroups = {};
     relevant.forEach(l => {
       const d = l.date || 'today';
@@ -2481,11 +2485,10 @@
         const row = document.createElement('div');
         row.className = 'log-item-row';
         row.setAttribute('data-id', item.id);
-        const cheatBadge = item.isCheat ? ' <span style="color:var(--accent-primary); font-weight:800;">(צ\'יט)</span>' : '';
 
         row.innerHTML = `
           <div style="flex:1; pointer-events:none; font-size:0.82rem; text-align:right;">
-            <strong>${item.name || ''}</strong>${cheatBadge} <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro}ג')</span>
+            <strong>${item.name || ''}</strong> <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro}ג')</span>
           </div>
           <div style="display:flex; gap:2px;">
             <button class="btn-log-action" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
@@ -2700,7 +2703,7 @@
     clearEntryInputs();
     document.getElementById('catRow').style.display = 'block';
     document.getElementById('saveTypeRow').style.display = 'flex';
-    document.getElementById('entryTitle').textContent = '🔍 הזנה, חיפוש ושמירת מנה';
+    document.getElementById('entryTitle').textContent = '🔍 הזנת מנה מהירה';
     document.getElementById('defaultActionBtns').style.display = 'flex';
     document.getElementById('logEditActionBtns').style.display = 'none';
   }
@@ -2893,6 +2896,9 @@
     }
     onSaveModeSelectionChanged();
 
+    // פתיחה אוטומטית של אפשרויות המאגר כשבוחרים לערוך
+    openPoolOptionsDrawer();
+
     document.getElementById('cancelEditPoolBtn').style.display = 'block';
     document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
     entryNameInput.focus();
@@ -2979,13 +2985,11 @@
   function closeDay(isAuto, transferBank = true) {
     const diffCal = targetCal - eatenCal;
     if (!isAuto) {
-      const msg = transferBank 
-        ? `להתחיל יום חדש?\nספייר שיועבר: ${diffCal >= 0 ? '+' : ''}${diffCal} קלוריות.` 
-        : 'להתחיל יום חדש ללא ספייר?\nהעודף/חוסר של היום יוזנח.';
+      const msg = `להתחיל יום חדש?\nספייר שיועבר: ${diffCal >= 0 ? '+' : ''}${diffCal} קלוריות.`;
       if (!confirm(msg)) return;
     }
     pushState();
-    if (transferBank) weeklyBank += diffCal;
+    weeklyBank += diffCal;
     eatenCal = 0; eatenPro = 0;
     lastActiveDate = new Date().toISOString().slice(0, 10);
     renderLogs();
@@ -3009,7 +3013,6 @@
       categoryOrder = ['כללי'];
       closeSettingsModal();
       renderPresets();
-      updateDatalists();
       saveData();
     }
   }
@@ -3129,10 +3132,9 @@
         `;
         
         items.forEach(it => {
-          const cheatTxt = it.isCheat ? ' (צ\'יט)' : '';
           grp.innerHTML += `
             <div class="archive-item-row">
-              <span>${it.name || 'ללא שם'}${cheatTxt}</span>
+              <span>${it.name || 'ללא שם'}</span>
               <span style="color:var(--text-muted);">+${it.cal} קל' | +${it.pro}ג'</span>
             </div>
           `;
