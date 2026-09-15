@@ -31,30 +31,21 @@
     --primary-surface: #edf2ff;
     
     --accent-secondary: #1c7ed6;
+    --accent-secondary-shadow: #1864ab;
     --secondary-surface: #e7f5ff;
     
     --bank-color: #7048e8;
     --bank-surface: #f3f0ff;
     
-    --tint-green-bg: #ebfbee;
-    --tint-green-border: #b2f2bb;
-    --tint-green-text: #2b8a3e;
-    --tint-green-shadow: #8ce99a;
+    --tint-blue-bg: #edf2ff;
+    --tint-blue-border: #bac8ff;
+    --tint-blue-text: #364fc7;
+    --tint-blue-shadow: #91a7ff;
 
-    --tint-blue-bg: #e7f5ff;
-    --tint-blue-border: #a5d8ff;
-    --tint-blue-text: #1971c2;
-    --tint-blue-shadow: #74c0fc;
-
-    --tint-mint-bg: #e6fcf5;
-    --tint-mint-border: #96f2d7;
-    --tint-mint-text: #099268;
-    --tint-mint-shadow: #63e6be;
-
-    --tint-orange-bg: #fff4e6;
-    --tint-orange-border: #ffd8a8;
-    --tint-orange-text: #d9480f;
-    --tint-orange-shadow: #ffc078;
+    --tint-cyan-bg: #e7f5ff;
+    --tint-cyan-border: #a5d8ff;
+    --tint-cyan-text: #1971c2;
+    --tint-cyan-shadow: #74c0fc;
 
     --neutral-btn-bg: #ffffff;
     --neutral-btn-border: #ced4da;
@@ -192,6 +183,104 @@
     border-color: var(--accent-primary);
   }
 
+  /* כרטיס מטרות אישיות בראש העמוד */
+  .goals-card-wrapper {
+    background: #ffffff;
+    border: 1.5px solid var(--card-border);
+    border-radius: 20px;
+    padding: 14px 16px;
+    width: 100%;
+    max-width: 410px;
+    box-shadow: var(--card-shadow);
+    user-select: none;
+  }
+  .goals-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+  }
+  .goals-title {
+    font-size: 0.95rem;
+    font-weight: 900;
+    color: var(--text-main);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .goals-body {
+    display: none;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--card-border);
+    cursor: default;
+  }
+  .goals-card-wrapper.open .goals-body { display: block; }
+  .goals-card-wrapper.open .goals-chevron { transform: rotate(180deg); }
+  .goals-chevron { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
+
+  .goal-status-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    background: var(--primary-surface);
+    color: var(--accent-primary);
+    border: 1px solid var(--tint-blue-border);
+  }
+
+  .program-duration-box {
+    background: var(--secondary-surface);
+    border: 1px solid var(--tint-cyan-border);
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.82rem;
+  }
+  .program-duration-box .label { font-weight: 800; color: var(--accent-secondary); }
+  .program-duration-box .val { font-weight: 900; color: var(--text-main); }
+
+  .weekly-avg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .weekly-avg-item {
+    background: var(--input-bg);
+    border: 1px solid var(--input-border);
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+  }
+  .weekly-avg-item .val {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--text-main);
+  }
+  .weekly-avg-item .lbl {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 700;
+  }
+
+  .cheat-count-banner {
+    background: var(--primary-surface);
+    border: 1px solid var(--tint-blue-border);
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--accent-primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
   /* מלבן מאוחד עליון עם מספרים מוגדלים */
   .stats-board {
     display: flex;
@@ -291,7 +380,7 @@
   }
   .stat-chip-box .chip-num.negative { color: var(--danger); }
 
-  /* אזור הזנה שטוח ומובנה */
+  /* אזור הזנה שטוח */
   .entry-flat-section {
     border-top: 1px solid var(--card-border);
     padding-top: 14px;
@@ -414,7 +503,7 @@
 
   .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
 
-  /* כפתורים עם צבעי פסטל-חי (Tinted 3D) */
+  /* כפתורים עם צבעי פסטל הרמוניים */
   .action-buttons-stack { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
   
   .btn-tint {
@@ -447,32 +536,11 @@
     box-shadow: 0 3px 0 var(--tint-blue-shadow);
   }
 
-  .btn-tint-mint {
-    background: var(--tint-mint-bg);
-    color: var(--tint-mint-text);
-    border: 1.5px solid var(--tint-mint-border);
-    box-shadow: 0 3px 0 var(--tint-mint-shadow);
-  }
-
-  .btn-tint-green {
-    background: var(--tint-green-bg);
-    color: var(--tint-green-text);
-    border: 1.5px solid var(--tint-green-border);
-    box-shadow: 0 3px 0 var(--tint-green-shadow);
-  }
-
-  .btn-tint-orange {
-    background: var(--tint-orange-bg);
-    color: var(--tint-orange-text);
-    border: 1.5px solid var(--tint-orange-border);
-    box-shadow: 0 3px 0 var(--tint-orange-shadow);
-  }
-
-  .btn-tint-neutral {
-    background: var(--neutral-btn-bg);
-    color: var(--neutral-btn-text);
-    border: 1.5px solid var(--neutral-btn-border);
-    box-shadow: 0 3px 0 var(--neutral-btn-shadow);
+  .btn-tint-cyan {
+    background: var(--tint-cyan-bg);
+    color: var(--tint-cyan-text);
+    border: 1.5px solid var(--tint-cyan-border);
+    box-shadow: 0 3px 0 var(--tint-cyan-shadow);
   }
 
   .btn-clear-sel { 
@@ -485,6 +553,7 @@
     cursor: pointer;
   }
 
+  /* כפתורי יום חדש סימטריים לחלוטין */
   .day-actions-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -575,7 +644,7 @@
     pointer-events: none;
     z-index: 9999;
     background: #ffffff;
-    border: 1.5px solid var(--accent-primary);
+    border: 1px solid var(--accent-primary);
     box-shadow: 0 10px 25px rgba(0,0,0,0.12);
     border-radius: 10px;
     padding: 8px 14px;
@@ -615,6 +684,14 @@
   .pool-tab-btn:active {
     transform: translateY(2px);
     box-shadow: none;
+  }
+
+  /* כרטיסי מנות מהירות בראש האוכל שלי */
+  .quick-special-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 12px;
   }
 
   .category-block {
@@ -747,89 +824,6 @@
     transform: scale(0.98);
   }
 
-  /* כרטיס מטרות אישיות תחתון מתקפל */
-  .goals-card-wrapper {
-    background: #ffffff;
-    border: 1.5px solid var(--card-border);
-    border-radius: 20px;
-    padding: 14px 16px;
-    width: 100%;
-    max-width: 410px;
-    box-shadow: var(--card-shadow);
-    cursor: pointer;
-    user-select: none;
-  }
-  .goals-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .goals-title {
-    font-size: 0.95rem;
-    font-weight: 900;
-    color: var(--text-main);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-  .goals-body {
-    display: none;
-    margin-top: 14px;
-    padding-top: 12px;
-    border-top: 1px solid var(--card-border);
-    cursor: default;
-  }
-  .goals-card-wrapper.open .goals-body { display: block; }
-  .goals-card-wrapper.open .goals-chevron { transform: rotate(180deg); }
-  .goals-chevron { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
-
-  .goal-status-badge {
-    display: inline-block;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.78rem;
-    font-weight: 800;
-    background: var(--primary-surface);
-    color: var(--accent-primary);
-  }
-
-  .weekly-avg-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin: 10px 0;
-  }
-  .weekly-avg-item {
-    background: var(--input-bg);
-    border: 1px solid var(--input-border);
-    border-radius: 14px;
-    padding: 10px;
-    text-align: center;
-  }
-  .weekly-avg-item .val {
-    font-size: 1.35rem;
-    font-weight: 900;
-    color: var(--text-main);
-  }
-  .weekly-avg-item .lbl {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    font-weight: 700;
-  }
-
-  .cheat-count-banner {
-    background: var(--tint-orange-bg);
-    border: 1px solid var(--tint-orange-border);
-    border-radius: 12px;
-    padding: 8px 12px;
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--tint-orange-text);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
   .ai-card {
     background: #ffffff;
     border: 1.5px solid var(--card-border);
@@ -949,6 +943,46 @@
   </div>
 </div>
 
+<!-- 1. כרטיס מטרות אישיות בראש העמוד -->
+<div class="goals-card-wrapper" id="goalsCard" onclick="toggleGoalsCard(event)">
+  <div class="goals-card-header">
+    <div class="goals-title">
+      <span>🎯 מטרות אישיות</span>
+      <span class="goal-status-badge" id="goalBadgeText">חיטוב</span>
+    </div>
+    <span class="goals-chevron" id="goalsChevron">▼</span>
+  </div>
+
+  <div class="goals-body" id="goalsBody" onclick="event.stopPropagation()">
+    <!-- זמן בחיטוב/מסה בפורמט ימים / שבועות / חודשים -->
+    <div class="program-duration-box">
+      <span class="label" id="programDurationLabel">זמן בחיטוב:</span>
+      <span class="val" id="programDurationValue">יום 1 / שבוע 1</span>
+    </div>
+
+    <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between; margin-bottom:6px;">
+      <span>יעד יומי:</span>
+      <span style="color:var(--text-main); font-weight:900;" id="goalsTargetSummary">1,800 קל' | 140ג' חלבון</span>
+    </div>
+
+    <div class="weekly-avg-grid">
+      <div class="weekly-avg-item">
+        <div class="lbl">ממוצע שבועי קלוריות</div>
+        <div class="val" id="weeklyAvgCal">0</div>
+      </div>
+      <div class="weekly-avg-item">
+        <div class="lbl">ממוצע שבועי חלבון</div>
+        <div class="val" id="weeklyAvgPro">0ג'</div>
+      </div>
+    </div>
+
+    <div class="cheat-count-banner">
+      <span>🍔 ארוחות צ'יט ב-7 הימים האחרונים:</span>
+      <span id="cheatCountWeekly" style="font-size:1.05rem;">0</span>
+    </div>
+  </div>
+</div>
+
 <div class="card">
   <!-- מלבן אחד גדול ומאוחד עבור נשאר להיום -->
   <div class="stats-board">
@@ -1005,6 +1039,7 @@
       <div class="custom-dropdown-panel" id="searchDropdown"></div>
     </div>
 
+    <!-- מחשבון כמויות דו-כיווני (גרם מול יחידה) -->
     <div class="portion-panel" id="portionCalcRow">
       <div class="portion-dual-inputs">
         <div class="portion-input-cell" id="unitInputCell">
@@ -1044,22 +1079,22 @@
       <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
       <div style="display:flex; gap:8px;">
         <button class="btn-tint btn-tint-blue" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
-        <button class="btn-tint btn-tint-mint" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
+        <button class="btn-tint btn-tint-cyan" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
       </div>
-      <button class="btn-tint btn-tint-orange" onclick="triggerCheatMealDay()">🍔 ארוחת צ'יט / השלם יעד</button>
       <button class="btn-clear-sel" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
-      <button id="cancelEditPoolBtn" class="btn-tint btn-tint-neutral" style="display:none;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
+      <button id="cancelEditPoolBtn" class="btn-tint btn-tint-blue" style="display:none;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
     </div>
 
     <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
       <button class="btn-tint btn-tint-primary" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
-      <button class="btn-tint btn-tint-neutral" onclick="cancelLogEdit()">ביטול עריכה</button>
+      <button class="btn-tint btn-tint-blue" onclick="cancelLogEdit()">ביטול עריכה</button>
     </div>
   </div>
 
+  <!-- כפתורי יום חדש סימטריים בצבעי אינדיגו ותכלת הרמוניים -->
   <div class="day-actions-grid">
-    <button class="btn-tint btn-tint-green" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.72rem; opacity:0.85;">(מעביר ספייר)</span></button>
-    <button class="btn-tint btn-tint-neutral" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.72rem; opacity:0.85;">(ללא ספייר)</span></button>
+    <button class="btn-tint btn-tint-blue" onclick="closeDay(false, true)">🌅 יום חדש<br><span style="font-size:0.72rem; opacity:0.85;">(מעביר ספייר)</span></button>
+    <button class="btn-tint btn-tint-cyan" onclick="closeDay(false, false)">⚡ יום חדש<br><span style="font-size:0.72rem; opacity:0.85;">(ללא ספייר)</span></button>
   </div>
 
   <div class="collapsible-wrapper">
@@ -1083,41 +1118,13 @@
     <input type="text" id="allSearchInput" placeholder="סינון ברשימה..." oninput="renderPresets()">
   </div>
 
+  <!-- כפתורי צ'יט והשלמה בראש "האוכל שלי" -->
+  <div class="quick-special-actions" id="myFoodSpecialActions">
+    <button class="btn-tint btn-tint-blue" onclick="triggerCheatMealDay()">🍔 ארוחת צ'יט</button>
+    <button class="btn-tint btn-tint-cyan" onclick="triggerFillToGoalDay()">⚡ השלם יעד</button>
+  </div>
+
   <div id="categoryContainer"></div>
-</div>
-
-<!-- כרטיס מטרות אישיות מתקפל בתחתית המסך -->
-<div class="goals-card-wrapper" id="goalsCard" onclick="toggleGoalsCard(event)">
-  <div class="goals-card-header">
-    <div class="goals-title">
-      <span>🎯 מטרות אישיות</span>
-      <span class="goal-status-badge" id="goalBadgeText">חיטוב</span>
-    </div>
-    <span class="goals-chevron" id="goalsChevron">▼</span>
-  </div>
-
-  <div class="goals-body" id="goalsBody" onclick="event.stopPropagation()">
-    <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between; margin-bottom:6px;">
-      <span>יעד יומי שהוגדר:</span>
-      <span style="color:var(--text-main); font-weight:900;" id="goalsTargetSummary">1,800 קל' | 140ג' חלבון</span>
-    </div>
-
-    <div class="weekly-avg-grid">
-      <div class="weekly-avg-item">
-        <div class="lbl">ממוצע שבועי קלוריות</div>
-        <div class="val" id="weeklyAvgCal">0</div>
-      </div>
-      <div class="weekly-avg-item">
-        <div class="lbl">ממוצע שבועי חלבון</div>
-        <div class="val" id="weeklyAvgPro">0ג'</div>
-      </div>
-    </div>
-
-    <div class="cheat-count-banner">
-      <span>🍔 ארוחות צ'יט ב-7 הימים האחרונים:</span>
-      <span id="cheatCountWeekly" style="font-size:1rem;">0</span>
-    </div>
-  </div>
 </div>
 
 <div class="ai-card" id="aiAssistantCard">
@@ -1150,9 +1157,9 @@
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <!-- הגדרת מטרות מרוכזת -->
+    <!-- הגדרת מטרות ותאריך התחלה -->
     <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
-      <div style="font-size:0.84rem; font-weight:900; margin-bottom:8px; color:var(--accent-primary);">🎯 מטרות ויעדים:</div>
+      <div style="font-size:0.84rem; font-weight:900; margin-bottom:8px; color:var(--accent-primary);">🎯 מטרות ותוכנית:</div>
       
       <div style="margin-bottom:8px;">
         <select id="userGoalTypeSelect" style="font-weight:700;">
@@ -1166,6 +1173,13 @@
         <input type="number" id="targetCalInput" placeholder="יעד קלוריות">
         <input type="number" id="targetProInput" placeholder="יעד חלבון (ג')">
       </div>
+
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
+        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">תאריך התחלת התוכנית:</span>
+        <button class="btn-tint btn-tint-blue" style="width:auto; padding:5px 10px; font-size:0.75rem;" onclick="resetProgramStartDate()">איפוס להיום</button>
+      </div>
+      <input type="date" id="programStartDateInput" style="margin-bottom:8px; font-size:0.85rem; padding:8px 10px;">
+
       <button class="btn-tint btn-tint-primary" onclick="updateTargets()">שמור יעדים ומטרה</button>
     </div>
 
@@ -1181,11 +1195,11 @@
       </div>
     </div>
 
-    <button class="btn-tint btn-tint-neutral" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
+    <button class="btn-tint btn-tint-blue" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
 
     <div style="display:flex; gap:6px;">
-      <button class="btn-tint btn-tint-neutral" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
-      <button class="btn-tint btn-tint-neutral" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
+      <button class="btn-tint btn-tint-blue" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
+      <button class="btn-tint btn-tint-blue" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
       <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
     </div>
 
@@ -1193,8 +1207,8 @@
       <div style="font-size:0.82rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
       <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
       <div style="display:flex; gap:6px;">
-        <button class="btn-tint btn-tint-neutral" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
-        <button class="btn-tint btn-tint-neutral" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
+        <button class="btn-tint btn-tint-blue" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
+        <button class="btn-tint btn-tint-blue" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
       </div>
       <div class="archive-viewer-box" id="archiveViewerBox"></div>
     </div>
@@ -1308,7 +1322,7 @@
     { name: "לחם אחיד", cal: 250, pro: 8.3, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 30 },
     { name: "לחם מלא / מחמצת", cal: 240, pro: 10.0, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 35 },
     { name: "לחם קל", cal: 180, pro: 8.0, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 25 },
-    { name: "טורטיה", cal: 300, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 40 },
+    { name: "טורטיה", cal: 300, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה בינונית", unitWeight: 40 },
     { name: "פריכיות אורז", cal: 375, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 8 },
 
     // שומנים וממרחים
@@ -1330,6 +1344,7 @@
   let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
   let targetPro = parseInt(localStorage.getItem('cal_targetPro')) || 140;
   let userGoalType = localStorage.getItem('cal_userGoalType') || 'cut';
+  let programStartDate = localStorage.getItem('cal_programStartDate') || new Date().toISOString().slice(0, 10);
   let eatenCal = parseInt(localStorage.getItem('cal_eatenCal')) || 0;
   let eatenPro = parseFloat(localStorage.getItem('cal_eatenPro')) || 0;
   let weeklyBank = parseInt(localStorage.getItem('cal_weeklyBank')) || 0;
@@ -1356,6 +1371,7 @@
   document.getElementById('targetCalInput').value = targetCal;
   document.getElementById('targetProInput').value = targetPro;
   document.getElementById('userGoalTypeSelect').value = userGoalType;
+  document.getElementById('programStartDateInput').value = programStartDate;
   document.getElementById('geminiApiKeyInput').value = geminiApiKey;
 
   applyAiStateUI();
@@ -1371,12 +1387,50 @@
   const customUnitWeightRow = document.getElementById('customUnitWeightRow');
   const customUnitGramsInput = document.getElementById('customUnitGramsInput');
 
+  // חישוב חכם של משך התוכנית בפורמט ימים / שבועות / חודשים
+  function updateProgramDurationDisplay() {
+    const start = new Date(programStartDate + 'T00:00:00');
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+
+    const diffDays = Math.max(1, Math.floor((now - start) / (1000 * 60 * 60 * 24)) + 1);
+    const weeks = Math.floor(diffDays / 7);
+    const remDays = diffDays % 7;
+    const months = Math.floor(diffDays / 30.4);
+
+    let text = '';
+    if (months >= 1) {
+      const remainingWeeks = Math.floor((diffDays - (months * 30.4)) / 7);
+      text = `${months} חודש` + (remainingWeeks > 0 ? ` ו-${remainingWeeks} שבועות` : '') + ` (${diffDays} ימים)`;
+    } else if (weeks >= 1) {
+      text = `שבוע ${weeks}` + (remDays > 0 ? ` ו-${remDays} ימים` : '') + ` (${diffDays} ימים)`;
+    } else {
+      text = `${diffDays} ימים (שבוע 1)`;
+    }
+
+    const labelEl = document.getElementById('programDurationLabel');
+    if (userGoalType === 'cut') labelEl.textContent = 'זמן בחיטוב:';
+    else if (userGoalType === 'bulk') labelEl.textContent = 'זמן במסה:';
+    else labelEl.textContent = 'זמן בתוכנית:';
+
+    document.getElementById('programDurationValue').textContent = text;
+  }
+
+  function resetProgramStartDate() {
+    programStartDate = new Date().toISOString().slice(0, 10);
+    document.getElementById('programStartDateInput').value = programStartDate;
+    updateProgramDurationDisplay();
+    saveData();
+    showToast('תאריך התוכנית אופס להיום!');
+  }
+
   function applyUserGoalBadge() {
     const badge = document.getElementById('goalBadgeText');
     if (userGoalType === 'cut') badge.textContent = 'חיטוב';
     else if (userGoalType === 'bulk') badge.textContent = 'מסה';
     else badge.textContent = 'ניטרלי';
     document.getElementById('goalsTargetSummary').textContent = `${targetCal.toLocaleString()} קל' | ${targetPro}ג' חלבון`;
+    updateProgramDurationDisplay();
   }
 
   function toggleGoalsCard(e) {
@@ -1652,15 +1706,15 @@
     document.getElementById('portionCalcRow').style.display = 'none';
   }
 
-  // פונקציית ארוחת צ'יט: משלימה את הקלוריות בדיוק ליעד (ספייר מתאפס), חלבון ללא שינוי
+  // פונקציית צ'יט: משלימה ל-1800 (או היעד) ונספרת כצ'יט
   function triggerCheatMealDay() {
     const diff = targetCal - eatenCal;
     if (diff <= 0) {
-      alert('כבר השלמת או עברת את יעד הקלוריות היומי להיום!');
+      alert('כבר השלמת או עברת את יעד הקלוריות היומי!');
       return;
     }
 
-    if (!confirm(`להוסיף ארוחת צ'יט של ${diff} קלוריות כדי להשלים בדיוק ליעד היומי (${targetCal})?\n\n* ערך החלבון לא ישתנה.`)) {
+    if (!confirm(`להוסיף ארוחת צ'יט של ${diff} קלוריות כדי להשלים ליעד היומי (${targetCal})?\n\n* תירשם כארוחת צ'יט במעקב השבועי.`)) {
       return;
     }
 
@@ -1681,7 +1735,39 @@
     clearEntryInputs();
     renderLogs();
     updateDisplay();
-    showToast("ארוחת צ'יט נרשמה והיעד הושלם!");
+    showToast("ארוחת צ'יט נרשמה!");
+  }
+
+  // פונקציית השלמת יום: משלימה בדיוק ליעד, ללא ספירה כארוחת צ'יט
+  function triggerFillToGoalDay() {
+    const diff = targetCal - eatenCal;
+    if (diff <= 0) {
+      alert('כבר השלמת או עברת את יעד הקלוריות היומי!');
+      return;
+    }
+
+    if (!confirm(`להשלים את היום עם ${diff} קלוריות עד ליעד (${targetCal})?\n\n* לא ייספר כארוחת צ'יט.`)) {
+      return;
+    }
+
+    pushState();
+    eatenCal += diff;
+    const today = new Date().toISOString().slice(0, 10);
+    const logObj = { 
+      id: Date.now() + Math.random().toString(), 
+      name: "השלמת יעד יומי", 
+      cal: diff, 
+      pro: 0, 
+      date: today,
+      isCheat: false 
+    };
+    logs.unshift(logObj);
+    archiveLogs.unshift(logObj);
+
+    clearEntryInputs();
+    renderLogs();
+    updateDisplay();
+    showToast("היעד הושלם להיום!");
   }
 
   function toggleAiEnabled() {
@@ -1719,7 +1805,7 @@
 
   function pushState() {
     historyStack.push({
-      targetCal, targetPro, userGoalType, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -1734,6 +1820,7 @@
     localStorage.setItem('cal_targetCal', targetCal);
     localStorage.setItem('cal_targetPro', targetPro);
     localStorage.setItem('cal_userGoalType', userGoalType);
+    localStorage.setItem('cal_programStartDate', programStartDate);
     localStorage.setItem('cal_eatenCal', eatenCal);
     localStorage.setItem('cal_eatenPro', eatenPro);
     localStorage.setItem('cal_weeklyBank', weeklyBank);
@@ -1855,6 +1942,7 @@
     document.getElementById('tabMyFood').className = 'pool-tab-btn ' + (currentPoolTab === 'myfood' ? 'active' : '');
     document.getElementById('tabBase').className = 'pool-tab-btn ' + (currentPoolTab === 'base' ? 'active' : '');
     document.getElementById('allSearchRow').style.display = (currentPoolTab !== 'none') ? 'block' : 'none';
+    document.getElementById('myFoodSpecialActions').style.display = (currentPoolTab === 'myfood') ? 'grid' : 'none';
   }
 
   function toggleCategoryAccordion(catKey) {
@@ -1943,6 +2031,27 @@
     });
   }
 
+  // גלילה אוטומטית בעת גרירה
+  function handleAutoScrollDuringDrag(clientY) {
+    const edgeThreshold = 75;
+    const scrollSpeed = 14;
+
+    if (clientY < edgeThreshold) {
+      window.scrollBy({ top: -scrollSpeed, behavior: 'auto' });
+    } else if (window.innerHeight - clientY < edgeThreshold) {
+      window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
+    }
+
+    const logContainer = document.getElementById('logs');
+    if (logContainer && logContainer.offsetParent !== null) {
+      const rect = logContainer.getBoundingClientRect();
+      if (clientY >= rect.top && clientY <= rect.bottom) {
+        if (clientY - rect.top < 40) logContainer.scrollTop -= 10;
+        else if (rect.bottom - clientY < 40) logContainer.scrollTop += 10;
+      }
+    }
+  }
+
   function setupCategoryDragAndDrop(headerEl, blockEl, catName) {
     let timer = null;
     let isDragging = false;
@@ -1973,6 +2082,8 @@
         return;
       }
       if (e.cancelable) e.preventDefault();
+
+      handleAutoScrollDuringDrag(point.clientY);
 
       const elBelow = document.elementFromPoint(point.clientX, point.clientY);
       const targetBlock = elBelow?.closest('.category-block:not(.category-holding)');
@@ -2075,6 +2186,8 @@
         dragClone.style.left = (point.clientX - offsetX) + 'px';
         dragClone.style.top = (point.clientY - offsetY) + 'px';
       }
+
+      handleAutoScrollDuringDrag(point.clientY);
 
       const elBelow = document.elementFromPoint(point.clientX, point.clientY);
       const targetList = elBelow?.closest('.preset-list');
@@ -2225,11 +2338,9 @@
 
     const relevant = archiveLogs.filter(l => (l.date || '') >= cutoffStr);
     
-    // חישוב צ'יטים שבועי
     const cheatCount = relevant.filter(l => l.isCheat === true).length;
     document.getElementById('cheatCountWeekly').textContent = cheatCount;
 
-    // חישוב ממוצע קלוריות וחלבון יומי ב-7 ימים
     const dayGroups = {};
     relevant.forEach(l => {
       const d = l.date || 'today';
@@ -2291,6 +2402,7 @@
     document.getElementById('archiveCountText').textContent = `בארכיון שמורות ${archiveLogs.length} הזנות תמידיות.`;
     
     calculateWeeklyStats();
+    updateProgramDurationDisplay();
     saveData();
   }
 
@@ -2345,7 +2457,7 @@
         const row = document.createElement('div');
         row.className = 'log-item-row';
         row.setAttribute('data-id', item.id);
-        const cheatBadge = item.isCheat ? ' <span style="color:var(--tint-orange-text); font-weight:800;">(צ\'יט)</span>' : '';
+        const cheatBadge = item.isCheat ? ' <span style="color:var(--accent-primary); font-weight:800;">(צ\'יט)</span>' : '';
 
         row.innerHTML = `
           <div style="flex:1; pointer-events:none; font-size:0.82rem;">
@@ -2413,6 +2525,8 @@
         dragClone.style.left = (point.clientX - offsetX) + 'px';
         dragClone.style.top = (point.clientY - offsetY) + 'px';
       }
+
+      handleAutoScrollDuringDrag(point.clientY);
 
       const elBelow = document.elementFromPoint(point.clientX, point.clientY);
       const dayContainer = elBelow?.closest('.day-items-container');
@@ -2780,7 +2894,7 @@
   function undoLastAction() {
     if (historyStack.length === 0) return;
     redoStack.push({
-      targetCal, targetPro, userGoalType, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -2793,7 +2907,7 @@
   function redoLastAction() {
     if (redoStack.length === 0) return;
     historyStack.push({
-      targetCal, targetPro, userGoalType, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -2806,6 +2920,7 @@
   function applyStateSilent(st) {
     targetCal = st.targetCal; targetPro = st.targetPro;
     userGoalType = st.userGoalType || 'cut';
+    programStartDate = st.programStartDate || new Date().toISOString().slice(0, 10);
     eatenCal = st.eatenCal; eatenPro = st.eatenPro; weeklyBank = st.weeklyBank;
     logs = st.logs; archiveLogs = st.archiveLogs || archiveLogs;
     presets = st.presets || presets; categoryOrder = st.categoryOrder || categoryOrder;
@@ -2818,6 +2933,7 @@
     document.getElementById('targetCalInput').value = targetCal;
     document.getElementById('targetProInput').value = targetPro;
     document.getElementById('userGoalTypeSelect').value = userGoalType;
+    document.getElementById('programStartDateInput').value = programStartDate;
 
     applyUserGoalBadge();
     renderLogs();
@@ -2877,12 +2993,14 @@
     const newCal = parseInt(document.getElementById('targetCalInput').value);
     const newPro = parseInt(document.getElementById('targetProInput').value);
     const newGoal = document.getElementById('userGoalTypeSelect').value;
+    const newStartDate = document.getElementById('programStartDateInput').value;
 
     if (newCal > 0 || newPro > 0) {
       pushState();
       if (newCal > 0) targetCal = newCal;
       if (newPro > 0) targetPro = newPro;
       userGoalType = newGoal;
+      if (newStartDate) programStartDate = newStartDate;
 
       applyUserGoalBadge();
       closeSettingsModal();
@@ -3001,7 +3119,7 @@
   }
 
   function exportBackupTxt() {
-    const data = { targetCal, targetPro, userGoalType, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
+    const data = { targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -3030,6 +3148,7 @@
           pushState();
           targetCal = d.targetCal || 1800; targetPro = d.targetPro || 140;
           userGoalType = d.userGoalType || 'cut';
+          programStartDate = d.programStartDate || new Date().toISOString().slice(0, 10);
           eatenCal = d.eatenCal || 0; eatenPro = d.eatenPro || 0; weeklyBank = d.weeklyBank || 0;
           logs = d.logs || []; archiveLogs = d.archiveLogs || (d.logs ? JSON.parse(JSON.stringify(d.logs)) : []);
           presets = d.presets || []; categoryOrder = d.categoryOrder || ['כללי'];
