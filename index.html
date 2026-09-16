@@ -23,8 +23,8 @@
     --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
     
     --text-main: #1a1d20;
-    --text-muted: #6c757d;
-    --text-subtle: #adb5bd;
+    --text-muted: #5c636a;
+    --text-subtle: #8c959f;
     
     --accent-primary: #3b5bdb;
     --accent-primary-shadow: #2b44a8;
@@ -47,13 +47,24 @@
     --tint-cyan-text: #1971c2;
     --tint-cyan-shadow: #74c0fc;
 
+    --tint-green-bg: #ebfbee;
+    --tint-green-border: #b2f2bb;
+    --tint-green-text: #2b8a3e;
+    --tint-green-shadow: #8ce99a;
+
+    --status-green: #2b8a3e;
+    --status-orange: #d9480f;
+    --status-red: #e03131;
+
     --neutral-btn-bg: #ffffff;
     --neutral-btn-border: #ced4da;
     --neutral-btn-shadow: #adb5bd;
     --neutral-btn-text: #343a40;
 
-    --danger: #e03131;
-    --danger-surface: #fff5f5;
+    --danger-soft-bg: #fff5f5;
+    --danger-soft-border: #ffc9c9;
+    --danger-soft-text: #c92a2a;
+    --danger-soft-shadow: #ffa8a8;
 
     --input-bg: #f8f9fa;
     --input-border: #ced4da;
@@ -204,7 +215,7 @@
   .goals-title {
     font-size: 0.95rem;
     font-weight: 900;
-    color: var(--text-main);
+    color: var(--accent-primary);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -236,17 +247,32 @@
     border: 1px solid var(--tint-cyan-border);
     border-radius: 12px;
     padding: 9px 12px;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 3px;
     text-align: center;
-    font-size: 0.85rem;
   }
-  .program-duration-box .label { font-weight: 800; color: var(--accent-secondary); }
-  .program-duration-box .val { font-weight: 900; color: var(--text-main); font-size: 0.92rem; }
+  .program-duration-box .label { font-weight: 800; color: var(--accent-secondary); font-size: 0.82rem; }
+  .program-duration-box .val { font-weight: 900; color: var(--text-main); font-size: 0.95rem; }
+
+  .goals-target-row {
+    font-size: 0.84rem;
+    font-weight: 800;
+    color: var(--text-muted);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+  .goals-target-row .target-val {
+    color: var(--accent-primary);
+    font-weight: 900;
+  }
 
   .weekly-avg-grid {
     display: grid;
@@ -261,17 +287,18 @@
     text-align: center;
   }
   .weekly-avg-item .val {
-    font-size: 1.35rem;
+    font-size: 1.4rem;
     font-weight: 900;
-    color: var(--text-main);
+    margin-top: 2px;
+    transition: color 0.3s;
   }
   .weekly-avg-item .lbl {
-    font-size: 0.72rem;
+    font-size: 0.74rem;
     color: var(--text-muted);
-    font-weight: 700;
+    font-weight: 800;
   }
 
-  /* לוח עליון: נשאר להיום מובדל בצבעו מנאכל היום והספייר */
+  /* לוח עליון */
   .stats-board {
     display: flex;
     flex-direction: column;
@@ -322,7 +349,6 @@
   }
   .target-column.cal .col-number { color: var(--accent-primary); }
   .target-column.pro .col-number { color: var(--accent-secondary); }
-  .target-column.negative .col-number { color: var(--danger) !important; }
 
   .bar-container { 
     width: 100%; 
@@ -338,7 +364,6 @@
     transition: width 0.3s ease, background-color 0.3s ease; 
   }
 
-  /* נאכל היום והספייר באותו גוון תכלת פסטלי תואם */
   .stats-secondary-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -368,12 +393,12 @@
     font-size: 1.55rem;
     font-weight: 900;
     line-height: 1.1;
-    color: var(--accent-secondary);
     text-align: center;
+    direction: ltr !important;
+    display: inline-block;
   }
-  .stat-chip-box .chip-num.negative { color: var(--danger) !important; }
 
-  /* אזור הזנה נקי ללא עומס */
+  /* אזור הזנה */
   .entry-flat-section {
     border-top: 1px solid var(--card-border);
     padding-top: 14px;
@@ -500,13 +525,12 @@
 
   .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
 
-  /* כפתורים הרמוניים וסימטריים בתלת-ממד עדין */
   .action-buttons-stack { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
   
   .btn-tint {
     border-radius: 12px;
-    padding: 12px 14px;
-    font-size: 0.95rem;
+    padding: 11px 12px;
+    font-size: 0.92rem;
     font-weight: 800;
     cursor: pointer;
     width: 100%;
@@ -544,14 +568,33 @@
     box-shadow: 0 3px 0 var(--tint-cyan-shadow);
   }
 
-  /* כפתור יום חדש ארוך ודק */
+  .btn-cancel-edit-soft {
+    background: var(--danger-soft-bg);
+    color: var(--danger-soft-text);
+    border: 1.5px solid var(--danger-soft-border);
+    box-shadow: 0 3px 0 var(--danger-soft-shadow);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.86rem;
+    font-weight: 800;
+    cursor: pointer;
+    width: 100%;
+    text-align: center;
+    outline: none;
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+  }
+  .btn-cancel-edit-soft:active {
+    transform: translateY(3px);
+    box-shadow: none;
+  }
+
   .btn-day-single {
     background: var(--tint-cyan-bg);
     color: var(--tint-cyan-text);
     border: 1.5px solid var(--tint-cyan-border);
     box-shadow: 0 3px 0 var(--tint-cyan-shadow);
     border-radius: 14px;
-    padding: 9px 12px;
+    padding: 10px 12px;
     font-size: 0.86rem;
     font-weight: 800;
     cursor: pointer;
@@ -566,7 +609,6 @@
     box-shadow: none;
   }
 
-  /* כפתור פתיחת אפשרויות שמירה למאגר */
   .btn-pool-opts-toggle {
     background: var(--input-bg);
     color: var(--text-muted);
@@ -591,25 +633,15 @@
     border-radius: 14px;
   }
 
-  .btn-clear-sel { 
-    background: transparent; 
-    color: var(--text-muted); 
-    font-size: 0.8rem; 
-    padding: 6px; 
-    display: none; 
-    border: none; 
-    cursor: pointer;
-    text-align: center;
-  }
-
   .collapsible-wrapper { margin-top: 4px; }
-  .btn-toggle-box {
-    background: #ffffff;
-    color: var(--text-main);
-    border: 1.5px solid var(--card-border);
+  
+  .btn-toggle-box-green {
+    background: var(--tint-green-bg);
+    color: var(--tint-green-text);
+    border: 1.5px solid var(--tint-green-border);
     border-radius: 14px;
-    font-size: 0.84rem;
-    font-weight: 700;
+    font-size: 0.85rem;
+    font-weight: 800;
     padding: 11px 14px;
     width: 100%;
     cursor: pointer;
@@ -617,10 +649,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 0 var(--card-border);
+    box-shadow: 0 2px 0 var(--tint-green-shadow);
     transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
-  .btn-toggle-box:active {
+  .btn-toggle-box-green:active {
     transform: translateY(2px);
     box-shadow: none;
   }
@@ -673,11 +705,10 @@
     border-radius: 8px;
   }
   .drag-placeholder {
-    height: 38px;
     border: 1.5px dashed var(--accent-primary);
     background: var(--primary-surface);
-    border-radius: 8px;
-    margin: 2px 0;
+    border-radius: 10px;
+    margin: 4px 0;
     pointer-events: none;
   }
   .floating-drag-clone {
@@ -686,14 +717,15 @@
     z-index: 9999;
     background: #ffffff;
     border: 1.5px solid var(--accent-primary);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.12);
-    border-radius: 10px;
-    padding: 8px 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    border-radius: 12px;
+    padding: 10px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--text-main);
     transform: scale(1.02);
+    opacity: 0.95;
   }
 
   .btn-log-action { background: transparent; border: none; font-size: 0.95rem; cursor: pointer; padding: 2px 5px; color: var(--text-subtle); transition: color 0.15s; }
@@ -727,7 +759,6 @@
     box-shadow: none;
   }
 
-  /* כפתור אימון / קיזוז מינוס בראש האוכל שלי */
   .burn-action-wrap {
     margin-bottom: 12px;
   }
@@ -920,6 +951,52 @@
   .modal-header-bar h3 { margin: 0; font-size: 1.15rem; font-weight: 800; }
   .modal-close-btn { background: transparent; border: none; font-size: 1.3rem; color: var(--text-muted); cursor: pointer; }
 
+  .btn-setting-accordion {
+    background: var(--neutral-btn-bg);
+    color: var(--text-main);
+    border: 1.5px solid var(--neutral-btn-border);
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 0.9rem;
+    font-weight: 800;
+    cursor: pointer;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 0 var(--neutral-btn-shadow);
+    transition: all 0.15s ease;
+  }
+  .btn-setting-accordion.active {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border-color: var(--accent-primary-shadow);
+    box-shadow: 0 2px 0 var(--accent-primary-shadow);
+  }
+  .setting-accordion-drawer {
+    display: none;
+    background: #fbfbfc;
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 12px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  .date-dmy-wrap {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 8px;
+    direction: ltr;
+  }
+  .date-dmy-wrap input {
+    padding: 8px !important;
+    font-size: 0.9rem !important;
+    text-align: center !important;
+  }
+
   .switch-btn {
     background: var(--input-bg);
     border: 1.5px solid var(--input-border);
@@ -991,7 +1068,7 @@
   </div>
 </div>
 
-<!-- 1. כרטיס מטרות אישיות ממוקם בראש העמוד -->
+<!-- 1. כרטיס מטרות אישיות בראש העמוד -->
 <div class="goals-card-wrapper" id="goalsCard" onclick="toggleGoalsCard(event)">
   <div class="goals-card-header">
     <div class="goals-title">
@@ -1002,24 +1079,23 @@
   </div>
 
   <div class="goals-body" id="goalsBody" onclick="event.stopPropagation()">
-    <!-- זמן בחיטוב/מסה בפורמט מסודר -->
     <div class="program-duration-box">
       <span class="label" id="programDurationLabel">זמן בחיטוב:</span>
       <span class="val" id="programDurationValue">יום 1</span>
     </div>
 
-    <div style="font-size:0.82rem; font-weight:700; color:var(--text-muted); display:flex; justify-content:space-between; margin-bottom:8px;">
+    <div class="goals-target-row">
       <span>יעד יומי שהוגדר:</span>
-      <span style="color:var(--text-main); font-weight:900;" id="goalsTargetSummary">1,800 קל' | 140ג' חלבון</span>
+      <span class="target-val" id="goalsTargetSummary">1,800 קל' | 140ג' חלבון</span>
     </div>
 
     <div class="weekly-avg-grid">
       <div class="weekly-avg-item">
-        <div class="lbl">ממוצע שבועי קלוריות</div>
+        <div class="lbl">ממוצע שבועי קלוריות (מאתמול)</div>
         <div class="val" id="weeklyAvgCal">0</div>
       </div>
       <div class="weekly-avg-item">
-        <div class="lbl">ממוצע שבועי חלבון</div>
+        <div class="lbl">ממוצע שבועי חלבון (מאתמול)</div>
         <div class="val" id="weeklyAvgPro">0ג'</div>
       </div>
     </div>
@@ -1027,7 +1103,7 @@
 </div>
 
 <div class="card">
-  <!-- מלבן מאוחד עליון: נשאר להיום (בצבע אינדיגו בהיר וייחודי) -->
+  <!-- מלבן מאוחד עליון: נשאר להיום -->
   <div class="stats-board">
     <div class="stat-card-target-unified">
       <div class="unified-headline">נשאר להיום</div>
@@ -1050,7 +1126,7 @@
       </div>
     </div>
 
-    <!-- נאכל היום וספייר מצטבר (באותו גוון תכלת פסטלי תואם) -->
+    <!-- נאכל היום וספייר מצטבר -->
     <div class="stats-secondary-row">
       <div class="stat-chip-box">
         <div class="chip-title">🍽️ נאכל היום</div>
@@ -1074,7 +1150,7 @@
     </div>
   </div>
 
-  <!-- הזנה זורמת, נקייה וקומפקטית -->
+  <!-- הזנה זורמת -->
   <div class="entry-flat-section" id="entryBox">
     <div class="entry-flat-title" id="entryTitle">🔍 הזנת מנה מהירה</div>
     
@@ -1083,7 +1159,7 @@
       <div class="custom-dropdown-panel" id="searchDropdown"></div>
     </div>
 
-    <!-- מחשבון כמויות דו-כיווני (גרם מול יחידה) -->
+    <!-- מחשבון כמויות דו-כיווני -->
     <div class="portion-panel" id="portionCalcRow">
       <div class="portion-dual-inputs">
         <div class="portion-input-cell" id="unitInputCell">
@@ -1102,11 +1178,11 @@
       <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
     </div>
 
-    <!-- כפתור הוספה ראשי מודגש מיד מתחת לקלוריות והחלבון -->
+    <!-- כפתור הוספה ראשי מודגש -->
     <div class="action-buttons-stack" id="defaultActionBtns">
       <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
 
-      <!-- אפשרויות שמירה למאגר במגירה מתקפלת לקבלת מסך נקי -->
+      <!-- מגירת אפשרויות שמירה למאגר -->
       <button type="button" class="btn-pool-opts-toggle" onclick="togglePoolOptionsDrawer()">
         <span id="poolDrawerBtnText">📦 אפשרויות שמירה למאגר</span>
         <span id="poolDrawerChevron" style="font-size:0.75rem;">▼</span>
@@ -1136,25 +1212,26 @@
         </div>
       </div>
 
-      <button class="btn-clear-sel" id="btnClearSelection" onclick="clearEntryInputsManually()">✕ נקה / ביטול בחירה</button>
-      <button id="cancelEditPoolBtn" class="btn-tint btn-tint-pair-top" style="display:none;" onclick="cancelEditPreset()">ביטול עריכת מנה</button>
+      <!-- כפתור ביטול עריכה/בחירה רשמי באדום בהיר -->
+      <button id="cancelEditPoolBtn" class="btn-cancel-edit-soft" style="display:none;" onclick="cancelEditPreset()">ביטול עריכה/בחירה</button>
     </div>
 
     <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
       <button class="btn-tint btn-tint-primary" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
-      <button class="btn-tint btn-tint-pair-top" onclick="cancelLogEdit()">ביטול עריכה</button>
+      <button class="btn-cancel-edit-soft" onclick="cancelLogEdit()">ביטול עריכה/בחירה</button>
     </div>
   </div>
 
-  <!-- כפתור יום חדש יחיד, דק וארוך שמעביר ספייר כרגיל -->
+  <!-- כפתור יום חדש יחיד, דק וארוך שמעביר ספייר -->
   <button class="btn-day-single" onclick="closeDay(false, true)">
     🌅 יום חדש (מעביר ספייר לחישוב שבועי)
   </button>
 
+  <!-- כפתור היסטוריה שבועית צבוע בירוק בהיר -->
   <div class="collapsible-wrapper">
-    <button class="btn-toggle-box" id="btnToggleLogs" onclick="toggleLogs()">
+    <button class="btn-toggle-box-green" id="btnToggleLogs" onclick="toggleLogs()">
       <span id="btnToggleLogsTitle">📜 היסטוריה שבועית (0)</span>
-      <span style="font-size:0.75rem; color:var(--text-muted);">▼</span>
+      <span style="font-size:0.75rem;">▼</span>
     </button>
     <div class="collapsible-box" id="logsContent">
       <div class="log-scroll-area" id="logs"></div>
@@ -1210,10 +1287,13 @@
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <!-- הגדרת מטרות ותאריך התחלה -->
-    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
-      <div style="font-size:0.84rem; font-weight:900; margin-bottom:8px; color:var(--accent-primary);">🎯 מטרות ותוכנית:</div>
-      
+    <!-- כפתור אקורדיון: מטרות ותוכנית -->
+    <button type="button" class="btn-setting-accordion" id="btnAccordionGoals" onclick="toggleSettingAccordion('goals')">
+      <span>🎯 מטרות ותוכנית</span>
+      <span id="chevronSettingGoals" style="font-size:0.75rem;">▼</span>
+    </button>
+
+    <div class="setting-accordion-drawer" id="drawerSettingGoals">
       <div style="margin-bottom:8px;">
         <select id="userGoalTypeSelect" style="font-weight:700;">
           <option value="cut">חיטוב (גירעון קלורי)</option>
@@ -1227,18 +1307,27 @@
         <input type="number" id="targetProInput" placeholder="יעד חלבון (ג')">
       </div>
 
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:8px;">
-        <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">תאריך התחלת התוכנית:</span>
-        <button class="btn-tint btn-tint-pair-top" style="width:auto; padding:5px 10px; font-size:0.75rem;" onclick="resetProgramStartDate()">איפוס להיום</button>
+      <div style="font-size:0.76rem; color:var(--text-muted); font-weight:700; margin-bottom:4px;">
+        תאריך התחלת התוכנית (יום / חודש / שנה):
       </div>
-      <input type="date" id="programStartDateInput" style="margin-bottom:8px; font-size:0.85rem; padding:8px 10px; text-align:center;">
+      <div class="date-dmy-wrap">
+        <input type="number" id="startDayInput" placeholder="יום" style="width:58px;" min="1" max="31">
+        <input type="number" id="startMonthInput" placeholder="חודש" style="width:58px;" min="1" max="12">
+        <input type="number" id="startYearInput" placeholder="שנה" style="width:78px;" min="2020" max="2035">
+      </div>
 
       <button class="btn-tint btn-tint-primary" onclick="updateTargets()">שמור יעדים ומטרה</button>
     </div>
 
-    <div style="background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
+    <!-- כפתור אקורדיון: עוזר AI -->
+    <button type="button" class="btn-setting-accordion" id="btnAccordionAI" onclick="toggleSettingAccordion('ai')">
+      <span>🤖 עוזר AI</span>
+      <span id="chevronSettingAI" style="font-size:0.75rem;">▼</span>
+    </button>
+
+    <div class="setting-accordion-drawer" id="drawerSettingAI">
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <span style="font-size:0.85rem; font-weight:800;">עוזר AI (צ'אט)</span>
+        <span style="font-size:0.85rem; font-weight:800;">הפעלה:</span>
         <button id="btnAiToggle" class="switch-btn active" onclick="toggleAiEnabled()">ON</button>
       </div>
       <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:6px;">מפתח Gemini API:</div>
@@ -1264,11 +1353,6 @@
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
       </div>
       <div class="archive-viewer-box" id="archiveViewerBox"></div>
-    </div>
-
-    <div style="display:flex; flex-direction:column; gap:6px;">
-      <button class="btn-tint" style="background:#fff5f5; color:var(--danger); border:1.5px solid #ffc9c9; box-shadow:0 3px 0 #ffa8a8;" onclick="resetDayOnly()">איפוס יום נוכחי בלבד</button>
-      <button class="btn-tint" style="background:#fff5f5; color:var(--danger); border:1.5px solid #ffc9c9; box-shadow:0 3px 0 #ffa8a8;" onclick="clearAllPresets()">נקה מאגר מנות אישי לחלוטין</button>
     </div>
   </div>
 </div>
@@ -1424,8 +1508,17 @@
   document.getElementById('targetCalInput').value = targetCal;
   document.getElementById('targetProInput').value = targetPro;
   document.getElementById('userGoalTypeSelect').value = userGoalType;
-  document.getElementById('programStartDateInput').value = programStartDate;
   document.getElementById('geminiApiKeyInput').value = geminiApiKey;
+
+  function syncDateInputsFromStorage() {
+    const parts = programStartDate.split('-');
+    if (parts.length === 3) {
+      document.getElementById('startYearInput').value = parts[0];
+      document.getElementById('startMonthInput').value = parseInt(parts[1], 10);
+      document.getElementById('startDayInput').value = parseInt(parts[2], 10);
+    }
+  }
+  syncDateInputsFromStorage();
 
   applyAiStateUI();
   applyUserGoalBadge();
@@ -1439,6 +1532,22 @@
   const entryPortionModeSelect = document.getElementById('entryPortionModeSelect');
   const customUnitWeightRow = document.getElementById('customUnitWeightRow');
   const customUnitGramsInput = document.getElementById('customUnitGramsInput');
+
+  function toggleSettingAccordion(type) {
+    const isGoals = type === 'goals';
+    const btn = document.getElementById(isGoals ? 'btnAccordionGoals' : 'btnAccordionAI');
+    const drawer = document.getElementById(isGoals ? 'drawerSettingGoals' : 'drawerSettingAI');
+    const chevron = document.getElementById(isGoals ? 'chevronSettingGoals' : 'chevronSettingAI');
+
+    const isOpen = drawer.style.display === 'block';
+    drawer.style.display = isOpen ? 'none' : 'block';
+    chevron.textContent = isOpen ? '▼' : '▲';
+    if (isOpen) {
+      btn.classList.remove('active');
+    } else {
+      btn.classList.add('active');
+    }
+  }
 
   function togglePoolOptionsDrawer() {
     const drawer = document.getElementById('poolOptionsDrawer');
@@ -1483,14 +1592,6 @@
     document.getElementById('programDurationValue').textContent = text;
   }
 
-  function resetProgramStartDate() {
-    programStartDate = new Date().toISOString().slice(0, 10);
-    document.getElementById('programStartDateInput').value = programStartDate;
-    updateProgramDurationDisplay();
-    saveData();
-    showToast('תאריך התוכנית אופס להיום!');
-  }
-
   function applyUserGoalBadge() {
     const badge = document.getElementById('goalBadgeText');
     if (userGoalType === 'cut') badge.textContent = 'חיטוב';
@@ -1510,15 +1611,15 @@
     customUnitWeightRow.style.display = (val === 'customUnit') ? 'flex' : 'none';
   }
 
-  function updateClearBtnVisibility() {
-    const btn = document.getElementById('btnClearSelection');
+  function updateCancelBtnVisibility() {
+    const btn = document.getElementById('cancelEditPoolBtn');
     if (!btn) return;
-    const hasData = entryNameInput.value.trim() !== '' || calInput.value !== '' || proInput.value !== '' || activePortionContext !== null;
+    const hasData = entryNameInput.value.trim() !== '' || calInput.value !== '' || proInput.value !== '' || activePortionContext !== null || editingPresetIndex >= 0;
     btn.style.display = hasData ? 'block' : 'none';
   }
 
   [entryNameInput, calInput, proInput, entryCatInput].forEach(el => {
-    el.addEventListener('input', updateClearBtnVisibility);
+    el.addEventListener('input', updateCancelBtnVisibility);
   });
 
   entryNameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); calInput.focus(); } });
@@ -1694,7 +1795,7 @@
       entryPortionModeSelect.value = "fixed";
       onSaveModeSelectionChanged();
     }
-    updateClearBtnVisibility();
+    updateCancelBtnVisibility();
   }
 
   function loadBaseFoodForPortion(foodName, shouldGlow = true) {
@@ -1736,7 +1837,7 @@
     }
 
     portionRow.style.display = 'flex';
-    updateClearBtnVisibility();
+    updateCancelBtnVisibility();
 
     document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -1765,7 +1866,7 @@
   function recalcMacrosFromGrams(grams) {
     calInput.value = Math.round(activePortionContext.calPerGram * grams);
     proInput.value = Math.round((activePortionContext.proPerGram * grams) * 10) / 10;
-    updateClearBtnVisibility();
+    updateCancelBtnVisibility();
   }
 
   function closePortionCalculator() {
@@ -1773,7 +1874,6 @@
     document.getElementById('portionCalcRow').style.display = 'none';
   }
 
-  // אימון / קיזוז מינוס: מוסיף קלוריות ישירות לספייר
   function openExerciseBurnModal() {
     const val = prompt('כמה קלוריות שרפת באימון האקסטרה? (יוזן כתוספת לספייר)');
     if (val === null) return;
@@ -2086,17 +2186,31 @@
   function setupCategoryDragAndDrop(headerEl, blockEl, catName) {
     let timer = null;
     let isDragging = false;
-    let startY = 0;
+    let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
+    let dragClone = null;
     let placeholder = null;
 
     const onStart = function(e) {
       const point = e.touches ? e.touches[0] : e;
+      startX = point.clientX;
       startY = point.clientY;
 
       timer = setTimeout(() => {
         isDragging = true;
         blockEl.classList.add('category-holding');
         if (navigator.vibrate) navigator.vibrate(60);
+
+        const rect = blockEl.getBoundingClientRect();
+        offsetX = startX - rect.left;
+        offsetY = startY - rect.top;
+
+        dragClone = document.createElement('div');
+        dragClone.className = 'floating-drag-clone';
+        dragClone.innerHTML = `<strong style="color:var(--accent-primary);">📂 ${catName}</strong>`;
+        dragClone.style.width = rect.width + 'px';
+        dragClone.style.left = (startX - offsetX) + 'px';
+        dragClone.style.top = (startY - offsetY) + 'px';
+        document.body.appendChild(dragClone);
 
         placeholder = document.createElement('div');
         placeholder.className = 'drag-placeholder';
@@ -2109,10 +2223,15 @@
     const onMove = function(e) {
       const point = e.touches ? e.touches[0] : e;
       if (!isDragging) {
-        if (Math.abs(point.clientY - startY) > 8) clearTimeout(timer);
+        if (Math.abs(point.clientY - startY) > 8 || Math.abs(point.clientX - startX) > 8) clearTimeout(timer);
         return;
       }
       if (e.cancelable) e.preventDefault();
+
+      if (dragClone) {
+        dragClone.style.left = (point.clientX - offsetX) + 'px';
+        dragClone.style.top = (point.clientY - offsetY) + 'px';
+      }
 
       handleAutoScrollDuringDrag(point.clientY);
 
@@ -2133,6 +2252,7 @@
       if (isDragging) {
         isDragging = false;
         blockEl.classList.remove('category-holding');
+        if (dragClone) { dragClone.remove(); dragClone = null; }
         if (placeholder && placeholder.parentNode) {
           placeholder.parentNode.insertBefore(blockEl, placeholder);
           placeholder.remove();
@@ -2197,6 +2317,7 @@
         placeholder = document.createElement('div');
         placeholder.className = 'drag-placeholder';
         placeholder.style.width = rect.width + 'px';
+        placeholder.style.height = rect.height + 'px';
         rowEl.parentNode.insertBefore(placeholder, rowEl);
         rowEl.style.display = 'none';
       }, 700);
@@ -2361,17 +2482,28 @@
     });
   }
 
+  // חישוב ממוצע שבועי מדויק: 7 ימים מלאים מאתמול ואחורה (לא כולל היום הפעיל)
   function calculateWeeklyStats() {
     const today = new Date();
-    const cutoff = new Date(today);
-    cutoff.setDate(today.getDate() - 7);
-    const cutoffStr = cutoff.toISOString().slice(0, 10);
+    const todayStr = today.toISOString().slice(0, 10);
 
-    const relevant = archiveLogs.filter(l => (l.date || '') >= cutoffStr);
-    
+    const yesterday = new Date(today);
+    yesterday.setDate(today.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+
+    const startCutoff = new Date(today);
+    startCutoff.setDate(today.getDate() - 7);
+    const startCutoffStr = startCutoff.toISOString().slice(0, 10);
+
+    // סינון הזנות מאתמול ועד 7 ימים אחורה בלבד
+    const relevant = archiveLogs.filter(l => {
+      const d = l.date || '';
+      return d && d !== todayStr && d <= yesterdayStr && d >= startCutoffStr;
+    });
+
     const dayGroups = {};
     relevant.forEach(l => {
-      const d = l.date || 'today';
+      const d = l.date;
       if (!dayGroups[d]) dayGroups[d] = { cal: 0, pro: 0 };
       dayGroups[d].cal += (l.cal || 0);
       dayGroups[d].pro += (l.pro || 0);
@@ -2389,8 +2521,27 @@
     const avgCal = Math.round(sumCal / divider);
     const avgPro = Math.round((sumPro / divider) * 10) / 10;
 
-    document.getElementById('weeklyAvgCal').textContent = avgCal.toLocaleString();
-    document.getElementById('weeklyAvgPro').textContent = avgPro + "ג'";
+    const avgCalEl = document.getElementById('weeklyAvgCal');
+    const avgProEl = document.getElementById('weeklyAvgPro');
+
+    avgCalEl.textContent = avgCal.toLocaleString();
+    avgProEl.textContent = avgPro + "ג'";
+
+    // אינדיקציית צבע לקלוריות: ±100 ירוק, אחרת כתום
+    const calDiff = Math.abs(avgCal - targetCal);
+    if (calDiff <= 100) {
+      avgCalEl.style.color = "var(--status-green)";
+    } else {
+      avgCalEl.style.color = "var(--status-orange)";
+    }
+
+    // אינדיקציית צבע לחלבון: ±10 ירוק, אחרת כתום
+    const proDiff = Math.abs(avgPro - targetPro);
+    if (proDiff <= 10) {
+      avgProEl.style.color = "var(--status-green)";
+    } else {
+      avgProEl.style.color = "var(--status-orange)";
+    }
   }
 
   function updateDisplay() {
@@ -2399,18 +2550,27 @@
 
     const remCalEl = document.getElementById('remainingCal');
     remCalEl.textContent = remCal.toLocaleString();
-    document.getElementById('boxRemCal').className = 'target-column cal ' + (remCal < 0 ? 'negative' : '');
+    document.getElementById('boxRemCal').className = 'target-column cal';
 
     const remProEl = document.getElementById('remainingPro');
     remProEl.textContent = remPro + "ג'";
-    document.getElementById('boxRemPro').className = 'target-column pro ' + (remPro < 0 ? 'negative' : '');
+    document.getElementById('boxRemPro').className = 'target-column pro';
 
     document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
     document.getElementById('eatenPro').textContent = eatenPro + "ג'";
 
+    // ספייר מצטבר: סימון משמאל (+/-)
     const bankEl = document.getElementById('weeklyBank');
-    bankEl.textContent = (weeklyBank >= 0 ? '+' : '') + weeklyBank.toLocaleString();
-    bankEl.className = 'chip-num ' + (weeklyBank < 0 ? 'negative' : '');
+    const sign = weeklyBank >= 0 ? '+' : '-';
+    bankEl.textContent = `${sign}${Math.abs(weeklyBank).toLocaleString()}`;
+
+    if (weeklyBank >= 0) {
+      bankEl.style.color = "var(--status-green)";
+    } else if (weeklyBank >= -200) {
+      bankEl.style.color = "var(--status-orange)";
+    } else {
+      bankEl.style.color = "var(--status-red)";
+    }
 
     const calRemPercent = Math.min(100, Math.max(0, (remCal / targetCal) * 100));
     const proRemPercent = Math.min(100, Math.max(0, (remPro / targetPro) * 100));
@@ -2418,11 +2578,11 @@
 
     const barRemCal = document.getElementById('barRemainingCal');
     barRemCal.style.width = calRemPercent + '%';
-    barRemCal.style.background = remCal < 0 ? 'var(--danger)' : 'var(--accent-primary)';
+    barRemCal.style.background = 'var(--accent-primary)';
 
     const barRemPro = document.getElementById('barRemainingPro');
     barRemPro.style.width = proRemPercent + '%';
-    barRemPro.style.background = remPro < 0 ? 'var(--danger)' : 'var(--accent-secondary)';
+    barRemPro.style.background = 'var(--accent-secondary)';
 
     const barEatCal = document.getElementById('barEatenCal');
     barEatCal.style.width = calEatenPercent + '%';
@@ -2532,6 +2692,7 @@
 
         placeholder = document.createElement('div');
         placeholder.className = 'drag-placeholder';
+        placeholder.style.height = '38px';
         rowEl.parentNode.insertBefore(placeholder, rowEl);
         rowEl.style.display = 'none';
       }, 700);
@@ -2665,7 +2826,7 @@
     document.getElementById('logEditActionBtns').style.display = 'flex';
     document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
     entryNameInput.focus();
-    updateClearBtnVisibility();
+    updateCancelBtnVisibility();
   }
 
   function saveLogEdit() {
@@ -2777,7 +2938,7 @@
     closePortionCalculator();
     searchDropdown.style.display = 'none';
     categoryDropdown.style.display = 'none';
-    updateClearBtnVisibility();
+    updateCancelBtnVisibility();
   }
 
   function clearEntryInputsManually() {
@@ -2895,14 +3056,12 @@
       customUnitGramsInput.value = p.unitWeight;
     }
     onSaveModeSelectionChanged();
-
-    // פתיחה אוטומטית של אפשרויות המאגר כשבוחרים לערוך
     openPoolOptionsDrawer();
 
     document.getElementById('cancelEditPoolBtn').style.display = 'block';
     document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
     entryNameInput.focus();
-    updateClearBtnVisibility();
+    updateCancelBtnVisibility();
   }
 
   function cancelEditPreset() {
@@ -2963,7 +3122,7 @@
     document.getElementById('targetCalInput').value = targetCal;
     document.getElementById('targetProInput').value = targetPro;
     document.getElementById('userGoalTypeSelect').value = userGoalType;
-    document.getElementById('programStartDateInput').value = programStartDate;
+    syncDateInputsFromStorage();
 
     applyUserGoalBadge();
     renderLogs();
@@ -3005,30 +3164,23 @@
     }
   }
 
-  function clearAllPresets() {
-    if (confirm('למחוק את כל המנות מהמאגר האישי שלך?')) {
-      pushState();
-      cancelEditPreset();
-      presets = [];
-      categoryOrder = ['כללי'];
-      closeSettingsModal();
-      renderPresets();
-      saveData();
-    }
-  }
-
   function updateTargets() {
     const newCal = parseInt(document.getElementById('targetCalInput').value);
     const newPro = parseInt(document.getElementById('targetProInput').value);
     const newGoal = document.getElementById('userGoalTypeSelect').value;
-    const newStartDate = document.getElementById('programStartDateInput').value;
+
+    const y = parseInt(document.getElementById('startYearInput').value, 10);
+    const m = String(document.getElementById('startMonthInput').value).padStart(2, '0');
+    const d = String(document.getElementById('startDayInput').value).padStart(2, '0');
 
     if (newCal > 0 || newPro > 0) {
       pushState();
       if (newCal > 0) targetCal = newCal;
       if (newPro > 0) targetPro = newPro;
       userGoalType = newGoal;
-      if (newStartDate) programStartDate = newStartDate;
+      if (y && m && d) {
+        programStartDate = `${y}-${m}-${d}`;
+      }
 
       applyUserGoalBadge();
       closeSettingsModal();
@@ -3146,6 +3298,7 @@
   }
 
   function exportBackupTxt() {
+    if (!confirm('האם לייצא ולהוריד קובץ גיבוי מלא של הנתונים?')) return;
     const data = { targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
@@ -3157,6 +3310,7 @@
 
   function exportArchiveOnly() {
     if (archiveLogs.length === 0) { alert('הארכיון ריק'); return; }
+    if (!confirm('האם להוריד את היסטוריית הארכיון כקובץ טקסט?')) return;
     const blob = new Blob([JSON.stringify(archiveLogs, null, 2)], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -3184,6 +3338,7 @@
           if (typeof d.isAiEnabled !== 'undefined') isAiEnabled = d.isAiEnabled;
 
           applyAiStateUI();
+          syncDateInputsFromStorage();
           applyUserGoalBadge();
           closeSettingsModal();
           renderLogs();
