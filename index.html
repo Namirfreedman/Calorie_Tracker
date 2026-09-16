@@ -195,7 +195,6 @@
     border-color: var(--accent-primary);
   }
 
-  /* כרטיס מטרות אישיות בראש העמוד */
   .goals-card-wrapper {
     background: #ffffff;
     border: 1.5px solid var(--card-border);
@@ -298,7 +297,6 @@
     font-weight: 800;
   }
 
-  /* לוח עליון */
   .stats-board {
     display: flex;
     flex-direction: column;
@@ -398,7 +396,6 @@
     display: inline-block;
   }
 
-  /* אזור הזנה */
   .entry-flat-section {
     border-top: 1px solid var(--card-border);
     padding-top: 14px;
@@ -763,7 +760,6 @@
     margin-bottom: 12px;
   }
 
-  /* המאגר מיושר לימין */
   .category-block {
     background: #ffffff;
     border: 1.5px solid var(--card-border);
@@ -1144,7 +1140,6 @@
         <div class="chip-title">🏦 ספייר מצטבר</div>
         <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
           <span id="weeklyBank" class="chip-num">0</span>
-          <button class="btn-icon-top" onclick="editSpareCalories()" style="font-size:0.95rem; color:var(--accent-secondary);" title="ערוך ספייר">✎</button>
         </div>
       </div>
     </div>
@@ -2482,7 +2477,6 @@
     });
   }
 
-  // חישוב ממוצע שבועי מדויק: 7 ימים מלאים מאתמול ואחורה (לא כולל היום הפעיל)
   function calculateWeeklyStats() {
     const today = new Date();
     const todayStr = today.toISOString().slice(0, 10);
@@ -2495,7 +2489,6 @@
     startCutoff.setDate(today.getDate() - 7);
     const startCutoffStr = startCutoff.toISOString().slice(0, 10);
 
-    // סינון הזנות מאתמול ועד 7 ימים אחורה בלבד
     const relevant = archiveLogs.filter(l => {
       const d = l.date || '';
       return d && d !== todayStr && d <= yesterdayStr && d >= startCutoffStr;
@@ -2527,7 +2520,6 @@
     avgCalEl.textContent = avgCal.toLocaleString();
     avgProEl.textContent = avgPro + "ג'";
 
-    // אינדיקציית צבע לקלוריות: ±100 ירוק, אחרת כתום
     const calDiff = Math.abs(avgCal - targetCal);
     if (calDiff <= 100) {
       avgCalEl.style.color = "var(--status-green)";
@@ -2535,7 +2527,6 @@
       avgCalEl.style.color = "var(--status-orange)";
     }
 
-    // אינדיקציית צבע לחלבון: ±10 ירוק, אחרת כתום
     const proDiff = Math.abs(avgPro - targetPro);
     if (proDiff <= 10) {
       avgProEl.style.color = "var(--status-green)";
@@ -2559,7 +2550,6 @@
     document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
     document.getElementById('eatenPro').textContent = eatenPro + "ג'";
 
-    // ספייר מצטבר: סימון משמאל (+/-)
     const bankEl = document.getElementById('weeklyBank');
     const sign = weeklyBank >= 0 ? '+' : '-';
     bankEl.textContent = `${sign}${Math.abs(weeklyBank).toLocaleString()}`;
@@ -3130,17 +3120,6 @@
     updateDisplay();
   }
 
-  function editSpareCalories() {
-    const val = prompt('ערוך ספייר קלוריות מצטבר:', weeklyBank);
-    if (val === null) return;
-    const num = parseInt(val);
-    if (!isNaN(num)) {
-      pushState();
-      weeklyBank = num;
-      updateDisplay();
-    }
-  }
-
   function closeDay(isAuto, transferBank = true) {
     const diffCal = targetCal - eatenCal;
     if (!isAuto) {
@@ -3153,15 +3132,6 @@
     lastActiveDate = new Date().toISOString().slice(0, 10);
     renderLogs();
     updateDisplay();
-  }
-
-  function resetDayOnly() {
-    if (confirm('לאפס את נתוני היום ל-0?')) {
-      pushState();
-      eatenCal = 0; eatenPro = 0;
-      closeSettingsModal();
-      updateDisplay();
-    }
   }
 
   function updateTargets() {
