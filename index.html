@@ -97,7 +97,7 @@
 
   .card { 
     background: var(--card-bg); 
-    border: 1.5px solid var(--card-border);
+    border: 1.5px solid var(--card-border); 
     border-radius: 20px; 
     padding: 16px; 
     width: 100%; 
@@ -153,21 +153,21 @@
   .btn-icon-top { 
     background: transparent; 
     border: none; 
-    outline: none;
+    outline: none; 
     font-size: 1.3rem; 
     cursor: pointer; 
     color: var(--text-muted); 
     padding: 4px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: color 0.15s;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    transition: color 0.15s; 
   }
   .btn-icon-top:active { color: var(--accent-primary); transform: scale(0.92); }
 
   .nav-history-group { 
     display: flex; 
-    flex-direction: row-reverse;
+    flex-direction: row-reverse; 
     gap: 8px; 
     align-items: center; 
   }
@@ -344,6 +344,8 @@
     line-height: 1.1;
     margin-bottom: 6px;
     text-align: center;
+    direction: ltr !important;
+    display: inline-block;
   }
   .target-column.cal .col-number { color: var(--accent-primary); }
   .target-column.pro .col-number { color: var(--accent-secondary); }
@@ -408,11 +410,11 @@
     font-weight: 800; 
     color: var(--text-main); 
     margin-bottom: 10px; 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    text-align: center;
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    gap: 6px; 
+    text-align: center; 
   }
 
   .search-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
@@ -425,10 +427,10 @@
     padding: 11px 12px; 
     width: 100%; 
     font-size: 0.92rem; 
-    font-weight: 600;
+    font-weight: 600; 
     outline: none; 
-    text-align: center;
-    transition: all 0.2s;
+    text-align: center; 
+    transition: all 0.2s; 
   }
 
   input[type="number"] {
@@ -439,18 +441,18 @@
     padding: 11px 12px; 
     width: 100%; 
     font-size: 0.95rem; 
-    font-weight: 700;
+    font-weight: 700; 
     outline: none; 
-    direction: ltr !important;
-    text-align: center !important;
-    unicode-bidi: plaintext;
-    transition: all 0.2s;
+    direction: ltr !important; 
+    text-align: center !important; 
+    unicode-bidi: plaintext; 
+    transition: all 0.2s; 
   }
 
   input:focus, textarea:focus, select:focus { 
-    background: #ffffff;
-    border-color: var(--accent-primary);
-    box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.12);
+    background: #ffffff; 
+    border-color: var(--accent-primary); 
+    box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.12); 
   }
 
   .custom-dropdown-panel {
@@ -616,10 +618,11 @@
     font-weight: 700;
     cursor: pointer;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 24px 1fr 24px;
     align-items: center;
     margin-top: 4px;
+    text-align: center;
   }
   .pool-options-drawer {
     display: none;
@@ -643,9 +646,10 @@
     width: 100%;
     cursor: pointer;
     outline: none;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 24px 1fr 24px;
     align-items: center;
+    text-align: center;
     box-shadow: 0 2px 0 var(--tint-green-shadow);
     transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
@@ -690,11 +694,11 @@
     justify-content: space-between; 
     align-items: center; 
     padding: 9px 0; 
-    border-bottom: 1px solid #f8f9fa;
-    color: var(--text-main);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: pan-y;
+    border-bottom: 1px solid #f8f9fa; 
+    color: var(--text-main); 
+    user-select: none; 
+    -webkit-user-select: none; 
+    touch-action: pan-y; 
   }
   .log-item-row:last-child { border-bottom: none; }
   .log-item-row.holding-active {
@@ -727,7 +731,7 @@
 
   .btn-log-action { background: transparent; border: none; font-size: 0.95rem; cursor: pointer; padding: 2px 5px; color: var(--text-subtle); transition: color 0.15s; }
   .btn-log-action:active { color: var(--accent-primary); }
-  .btn-log-del:active { color: var(--danger); }
+  .btn-log-del:active { color: var(--danger-soft-text); }
 
   .pool-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
   .pool-tab-btn {
@@ -803,10 +807,10 @@
     display: flex; 
     flex-wrap: wrap; 
     gap: 6px; 
-    min-height: 28px;
-    padding: 2px 0;
-    justify-content: flex-start;
-    text-align: right;
+    min-height: 28px; 
+    padding: 2px 0; 
+    justify-content: flex-start; 
+    text-align: right; 
   }
   .preset-btn-wrapper { 
     display: flex; 
@@ -815,11 +819,11 @@
     border: 1.5px solid var(--input-border); 
     border-radius: 10px; 
     overflow: hidden; 
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: pan-y;
-    box-shadow: 0 2px 0 var(--neutral-btn-shadow);
-    transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.3s ease;
+    user-select: none; 
+    -webkit-user-select: none; 
+    touch-action: pan-y; 
+    box-shadow: 0 2px 0 var(--neutral-btn-shadow); 
+    transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.3s ease; 
   }
   .preset-btn-wrapper:active {
     transform: translateY(2px);
@@ -1177,8 +1181,9 @@
     <div class="action-buttons-stack" id="defaultActionBtns">
       <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
 
-      <!-- מגירת אפשרויות שמירה למאגר -->
+      <!-- מגירת אפשרויות שמירה למאגר (ממורכזת) -->
       <button type="button" class="btn-pool-opts-toggle" onclick="togglePoolOptionsDrawer()">
+        <span></span>
         <span id="poolDrawerBtnText">📦 אפשרויות שמירה למאגר</span>
         <span id="poolDrawerChevron" style="font-size:0.75rem;">▼</span>
       </button>
@@ -1186,8 +1191,8 @@
       <div class="pool-options-drawer" id="poolOptionsDrawer">
         <div class="input-row" id="saveTypeRow" style="margin-bottom:8px;">
           <select id="entryPortionModeSelect" onchange="onSaveModeSelectionChanged()">
-            <option value="fixed">מנה קבועה</option>
             <option value="per100g">לפי 100 גרם</option>
+            <option value="fixed">מנה קבועה</option>
             <option value="customUnit">לפי יחידה</option>
           </select>
         </div>
@@ -1217,14 +1222,15 @@
     </div>
   </div>
 
-  <!-- כפתור יום חדש יחיד, דק וארוך שמעביר ספייר -->
+  <!-- כפתור יום חדש נקי -->
   <button class="btn-day-single" onclick="closeDay(false, true)">
-    🌅יום חדש
+    🌅 יום חדש
   </button>
 
-  <!-- כפתור היסטוריה שבועית צבוע בירוק בהיר -->
+  <!-- כפתור היסטוריה שבועית צבוע בירוק בהיר וממורכז -->
   <div class="collapsible-wrapper">
     <button class="btn-toggle-box-green" id="btnToggleLogs" onclick="toggleLogs()">
+      <span></span>
       <span id="btnToggleLogsTitle">📜 היסטוריה שבועית (0)</span>
       <span style="font-size:0.75rem;">▼</span>
     </button>
@@ -1439,8 +1445,7 @@
 
     // דגנים ופחמימות
     { name: "שיבולת שועל (קוואקר יבש)", cal: 389, pro: 16.9, cat: "דגנים ופחמימות", unitName: "כף מלאה", unitWeight: 12 },
-    { name: "אורז בסמטי מבושל", cal: 130, pro: 2.7, cat: "דגנים ופחמימות" },
-    { name: "אורז יסמין מבושל", cal: 130, pro: 2.5, cat: "דגנים ופחמימות" },
+    { name: "אורז לבן מבושל", cal: 130, pro: 2.7, cat: "דגנים ופחמימות" },
     { name: "אורז מלא מבושל", cal: 112, pro: 2.6, cat: "דגנים ופחמימות" },
     { name: "פסטה רגילה מבושלת", cal: 158, pro: 5.8, cat: "דגנים ופחמימות" },
     { name: "פסטה מקמח מלא מבושלת", cal: 145, pro: 6.0, cat: "דגנים ופחמימות" },
@@ -1470,7 +1475,15 @@
     { name: "זרעי פשתן טחונים", cal: 534, pro: 18.3, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 10 },
     { name: "שמן זית", cal: 884, pro: 0, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 10 },
     { name: "אבוקדו", cal: 160, pro: 0, cat: "שומנים וממרחים", unitName: "חצי", unitWeight: 75 },
-    { name: "זיתים ירוקים / שחורים", cal: 145, pro: 0, cat: "שומנים וממרחים", unitName: "יחידה", unitWeight: 4 }
+    { name: "זיתים ירוקים / שחורים", cal: 145, pro: 0, cat: "שומנים וממרחים", unitName: "יחידה", unitWeight: 4 },
+
+    // אלכוהול (לפי 100 מ"ל)
+    { name: "בירה (לאגר)", cal: 43, pro: 0.5, cat: "אלכוהול", unitName: "בקבוק 330 מ\"ל", unitWeight: 330 },
+    { name: "יין אדום יבש", cal: 85, pro: 0.1, cat: "אלכוהול", unitName: "כוס 150 מ\"ל", unitWeight: 150 },
+    { name: "יין לבן יבש", cal: 82, pro: 0.1, cat: "אלכוהול", unitName: "כוס 150 מ\"ל", unitWeight: 150 },
+    { name: "וויסקי", cal: 231, pro: 0, cat: "אלכוהול", unitName: "שוט 40 מ\"ל", unitWeight: 40 },
+    { name: "ערק / וודקה (40%)", cal: 231, pro: 0, cat: "אלכוהול", unitName: "שוט 40 מ\"ל", unitWeight: 40 },
+    { name: "ג'ין", cal: 231, pro: 0, cat: "אלכוהול", unitName: "שוט 40 מ\"ל", unitWeight: 40 }
   ];
 
   let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
@@ -2016,7 +2029,7 @@
       document.getElementById('aiResultBox').style.display = 'block';
       setAiStatus('הושלם!', 'var(--accent-primary)', true);
     } catch (e) {
-      setAiStatus('שגיאה', 'var(--danger)', true);
+      setAiStatus('שגיאה', 'var(--danger-soft-text)', true);
       alert('שגיאה בחיבור ל-AI: ' + e.message);
     }
   }
@@ -2489,6 +2502,7 @@
     startCutoff.setDate(today.getDate() - 7);
     const startCutoffStr = startCutoff.toISOString().slice(0, 10);
 
+    // לוקח רק את הימים מאתמול ועד 7 ימים אחורה בלבד
     const relevant = archiveLogs.filter(l => {
       const d = l.date || '';
       return d && d !== todayStr && d <= yesterdayStr && d >= startCutoffStr;
@@ -2502,6 +2516,7 @@
       dayGroups[d].pro += (l.pro || 0);
     });
 
+    // מחלק רק במספר הימים שבהם נרשמה הזנה בפועל (יום שלא נרשם לא מוריד את הממוצע ולא מוצג)
     const recordedDays = Object.keys(dayGroups).length;
     const divider = Math.max(1, recordedDays);
 
@@ -2511,14 +2526,20 @@
       sumPro += g.pro;
     });
 
-    const avgCal = Math.round(sumCal / divider);
-    const avgPro = Math.round((sumPro / divider) * 10) / 10;
+    const avgCal = recordedDays > 0 ? Math.round(sumCal / divider) : 0;
+    const avgPro = recordedDays > 0 ? Math.round((sumPro / divider) * 10) / 10 : 0;
 
     const avgCalEl = document.getElementById('weeklyAvgCal');
     const avgProEl = document.getElementById('weeklyAvgPro');
 
     avgCalEl.textContent = avgCal.toLocaleString();
     avgProEl.textContent = avgPro + "ג'";
+
+    if (recordedDays === 0) {
+      avgCalEl.style.color = "var(--text-main)";
+      avgProEl.style.color = "var(--text-main)";
+      return;
+    }
 
     const calDiff = Math.abs(avgCal - targetCal);
     if (calDiff <= 100) {
@@ -2544,7 +2565,12 @@
     document.getElementById('boxRemCal').className = 'target-column cal';
 
     const remProEl = document.getElementById('remainingPro');
-    remProEl.textContent = remPro + "ג'";
+    // עיצוב תקין כשהחלבון במינוס: הסימן מינוס תמיד משמאל למספר
+    if (remPro < 0) {
+      remProEl.textContent = `-${Math.abs(remPro)}ג'`;
+    } else {
+      remProEl.textContent = `${remPro}ג'`;
+    }
     document.getElementById('boxRemPro').className = 'target-column pro';
 
     document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
@@ -2922,7 +2948,7 @@
     calInput.value = '';
     proInput.value = '';
     entryCatInput.value = '';
-    entryPortionModeSelect.value = 'fixed';
+    entryPortionModeSelect.value = 'per100g';
     customUnitGramsInput.value = '';
     onSaveModeSelectionChanged();
     closePortionCalculator();
@@ -2966,8 +2992,8 @@
       cat: val.cat, 
       cal: val.cal, 
       pro: val.pro, 
-      portionMode: val.portionMode,
-      unitWeight: val.unitWeight
+      portionMode: val.portionMode, 
+      unitWeight: val.unitWeight 
     };
 
     if (editingPresetIndex >= 0) {
