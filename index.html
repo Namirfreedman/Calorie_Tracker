@@ -199,22 +199,25 @@
     background: #ffffff;
     border: 1.5px solid var(--card-border);
     border-radius: 20px;
-    padding: 14px 16px;
+    padding: 12px 14px;
     width: 100%;
     max-width: 410px;
     box-shadow: var(--card-shadow);
     user-select: none;
-    transition: background-color 0.2s ease, border-color 0.2s ease;
-  }
-  .goals-card-wrapper.open {
-    background: var(--primary-surface);
-    border-color: var(--tint-blue-border);
   }
   .goals-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease;
+  }
+  .goals-card-wrapper.open .goals-card-header {
+    background: var(--primary-surface);
+    border-color: var(--tint-blue-border);
   }
   .goals-title {
     font-size: 0.95rem;
@@ -1080,8 +1083,8 @@
 </div>
 
 <!-- 1. כרטיס מטרות אישיות בראש העמוד -->
-<div class="goals-card-wrapper" id="goalsCard" onclick="toggleGoalsCard(event)">
-  <div class="goals-card-header">
+<div class="goals-card-wrapper" id="goalsCard">
+  <div class="goals-card-header" onclick="toggleGoalsCard(event)">
     <div class="goals-title">
       <span>🎯 מטרות אישיות</span>
       <span class="goal-status-badge" id="goalBadgeText">חיטוב</span>
@@ -1192,7 +1195,7 @@
     <div class="action-buttons-stack" id="defaultActionBtns">
       <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
 
-      <!-- מגירת אפשרויות שמירה למאגר (ממורכזת עם הדגשת לחיצה עדינה) -->
+      <!-- מגירת אפשרויות שמירה למאגר -->
       <button type="button" class="btn-pool-opts-toggle" id="btnPoolToggle" onclick="togglePoolOptionsDrawer()">
         <span></span>
         <span id="poolDrawerBtnText">📦 אפשרויות שמירה למאגר</span>
