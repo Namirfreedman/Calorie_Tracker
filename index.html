@@ -424,7 +424,7 @@
     background: #ffffff;
     border: 1.5px solid var(--tint-cyan-border);
     border-radius: 14px;
-    padding: 10px 12px;
+    padding: 10px 14px;
     margin-top: 6px;
     margin-bottom: 8px;
     text-align: right;
@@ -437,8 +437,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.78rem;
-    padding: 5px 0;
+    font-size: 0.8rem;
+    padding: 6px 0;
     border-bottom: 1px dashed #e9ecef;
   }
   .bank-detail-item:last-child {
@@ -738,15 +738,32 @@
     margin-bottom: 4px;
     border-bottom: 1px solid #f1f3f5;
   }
-  .history-day-title { font-size: 0.82rem; font-weight: 800; color: var(--accent-primary); }
-  .history-day-summary { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  .history-day-title { font-size: 0.82rem; font-weight: 800; color: var(--accent-primary); flex-shrink: 0; }
+  .history-day-summary { 
+    font-size: 0.74rem; 
+    color: var(--text-muted); 
+    font-weight: 600; 
+    display: flex; 
+    align-items: center; 
+    gap: 6px; 
+    white-space: nowrap; 
+    overflow: hidden; 
+  }
   .bank-pill-mini {
-    font-size: 0.7rem;
+    font-size: 0.68rem;
     font-weight: 800;
     padding: 2px 6px;
     border-radius: 8px;
     background: #f1f3f5;
     color: var(--text-muted);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+  .bank-pill-mini .num-span {
+    direction: ltr !important;
+    display: inline-block;
   }
   .bank-pill-mini.active-pos { background: var(--tint-green-bg); color: var(--status-green); }
   .bank-pill-mini.active-neg { background: var(--danger-soft-bg); color: var(--danger-soft-text); }
@@ -1217,8 +1234,8 @@
 
     <!-- מגירת פירוט תוקף ספייר -->
     <div class="bank-details-drawer" id="bankDetailsDrawer">
-      <div style="font-size:0.75rem; font-weight:800; color:var(--accent-secondary); margin-bottom:6px; text-align:center;">
-        תוקף יתרות הספייר הפעילות (3 ימים):
+      <div style="font-size:0.84rem; font-weight:900; color:var(--accent-secondary); margin-bottom:8px; text-align:center;">
+        תוקף הספייר
       </div>
       <div id="bankDetailsList"></div>
     </div>
@@ -1571,6 +1588,17 @@
   // מאגר ספייר עם תוקף (מערך רשומות: { id, date, amount, desc })
   let bankLedger = JSON.parse(localStorage.getItem('cal_bankLedger') || '[]');
   
+  // שמירה על תאימות אחורה אם היה ערך ישן ב-weeklyBank
+  const legacyBank = parseInt(localStorage.getItem('cal_weeklyBank'));
+  if (bankLedger.length === 0 && !isNaN(legacyBank) && legacyBank !== 0) {
+    bankLedger.push({
+      id: Date.now().toString(),
+      date: new Date().toISOString().slice(0, 10),
+      amount: legacyBank,
+      desc: 'ספייר קודם'
+    });
+  }
+
   let logs = JSON.parse(localStorage.getItem('cal_logs') || '[]');
   let archiveLogs = JSON.parse(localStorage.getItem('cal_archiveLogs') || '[]');
   let presets = JSON.parse(localStorage.getItem('cal_presets') || '[]');
@@ -1988,13 +2016,21 @@
     return Math.floor((today - target) / (1000 * 60 * 60 * 24));
   }
 
+  // החזרת שם היום בעברית שבו יפוג התוקף (תאריך יצירה + 3 ימים)
+  function getExpiryDayName(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    d.setDate(d.getDate() + 3);
+    const dayNames = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
+    return dayNames[d.getDay()];
+  }
+
   // קיזוז חכם של רשומות הספייר
   function applyBankDelta(deltaAmount, dateStr, description) {
     if (deltaAmount === 0) return;
     const todayStr = getTodayString();
     const entryDate = dateStr || todayStr;
 
-    // מחיקת יתרות ישנות שפג תוקפן מעל 3 ימים
+    // מחיקת יתרות ישנות שפג תוקפן (תוקף הוא 3 ימים מלאים אחרי היום שנסגר: 0,1,2,3 תקפים)
     bankLedger = bankLedger.filter(item => getDaysDifference(item.date) <= 3);
 
     let remainingDelta = deltaAmount;
@@ -2048,7 +2084,7 @@
   }
 
   function calculateActiveBank() {
-    // מסננים רשומות שחלפו מעל 3 ימים (0 = היום, 1 = אתמול, 2 = שלשום, 3 = לפני שלושה ימים)
+    // מסננים רשומות בטווח 3 ימים מתאריך ההזנה
     const activeEntries = bankLedger.filter(item => getDaysDifference(item.date) <= 3 && item.amount !== 0);
     return activeEntries.reduce((sum, item) => sum + item.amount, 0);
   }
@@ -2730,26 +2766,33 @@
     const listEl = document.getElementById('bankDetailsList');
     listEl.innerHTML = '';
 
-    // מציגים רשומות רלוונטיות
+    // מציגים אך ורק יתרות פעילות שתקפות (diff <= 3) ושונות מ-0
     const activeEntries = bankLedger.filter(item => getDaysDifference(item.date) <= 3 && item.amount !== 0);
 
     if (activeEntries.length === 0) {
-      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.75rem; padding:4px 0;">אין יתרות ספייר פעילות</div>';
+      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.75rem; padding:4px 0;">אין יתרות ספייר פעילות כרגע</div>';
       return;
     }
 
     activeEntries.forEach(item => {
       const daysPassed = getDaysDifference(item.date);
-      const daysLeft = Math.max(0, 3 - daysPassed);
-      let expiryLabel = daysLeft === 0 ? 'פג הלילה' : `נשארו עוד ${daysLeft} ימים`;
-      const sign = item.amount >= 0 ? '+' : '';
-      const color = item.amount >= 0 ? 'var(--status-green)' : 'var(--status-red)';
+      const daysLeft = 3 - daysPassed;
+      const expiryDay = getExpiryDayName(item.date);
+      const expiryLabel = daysLeft === 0 ? 'היום' : `עד ${expiryDay}`;
+      
+      const isPos = item.amount > 0;
+      const sign = isPos ? '+' : '-';
+      const absVal = Math.abs(item.amount).toLocaleString();
+      const color = isPos ? 'var(--status-green)' : 'var(--status-red)';
 
       const row = document.createElement('div');
       row.className = 'bank-detail-item';
       row.innerHTML = `
-        <span>${formatLogDateTitle(item.date)} (${item.desc || 'ספייר'}):</span>
-        <span style="font-weight:800; color:${color}; direction:ltr;">${sign}${item.amount} קל' <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">(${expiryLabel})</span></span>
+        <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
+        <span style="direction:rtl; font-weight:800; color:${color};">
+          <span style="direction:ltr; unicode-bidi:isolate; display:inline-block;">${sign}${absVal}</span> קל' 
+          <span style="font-size:0.72rem; color:var(--text-muted); font-weight:normal;">(${expiryLabel})</span>
+        </span>
       `;
       listEl.appendChild(row);
     });
@@ -2841,20 +2884,36 @@
       const dayCal = entries.reduce((acc, c) => acc + (c.cal || 0), 0);
       const dayPro = Math.round(entries.reduce((acc, c) => acc + (c.pro || 0), 0) * 10) / 10;
 
-      // חישוב אינדיקציית ספייר לאותו יום
+      // חישוב אינדיקציית ספייר קצרה בשורה אחת
       let bankIndicatorHtml = '';
       if (isCurrentDay) {
         bankIndicatorHtml = '<span class="bank-pill-mini">היום פעיל</span>';
       } else {
         const dayDifference = getDaysDifference(dStr);
         const dayDiffCal = targetCal - dayCal;
-        const sign = dayDiffCal >= 0 ? '+' : '';
+        const sign = dayDiffCal >= 0 ? '+' : '-';
+        const absVal = Math.abs(dayDiffCal).toLocaleString();
+
         if (dayDifference <= 3) {
           const cls = dayDiffCal >= 0 ? 'active-pos' : 'active-neg';
-          const daysLeft = Math.max(0, 3 - dayDifference);
-          bankIndicatorHtml = `<span class="bank-pill-mini ${cls}">ספייר: ${sign}${dayDiffCal} (נשארו ${daysLeft} ימים)</span>`;
+          const expiryDay = getExpiryDayName(dStr);
+          const daysLeft = 3 - dayDifference;
+          const expiryTxt = daysLeft === 0 ? 'היום' : `עד ${expiryDay}`;
+          bankIndicatorHtml = `
+            <span class="bank-pill-mini ${cls}">
+              <span>ספייר:</span>
+              <span class="num-span">${sign}${absVal}</span>
+              <span>(${expiryTxt})</span>
+            </span>
+          `;
         } else {
-          bankIndicatorHtml = `<span class="bank-pill-mini">ספייר: ${sign}${dayDiffCal} (פג תוקף)</span>`;
+          bankIndicatorHtml = `
+            <span class="bank-pill-mini">
+              <span>ספייר:</span>
+              <span class="num-span">${sign}${absVal}</span>
+              <span>(פג)</span>
+            </span>
+          `;
         }
       }
 
@@ -2866,7 +2925,7 @@
           <span class="history-day-title">${formatLogDateTitle(dStr)}</span>
           <div class="history-day-summary">
             ${bankIndicatorHtml}
-            <span>${isCurrentDay ? '' : `${dayCal} קל' | ${dayPro} חלבון`}</span>
+            <span>${isCurrentDay ? '' : `${dayCal} קל' | ${dayPro}`}</span>
           </div>
         </div>
         <div class="day-items-container" data-day="${dStr}"></div>
