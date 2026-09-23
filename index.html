@@ -388,6 +388,15 @@
     background: var(--secondary-surface);
     text-align: center;
     box-shadow: 0 2px 0 var(--tint-cyan-border);
+    cursor: default;
+    transition: border-color 0.2s, background-color 0.2s;
+  }
+  .stat-chip-box.clickable {
+    cursor: pointer;
+    user-select: none;
+  }
+  .stat-chip-box.clickable:active {
+    transform: translateY(1px);
   }
 
   .stat-chip-box .chip-title {
@@ -396,6 +405,10 @@
     color: var(--accent-secondary);
     text-align: center;
     margin-bottom: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
   }
   .stat-chip-box .chip-num {
     font-size: 1.55rem;
@@ -404,6 +417,32 @@
     text-align: center;
     direction: ltr !important;
     display: inline-block;
+  }
+
+  .bank-details-drawer {
+    display: none;
+    background: #ffffff;
+    border: 1.5px solid var(--tint-cyan-border);
+    border-radius: 14px;
+    padding: 10px 12px;
+    margin-top: 6px;
+    margin-bottom: 8px;
+    text-align: right;
+    box-shadow: 0 4px 12px rgba(28, 126, 214, 0.08);
+  }
+  .bank-details-drawer.open {
+    display: block;
+  }
+  .bank-detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.78rem;
+    padding: 5px 0;
+    border-bottom: 1px dashed #e9ecef;
+  }
+  .bank-detail-item:last-child {
+    border-bottom: none;
   }
 
   .entry-flat-section {
@@ -700,7 +739,17 @@
     border-bottom: 1px solid #f1f3f5;
   }
   .history-day-title { font-size: 0.82rem; font-weight: 800; color: var(--accent-primary); }
-  .history-day-summary { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; }
+  .history-day-summary { font-size: 0.76rem; color: var(--text-muted); font-weight: 600; display: flex; align-items: center; gap: 6px; }
+  .bank-pill-mini {
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 2px 6px;
+    border-radius: 8px;
+    background: #f1f3f5;
+    color: var(--text-muted);
+  }
+  .bank-pill-mini.active-pos { background: var(--tint-green-bg); color: var(--status-green); }
+  .bank-pill-mini.active-neg { background: var(--danger-soft-bg); color: var(--danger-soft-text); }
 
   .day-items-container { min-height: 28px; display: flex; flex-direction: column; }
   .log-item-row { 
@@ -1154,12 +1203,24 @@
         </div>
       </div>
 
-      <div class="stat-chip-box">
-        <div class="chip-title">🏦 ספייר מצטבר</div>
+      <!-- קוביית ספייר עם תוקף ופתיחת פירוט -->
+      <div class="stat-chip-box clickable" onclick="toggleBankDrawer()" title="לחץ לפירוט תוקף יתרות הספייר">
+        <div class="chip-title">
+          <span>🏦 ספייר (3 ימים)</span>
+          <span id="bankChevron" style="font-size:0.65rem; transition:transform 0.2s;">▼</span>
+        </div>
         <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
           <span id="weeklyBank" class="chip-num">0</span>
         </div>
       </div>
+    </div>
+
+    <!-- מגירת פירוט תוקף ספייר -->
+    <div class="bank-details-drawer" id="bankDetailsDrawer">
+      <div style="font-size:0.75rem; font-weight:800; color:var(--accent-secondary); margin-bottom:6px; text-align:center;">
+        תוקף יתרות הספייר הפעילות (3 ימים):
+      </div>
+      <div id="bankDetailsList"></div>
     </div>
   </div>
 
@@ -1506,7 +1567,10 @@
   let programStartDate = localStorage.getItem('cal_programStartDate') || new Date().toISOString().slice(0, 10);
   let eatenCal = parseInt(localStorage.getItem('cal_eatenCal')) || 0;
   let eatenPro = parseFloat(localStorage.getItem('cal_eatenPro')) || 0;
-  let weeklyBank = parseInt(localStorage.getItem('cal_weeklyBank')) || 0;
+  
+  // מאגר ספייר עם תוקף (מערך רשומות: { id, date, amount, desc })
+  let bankLedger = JSON.parse(localStorage.getItem('cal_bankLedger') || '[]');
+  
   let logs = JSON.parse(localStorage.getItem('cal_logs') || '[]');
   let archiveLogs = JSON.parse(localStorage.getItem('cal_archiveLogs') || '[]');
   let presets = JSON.parse(localStorage.getItem('cal_presets') || '[]');
@@ -1595,6 +1659,14 @@
     btn.classList.add('active');
   }
 
+  function toggleBankDrawer() {
+    const drawer = document.getElementById('bankDetailsDrawer');
+    const chevron = document.getElementById('bankChevron');
+    const isOpen = drawer.classList.contains('open');
+    drawer.classList.toggle('open');
+    chevron.textContent = isOpen ? '▼' : '▲';
+  }
+
   function updateProgramDurationDisplay() {
     const start = new Date(programStartDate + 'T00:00:00');
     const now = new Date();
@@ -1628,7 +1700,7 @@
     if (userGoalType === 'cut') badge.textContent = 'חיטוב';
     else if (userGoalType === 'bulk') badge.textContent = 'מסה';
     else badge.textContent = 'ניטרלי';
-    document.getElementById('goalsTargetSummary').textContent = `${targetCal.toLocaleString()} קל' | ${targetPro}ג' חלבון`;
+    document.getElementById('goalsTargetSummary').textContent = `${targetCal.toLocaleString()} קל' | ${targetPro} חלבון`;
     updateProgramDurationDisplay();
   }
 
@@ -1709,14 +1781,14 @@
         const unitSuffix = m.data.unitWeight ? `100ג / ${m.data.unitName || 'יח'}` : '100ג';
         row.innerHTML = `
           <span>⚖️ ${m.data.name}</span>
-          <span class="dropdown-item-meta">${m.data.cal} קל' | ${m.data.pro}ג' (${unitSuffix})</span>
+          <span class="dropdown-item-meta">${m.data.cal} קל' | ${m.data.pro} (${unitSuffix})</span>
         `;
         row.onclick = () => {
           loadBaseFoodForPortion(m.data.name, false);
           searchDropdown.style.display = 'none';
         };
       } else {
-        let meta = `${m.data.cal} קל' | ${m.data.pro}ג'`;
+        let meta = `${m.data.cal} קל' | ${m.data.pro}`;
         if (m.data.portionMode === 'per100g') meta += ' (100ג)';
         if (m.data.portionMode === 'customUnit') meta += ` (${m.data.unitWeight}ג ליח')`;
 
@@ -1905,8 +1977,84 @@
     document.getElementById('portionCalcRow').style.display = 'none';
   }
 
+  // --- לוגיקת ספייר עם תוקף 3 ימים ו-FIFO ---
+  function getTodayString() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function getDaysDifference(dateStr) {
+    const today = new Date(getTodayString() + 'T00:00:00');
+    const target = new Date(dateStr + 'T00:00:00');
+    return Math.floor((today - target) / (1000 * 60 * 60 * 24));
+  }
+
+  // קיזוז חכם של רשומות הספייר
+  function applyBankDelta(deltaAmount, dateStr, description) {
+    if (deltaAmount === 0) return;
+    const todayStr = getTodayString();
+    const entryDate = dateStr || todayStr;
+
+    // מחיקת יתרות ישנות שפג תוקפן מעל 3 ימים
+    bankLedger = bankLedger.filter(item => getDaysDifference(item.date) <= 3);
+
+    let remainingDelta = deltaAmount;
+
+    // אם מכניסים פלוס (אימון / גירעון) ויש מינוסים קיימים שטרם פגו - מכסים קודם את המינוס הישן ביותר (FIFO)
+    if (remainingDelta > 0) {
+      for (let i = 0; i < bankLedger.length; i++) {
+        if (bankLedger[i].amount < 0) {
+          const debt = Math.abs(bankLedger[i].amount);
+          if (remainingDelta >= debt) {
+            remainingDelta -= debt;
+            bankLedger[i].amount = 0;
+          } else {
+            bankLedger[i].amount += remainingDelta;
+            remainingDelta = 0;
+            break;
+          }
+        }
+      }
+    } 
+    // אם מכניסים מינוס (חריגה באוכל) ויש פלוסים קיימים - שורפים קודם את הפלוסים הישנים ביותר (FIFO)
+    else if (remainingDelta < 0) {
+      let needed = Math.abs(remainingDelta);
+      for (let i = 0; i < bankLedger.length; i++) {
+        if (bankLedger[i].amount > 0) {
+          if (bankLedger[i].amount <= needed) {
+            needed -= bankLedger[i].amount;
+            bankLedger[i].amount = 0;
+          } else {
+            bankLedger[i].amount -= needed;
+            needed = 0;
+            break;
+          }
+        }
+      }
+      remainingDelta = -needed;
+    }
+
+    // ניקוי רשומות שאופסו לגמרי
+    bankLedger = bankLedger.filter(item => item.amount !== 0);
+
+    // אם נשארה יתרה שטרם קוזזה, שומרים אותה עם תאריך כניסה
+    if (remainingDelta !== 0) {
+      bankLedger.push({
+        id: Date.now() + Math.random().toString(),
+        date: entryDate,
+        amount: remainingDelta,
+        desc: description || 'ספייר יומי'
+      });
+    }
+  }
+
+  function calculateActiveBank() {
+    // מסננים רשומות שחלפו מעל 3 ימים (0 = היום, 1 = אתמול, 2 = שלשום, 3 = לפני שלושה ימים)
+    const activeEntries = bankLedger.filter(item => getDaysDifference(item.date) <= 3 && item.amount !== 0);
+    return activeEntries.reduce((sum, item) => sum + item.amount, 0);
+  }
+
   function openExerciseBurnModal() {
-    const val = prompt('כמה קלוריות שרפת באימון האקסטרה? (יוזן כתוספת לספייר)');
+    const val = prompt('כמה קלוריות שרפת באימון האקסטרה? (יוזן לקיזוז ספייר)');
     if (val === null) return;
     const burned = parseInt(val);
     if (isNaN(burned) || burned <= 0) {
@@ -1915,12 +2063,12 @@
     }
 
     pushState();
-    weeklyBank += burned;
+    const today = getTodayString();
+    applyBankDelta(burned, today, 'אימון אקסטרה');
 
-    const today = new Date().toISOString().slice(0, 10);
     const logObj = { 
       id: Date.now() + Math.random().toString(), 
-      name: `קיזוז אימון (${burned} קל' לספייר)`, 
+      name: `קיזוז אימון (+${burned} לספייר)`, 
       cal: 0, 
       pro: 0, 
       date: today 
@@ -1930,7 +2078,7 @@
 
     renderLogs();
     updateDisplay();
-    showToast(`נוספו +${burned} קלוריות לספייר!`);
+    showToast(`נוספו +${burned} קלוריות לקיזוז בספייר!`);
   }
 
   function toggleAiEnabled() {
@@ -1968,7 +2116,8 @@
 
   function pushState() {
     historyStack.push({
-      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro,
+      bankLedger: JSON.parse(JSON.stringify(bankLedger)),
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -1986,7 +2135,7 @@
     localStorage.setItem('cal_programStartDate', programStartDate);
     localStorage.setItem('cal_eatenCal', eatenCal);
     localStorage.setItem('cal_eatenPro', eatenPro);
-    localStorage.setItem('cal_weeklyBank', weeklyBank);
+    localStorage.setItem('cal_bankLedger', JSON.stringify(bankLedger));
     localStorage.setItem('cal_logs', JSON.stringify(logs));
     localStorage.setItem('cal_archiveLogs', JSON.stringify(archiveLogs));
     localStorage.setItem('cal_presets', JSON.stringify(presets));
@@ -2065,7 +2214,7 @@
     pushState();
     eatenCal += cal;
     eatenPro = Math.round((eatenPro + pro) * 10) / 10;
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayString();
     const logObj = { id: Date.now() + Math.random().toString(), name, cal, pro, date: today };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
@@ -2495,7 +2644,7 @@
         wrap.innerHTML = `
           <button class="base-food-btn">
             <span>⚖️ ${item.name}</span>
-            <span class="meta-tag">${item.cal} קל' | ${item.pro}ג' (${unitSuffix})</span>
+            <span class="meta-tag">${item.cal} קל' | ${item.pro} (${unitSuffix})</span>
           </button>
         `;
 
@@ -2577,6 +2726,35 @@
     }
   }
 
+  function renderBankDetailsDrawer() {
+    const listEl = document.getElementById('bankDetailsList');
+    listEl.innerHTML = '';
+
+    // מציגים רשומות רלוונטיות
+    const activeEntries = bankLedger.filter(item => getDaysDifference(item.date) <= 3 && item.amount !== 0);
+
+    if (activeEntries.length === 0) {
+      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.75rem; padding:4px 0;">אין יתרות ספייר פעילות</div>';
+      return;
+    }
+
+    activeEntries.forEach(item => {
+      const daysPassed = getDaysDifference(item.date);
+      const daysLeft = Math.max(0, 3 - daysPassed);
+      let expiryLabel = daysLeft === 0 ? 'פג הלילה' : `נשארו עוד ${daysLeft} ימים`;
+      const sign = item.amount >= 0 ? '+' : '';
+      const color = item.amount >= 0 ? 'var(--status-green)' : 'var(--status-red)';
+
+      const row = document.createElement('div');
+      row.className = 'bank-detail-item';
+      row.innerHTML = `
+        <span>${formatLogDateTitle(item.date)} (${item.desc || 'ספייר'}):</span>
+        <span style="font-weight:800; color:${color}; direction:ltr;">${sign}${item.amount} קל' <span style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;">(${expiryLabel})</span></span>
+      `;
+      listEl.appendChild(row);
+    });
+  }
+
   function updateDisplay() {
     const remCal = targetCal - eatenCal;
     const remPro = Math.round((targetPro - eatenPro) * 10) / 10;
@@ -2592,13 +2770,14 @@
     document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
     document.getElementById('eatenPro').textContent = eatenPro;
 
+    const activeBank = calculateActiveBank();
     const bankEl = document.getElementById('weeklyBank');
-    const sign = weeklyBank >= 0 ? '+' : '-';
-    bankEl.textContent = `${sign}${Math.abs(weeklyBank).toLocaleString()}`;
+    const sign = activeBank >= 0 ? '+' : '-';
+    bankEl.textContent = `${sign}${Math.abs(activeBank).toLocaleString()}`;
 
-    if (weeklyBank >= 0) {
+    if (activeBank >= 0) {
       bankEl.style.color = "var(--status-green)";
-    } else if (weeklyBank >= -200) {
+    } else if (activeBank >= -200) {
       bankEl.style.color = "var(--status-orange)";
     } else {
       bankEl.style.color = "var(--status-red)";
@@ -2621,6 +2800,7 @@
 
     document.getElementById('archiveCountText').textContent = `בארכיון שמורות ${archiveLogs.length} הזנות תמידיות.`;
     
+    renderBankDetailsDrawer();
     calculateWeeklyStats();
     updateProgramDurationDisplay();
     saveData();
@@ -2633,7 +2813,7 @@
   }
 
   function getTodayLogsCount() {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayString();
     return logs.filter(l => (l.date || today) === today).length;
   }
 
@@ -2647,7 +2827,7 @@
       return;
     }
 
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = getTodayString();
     const groups = {};
     logs.forEach(item => {
       const d = item.date || todayStr;
@@ -2661,13 +2841,33 @@
       const dayCal = entries.reduce((acc, c) => acc + (c.cal || 0), 0);
       const dayPro = Math.round(entries.reduce((acc, c) => acc + (c.pro || 0), 0) * 10) / 10;
 
+      // חישוב אינדיקציית ספייר לאותו יום
+      let bankIndicatorHtml = '';
+      if (isCurrentDay) {
+        bankIndicatorHtml = '<span class="bank-pill-mini">היום פעיל</span>';
+      } else {
+        const dayDifference = getDaysDifference(dStr);
+        const dayDiffCal = targetCal - dayCal;
+        const sign = dayDiffCal >= 0 ? '+' : '';
+        if (dayDifference <= 3) {
+          const cls = dayDiffCal >= 0 ? 'active-pos' : 'active-neg';
+          const daysLeft = Math.max(0, 3 - dayDifference);
+          bankIndicatorHtml = `<span class="bank-pill-mini ${cls}">ספייר: ${sign}${dayDiffCal} (נשארו ${daysLeft} ימים)</span>`;
+        } else {
+          bankIndicatorHtml = `<span class="bank-pill-mini">ספייר: ${sign}${dayDiffCal} (פג תוקף)</span>`;
+        }
+      }
+
       const card = document.createElement('div');
       card.className = 'history-day-card';
       card.setAttribute('data-day', dStr);
       card.innerHTML = `
         <div class="history-day-header">
           <span class="history-day-title">${formatLogDateTitle(dStr)}</span>
-          <span class="history-day-summary">${isCurrentDay ? 'היום פעיל' : `${dayCal} קל' | ${dayPro}ג'`}</span>
+          <div class="history-day-summary">
+            ${bankIndicatorHtml}
+            <span>${isCurrentDay ? '' : `${dayCal} קל' | ${dayPro} חלבון`}</span>
+          </div>
         </div>
         <div class="day-items-container" data-day="${dStr}"></div>
       `;
@@ -2680,7 +2880,7 @@
 
         row.innerHTML = `
           <div style="flex:1; pointer-events:none; font-size:0.82rem; text-align:right;">
-            <strong>${item.name || ''}</strong> <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro}ג')</span>
+            <strong>${item.name || ''}</strong> <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro})</span>
           </div>
           <div style="display:flex; gap:2px;">
             <button class="btn-log-action" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
@@ -2789,7 +2989,7 @@
   }
 
   function finalizeDomReorder() {
-    const todayStr = new Date().toISOString().slice(0, 10);
+    const todayStr = getTodayString();
     const newLogs = [];
     pushState();
 
@@ -2869,7 +3069,7 @@
     const val = getEntryValues();
     pushState();
 
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayString();
     if (!item.date || item.date === today) {
       eatenCal = Math.max(0, eatenCal - item.cal + val.cal);
       eatenPro = Math.max(0, Math.round((eatenPro - item.pro + val.pro) * 10) / 10);
@@ -2909,7 +3109,7 @@
     if (!confirm(`למחוק את "${item.name || 'המנה'}"?`)) return;
 
     pushState();
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayString();
     if (!item.date || item.date === today) {
       eatenCal = Math.max(0, eatenCal - item.cal);
       eatenPro = Math.max(0, Math.round((eatenPro - item.pro) * 10) / 10);
@@ -2985,7 +3185,7 @@
     pushState();
     eatenCal += val.cal;
     eatenPro = Math.round((eatenPro + val.pro) * 10) / 10;
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayString();
     const logObj = { id: Date.now() + Math.random().toString(), name: val.name, cal: val.cal, pro: val.pro, date: today };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
@@ -3035,7 +3235,7 @@
     pushState();
     eatenCal += val.cal;
     eatenPro = Math.round((eatenPro + val.pro) * 10) / 10;
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayString();
     const logObj = { id: Date.now() + Math.random().toString(), name: val.name, cal: val.cal, pro: val.pro, date: today };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
@@ -3052,7 +3252,7 @@
     pushState();
     eatenCal += p.cal;
     eatenPro = Math.round((eatenPro + p.pro) * 10) / 10;
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayString();
     const logObj = { id: Date.now() + Math.random().toString(), name: p.name, cal: p.cal, pro: p.pro, date: today };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
@@ -3115,7 +3315,8 @@
   function undoLastAction() {
     if (historyStack.length === 0) return;
     redoStack.push({
-      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro,
+      bankLedger: JSON.parse(JSON.stringify(bankLedger)),
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -3128,7 +3329,8 @@
   function redoLastAction() {
     if (redoStack.length === 0) return;
     historyStack.push({
-      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
+      targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro,
+      bankLedger: JSON.parse(JSON.stringify(bankLedger)),
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
@@ -3141,8 +3343,9 @@
   function applyStateSilent(st) {
     targetCal = st.targetCal; targetPro = st.targetPro;
     userGoalType = st.userGoalType || 'cut';
-    programStartDate = st.programStartDate || new Date().toISOString().slice(0, 10);
-    eatenCal = st.eatenCal; eatenPro = st.eatenPro; weeklyBank = st.weeklyBank;
+    programStartDate = st.programStartDate || getTodayString();
+    eatenCal = st.eatenCal; eatenPro = st.eatenPro;
+    bankLedger = st.bankLedger || [];
     logs = st.logs; archiveLogs = st.archiveLogs || archiveLogs;
     presets = st.presets || presets; categoryOrder = st.categoryOrder || categoryOrder;
     lastActiveDate = st.lastActiveDate || lastActiveDate;
@@ -3165,13 +3368,17 @@
   function closeDay(isAuto, transferBank = true) {
     const diffCal = targetCal - eatenCal;
     if (!isAuto) {
-      const msg = `להתחיל יום חדש?\nספייר שיועבר: ${diffCal >= 0 ? '+' : ''}${diffCal} קלוריות.`;
+      const msg = `להתחיל יום חדש?\nספייר שיועבר (לתוקף של 3 ימים): ${diffCal >= 0 ? '+' : ''}${diffCal} קלוריות.`;
       if (!confirm(msg)) return;
     }
     pushState();
-    weeklyBank += diffCal;
+    
+    // מעביר את היתרה של היום למאגר הספייר עם תאריך אתמול/היום שנסגר
+    const closedDate = lastActiveDate || getTodayString();
+    applyBankDelta(diffCal, closedDate, 'סגירת יום');
+
     eatenCal = 0; eatenPro = 0;
-    lastActiveDate = new Date().toISOString().slice(0, 10);
+    lastActiveDate = getTodayString();
     renderLogs();
     updateDisplay();
   }
@@ -3311,7 +3518,7 @@
 
   function exportBackupTxt() {
     if (!confirm('האם לייצא ולהוריד קובץ גיבוי מלא של הנתונים?')) return;
-    const data = { targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
+    const data = { targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, bankLedger, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -3341,11 +3548,12 @@
           pushState();
           targetCal = d.targetCal || 1800; targetPro = d.targetPro || 140;
           userGoalType = d.userGoalType || 'cut';
-          programStartDate = d.programStartDate || new Date().toISOString().slice(0, 10);
-          eatenCal = d.eatenCal || 0; eatenPro = d.eatenPro || 0; weeklyBank = d.weeklyBank || 0;
+          programStartDate = d.programStartDate || getTodayString();
+          eatenCal = d.eatenCal || 0; eatenPro = d.eatenPro || 0; 
+          bankLedger = d.bankLedger || (d.weeklyBank ? [{ id: Date.now().toString(), date: getTodayString(), amount: d.weeklyBank, desc: 'יתרה שיובאה' }] : []);
           logs = d.logs || []; archiveLogs = d.archiveLogs || (d.logs ? JSON.parse(JSON.stringify(d.logs)) : []);
           presets = d.presets || []; categoryOrder = d.categoryOrder || ['כללי'];
-          lastActiveDate = d.lastActiveDate || new Date().toISOString().slice(0, 10);
+          lastActiveDate = d.lastActiveDate || getTodayString();
           if (d.geminiApiKey) geminiApiKey = d.geminiApiKey;
           if (typeof d.isAiEnabled !== 'undefined') isAiEnabled = d.isAiEnabled;
 
@@ -3366,7 +3574,7 @@
   }
 
   function checkMidnightRollover() {
-    const today = new Date().toISOString().slice(0, 10);
+    const today = getTodayString();
     if (lastActiveDate && lastActiveDate !== today) {
       if (eatenCal > 0 || eatenPro > 0) {
         alert(`שים לב: התחיל יום חדש (${today}) וטרם איפסת את אתמול!`);
@@ -3381,7 +3589,7 @@
     cutoff.setDate(cutoff.getDate() - 7);
     const cutoffIso = cutoff.toISOString().slice(0, 10);
     const len = logs.length;
-    logs = logs.filter(l => (l.date || new Date().toISOString().slice(0, 10)) >= cutoffIso);
+    logs = logs.filter(l => (l.date || getTodayString()) >= cutoffIso);
     if (logs.length !== len) saveData();
   }
 
