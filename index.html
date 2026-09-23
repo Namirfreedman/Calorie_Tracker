@@ -424,7 +424,7 @@
     background: #ffffff;
     border: 1.5px solid var(--tint-cyan-border);
     border-radius: 14px;
-    padding: 10px 14px;
+    padding: 12px 14px;
     margin-top: 6px;
     margin-bottom: 8px;
     text-align: right;
@@ -437,8 +437,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.8rem;
-    padding: 6px 0;
+    font-size: 0.82rem;
+    padding: 7px 0;
     border-bottom: 1px dashed #e9ecef;
   }
   .bank-detail-item:last-child {
@@ -767,6 +767,7 @@
   }
   .bank-pill-mini.active-pos { background: var(--tint-green-bg); color: var(--status-green); }
   .bank-pill-mini.active-neg { background: var(--danger-soft-bg); color: var(--danger-soft-text); }
+  .bank-pill-mini.settled { background: #edf2ff; color: var(--accent-primary); }
 
   .day-items-container { min-height: 28px; display: flex; flex-direction: column; }
   .log-item-row { 
@@ -1585,18 +1586,19 @@
   let eatenCal = parseInt(localStorage.getItem('cal_eatenCal')) || 0;
   let eatenPro = parseFloat(localStorage.getItem('cal_eatenPro')) || 0;
   
-  // מאגר ספייר עם תוקף (מערך רשומות: { id, date, amount, desc })
+  // מנוע ספייר מבוסס רשומות עם מעקב ניצול (Ledger):
+  // { id, date, original, remaining, desc }
   let bankLedger = JSON.parse(localStorage.getItem('cal_bankLedger') || '[]');
   
-  // שמירה על תאימות אחורה אם היה ערך ישן ב-weeklyBank
-  const legacyBank = parseInt(localStorage.getItem('cal_weeklyBank'));
-  if (bankLedger.length === 0 && !isNaN(legacyBank) && legacyBank !== 0) {
-    bankLedger.push({
-      id: Date.now().toString(),
-      date: new Date().toISOString().slice(0, 10),
-      amount: legacyBank,
-      desc: 'ספייר קודם'
-    });
+  // שדרוג מבנה נתונים ישן במידת הצורך
+  if (bankLedger.length > 0 && typeof bankLedger[0].remaining === 'undefined') {
+    bankLedger = bankLedger.map(item => ({
+      id: item.id || Date.now() + Math.random().toString(),
+      date: item.date,
+      original: item.amount || 0,
+      remaining: item.amount || 0,
+      desc: item.desc || 'ספייר יומי'
+    }));
   }
 
   let logs = JSON.parse(localStorage.getItem('cal_logs') || '[]');
@@ -2005,7 +2007,7 @@
     document.getElementById('portionCalcRow').style.display = 'none';
   }
 
-  // --- לוגיקת ספייר עם תוקף 3 ימים ו-FIFO ---
+  // --- לוגיקת ספייר ותוקף מדויקת ללא חורים ---
   function getTodayString() {
     return new Date().toISOString().slice(0, 10);
   }
@@ -2016,7 +2018,7 @@
     return Math.floor((today - target) / (1000 * 60 * 60 * 24));
   }
 
-  // החזרת שם היום בעברית שבו יפוג התוקף (תאריך יצירה + 3 ימים)
+  // שם היום בעברית בו התוקף פג (תאריך יצירה + 3 ימים)
   function getExpiryDayName(dateStr) {
     const d = new Date(dateStr + 'T00:00:00');
     d.setDate(d.getDate() + 3);
@@ -2024,69 +2026,64 @@
     return dayNames[d.getDay()];
   }
 
-  // קיזוז חכם של רשומות הספייר
+  // סליקת ספייר כרונולוגית (FIFO)
   function applyBankDelta(deltaAmount, dateStr, description) {
     if (deltaAmount === 0) return;
-    const todayStr = getTodayString();
-    const entryDate = dateStr || todayStr;
+    const entryDate = dateStr || getTodayString();
 
-    // מחיקת יתרות ישנות שפג תוקפן (תוקף הוא 3 ימים מלאים אחרי היום שנסגר: 0,1,2,3 תקפים)
-    bankLedger = bankLedger.filter(item => getDaysDifference(item.date) <= 3);
+    let unallocated = deltaAmount;
 
-    let remainingDelta = deltaAmount;
-
-    // אם מכניסים פלוס (אימון / גירעון) ויש מינוסים קיימים שטרם פגו - מכסים קודם את המינוס הישן ביותר (FIFO)
-    if (remainingDelta > 0) {
+    // 1. אם נכנס פלוס (גירעון או אימון) ויש מינוסים פעילים פתוחים - מקזזים קודם את המינוס הישן ביותר שטרם פג
+    if (unallocated > 0) {
       for (let i = 0; i < bankLedger.length; i++) {
-        if (bankLedger[i].amount < 0) {
-          const debt = Math.abs(bankLedger[i].amount);
-          if (remainingDelta >= debt) {
-            remainingDelta -= debt;
-            bankLedger[i].amount = 0;
+        const item = bankLedger[i];
+        if (item.remaining < 0 && getDaysDifference(item.date) <= 3) {
+          const debt = Math.abs(item.remaining);
+          if (unallocated >= debt) {
+            unallocated -= debt;
+            item.remaining = 0;
           } else {
-            bankLedger[i].amount += remainingDelta;
-            remainingDelta = 0;
+            item.remaining += unallocated;
+            unallocated = 0;
             break;
           }
         }
       }
     } 
-    // אם מכניסים מינוס (חריגה באוכל) ויש פלוסים קיימים - שורפים קודם את הפלוסים הישנים ביותר (FIFO)
-    else if (remainingDelta < 0) {
-      let needed = Math.abs(remainingDelta);
+    // 2. אם נכנס מינוס (חריגה באוכל) ויש פלוסים פעילים פתוחים - שורפים קודם את הפלוסים הישנים ביותר שטרם פגו
+    else if (unallocated < 0) {
+      let needed = Math.abs(unallocated);
       for (let i = 0; i < bankLedger.length; i++) {
-        if (bankLedger[i].amount > 0) {
-          if (bankLedger[i].amount <= needed) {
-            needed -= bankLedger[i].amount;
-            bankLedger[i].amount = 0;
+        const item = bankLedger[i];
+        if (item.remaining > 0 && getDaysDifference(item.date) <= 3) {
+          if (item.remaining <= needed) {
+            needed -= item.remaining;
+            item.remaining = 0;
           } else {
-            bankLedger[i].amount -= needed;
+            item.remaining -= needed;
             needed = 0;
             break;
           }
         }
       }
-      remainingDelta = -needed;
+      unallocated = -needed;
     }
 
-    // ניקוי רשומות שאופסו לגמרי
-    bankLedger = bankLedger.filter(item => item.amount !== 0);
-
-    // אם נשארה יתרה שטרם קוזזה, שומרים אותה עם תאריך כניסה
-    if (remainingDelta !== 0) {
-      bankLedger.push({
-        id: Date.now() + Math.random().toString(),
-        date: entryDate,
-        amount: remainingDelta,
-        desc: description || 'ספייר יומי'
-      });
-    }
+    // 3. יצירת רשומה חדשה לכל יום / אירוע שיש בו יתרה שנוצרה
+    bankLedger.push({
+      id: Date.now() + Math.random().toString(),
+      date: entryDate,
+      original: deltaAmount,
+      remaining: unallocated,
+      desc: description || 'ספייר יומי'
+    });
   }
 
   function calculateActiveBank() {
-    // מסננים רשומות בטווח 3 ימים מתאריך ההזנה
-    const activeEntries = bankLedger.filter(item => getDaysDifference(item.date) <= 3 && item.amount !== 0);
-    return activeEntries.reduce((sum, item) => sum + item.amount, 0);
+    // סכימה אך ורק של יתרות שטרם פקעו (0, 1, 2, 3 ימים) ושלא קוזזו במלואן
+    return bankLedger
+      .filter(item => getDaysDifference(item.date) <= 3 && item.remaining !== 0)
+      .reduce((sum, item) => sum + item.remaining, 0);
   }
 
   function openExerciseBurnModal() {
@@ -2766,11 +2763,11 @@
     const listEl = document.getElementById('bankDetailsList');
     listEl.innerHTML = '';
 
-    // מציגים אך ורק יתרות פעילות שתקפות (diff <= 3) ושונות מ-0
-    const activeEntries = bankLedger.filter(item => getDaysDifference(item.date) <= 3 && item.amount !== 0);
+    // מציגים אך ורק יתרות פעילות תקפות שעדיין לא אופסו
+    const activeEntries = bankLedger.filter(item => getDaysDifference(item.date) <= 3 && item.remaining !== 0);
 
     if (activeEntries.length === 0) {
-      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.75rem; padding:4px 0;">אין יתרות ספייר פעילות כרגע</div>';
+      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.78rem; padding:6px 0;">אין יתרות ספייר פעילות כרגע</div>';
       return;
     }
 
@@ -2778,20 +2775,20 @@
       const daysPassed = getDaysDifference(item.date);
       const daysLeft = 3 - daysPassed;
       const expiryDay = getExpiryDayName(item.date);
-      const expiryLabel = daysLeft === 0 ? 'היום' : `עד ${expiryDay}`;
+      const expiryLabel = daysLeft === 0 ? 'עד היום' : `עד ${expiryDay}`;
       
-      const isPos = item.amount > 0;
+      const isPos = item.remaining > 0;
       const sign = isPos ? '+' : '-';
-      const absVal = Math.abs(item.amount).toLocaleString();
+      const absVal = Math.abs(item.remaining).toLocaleString();
       const color = isPos ? 'var(--status-green)' : 'var(--status-red)';
 
       const row = document.createElement('div');
       row.className = 'bank-detail-item';
       row.innerHTML = `
         <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
-        <span style="direction:rtl; font-weight:800; color:${color};">
+        <span style="font-weight:800; color:${color};">
           <span style="direction:ltr; unicode-bidi:isolate; display:inline-block;">${sign}${absVal}</span> קל' 
-          <span style="font-size:0.72rem; color:var(--text-muted); font-weight:normal;">(${expiryLabel})</span>
+          <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">(${expiryLabel})</span>
         </span>
       `;
       listEl.appendChild(row);
@@ -2884,34 +2881,53 @@
       const dayCal = entries.reduce((acc, c) => acc + (c.cal || 0), 0);
       const dayPro = Math.round(entries.reduce((acc, c) => acc + (c.pro || 0), 0) * 10) / 10;
 
-      // חישוב אינדיקציית ספייר קצרה בשורה אחת
+      // בדיקת סטטוס ספייר אמיתי מתוך ה-Ledger
       let bankIndicatorHtml = '';
       if (isCurrentDay) {
         bankIndicatorHtml = '<span class="bank-pill-mini">היום פעיל</span>';
       } else {
-        const dayDifference = getDaysDifference(dStr);
-        const dayDiffCal = targetCal - dayCal;
-        const sign = dayDiffCal >= 0 ? '+' : '-';
-        const absVal = Math.abs(dayDiffCal).toLocaleString();
+        const matchingLedger = bankLedger.find(b => b.date === dStr && b.desc !== 'אימון אקסטרה');
+        
+        if (matchingLedger) {
+          const orig = matchingLedger.original;
+          const rem = matchingLedger.remaining;
+          const isPos = orig >= 0;
+          const origSign = isPos ? '+' : '-';
+          const origAbs = Math.abs(orig).toLocaleString();
+          const daysPassed = getDaysDifference(dStr);
+          const isExpired = daysPassed > 3;
 
-        if (dayDifference <= 3) {
-          const cls = dayDiffCal >= 0 ? 'active-pos' : 'active-neg';
-          const expiryDay = getExpiryDayName(dStr);
-          const daysLeft = 3 - dayDifference;
-          const expiryTxt = daysLeft === 0 ? 'היום' : `עד ${expiryDay}`;
+          let statusTxt = '';
+          let cls = isPos ? 'active-pos' : 'active-neg';
+
+          if (rem === 0) {
+            statusTxt = 'נוצל';
+            cls = 'settled';
+          } else if (isExpired) {
+            statusTxt = (rem === orig) ? 'פג' : `פג (נוצל ${Math.abs(orig - rem)})`;
+          } else {
+            const expiryDay = getExpiryDayName(dStr);
+            const daysLeft = 3 - daysPassed;
+            const targetTxt = (daysLeft === 0) ? 'עד היום' : `עד ${expiryDay}`;
+            statusTxt = (rem === orig) ? targetTxt : `נוצל בחלקו (${targetTxt})`;
+          }
+
           bankIndicatorHtml = `
             <span class="bank-pill-mini ${cls}">
               <span>ספייר:</span>
-              <span class="num-span">${sign}${absVal}</span>
-              <span>(${expiryTxt})</span>
+              <span class="num-span">${origSign}${origAbs}</span>
+              <span>(${statusTxt})</span>
             </span>
           `;
         } else {
+          // חישוב עזר אם טרם נוצרה רשומה
+          const dayDiffCal = targetCal - dayCal;
+          const sign = dayDiffCal >= 0 ? '+' : '-';
+          const absVal = Math.abs(dayDiffCal).toLocaleString();
           bankIndicatorHtml = `
             <span class="bank-pill-mini">
               <span>ספייר:</span>
               <span class="num-span">${sign}${absVal}</span>
-              <span>(פג)</span>
             </span>
           `;
         }
@@ -3014,8 +3030,8 @@
         let inserted = false;
         for (let sib of siblings) {
           const r = sib.getBoundingClientRect();
-          if (point.clientY < r.top + r.height / 2) {
-            dayContainer.insertBefore(placeholder, sib);
+          if (point.clientY < r.top + r.height / 2 || (point.clientX > r.left + r.width / 2 && Math.abs(point.clientY - r.top) < 30)) {
+            targetList.insertBefore(placeholder, sib);
             inserted = true;
             break;
           }
@@ -3432,7 +3448,7 @@
     }
     pushState();
     
-    // מעביר את היתרה של היום למאגר הספייר עם תאריך אתמול/היום שנסגר
+    // סליקת ספייר יומי מלאה לתאריך של היום שנסגר
     const closedDate = lastActiveDate || getTodayString();
     applyBankDelta(diffCal, closedDate, 'סגירת יום');
 
@@ -3609,7 +3625,7 @@
           userGoalType = d.userGoalType || 'cut';
           programStartDate = d.programStartDate || getTodayString();
           eatenCal = d.eatenCal || 0; eatenPro = d.eatenPro || 0; 
-          bankLedger = d.bankLedger || (d.weeklyBank ? [{ id: Date.now().toString(), date: getTodayString(), amount: d.weeklyBank, desc: 'יתרה שיובאה' }] : []);
+          bankLedger = d.bankLedger || [];
           logs = d.logs || []; archiveLogs = d.archiveLogs || (d.logs ? JSON.parse(JSON.stringify(d.logs)) : []);
           presets = d.presets || []; categoryOrder = d.categoryOrder || ['כללי'];
           lastActiveDate = d.lastActiveDate || getTodayString();
