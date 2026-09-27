@@ -2117,6 +2117,7 @@
   async function loadFromCloud() {
     try {
       const res = await fetch('/api/data');
+      if (!res.ok) throw new Error(`Cloud load failed: ${res.status}`);
       const data = await res.json();
       if (data && data.result) {
         const d = data.result;
@@ -2148,8 +2149,10 @@
         renderPresets();
         updateDisplay();
       }
+      return true;
     } catch (e) {
       console.log('טעינה מהענן נכשלה, טוען נתונים מקומיים');
+      return false;
     }
   }
 
@@ -3625,11 +3628,18 @@
     if (logs.length !== len) saveData();
   }
 
-  applySevenDayRollingWindow();
-  checkMidnightRollover();
   renderLogs();
   applyPoolTabUI();
   renderPresets();
   updateDisplay();
-  loadFromCloud();
+  loadFromCloud().then(cloudLoaded => {
+    if (!cloudLoaded) return;
+    applySevenDayRollingWindow();
+    checkMidnightRollover();
+    saveData();
+    renderLogs();
+    applyPoolTabUI();
+    renderPresets();
+    updateDisplay();
+  });
 </script></body></html>
