@@ -99,9 +99,10 @@
     gap: 6px;
     flex-shrink: 0;
   }
+  /* הגדלת כתב הכותרת הראשית */
   .floating-top-bar h2 {
     margin: 0;
-    font-size: 1.05rem;
+    font-size: 1.25rem;
     color: var(--text-main);
     font-weight: 900;
     letter-spacing: -0.3px;
@@ -132,18 +133,20 @@
     padding: 0 4px;
     min-width: 0;
   }
+  /* Toast תומך עטיפת שורות/טקסט ארוך ללא 3 נקודות */
   .toast-pill {
     font-size: 0.76rem;
     font-weight: 800;
     color: #ffffff;
     background: var(--accent-primary);
-    padding: 5px 12px;
-    border-radius: 20px;
+    padding: 4px 10px;
+    border-radius: 16px;
     opacity: 0;
     pointer-events: none;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.2;
+    word-break: break-word;
     max-width: 100%;
     box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
     direction: rtl;
@@ -152,7 +155,7 @@
   .toast-pill.show { opacity: 1; }
   .toast-pill.fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
 
-  /* Nav Buttons Group (Redo on left, Undo on far right) */
+  /* Nav Buttons Group - חזור מימין להלוך ב-LTR, אייקונים עגולים תואמים */
   .nav-history-group { 
     display: flex; 
     flex-direction: row; 
@@ -176,7 +179,6 @@
     box-shadow: 0 2px 0 var(--neutral-btn-shadow);
     transition: all 0.1s ease;
   }
-  /* Bolder and thicker stroke lines for Undo/Redo */
   .btn-nav-circle svg { 
     width: 19px; 
     height: 19px; 
@@ -603,7 +605,7 @@
   .portion-input-cell input { padding: 10px !important; font-size: 1rem !important; border-radius: 10px; background: #ffffff; }
 
   .input-row { display: flex; gap: 10px; margin-bottom: 12px; }
-  .action-buttons-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+  .action-buttons-stack { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
   
   .btn-tint {
     border-radius: 14px;
@@ -644,17 +646,31 @@
     font-size: 0.95rem;
     padding: 13px 14px;
   }
-  .btn-cancel-edit-soft {
+  
+  /* כפתור ביטול קבוע וקומפקטי מתחת להוספה לתפריט */
+  .btn-cancel-compact {
+    border-radius: 12px;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    width: 100%;
+    cursor: default;
+    border: 1.5px solid var(--neutral-btn-border);
+    background: #f1f5f9;
+    color: #94a3b8;
+    box-shadow: none;
+    transition: all 0.2s ease;
+  }
+  .btn-cancel-compact.active-danger {
     background: var(--danger-soft-bg);
     color: var(--danger-soft-text);
-    border: 1.5px solid var(--danger-soft-border);
-    box-shadow: 0 3px 0 var(--danger-soft-shadow);
-    border-radius: 14px;
-    padding: 12px 14px;
-    font-size: 0.92rem;
-    font-weight: 800;
+    border-color: var(--danger-soft-border);
+    box-shadow: 0 2px 0 var(--danger-soft-shadow);
     cursor: pointer;
-    width: 100%;
+  }
+  .btn-cancel-compact.active-danger:active {
+    transform: translateY(2px);
+    box-shadow: none;
   }
 
   .btn-day-single {
@@ -671,7 +687,7 @@
     margin-top: 14px;
   }
 
-  /* Segmented 3-button Mode Picker without "לפי" */
+  /* Segmented 3-button Mode Picker */
   .segmented-mode-container {
     background: var(--input-bg);
     border: 1.5px solid var(--card-border);
@@ -784,6 +800,8 @@
     border-bottom: 1px solid #f8fafc; 
     color: var(--text-main); 
     touch-action: pan-y; 
+    user-select: none;
+    -webkit-user-select: none;
   }
   .log-item-row:last-child { border-bottom: none; }
   .log-item-row.holding-active {
@@ -805,7 +823,7 @@
     border: 2px solid var(--accent-primary);
     box-shadow: 0 12px 30px rgba(0,0,0,0.18);
     border-radius: 14px;
-    padding: 12px 16px;
+    padding: 10px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -862,6 +880,7 @@
     padding: 13px 16px;
     cursor: pointer;
     user-select: none;
+    -webkit-user-select: none;
     background: #ffffff;
     touch-action: pan-y;
   }
@@ -871,19 +890,24 @@
   .category-block.open .category-chevron { transform: rotate(180deg); }
   .category-content {
     display: none;
-    padding: 12px 16px;
+    padding: 12px 14px;
     border-top: 1px solid #f1f5f9;
     background: #fafbfc;
   }
   .category-block.open .category-content { display: block; }
 
+  /* רשימת המנות במאגר - תמיכה ברשת 2 עמודות מעל 2 מנות ונטרול סימון טקסט */
   .preset-list { 
     display: flex; 
-    flex-wrap: wrap; 
+    flex-direction: column; 
     gap: 8px; 
     min-height: 32px; 
     padding: 4px 0; 
-    justify-content: flex-start; 
+  }
+  .preset-list.grid-dense {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
   }
   .preset-btn-wrapper { 
     display: flex; 
@@ -894,34 +918,55 @@
     overflow: hidden; 
     touch-action: pan-y; 
     box-shadow: 0 2px 0 var(--neutral-btn-shadow); 
+    user-select: none;
+    -webkit-user-select: none;
   }
   .preset-btn-wrapper.holding-active {
     background: var(--primary-surface) !important;
     border-color: var(--accent-primary);
   }
   .preset-btn {
+    flex: 1;
     background: transparent;
     color: var(--text-main);
-    font-size: 0.9rem;
-    padding: 10px 12px;
+    font-size: 0.88rem;
+    padding: 8px 10px;
     border: none;
     cursor: pointer;
     font-weight: 700;
     text-align: right;
+    user-select: none;
+    -webkit-user-select: none;
+    line-height: 1.25;
+  }
+  .preset-list.grid-dense .preset-btn {
+    font-size: 0.78rem;
+    padding: 7px 8px;
   }
   .preset-sub-btn {
     background: transparent;
     font-size: 0.85rem;
-    padding: 10px 8px;
+    padding: 8px 6px;
     border: none;
     border-right: 1px solid #f1f5f9;
     cursor: pointer;
     color: var(--text-subtle);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .preset-list.grid-dense .preset-sub-btn {
+    padding: 6px 4px;
+    font-size: 0.78rem;
   }
 
   .base-food-list {
     display: flex;
     flex-direction: column;
+    gap: 8px;
+  }
+  .base-food-list.grid-dense {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
   .base-food-btn-wrap {
@@ -932,23 +977,31 @@
     border-radius: 14px;
     box-shadow: 0 2px 0 var(--neutral-btn-shadow);
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
   }
   .base-food-btn {
     width: 100%;
     text-align: right;
-    padding: 12px 16px;
+    padding: 10px 12px;
     background: transparent;
     border: none;
-    font-size: 0.94rem;
+    font-size: 0.9rem;
     font-weight: 800;
     color: var(--text-main);
     cursor: pointer;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    flex-direction: column;
+    gap: 2px;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+  .base-food-list.grid-dense .base-food-btn {
+    padding: 8px 10px;
+    font-size: 0.8rem;
   }
   .base-food-btn .meta-tag {
-    font-size: 0.82rem;
+    font-size: 0.76rem;
     font-weight: normal;
     color: var(--text-muted);
   }
@@ -960,7 +1013,7 @@
     transform: scale(0.98);
   }
 
-  /* Modals */
+  /* Modals - חלון קבוע שלא גדל אלא גולל פנימית */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -979,13 +1032,23 @@
     padding: 22px;
     width: 100%;
     max-width: 420px;
-    max-height: 90vh;
-    overflow-y: auto;
+    height: 82vh;
+    max-height: 580px;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.16);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
     text-align: center;
+    overflow: hidden;
+  }
+  .modal-scrollable-body {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-right: 2px;
+    -webkit-overflow-scrolling: touch;
   }
   .modal-header-bar { 
     display: flex; 
@@ -993,6 +1056,7 @@
     justify-content: center; 
     position: relative;
     width: 100%;
+    flex-shrink: 0;
   }
   .modal-header-bar h3 { 
     margin: 0; 
@@ -1070,7 +1134,7 @@
     border: 1.5px solid var(--card-border);
     border-radius: 16px;
     padding: 12px 16px;
-    max-height: 280px;
+    max-height: 240px;
     overflow-y: auto;
     font-size: 0.85rem;
     margin-top: 8px;
@@ -1109,15 +1173,15 @@
   </div>
 
   <div class="nav-history-group">
-    <!-- Redo Button: Straight arrow pointing left, placed to the left of Undo -->
+    <!-- Redo Button: כפתור הלוך עם חץ ימינה מעגלי ב-LTR משמאל -->
     <button class="btn-nav-circle" onclick="redoLastAction()" title="הלוך">
-      <svg viewBox="0 0 24 24">
-        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      <svg viewBox="0 0 24 24" style="transform: scaleX(-1);">
+        <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
       </svg>
     </button>
-    <!-- Undo Button: Mirrored circular arrow clockwise, placed on the far right -->
+    <!-- Undo Button: כפתור חזור עם חץ עגול נגד כיוון השעון בקצה הימני -->
     <button class="btn-nav-circle" onclick="undoLastAction()" title="חזור">
-      <svg viewBox="0 0 24 24" style="transform: scaleX(-1);">
+      <svg viewBox="0 0 24 24">
         <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
       </svg>
     </button>
@@ -1144,16 +1208,12 @@
 <!-- Main Native Slider Container -->
 <div class="screens-slider-container" id="sliderContainer">
   
-  <!-- עמוד 0 (ימין): DATABASE - מאגר מאכלים -->
+  <!-- עמוד 0 (ימין): DATABASE - מאגר מאכלים (ללא שורת חיפוש כלל) -->
   <div class="screen-tab" id="screenDb">
     <div class="card" id="poolCard">
       <div class="pool-tabs">
         <button class="pool-tab-btn" id="tabMyFood" onclick="handlePoolTabClick('myfood')">⭐ האוכל שלי (0)</button>
         <button class="pool-tab-btn" id="tabBase" onclick="handlePoolTabClick('base')">⚖️ מאגר בסיס (0)</button>
-      </div>
-
-      <div id="allSearchRow" style="display:none; margin-bottom:12px;">
-        <input type="text" id="allSearchInput" placeholder="סינון ברשימה..." oninput="renderPresets()">
       </div>
 
       <div class="burn-action-wrap" id="myFoodSpecialActions">
@@ -1197,16 +1257,18 @@
 
         <div class="action-buttons-stack" id="defaultActionBtns">
           <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
+          <!-- כפתור בטל קומפקטי תמיד נוכח, אפור כברירת מחדל ואדום כשיש תוכן -->
+          <button type="button" id="btnCancelEntry" class="btn-cancel-compact" onclick="handleCancelEntryClick()">בטל</button>
         </div>
 
         <div class="action-buttons-stack" id="logEditActionBtns" style="display:none; margin-top:10px;">
           <button class="btn-tint btn-tint-primary" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
-          <button class="btn-cancel-edit-soft" onclick="cancelLogEdit()">ביטול עריכה/בחירה</button>
+          <button class="btn-cancel-compact active-danger" onclick="cancelLogEdit()">בטל עריכה</button>
         </div>
       </div>
     </div>
 
-    <!-- קובייה 2: אפשרויות שמירה למאגר (ללא כותרת "לפי:") -->
+    <!-- קובייה 2: אפשרויות שמירה למאגר -->
     <div class="goals-card-wrapper" id="poolSaveCard">
       <div class="goals-card-header" onclick="togglePoolOptionsDrawer()">
         <div class="goals-title">
@@ -1246,8 +1308,6 @@
           <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
           <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
         </div>
-
-        <button id="cancelEditPoolBtn" class="btn-cancel-edit-soft" style="display:none; margin-top:10px;" onclick="cancelEditPreset()">ביטול עריכת מנה מהמאגר</button>
       </div>
     </div>
 
@@ -1362,7 +1422,7 @@
 
 </div>
 
-<!-- Modal: Settings -->
+<!-- Modal: Settings (גובה קבוע עם גלילה לחלק התחתון ללא התרחבות החלון) -->
 <div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-header-bar">
@@ -1370,55 +1430,56 @@
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
-    <!-- Centered Goals & Plan Accordion Header -->
-    <button type="button" class="btn-setting-accordion" id="btnAccordionGoals" onclick="toggleSettingAccordion('goals')">
-      <span></span>
-      <span class="accordion-title-center">🎯 מטרות ותוכנית</span>
-      <span id="chevronSettingGoals" style="font-size:0.8rem;">▼</span>
-    </button>
+    <div class="modal-scrollable-body" id="settingsScrollBody">
+      <button type="button" class="btn-setting-accordion" id="btnAccordionGoals" onclick="toggleSettingAccordion('goals')">
+        <span></span>
+        <span class="accordion-title-center">🎯 מטרות ותוכנית</span>
+        <span id="chevronSettingGoals" style="font-size:0.8rem;">▼</span>
+      </button>
 
-    <div class="setting-accordion-drawer" id="drawerSettingGoals">
-      <div style="margin-bottom:10px;">
-        <select id="userGoalTypeSelect" style="font-weight:700;">
-          <option value="cut">חיטוב (גירעון קלורי)</option>
-          <option value="bulk">מסה (עודף קלורי)</option>
-          <option value="maintain">ניטרלי / שמירה</option>
-        </select>
+      <div class="setting-accordion-drawer" id="drawerSettingGoals">
+        <div style="margin-bottom:10px;">
+          <select id="userGoalTypeSelect" style="font-weight:700;">
+            <option value="cut">חיטוב (גירעון קלורי)</option>
+            <option value="bulk">מסה (עודף קלורי)</option>
+            <option value="maintain">ניטרלי / שמירה</option>
+          </select>
+        </div>
+
+        <div class="input-row" style="margin-bottom:10px;">
+          <input type="number" id="targetCalInput" placeholder="יעד קלוריות">
+          <input type="number" id="targetProInput" placeholder="יעד חלבון (ג')">
+        </div>
+
+        <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; margin-bottom:6px;">
+          תאריך התחלת התוכנית (יום / חודש / שנה):
+        </div>
+        <div class="date-dmy-wrap">
+          <input type="number" id="startDayInput" placeholder="יום" style="width:64px;" min="1" max="31">
+          <input type="number" id="startMonthInput" placeholder="חודש" style="width:64px;" min="1" max="12">
+          <input type="number" id="startYearInput" placeholder="שנה" style="width:84px;" min="2020" max="2035">
+        </div>
+
+        <button class="btn-tint btn-tint-primary" onclick="updateTargets()">שמור יעדים ומטרה</button>
       </div>
 
-      <div class="input-row" style="margin-bottom:10px;">
-        <input type="number" id="targetCalInput" placeholder="יעד קלוריות">
-        <input type="number" id="targetProInput" placeholder="יעד חלבון (ג')">
-      </div>
+      <button class="btn-tint btn-tint-pair-top" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
 
-      <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; margin-bottom:6px;">
-        תאריך התחלת התוכנית (יום / חודש / שנה):
-      </div>
-      <div class="date-dmy-wrap">
-        <input type="number" id="startDayInput" placeholder="יום" style="width:64px;" min="1" max="31">
-        <input type="number" id="startMonthInput" placeholder="חודש" style="width:64px;" min="1" max="12">
-        <input type="number" id="startYearInput" placeholder="שנה" style="width:84px;" min="2020" max="2035">
-      </div>
-
-      <button class="btn-tint btn-tint-primary" onclick="updateTargets()">שמור יעדים ומטרה</button>
-    </div>
-
-    <button class="btn-tint btn-tint-pair-top" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
-
-    <div style="display:flex; gap:8px;">
-      <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
-      <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
-      <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
-    </div>
-
-    <div style="background:#fbfbfc; border:1.5px solid var(--card-border); border-radius:18px; padding:14px;">
-      <div style="font-size:0.88rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🗄 ארכיון היסטוריה תמידי</div>
-      <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
       <div style="display:flex; gap:8px;">
-        <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
-        <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
+        <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
+        <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
+        <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
       </div>
-      <div class="archive-viewer-box" id="archiveViewerBox"></div>
+
+      <div style="background:#fbfbfc; border:1.5px solid var(--card-border); border-radius:18px; padding:14px;">
+        <div style="font-size:0.88rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🗄 ארכיון היסטוריה תמידי</div>
+        <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
+          <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
+        </div>
+        <div class="archive-viewer-box" id="archiveViewerBox"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -1430,12 +1491,14 @@
       <h3>📋 ייבוא מנות מטקסט</h3>
       <button class="modal-close-btn" onclick="closeMenuImportModal()">✕</button>
     </div>
-    <div style="font-size:0.8rem; color:var(--text-muted);">
-      הדבק שורות (פסיק או טאב):<br>
-      <code>שם המנה, קלוריות, חלבון, קטגוריה</code>
+    <div class="modal-scrollable-body">
+      <div style="font-size:0.8rem; color:var(--text-muted);">
+        הדבק שורות (פסיק או טאב):<br>
+        <code>שם המנה, קלוריות, חלבון, קטגוריה</code>
+      </div>
+      <textarea id="bulkMenuInput" rows="5" placeholder="טופו צרוב, 350, 27, ארוחת ערב"></textarea>
+      <button class="btn-tint btn-tint-primary" onclick="processBulkMenu()">טען מנות למאגר</button>
     </div>
-    <textarea id="bulkMenuInput" rows="5" placeholder="טופו צרוב, 350, 27, ארוחת ערב"></textarea>
-    <button class="btn-tint btn-tint-primary" onclick="processBulkMenu()">טען מנות למאגר</button>
   </div>
 </div>
 
@@ -1749,11 +1812,24 @@
     card.classList.toggle('open');
   }
 
+  /* עדכון כפתור הביטול: אפור אם ריק, אדום פעיל כשיש נתונים */
   function updateCancelBtnVisibility() {
-    const btn = document.getElementById('cancelEditPoolBtn');
+    const btn = document.getElementById('btnCancelEntry');
     if (!btn) return;
     const hasData = entryNameInput.value.trim() !== '' || calInput.value !== '' || proInput.value !== '' || activePortionContext !== null || editingPresetIndex >= 0;
-    btn.style.display = hasData ? 'block' : 'none';
+    if (hasData) {
+      btn.classList.add('active-danger');
+    } else {
+      btn.classList.remove('active-danger');
+    }
+  }
+
+  function handleCancelEntryClick() {
+    const btn = document.getElementById('btnCancelEntry');
+    if (btn && btn.classList.contains('active-danger')) {
+      clearEntryInputs();
+      if (editingPresetIndex >= 0) cancelEditPreset();
+    }
   }
 
   [entryNameInput, calInput, proInput, entryCatInput].forEach(el => {
@@ -1780,6 +1856,7 @@
     }
   });
 
+  /* חיפוש חי מקומי למסך ADD FOOD בלבד ללא השפעה על המאגר */
   function handleLiveSearch(query) {
     query = query.trim().toLowerCase();
     searchDropdown.innerHTML = '';
@@ -2091,6 +2168,7 @@
     showToast(`נוספו ${burned} קלוריות לספייר!`);
   }
 
+  /* תצוגת Toast עם 0.5 שניות נוספות (1.7 שניות סה"כ) לפני התפוגגות */
   function showToast(text) {
     const el = document.getElementById('toastMsg');
     if (!el) return;
@@ -2101,7 +2179,7 @@
     toastFadeTimer = setTimeout(() => {
       el.classList.remove('show');
       el.classList.add('fade-out');
-    }, 1200);
+    }, 1700);
   }
 
   function pushState(actionLabel = 'פעולה') {
@@ -2205,7 +2283,6 @@
   function applyPoolTabUI() {
     document.getElementById('tabMyFood').className = 'pool-tab-btn ' + (currentPoolTab === 'myfood' ? 'active' : '');
     document.getElementById('tabBase').className = 'pool-tab-btn ' + (currentPoolTab === 'base' ? 'active' : '');
-    document.getElementById('allSearchRow').style.display = (currentPoolTab !== 'none') ? 'block' : 'none';
     document.getElementById('myFoodSpecialActions').style.display = (currentPoolTab === 'myfood') ? 'block' : 'none';
   }
 
@@ -2214,6 +2291,7 @@
     renderPresets();
   }
 
+  /* תצוגת מאגרים: הצגה מלאה וקבועה של כל המנות (ללא תלות בשדה החיפוש) */
   function renderPresets() {
     const container = document.getElementById('categoryContainer');
     container.innerHTML = '';
@@ -2227,33 +2305,28 @@
     }
     container.style.display = 'block';
 
-    const searchTerm = (document.getElementById('allSearchInput')?.value || '').trim().toLowerCase();
-
     if (currentPoolTab === 'base') {
-      renderBaseFoodAccordion(container, searchTerm);
+      renderBaseFoodAccordion(container);
       return;
     }
 
-    const filtered = presets.filter(p => {
-      if (searchTerm) return p.name.toLowerCase().includes(searchTerm) || (p.cat || '').toLowerCase().includes(searchTerm);
-      return true;
-    });
-
-    if (filtered.length === 0) {
+    if (presets.length === 0) {
       container.innerHTML = `<div style="text-align:right; font-size:0.88rem; color:var(--text-muted); padding:16px;">אין מנות שמורות ב"האוכל שלי"</div>`;
       return;
     }
 
-    const activeCats = new Set(filtered.map(p => p.cat || 'כללי'));
+    const activeCats = new Set(presets.map(p => p.cat || 'כללי'));
     const visibleCategories = categoryOrder.filter(c => activeCats.has(c));
 
     visibleCategories.forEach((catName, catIdx) => {
-      const catPresets = filtered.filter(p => (p.cat || 'כללי') === catName);
+      const catPresets = presets.filter(p => (p.cat || 'כללי') === catName);
       if (catPresets.length === 0) return;
 
       const block = document.createElement('div');
       block.className = 'category-block open';
       block.setAttribute('data-category', catName);
+
+      const isDense = catPresets.length > 2;
 
       block.innerHTML = `
         <div class="category-header" data-cat-idx="${catIdx}">
@@ -2261,7 +2334,7 @@
           <span style="font-size:0.8rem; color:var(--text-subtle);">⋮⋮</span>
         </div>
         <div class="category-content">
-          <div class="preset-list" data-category="${catName}" id="cat-list-${catIdx}"></div>
+          <div class="preset-list ${isDense ? 'grid-dense' : ''}" data-category="${catName}" id="cat-list-${catIdx}"></div>
         </div>
       `;
 
@@ -2278,7 +2351,7 @@
         
         const mode = p.portionMode || (p.isPer100g ? 'per100g' : 'fixed');
         let labelText = `${p.name} (${p.cal} קל' | ${p.pro}ג')`;
-        if (mode === 'per100g') labelText = `⚖️️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ל-100ג)`;
+        if (mode === 'per100g') labelText = `⚖️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ל-100ג)`;
         if (mode === 'customUnit') labelText = `⚖️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ליח' ~${p.unitWeight}ג)`;
 
         itemWrap.innerHTML = `
@@ -2295,22 +2368,27 @@
     });
   }
 
+  /* גלילה רציפה ומדויקת תוך כדי גרירת פריט או קטגוריה למעלה/למטה */
   function handleAutoScrollDuringDrag(clientY) {
-    const edgeThreshold = 75;
-    const scrollSpeed = 14;
+    const edgeThreshold = 90;
+    const scrollSpeed = 16;
+    const activeScreen = document.getElementById('screenDb');
 
-    if (clientY < edgeThreshold) {
-      window.scrollBy({ top: -scrollSpeed, behavior: 'auto' });
-    } else if (window.innerHeight - clientY < edgeThreshold) {
-      window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
+    if (activeScreen) {
+      const rect = activeScreen.getBoundingClientRect();
+      if (clientY < rect.top + edgeThreshold) {
+        activeScreen.scrollTop -= scrollSpeed;
+      } else if (clientY > rect.bottom - edgeThreshold) {
+        activeScreen.scrollTop += scrollSpeed;
+      }
     }
 
     const logContainer = document.getElementById('logs');
     if (logContainer && logContainer.offsetParent !== null) {
       const rect = logContainer.getBoundingClientRect();
       if (clientY >= rect.top && clientY <= rect.bottom) {
-        if (clientY - rect.top < 40) logContainer.scrollTop -= 10;
-        else if (rect.bottom - clientY < 40) logContainer.scrollTop += 10;
+        if (clientY - rect.top < 40) logContainer.scrollTop -= 12;
+        else if (rect.bottom - clientY < 40) logContainer.scrollTop += 12;
       }
     }
   }
@@ -2349,7 +2427,7 @@
         placeholder.style.height = blockEl.offsetHeight + 'px';
         blockEl.parentNode.insertBefore(placeholder, blockEl);
         blockEl.style.display = 'none';
-      }, 700);
+      }, 550);
     };
 
     const onMove = function(e) {
@@ -2452,7 +2530,7 @@
         placeholder.style.height = rect.height + 'px';
         rowEl.parentNode.insertBefore(placeholder, rowEl);
         rowEl.style.display = 'none';
-      }, 700);
+      }, 550);
     };
 
     const onMove = function(e) {
@@ -2557,22 +2635,13 @@
     }
   }
 
-  function renderBaseFoodAccordion(container, searchTerm) {
-    const filtered = BASE_FOODS.filter(b => {
-      if (!searchTerm) return true;
-      return b.name.toLowerCase().includes(searchTerm) || (b.cat && b.cat.toLowerCase().includes(searchTerm));
-    });
-
-    if (filtered.length === 0) {
-      container.innerHTML = '<div style="text-align:right; font-size:0.88rem; color:var(--text-muted); padding:16px;">לא נמצאו תוצאות תואמות</div>';
-      return;
-    }
-
-    const cats = Array.from(new Set(filtered.map(b => b.cat)));
+  function renderBaseFoodAccordion(container) {
+    const cats = Array.from(new Set(BASE_FOODS.map(b => b.cat)));
     cats.forEach(catName => {
-      const catItems = filtered.filter(b => b.cat === catName);
+      const catItems = BASE_FOODS.filter(b => b.cat === catName);
       const catKey = 'base_' + catName;
-      const isOpen = searchTerm ? true : !!openCategoriesState[catKey];
+      const isOpen = !!openCategoriesState[catKey];
+      const isDense = catItems.length > 2;
 
       const block = document.createElement('div');
       block.className = 'category-block' + (isOpen ? ' open' : '');
@@ -2583,7 +2652,7 @@
           <span class="category-chevron">${isOpen ? '▲' : '▼'}</span>
         </div>
         <div class="category-content">
-          <div class="base-food-list"></div>
+          <div class="base-food-list ${isDense ? 'grid-dense' : ''}"></div>
         </div>
       `;
 
@@ -2904,7 +2973,7 @@
         placeholder.style.height = '42px';
         rowEl.parentNode.insertBefore(placeholder, rowEl);
         rowEl.style.display = 'none';
-      }, 700);
+      }, 550);
     };
 
     const onMove = function(e) {
@@ -3271,7 +3340,6 @@
     }
     openPoolOptionsDrawer();
 
-    document.getElementById('cancelEditPoolBtn').style.display = 'block';
     goToPageIndex(1);
     entryNameInput.focus();
     updateCancelBtnVisibility();
@@ -3280,7 +3348,6 @@
   function cancelEditPreset() {
     editingPresetIndex = -1;
     clearEntryInputs();
-    document.getElementById('cancelEditPoolBtn').style.display = 'none';
   }
 
   function deletePreset(idx) {
@@ -3527,7 +3594,7 @@
     if (archiveLogs.length === 0) { alert('הארכיון ריק'); return; }
     if (!confirm('האם להוריד את היסטוריית הארכיון כקובץ טקסט?')) return;
     const blob = new Blob([JSON.stringify(archiveLogs, null, 2)], { type: 'text/plain;charset=utf-8' });
-    a = document.createElement('a');
+    const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `archive_logs_${new Date().toISOString().slice(0,10)}.txt`;
     a.click();
