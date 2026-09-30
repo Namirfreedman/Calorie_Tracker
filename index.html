@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Macro Tracker</title><link rel="manifest" href="manifest.json?v=2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Macro Tracker"><link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"><script src="base-foods.js"></script><style>
+<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Macro Tracker</title><link rel="manifest" href="manifest.json?v=2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Macro Tracker"><link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"><script src="base-food.js" onload="if(typeof renderPresets==='function'){renderPresets();applyPoolTabUI();}"></script><style>
   :root {
     --bg-page: #f8f9fa;
     --card-bg: #ffffff;
@@ -815,7 +815,6 @@
     margin: 4px 0;
     pointer-events: none;
   }
-  /* פריט נגרר ביחס 1:1 בדיוק ללא הגדלה */
   .floating-drag-clone {
     position: fixed;
     pointer-events: none;
@@ -1203,7 +1202,7 @@
 <!-- Main Native Slider Container -->
 <div class="screens-slider-container" id="sliderContainer">
   
-  <!-- עמוד 0 (ימין): DATABASE - ללא שורת חיפוש, גרירה חופשית בין עמודים -->
+  <!-- עמוד 0 (ימין): DATABASE -->
   <div class="screen-tab" id="screenDb">
     <div class="card" id="poolCard">
       <div class="pool-tabs">
@@ -2008,7 +2007,7 @@
 
     sourceLogs.forEach(item => {
       const d = item.date || todayStr;
-      if (d === todayStr) return; // רק ימים שנסגרו בעבר
+      if (d === todayStr) return;
       if (item.name && item.name.includes('קיזוז אימון')) {
         dayBurned[d] = (dayBurned[d] || 0) + Math.abs(item.cal || 0);
       } else {
@@ -2033,7 +2032,6 @@
       };
     });
 
-    // הרצת FIFO כרונולוגי: כל גירעון מקזז קודם את הספייר מהיום הישן ביותר שעדיין נותר בו פלוס
     for (let i = 0; i < days.length; i++) {
       let def = days[i].deficit;
       if (def > 0) {
@@ -2383,7 +2381,7 @@
       }
     };
 
-    headerEl.addEventListener('touchstart', onStart, { passive: true });
+    headerEl.addEventListener('touchstart', onStart, { passive: false });
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
     window.addEventListener('touchcancel', onEnd);
@@ -2401,7 +2399,7 @@
       if (!newOrder.includes(c)) newOrder.push(c);
     });
 
-    if (JSON.stringify(newOrder) === oldOrder) return; // לא שונה דבר
+    if (JSON.stringify(newOrder) === oldOrder) return;
 
     pushState('סידור קטגוריות');
     categoryOrder = newOrder;
@@ -2499,7 +2497,7 @@
       }
     };
 
-    rowEl.addEventListener('touchstart', onStart, { passive: true });
+    rowEl.addEventListener('touchstart', onStart, { passive: false });
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
     window.addEventListener('touchcancel', onEnd);
@@ -2520,7 +2518,7 @@
       });
     });
 
-    if (JSON.stringify(newPresets) === oldPresetsStr) return; // לא שונה דבר
+    if (JSON.stringify(newPresets) === oldPresetsStr) return;
 
     pushState('סידור מנות במאגר');
     presets = newPresets;
@@ -2668,7 +2666,6 @@
     }
   }
 
-  /* הצגת מגירת תוקף הספייר לפי תוצאות ה-FIFO המדויקות */
   function renderBankDetailsDrawer() {
     const listEl = document.getElementById('bankDetailsList');
     listEl.innerHTML = '';
@@ -2966,7 +2963,7 @@
       }
     };
 
-    rowEl.addEventListener('touchstart', onStart, { passive: true });
+    rowEl.addEventListener('touchstart', onStart, { passive: false });
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
     window.addEventListener('touchcancel', onEnd);
@@ -3373,7 +3370,6 @@
     updateDisplay();
   }
 
-  /* סגירת יום עם חישוב אימונים מלא והעברה לספייר */
   function closeDay(isAuto, transferBank = true) {
     const today = getTodayString();
     let todayWorkoutsBurn = 0;
