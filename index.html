@@ -1,56 +1,56 @@
-<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>מעקב תזונה יומי</title><link rel="manifest" href="manifest.json?v=2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="תזונה"><link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"><style>
+<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Macro Tracker</title><link rel="manifest" href="manifest.json?v=2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Macro Tracker"><link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"><style>
   :root {
     --bg-page: #f8f9fa;
     --card-bg: #ffffff;
-    --card-border: #dbe0e6;
-    --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+    --card-border: #e2e8f0;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     
-    --text-main: #1a1d20;
-    --text-muted: #5c636a;
-    --text-subtle: #8c959f;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-subtle: #94a3b8;
     
-    --accent-primary: #3b5bdb;
-    --accent-primary-shadow: #2b44a8;
-    --primary-surface: #f0f4ff;
+    --accent-primary: #1877f2;
+    --accent-primary-shadow: #0e5ec4;
+    --primary-surface: #eff6ff;
     
-    --accent-secondary: #1c7ed6;
-    --accent-secondary-shadow: #1864ab;
-    --secondary-surface: #e7f5ff;
+    --accent-secondary: #0284c7;
+    --accent-secondary-shadow: #0369a1;
+    --secondary-surface: #f0f9ff;
     
-    --bank-color: #1971c2;
-    --bank-surface: #e7f5ff;
+    --bank-color: #0284c7;
+    --bank-surface: #f0f9ff;
     
-    --tint-blue-bg: #edf2ff;
-    --tint-blue-border: #bac8ff;
-    --tint-blue-text: #364fc7;
-    --tint-blue-shadow: #91a7ff;
+    --tint-blue-bg: #eff6ff;
+    --tint-blue-border: #bfdbfe;
+    --tint-blue-text: #1d4ed8;
+    --tint-blue-shadow: #93c5fd;
 
-    --tint-cyan-bg: #e7f5ff;
-    --tint-cyan-border: #a5d8ff;
-    --tint-cyan-text: #1971c2;
-    --tint-cyan-shadow: #74c0fc;
+    --tint-cyan-bg: #f0f9ff;
+    --tint-cyan-border: #bae6fd;
+    --tint-cyan-text: #0284c7;
+    --tint-cyan-shadow: #7dd3fc;
 
-    --tint-green-bg: #ebfbee;
-    --tint-green-border: #b2f2bb;
-    --tint-green-text: #2b8a3e;
-    --tint-green-shadow: #8ce99a;
+    --tint-green-bg: #f0fdf4;
+    --tint-green-border: #bbf7d0;
+    --tint-green-text: #15803d;
+    --tint-green-shadow: #86efac;
 
-    --status-green: #2b8a3e;
-    --status-orange: #d9480f;
-    --status-red: #e03131;
+    --status-green: #16a34a;
+    --status-orange: #ea580c;
+    --status-red: #dc2626;
 
     --neutral-btn-bg: #ffffff;
-    --neutral-btn-border: #ced4da;
-    --neutral-btn-shadow: #adb5bd;
-    --neutral-btn-text: #343a40;
+    --neutral-btn-border: #cbd5e1;
+    --neutral-btn-shadow: #94a3b8;
+    --neutral-btn-text: #334155;
 
-    --danger-soft-bg: #fff5f5;
-    --danger-soft-border: #ffc9c9;
-    --danger-soft-text: #c92a2a;
-    --danger-soft-shadow: #ffa8a8;
+    --danger-soft-bg: #fef2f2;
+    --danger-soft-border: #fecaca;
+    --danger-soft-text: #b91c1c;
+    --danger-soft-shadow: #fca5a5;
 
-    --input-bg: #f8f9fa;
-    --input-border: #ced4da;
+    --input-bg: #f8fafc;
+    --input-border: #cbd5e1;
   }
 
   * { 
@@ -59,18 +59,14 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  body { 
-    background: var(--bg-page); 
-    color: var(--text-main); 
-    display: flex; 
-    flex-direction: column; 
-    align-items: center; 
-    padding: 14px; 
-    padding-top: 68px; 
-    padding-bottom: 90px; 
-    margin: 0; 
-    gap: 14px; 
-    text-align: center;
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg-page);
+    color: var(--text-main);
+    overflow: hidden;
   }
 
   body.modal-open {
@@ -78,66 +74,45 @@
     touch-action: none;
   }
 
-  .card { 
-    background: var(--card-bg); 
-    border: 1.5px solid var(--card-border); 
-    border-radius: 20px; 
-    padding: 16px; 
-    width: 100%; 
-    max-width: 410px; 
-    box-shadow: var(--card-shadow); 
-    position: relative; 
-  }
-
+  /* Fixed Top Bar (LTR Direction for English mirror order) */
   .floating-top-bar {
     position: fixed;
     top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    max-width: 410px;
+    left: 0;
+    right: 0;
     height: 56px;
-    background: rgba(255, 255, 255, 0.94);
+    background: rgba(255, 255, 255, 0.98);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 900;
     display: flex;
+    direction: ltr;
     justify-content: space-between;
     align-items: center;
-    padding: 0 16px;
-    border-bottom: 1.5px solid var(--card-border);
+    padding: 0 10px;
+    border-bottom: 1px solid var(--card-border);
   }
 
-  .header-title-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-  h2 { margin: 0; font-size: 1.15rem; color: var(--text-main); font-weight: 800; }
-
-  .topbar-center-slot {
-    flex: 1;
+  .header-left-group {
     display: flex;
     align-items: center;
-    justify-content: center;
-    padding: 0 6px;
+    gap: 6px;
+    flex-shrink: 0;
   }
-  .toast-pill {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #ffffff;
-    background: var(--accent-primary);
-    padding: 4px 12px;
-    border-radius: 20px;
-    opacity: 0;
-    pointer-events: none;
+  .floating-top-bar h2 {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--text-main);
+    font-weight: 900;
+    letter-spacing: -0.3px;
     white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(59, 91, 219, 0.25);
+    word-break: keep-all;
   }
-  .toast-pill.show { opacity: 1; }
-  .toast-pill.fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
-
   .btn-icon-top { 
     background: transparent; 
     border: none; 
     outline: none; 
-    font-size: 1.3rem; 
+    font-size: 1.35rem; 
     cursor: pointer; 
     color: var(--text-muted); 
     padding: 4px; 
@@ -145,19 +120,50 @@
     align-items: center; 
     justify-content: center; 
     transition: color 0.15s; 
+    flex-shrink: 0;
   }
   .btn-icon-top:active { color: var(--accent-primary); transform: scale(0.92); }
 
+  .topbar-center-slot {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    min-width: 0;
+  }
+  .toast-pill {
+    font-size: 0.76rem;
+    font-weight: 800;
+    color: #ffffff;
+    background: var(--accent-primary);
+    padding: 5px 12px;
+    border-radius: 20px;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    max-width: 100%;
+    box-shadow: 0 4px 12px rgba(24, 119, 242, 0.3);
+    direction: rtl;
+    unicode-bidi: plaintext;
+  }
+  .toast-pill.show { opacity: 1; }
+  .toast-pill.fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
+
+  /* Nav Buttons Group (Redo on left, Undo on far right) */
   .nav-history-group { 
     display: flex; 
-    flex-direction: row-reverse; 
-    gap: 8px; 
+    flex-direction: row; 
+    gap: 6px; 
     align-items: center; 
+    flex-shrink: 0;
   }
   .btn-nav-circle {
     background: var(--neutral-btn-bg);
-    color: var(--text-muted);
-    border: 1.5px solid var(--neutral-btn-border);
+    color: var(--text-main);
+    border: 2px solid var(--neutral-btn-border);
     border-radius: 50%;
     width: 36px;
     height: 36px;
@@ -170,7 +176,14 @@
     box-shadow: 0 2px 0 var(--neutral-btn-shadow);
     transition: all 0.1s ease;
   }
-  .btn-nav-circle svg { width: 17px; height: 17px; fill: currentColor; }
+  /* Bolder and thicker stroke lines for Undo/Redo */
+  .btn-nav-circle svg { 
+    width: 19px; 
+    height: 19px; 
+    fill: currentColor; 
+    stroke: currentColor;
+    stroke-width: 0.9px;
+  }
   .btn-nav-circle:active {
     transform: translateY(2px);
     box-shadow: none;
@@ -178,23 +191,106 @@
     border-color: var(--accent-primary);
   }
 
-  .goals-card-wrapper {
+  /* Facebook-like Top Tabs */
+  .fb-nav-bar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    height: 52px;
     background: #ffffff;
-    border: 1.5px solid var(--card-border);
-    border-radius: 20px;
-    padding: 12px 14px;
-    width: 100%;
-    max-width: 410px;
-    box-shadow: var(--card-shadow);
-    user-select: none;
+    border-bottom: 1.5px solid var(--card-border);
+    display: flex;
+    z-index: 890;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
   }
+  .fb-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-muted);
+    transition: color 0.2s;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 3px 0;
+    gap: 2px;
+  }
+  .fb-nav-item .fb-icon { font-size: 1.3rem; line-height: 1; }
+  .fb-nav-item .fb-label { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.4px; }
+  .fb-nav-item.active { color: var(--accent-primary); }
+  
+  .fb-nav-indicator {
+    position: absolute;
+    bottom: -1.5px;
+    right: 0%;
+    height: 3.5px;
+    background: var(--accent-primary);
+    border-radius: 3px 3px 0 0;
+    width: 33.3333%;
+    pointer-events: none;
+    will-change: transform;
+  }
+
+  /* Slider Container */
+  .screens-slider-container {
+    position: absolute;
+    top: 108px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    flex-direction: row;
+    scrollbar-width: none;
+  }
+  .screens-slider-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .screen-tab {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scroll-snap-align: start;
+    padding: 18px 14px 40px 14px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Card Layouts */
+  .card, .goals-card-wrapper { 
+    background: var(--card-bg); 
+    border: 1.5px solid var(--card-border); 
+    border-radius: 24px; 
+    padding: 20px 18px; 
+    width: 100%; 
+    max-width: 460px; 
+    box-shadow: var(--card-shadow); 
+    position: relative; 
+  }
+
+  /* Goals */
   .goals-card-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    position: relative;
     cursor: pointer;
-    padding: 8px 12px;
-    border-radius: 14px;
+    padding: 10px 14px;
+    border-radius: 16px;
     border: 1.5px solid transparent;
     transition: background-color 0.2s ease, border-color 0.2s ease;
   }
@@ -203,61 +299,55 @@
     border-color: var(--tint-blue-border);
   }
   .goals-title {
-    font-size: 0.95rem;
+    font-size: 1.05rem;
     font-weight: 900;
     color: var(--accent-primary);
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    text-align: center;
   }
   .goals-body {
     display: none;
-    margin-top: 12px;
-    padding-top: 12px;
+    margin-top: 14px;
+    padding-top: 14px;
     border-top: 1px solid var(--card-border);
-    cursor: default;
   }
   .goals-card-wrapper.open .goals-body { display: block; }
   .goals-card-wrapper.open .goals-chevron { transform: rotate(180deg); }
-  .goals-chevron { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
-
-  .goal-status-badge {
-    display: inline-block;
-    padding: 3px 10px;
-    border-radius: 12px;
-    font-size: 0.78rem;
-    font-weight: 800;
-    background: #ffffff;
-    color: var(--accent-primary);
-    border: 1px solid var(--tint-blue-border);
+  .goals-chevron { 
+    position: absolute;
+    left: 14px;
+    font-size: 0.8rem; 
+    color: var(--text-muted); 
+    transition: transform 0.2s; 
   }
 
   .program-duration-box {
     background: var(--secondary-surface);
-    border: 1px solid var(--tint-cyan-border);
-    border-radius: 12px;
-    padding: 9px 12px;
-    margin-bottom: 12px;
+    border: 1.5px solid var(--tint-cyan-border);
+    border-radius: 16px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
-    text-align: center;
+    gap: 4px;
   }
-  .program-duration-box .label { font-weight: 800; color: var(--accent-secondary); font-size: 0.82rem; }
-  .program-duration-box .val { font-weight: 900; color: var(--text-main); font-size: 0.95rem; }
+  .program-duration-box .label { font-weight: 800; color: var(--accent-secondary); font-size: 0.88rem; }
+  .program-duration-box .val { font-weight: 900; color: var(--text-main); font-size: 1.05rem; }
 
   .goals-target-row {
-    font-size: 0.84rem;
+    font-size: 0.92rem;
     font-weight: 800;
     color: var(--text-muted);
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-bottom: 12px;
-    text-align: center;
+    margin-bottom: 14px;
   }
   .goals-target-row .target-val {
     color: var(--accent-primary);
@@ -267,131 +357,119 @@
   .weekly-avg-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
   }
   .weekly-avg-item {
     background: #ffffff;
-    border: 1px solid var(--input-border);
-    border-radius: 14px;
-    padding: 10px;
+    border: 1.5px solid var(--input-border);
+    border-radius: 16px;
+    padding: 12px;
     text-align: center;
   }
   .weekly-avg-item .val {
-    font-size: 1.4rem;
+    font-size: 1.55rem;
     font-weight: 900;
-    margin-top: 2px;
-    transition: color 0.3s;
+    margin-top: 3px;
   }
   .weekly-avg-item .lbl {
-    font-size: 0.74rem;
+    font-size: 0.78rem;
     color: var(--text-muted);
     font-weight: 800;
   }
 
+  /* Stats Card - Matched Colors */
   .stats-board {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin-bottom: 14px;
+    gap: 12px;
   }
   .stat-card-target-unified {
-    border: 1.5px solid var(--tint-blue-border);
-    border-radius: 18px;
-    padding: 14px 16px;
+    border: 2px solid var(--tint-blue-border);
+    border-radius: 20px;
+    padding: 18px 20px;
     background: var(--primary-surface);
     box-shadow: 0 2px 0 var(--tint-blue-border);
   }
   .unified-headline {
     text-align: center;
-    font-size: 0.84rem;
+    font-size: 0.95rem;
     font-weight: 900;
     color: var(--accent-primary);
-    margin-bottom: 10px;
+    margin-bottom: 12px;
   }
   .unified-columns {
     display: flex;
     justify-content: space-between;
-    gap: 16px;
+    gap: 20px;
   }
   .target-column {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    text-align: center;
   }
   .target-column .col-label {
-    font-size: 0.86rem;
+    font-size: 0.95rem;
     font-weight: 800;
-    margin-bottom: 2px;
-    text-align: center;
+    margin-bottom: 3px;
+    color: var(--accent-primary);
   }
-  .target-column.cal .col-label { color: var(--accent-primary); }
-  .target-column.pro .col-label { color: var(--accent-secondary); }
 
   .target-column .col-number {
-    font-size: 1.95rem;
+    font-size: 2.3rem;
     font-weight: 900;
     line-height: 1.1;
-    margin-bottom: 6px;
-    text-align: center;
+    margin-bottom: 8px;
     direction: ltr !important;
     display: inline-block;
+    color: var(--accent-primary);
   }
-  .target-column.cal .col-number { color: var(--accent-primary); }
-  .target-column.pro .col-number { color: var(--accent-secondary); }
 
   .bar-container { 
     width: 100%; 
     background: rgba(0, 0, 0, 0.08); 
-    height: 6px; 
-    border-radius: 3px; 
+    height: 8px; 
+    border-radius: 4px; 
     overflow: hidden; 
   }
   .bar-fill { 
     height: 100%; 
     width: 0%; 
-    border-radius: 3px; 
+    border-radius: 4px; 
     transition: width 0.3s ease, background-color 0.3s ease; 
   }
 
   .stats-secondary-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
   }
   .stat-chip-box {
-    border: 1.5px solid var(--tint-cyan-border);
-    border-radius: 14px;
-    padding: 10px 12px;
+    border: 2px solid var(--tint-cyan-border);
+    border-radius: 18px;
+    padding: 14px 16px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    min-height: 80px;
+    min-height: 94px;
     background: var(--secondary-surface);
     text-align: center;
     box-shadow: 0 2px 0 var(--tint-cyan-border);
-    position: relative;
   }
-
   .stat-chip-box .chip-title {
-    font-size: 0.78rem;
+    font-size: 0.85rem;
     font-weight: 800;
     color: var(--accent-secondary);
-    text-align: center;
-    margin-bottom: 2px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
     cursor: pointer;
-    user-select: none;
   }
   .stat-chip-box .chip-num {
-    font-size: 1.55rem;
+    font-size: 1.85rem;
     font-weight: 900;
     line-height: 1.1;
-    text-align: center;
     direction: ltr !important;
     display: inline-block;
     cursor: pointer;
@@ -401,67 +479,56 @@
     border: none;
     cursor: pointer;
     color: var(--text-subtle);
-    font-size: 0.85rem;
+    font-size: 0.95rem;
     padding: 0 4px;
-    transition: color 0.15s;
   }
-  .btn-edit-bank-inline:active { color: var(--accent-primary); }
 
   .bank-details-drawer {
     display: none;
     background: #ffffff;
     border: 1.5px solid var(--tint-cyan-border);
-    border-radius: 14px;
-    padding: 12px 14px;
-    margin-top: 6px;
-    margin-bottom: 8px;
-    text-align: right;
-    box-shadow: 0 4px 12px rgba(28, 126, 214, 0.08);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-top: 8px;
+    box-shadow: 0 4px 14px rgba(2, 132, 199, 0.08);
   }
-  .bank-details-drawer.open {
-    display: block;
-  }
+  .bank-details-drawer.open { display: block; }
   .bank-detail-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.82rem;
-    padding: 7px 0;
-    border-bottom: 1px dashed #e9ecef;
+    font-size: 0.88rem;
+    padding: 8px 0;
+    border-bottom: 1px dashed #e2e8f0;
   }
-  .bank-detail-item:last-child {
-    border-bottom: none;
-  }
+  .bank-detail-item:last-child { border-bottom: none; }
 
+  /* Inputs & Big Forms */
   .entry-flat-section {
-    border-top: 2px solid #ced4da;
-    padding-top: 14px;
-    margin-top: 12px;
-    margin-bottom: 12px;
-    text-align: center;
+    padding: 4px 0;
+    width: 100%;
   }
   .entry-flat-title { 
-    font-size: 0.88rem; 
-    font-weight: 800; 
+    font-size: 1.15rem; 
+    font-weight: 900; 
     color: var(--text-main); 
-    margin-bottom: 10px; 
+    margin-bottom: 14px; 
     display: flex; 
     align-items: center; 
     justify-content: center; 
-    gap: 6px; 
-    text-align: center; 
+    gap: 8px; 
   }
 
-  .search-wrapper { position: relative; width: 100%; margin-bottom: 8px; }
+  .search-wrapper { position: relative; width: 100%; margin-bottom: 12px; }
   
   input[type="text"], textarea, select { 
     background: var(--input-bg); 
-    border: 1.5px solid var(--input-border); 
-    border-radius: 12px; 
+    border: 2px solid var(--input-border); 
+    border-radius: 14px; 
     color: var(--text-main); 
-    padding: 11px 12px; 
+    padding: 13px 14px; 
     width: 100%; 
-    font-size: 0.92rem; 
+    font-size: 1rem; 
     font-weight: 600; 
     outline: none; 
     text-align: center; 
@@ -470,13 +537,13 @@
 
   input[type="number"] {
     background: var(--input-bg); 
-    border: 1.5px solid var(--input-border); 
-    border-radius: 12px; 
+    border: 2px solid var(--input-border); 
+    border-radius: 14px; 
     color: var(--text-main); 
-    padding: 11px 12px; 
+    padding: 13px 14px; 
     width: 100%; 
-    font-size: 0.95rem; 
-    font-weight: 700; 
+    font-size: 1.05rem; 
+    font-weight: 800; 
     outline: none; 
     direction: ltr !important; 
     text-align: center !important; 
@@ -487,7 +554,7 @@
   input:focus, textarea:focus, select:focus { 
     background: #ffffff; 
     border-color: var(--accent-primary); 
-    box-shadow: 0 0 0 3px rgba(59, 91, 219, 0.12); 
+    box-shadow: 0 0 0 4px rgba(24, 119, 242, 0.14); 
   }
 
   .custom-dropdown-panel {
@@ -496,75 +563,52 @@
     left: 0;
     right: 0;
     background: #ffffff;
-    border: 1.5px solid var(--input-border);
-    border-radius: 14px;
+    border: 2px solid var(--input-border);
+    border-radius: 16px;
     margin-top: 4px;
-    max-height: 240px;
+    max-height: 280px;
     overflow-y: auto;
     z-index: 1000;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     display: none;
     text-align: right;
   }
   .dropdown-item {
-    padding: 10px 14px;
+    padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     cursor: pointer;
     border-bottom: 1px solid var(--card-border);
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.92rem;
+    font-weight: 700;
   }
   .dropdown-item:last-child { border-bottom: none; }
   .dropdown-item:active { background: var(--primary-surface); color: var(--accent-primary); }
-  .dropdown-item-meta { font-size: 0.74rem; color: var(--text-muted); font-weight: normal; }
+  .dropdown-item-meta { font-size: 0.8rem; color: var(--text-muted); font-weight: normal; }
 
   .portion-panel {
     display: none;
     background: var(--secondary-surface);
-    border: 1.5px dashed var(--accent-secondary);
-    border-radius: 12px;
-    padding: 10px;
-    margin-bottom: 8px;
+    border: 2px dashed var(--accent-secondary);
+    border-radius: 16px;
+    padding: 12px;
+    margin-bottom: 12px;
     flex-direction: column;
-    gap: 8px;
+    gap: 10px;
   }
-  .portion-dual-inputs {
-    display: flex;
-    gap: 8px;
-    width: 100%;
-  }
-  .portion-input-cell {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 3px;
-    text-align: center;
-  }
-  .portion-input-cell label {
-    font-size: 0.74rem;
-    font-weight: 700;
-    color: var(--accent-secondary);
-    text-align: center;
-  }
-  .portion-input-cell input {
-    padding: 8px !important;
-    text-align: center !important;
-    font-weight: 800;
-    border-radius: 8px;
-    background: #ffffff;
-    direction: ltr !important;
-  }
+  .portion-dual-inputs { display: flex; gap: 10px; width: 100%; }
+  .portion-input-cell { flex: 1; display: flex; flex-direction: column; gap: 4px; text-align: center; }
+  .portion-input-cell label { font-size: 0.82rem; font-weight: 800; color: var(--accent-secondary); }
+  .portion-input-cell input { padding: 10px !important; font-size: 1rem !important; border-radius: 10px; background: #ffffff; }
 
-  .input-row { display: flex; gap: 8px; margin-bottom: 8px; }
-
-  .action-buttons-stack { display: flex; flex-direction: column; gap: 9px; margin-top: 4px; }
+  .input-row { display: flex; gap: 10px; margin-bottom: 12px; }
+  .action-buttons-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
   
   .btn-tint {
-    border-radius: 12px;
-    padding: 11px 12px;
-    font-size: 0.92rem;
+    border-radius: 14px;
+    padding: 13px 14px;
+    font-size: 1rem;
     font-weight: 800;
     cursor: pointer;
     width: 100%;
@@ -581,141 +625,125 @@
     background: var(--accent-primary);
     color: #ffffff;
     border: 1.5px solid var(--accent-primary-shadow);
-    box-shadow: 0 3px 0 var(--accent-primary-shadow);
-    font-size: 1rem;
-    padding: 13px 14px;
+    box-shadow: 0 4px 0 var(--accent-primary-shadow);
+    font-size: 1.05rem;
+    padding: 14px 16px;
   }
-
   .btn-tint-pair-top {
     background: var(--tint-blue-bg);
     color: var(--tint-blue-text);
     border: 1.5px solid var(--tint-blue-border);
     box-shadow: 0 3px 0 var(--tint-blue-shadow);
-    font-size: 0.88rem;
-    padding: 10px 8px;
+    font-size: 0.95rem;
   }
-
   .btn-tint-pair-bottom {
     background: var(--tint-cyan-bg);
     color: var(--tint-cyan-text);
     border: 1.5px solid var(--tint-cyan-border);
     box-shadow: 0 3px 0 var(--tint-cyan-shadow);
+    font-size: 0.95rem;
+    padding: 13px 14px;
   }
-
   .btn-cancel-edit-soft {
     background: var(--danger-soft-bg);
     color: var(--danger-soft-text);
     border: 1.5px solid var(--danger-soft-border);
     box-shadow: 0 3px 0 var(--danger-soft-shadow);
-    border-radius: 12px;
-    padding: 10px 12px;
-    font-size: 0.86rem;
+    border-radius: 14px;
+    padding: 12px 14px;
+    font-size: 0.92rem;
     font-weight: 800;
     cursor: pointer;
     width: 100%;
-    text-align: center;
-    outline: none;
-    transition: transform 0.08s ease, box-shadow 0.08s ease;
-  }
-  .btn-cancel-edit-soft:active {
-    transform: translateY(3px);
-    box-shadow: none;
   }
 
   .btn-day-single {
     background: var(--tint-cyan-bg);
     color: var(--tint-cyan-text);
-    border: 1.5px solid var(--tint-cyan-border);
+    border: 2px solid var(--tint-cyan-border);
     box-shadow: 0 3px 0 var(--tint-cyan-shadow);
-    border-radius: 14px;
-    padding: 10px 12px;
-    font-size: 0.86rem;
+    border-radius: 16px;
+    padding: 13px 16px;
+    font-size: 0.96rem;
     font-weight: 800;
     cursor: pointer;
     width: 100%;
-    text-align: center;
-    outline: none;
-    margin-bottom: 10px;
-    transition: transform 0.08s ease, box-shadow 0.08s ease;
+    margin-top: 14px;
   }
-  .btn-day-single:active {
-    transform: translateY(3px);
+
+  /* Segmented 3-button Mode Picker without "לפי" */
+  .segmented-mode-container {
+    background: var(--input-bg);
+    border: 1.5px solid var(--card-border);
+    border-radius: 16px;
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+  .segmented-buttons-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .btn-segment-option {
+    background: #ffffff;
+    color: var(--text-main);
+    border: 1.5px solid var(--input-border);
+    border-radius: 12px;
+    padding: 10px 4px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    outline: none;
+    box-shadow: 0 2px 0 var(--neutral-btn-shadow);
+    transition: all 0.15s ease;
+    text-align: center;
+  }
+  .btn-segment-option:active {
+    transform: translateY(2px);
     box-shadow: none;
   }
-
-  .btn-pool-opts-toggle {
-    background: var(--input-bg);
-    color: var(--text-muted);
-    border: 1px dashed var(--input-border);
-    border-radius: 12px;
-    padding: 8px 12px;
-    font-size: 0.82rem;
-    font-weight: 700;
-    cursor: pointer;
-    width: 100%;
-    display: grid;
-    grid-template-columns: 24px 1fr 24px;
-    align-items: center;
-    margin-top: 4px;
-    text-align: center;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-  }
-  .btn-pool-opts-toggle.active {
-    background: var(--primary-surface);
-    border: 1.5px solid var(--tint-blue-border);
-    color: var(--accent-primary);
-  }
-  .pool-options-drawer {
-    display: none;
-    margin-top: 8px;
-    padding: 10px;
-    background: #fbfbfc;
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
+  .btn-segment-option.active {
+    background: var(--accent-primary);
+    color: #ffffff;
+    border-color: var(--accent-primary-shadow);
+    box-shadow: 0 2px 0 var(--accent-primary-shadow);
   }
 
-  .collapsible-wrapper { margin-top: 4px; }
+  .collapsible-wrapper { margin-top: 12px; width: 100%; }
   
   .btn-toggle-box-green {
     background: var(--tint-green-bg);
     color: var(--tint-green-text);
-    border: 1.5px solid var(--tint-green-border);
-    border-radius: 14px;
-    font-size: 0.85rem;
+    border: 2px solid var(--tint-green-border);
+    border-radius: 16px;
+    font-size: 0.92rem;
     font-weight: 800;
-    padding: 11px 14px;
+    padding: 13px 16px;
     width: 100%;
     cursor: pointer;
     outline: none;
     display: grid;
     grid-template-columns: 24px 1fr 24px;
     align-items: center;
-    text-align: center;
     box-shadow: 0 2px 0 var(--tint-green-shadow);
-    transition: transform 0.08s ease, box-shadow 0.08s ease;
-  }
-  .btn-toggle-box-green:active {
-    transform: translateY(2px);
-    box-shadow: none;
   }
   .collapsible-box {
     display: none;
-    margin-top: 8px;
+    margin-top: 10px;
     padding: 4px 0;
   }
 
   .log-scroll-area {
-    max-height: 340px;
+    max-height: 420px;
     overflow-y: auto;
-    font-size: 0.84rem;
-    padding-right: 2px;
+    font-size: 0.9rem;
   }
   .history-day-card {
     background: #ffffff;
     border: 1.5px solid var(--card-border);
-    border-radius: 16px;
-    margin-bottom: 10px;
-    padding: 10px 14px;
+    border-radius: 18px;
+    margin-bottom: 12px;
+    padding: 12px 16px;
     box-shadow: 0 2px 0 var(--card-border);
   }
   .history-day-header {
@@ -723,61 +751,49 @@
     justify-content: space-between;
     align-items: center;
     padding-bottom: 8px;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #f1f3f5;
+    margin-bottom: 6px;
+    border-bottom: 1px solid #f1f5f9;
   }
-  .history-day-title { font-size: 0.82rem; font-weight: 800; color: var(--accent-primary); flex-shrink: 0; }
+  .history-day-title { font-size: 0.9rem; font-weight: 800; color: var(--accent-primary); }
   .history-day-summary { 
-    font-size: 0.74rem; 
+    font-size: 0.8rem; 
     color: var(--text-muted); 
-    font-weight: 600; 
+    font-weight: 700; 
     display: flex; 
     align-items: center; 
     gap: 6px; 
-    white-space: nowrap; 
-    overflow: hidden; 
   }
   .bank-pill-mini {
-    font-size: 0.68rem;
+    font-size: 0.72rem;
     font-weight: 800;
-    padding: 2px 6px;
-    border-radius: 8px;
-    background: #f1f3f5;
+    padding: 3px 8px;
+    border-radius: 10px;
+    background: #f1f5f9;
     color: var(--text-muted);
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-  }
-  .bank-pill-mini .num-span {
-    direction: ltr !important;
-    display: inline-block;
   }
   .bank-pill-mini.active-pos { background: var(--tint-green-bg); color: var(--status-green); }
   .bank-pill-mini.active-neg { background: var(--danger-soft-bg); color: var(--danger-soft-text); }
-  .bank-pill-mini.expired-gray { background: #f1f3f5; color: #868e96; }
+  .bank-pill-mini.expired-gray { background: #f1f5f9; color: #94a3b8; }
 
-  .day-items-container { min-height: 28px; display: flex; flex-direction: column; }
+  .day-items-container { min-height: 32px; display: flex; flex-direction: column; }
   .log-item-row { 
     display: flex; 
     justify-content: space-between; 
     align-items: center; 
-    padding: 9px 0; 
-    border-bottom: 1px solid #f8f9fa; 
+    padding: 11px 0; 
+    border-bottom: 1px solid #f8fafc; 
     color: var(--text-main); 
-    user-select: none; 
-    -webkit-user-select: none; 
     touch-action: pan-y; 
   }
   .log-item-row:last-child { border-bottom: none; }
   .log-item-row.holding-active {
     background: var(--primary-surface);
-    border-radius: 8px;
+    border-radius: 10px;
   }
   .drag-placeholder {
-    border: 1.5px dashed var(--accent-primary);
+    border: 2px dashed var(--accent-primary);
     background: var(--primary-surface);
-    border-radius: 10px;
+    border-radius: 12px;
     margin: 4px 0;
     pointer-events: none;
   }
@@ -786,36 +802,34 @@
     pointer-events: none;
     z-index: 9999;
     background: #ffffff;
-    border: 1.5px solid var(--accent-primary);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
-    border-radius: 12px;
-    padding: 10px 14px;
+    border: 2px solid var(--accent-primary);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+    border-radius: 14px;
+    padding: 12px 16px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--text-main);
     transform: scale(1.02);
-    opacity: 0.95;
   }
 
-  .btn-log-action { background: transparent; border: none; font-size: 0.95rem; cursor: pointer; padding: 2px 5px; color: var(--text-subtle); transition: color 0.15s; }
+  .btn-log-action { background: transparent; border: none; font-size: 1.05rem; cursor: pointer; padding: 3px 6px; color: var(--text-subtle); }
   .btn-log-action:active { color: var(--accent-primary); }
   .btn-log-del:active { color: var(--danger-soft-text); }
 
-  .pool-tabs { display: flex; gap: 8px; margin-bottom: 12px; }
+  /* Database Pools */
+  .pool-tabs { display: flex; gap: 10px; margin-bottom: 14px; }
   .pool-tab-btn {
     flex: 1;
     background: var(--neutral-btn-bg);
     color: var(--neutral-btn-text);
-    border: 1.5px solid var(--neutral-btn-border);
-    border-radius: 12px;
-    padding: 9px 4px;
-    font-size: 0.82rem;
-    font-weight: 700;
+    border: 2px solid var(--neutral-btn-border);
+    border-radius: 14px;
+    padding: 12px 6px;
+    font-size: 0.92rem;
+    font-weight: 800;
     cursor: pointer;
-    outline: none;
     box-shadow: 0 2px 0 var(--neutral-btn-shadow);
-    transition: transform 0.08s ease, box-shadow 0.08s ease;
   }
   .pool-tab-btn.active {
     background: var(--accent-primary);
@@ -824,79 +838,62 @@
     box-shadow: 0 2px 0 var(--accent-primary-shadow);
     transform: translateY(1px);
   }
-  .pool-tab-btn:active {
-    transform: translateY(2px);
-    box-shadow: none;
-  }
 
-  .burn-action-wrap {
-    margin-bottom: 12px;
-  }
+  .burn-action-wrap { margin-bottom: 14px; }
 
   .category-block {
     background: #ffffff;
     border: 1.5px solid var(--card-border);
-    border-radius: 14px;
-    margin-bottom: 10px;
+    border-radius: 18px;
+    margin-bottom: 12px;
     overflow: hidden;
     box-shadow: 0 2px 0 var(--card-border);
-    transition: border-color 0.2s, box-shadow 0.2s;
     text-align: right;
   }
   .category-block.category-holding {
     border-color: var(--accent-primary) !important;
     background: var(--primary-surface) !important;
-    box-shadow: 0 0 12px rgba(59, 91, 219, 0.3) !important;
+    box-shadow: 0 0 14px rgba(24, 119, 242, 0.35) !important;
   }
   .category-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 11px 14px;
+    padding: 13px 16px;
     cursor: pointer;
     user-select: none;
     background: #ffffff;
     touch-action: pan-y;
-    text-align: right;
   }
   .category-header:active { background: var(--input-bg); }
-  .category-title { font-size: 0.88rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 6px; }
-  .category-chevron { font-size: 0.75rem; color: var(--text-muted); transition: transform 0.2s; }
+  .category-title { font-size: 0.95rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+  .category-chevron { font-size: 0.8rem; color: var(--text-muted); transition: transform 0.2s; }
   .category-block.open .category-chevron { transform: rotate(180deg); }
   .category-content {
     display: none;
-    padding: 10px 14px;
-    border-top: 1px solid #f1f3f5;
+    padding: 12px 16px;
+    border-top: 1px solid #f1f5f9;
     background: #fafbfc;
-    text-align: right;
   }
   .category-block.open .category-content { display: block; }
 
   .preset-list { 
     display: flex; 
     flex-wrap: wrap; 
-    gap: 6px; 
-    min-height: 28px; 
-    padding: 2px 0; 
+    gap: 8px; 
+    min-height: 32px; 
+    padding: 4px 0; 
     justify-content: flex-start; 
-    text-align: right; 
   }
   .preset-btn-wrapper { 
     display: flex; 
     align-items: center; 
     background: #ffffff; 
     border: 1.5px solid var(--input-border); 
-    border-radius: 10px; 
+    border-radius: 12px; 
     overflow: hidden; 
-    user-select: none; 
-    -webkit-user-select: none; 
     touch-action: pan-y; 
     box-shadow: 0 2px 0 var(--neutral-btn-shadow); 
-    transition: transform 0.08s ease, box-shadow 0.08s ease, background-color 0.3s ease; 
-  }
-  .preset-btn-wrapper:active {
-    transform: translateY(2px);
-    box-shadow: none;
   }
   .preset-btn-wrapper.holding-active {
     background: var(--primary-surface) !important;
@@ -905,52 +902,45 @@
   .preset-btn {
     background: transparent;
     color: var(--text-main);
-    font-size: 0.82rem;
-    padding: 8px 10px;
+    font-size: 0.9rem;
+    padding: 10px 12px;
     border: none;
     cursor: pointer;
-    font-weight: 600;
+    font-weight: 700;
     text-align: right;
   }
   .preset-sub-btn {
     background: transparent;
-    font-size: 0.78rem;
-    padding: 8px 6px;
+    font-size: 0.85rem;
+    padding: 10px 8px;
     border: none;
-    border-right: 1px solid #f1f3f5;
+    border-right: 1px solid #f1f5f9;
     cursor: pointer;
     color: var(--text-subtle);
   }
-  .preset-sub-btn:active { color: var(--accent-primary); }
 
   .base-food-list {
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    text-align: right;
+    gap: 8px;
   }
   .base-food-btn-wrap {
     display: flex;
     width: 100%;
     background: #ffffff;
     border: 1.5px solid var(--input-border);
-    border-radius: 12px;
+    border-radius: 14px;
     box-shadow: 0 2px 0 var(--neutral-btn-shadow);
     overflow: hidden;
-    transition: all 0.25s ease;
-  }
-  .base-food-btn-wrap:active {
-    transform: translateY(2px);
-    box-shadow: none;
   }
   .base-food-btn {
     width: 100%;
     text-align: right;
-    padding: 10px 14px;
+    padding: 12px 16px;
     background: transparent;
     border: none;
-    font-size: 0.86rem;
-    font-weight: 700;
+    font-size: 0.94rem;
+    font-weight: 800;
     color: var(--text-main);
     cursor: pointer;
     display: flex;
@@ -958,7 +948,7 @@
     align-items: center;
   }
   .base-food-btn .meta-tag {
-    font-size: 0.76rem;
+    font-size: 0.82rem;
     font-weight: normal;
     color: var(--text-muted);
   }
@@ -966,36 +956,17 @@
   .pulse-active-glow {
     background: var(--primary-surface) !important;
     border-color: var(--accent-primary) !important;
-    box-shadow: 0 0 12px rgba(59, 91, 219, 0.4) !important;
+    box-shadow: 0 0 14px rgba(24, 119, 242, 0.45) !important;
     transform: scale(0.98);
   }
 
-  .ai-card {
-    background: #ffffff;
-    border: 1.5px solid var(--card-border);
-    border-radius: 20px;
-    padding: 16px;
-    width: 100%;
-    max-width: 410px;
-    box-shadow: var(--card-shadow);
-    text-align: center;
-  }
-  .ai-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.88rem;
-    font-weight: 800;
-    color: var(--accent-primary);
-    margin-bottom: 8px;
-  }
-
+  /* Modals */
   .modal-overlay {
     display: none;
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(6px);
     z-index: 1000;
     justify-content: center;
     align-items: center;
@@ -1003,94 +974,109 @@
   }
   .modal-box {
     background: #ffffff;
-    border: 1.5px solid var(--card-border);
-    border-radius: 20px;
-    padding: 20px;
+    border: 2px solid var(--card-border);
+    border-radius: 24px;
+    padding: 22px;
     width: 100%;
-    max-width: 380px;
+    max-width: 420px;
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.16);
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 14px;
     text-align: center;
   }
-  .modal-header-bar { display: flex; justify-content: space-between; align-items: center; }
-  .modal-header-bar h3 { margin: 0; font-size: 1.15rem; font-weight: 800; }
-  .modal-close-btn { background: transparent; border: none; font-size: 1.3rem; color: var(--text-muted); cursor: pointer; }
+  .modal-header-bar { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    position: relative;
+    width: 100%;
+  }
+  .modal-header-bar h3 { 
+    margin: 0; 
+    font-size: 1.25rem; 
+    font-weight: 900; 
+    text-align: center;
+    width: 100%;
+  }
+  .modal-close-btn { 
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent; 
+    border: none; 
+    font-size: 1.4rem; 
+    color: var(--text-muted); 
+    cursor: pointer; 
+  }
 
   .btn-setting-accordion {
     background: var(--neutral-btn-bg);
     color: var(--text-main);
-    border: 1.5px solid var(--neutral-btn-border);
-    border-radius: 14px;
-    padding: 12px 14px;
-    font-size: 0.9rem;
+    border: 2px solid var(--neutral-btn-border);
+    border-radius: 16px;
+    padding: 14px 16px;
+    font-size: 0.95rem;
     font-weight: 800;
     cursor: pointer;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 24px 1fr 24px;
     align-items: center;
     box-shadow: 0 2px 0 var(--neutral-btn-shadow);
-    transition: all 0.15s ease;
+  }
+  .btn-setting-accordion .accordion-title-center {
+    text-align: center;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
   }
   .btn-setting-accordion.active {
     background: var(--accent-primary);
     color: #ffffff;
     border-color: var(--accent-primary-shadow);
-    box-shadow: 0 2px 0 var(--accent-primary-shadow);
   }
   .setting-accordion-drawer {
     display: none;
     background: #fbfbfc;
-    border: 1px solid var(--card-border);
-    border-radius: 14px;
-    padding: 12px;
+    border: 1.5px solid var(--card-border);
+    border-radius: 16px;
+    padding: 14px;
     margin-top: 4px;
-    margin-bottom: 6px;
     text-align: center;
   }
 
   .date-dmy-wrap {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     justify-content: center;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     direction: ltr;
   }
   .date-dmy-wrap input {
-    padding: 8px !important;
-    font-size: 0.9rem !important;
+    padding: 10px !important;
+    font-size: 0.95rem !important;
     text-align: center !important;
   }
-
-  .switch-btn {
-    background: var(--input-bg);
-    border: 1.5px solid var(--input-border);
-    border-radius: 16px;
-    padding: 4px 12px;
-    color: var(--text-muted);
-    font-weight: 700;
-    font-size: 0.78rem;
-    cursor: pointer;
-  }
-  .switch-btn.active { background: var(--accent-primary); color: #ffffff; border-color: var(--accent-primary-shadow); }
 
   .archive-viewer-box {
     display: none;
     background: #fbfbfc;
     border: 1.5px solid var(--card-border);
-    border-radius: 14px;
-    padding: 10px 14px;
-    max-height: 260px;
+    border-radius: 16px;
+    padding: 12px 16px;
+    max-height: 280px;
     overflow-y: auto;
-    font-size: 0.8rem;
-    margin-top: 6px;
+    font-size: 0.85rem;
+    margin-top: 8px;
   }
   .archive-day-card {
-    padding: 10px 0;
+    padding: 12px 0;
     border-bottom: 1px solid var(--card-border);
   }
   .archive-day-card:last-child { border-bottom: none; }
@@ -1098,20 +1084,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
   }
   .archive-day-date { font-weight: 800; color: var(--accent-primary); }
-  .archive-day-totals { font-weight: 700; color: var(--text-muted); font-size: 0.74rem; }
+  .archive-day-totals { font-weight: 700; color: var(--text-muted); font-size: 0.78rem; }
   .archive-item-row {
     display: flex;
     justify-content: space-between;
-    padding: 3px 0;
+    padding: 4px 0;
     color: var(--text-main);
-    font-size: 0.78rem;
-  }</style></head><body><div class="floating-top-bar">
-  <div class="header-title-group">
-    <h2>מאזן יומי</h2>
-    <button class="btn-icon-top" onclick="openSettingsModal()" title="הגדרות">⚙</button>
+    font-size: 0.82rem;
+  }
+</style></head><body>
+
+<!-- Fixed Top Bar: Mirrored in English Order (Left to Right) -->
+<div class="floating-top-bar">
+  <div class="header-left-group">
+    <button class="btn-icon-top" onclick="openSettingsModal()" title="Settings">⚙</button>
+    <h2>Macro Tracker</h2>
   </div>
 
   <div class="topbar-center-slot">
@@ -1119,231 +1109,276 @@
   </div>
 
   <div class="nav-history-group">
-    <button class="btn-nav-circle" onclick="undoLastAction()" title="חזור אחורה">
+    <!-- Redo Button: Straight arrow pointing left, placed to the left of Undo -->
+    <button class="btn-nav-circle" onclick="redoLastAction()" title="הלוך">
       <svg viewBox="0 0 24 24">
+        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+      </svg>
+    </button>
+    <!-- Undo Button: Mirrored circular arrow clockwise, placed on the far right -->
+    <button class="btn-nav-circle" onclick="undoLastAction()" title="חזור">
+      <svg viewBox="0 0 24 24" style="transform: scaleX(-1);">
         <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
       </svg>
     </button>
-    <button class="btn-nav-circle" onclick="redoLastAction()" title="הלוך שוב">
-      <svg viewBox="0 0 24 24">
-        <path d="M4 11h12.17l-5.59-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4v-2z"/>
-      </svg>
-    </button>
-  </div></div><div class="goals-card-wrapper" id="goalsCard">
-  <div class="goals-card-header" onclick="toggleGoalsCard(event)">
-    <div class="goals-title">
-      <span>🎯 מטרות אישיות</span>
-      <span class="goal-status-badge" id="goalBadgeText">חיטוב</span>
-    </div>
-    <span class="goals-chevron" id="goalsChevron">▼</span>
   </div>
+</div>
 
-  <div class="goals-body" id="goalsBody" onclick="event.stopPropagation()">
-    <div class="program-duration-box">
-      <span class="label" id="programDurationLabel">זמן בחיטוב:</span>
-      <span class="val" id="programDurationValue">יום 1</span>
-    </div>
+<!-- Facebook-like Top Tabs (Right to Left: DATABASE -> ADD FOOD -> HOME) -->
+<div class="fb-nav-bar">
+  <button class="fb-nav-item active" id="fbNavDb" onclick="goToPageIndex(0)">
+    <span class="fb-icon">📚</span>
+    <span class="fb-label">DATABASE</span>
+  </button>
+  <button class="fb-nav-item" id="fbNavAdd" onclick="goToPageIndex(1)">
+    <span class="fb-icon">🍽️</span>
+    <span class="fb-label">ADD FOOD</span>
+  </button>
+  <button class="fb-nav-item" id="fbNavHome" onclick="goToPageIndex(2)">
+    <span class="fb-icon">🏠</span>
+    <span class="fb-label">HOME</span>
+  </button>
+  <div class="fb-nav-indicator" id="fbNavIndicator"></div>
+</div>
 
-    <div class="goals-target-row">
-      <span>יעד יומי שהוגדר:</span>
-      <span class="target-val" id="goalsTargetSummary">1,800 קל' | 140 חלבון</span>
-    </div>
-
-    <div class="weekly-avg-grid">
-      <div class="weekly-avg-item">
-        <div class="lbl">ממוצע שבועי קלוריות</div>
-        <div class="val" id="weeklyAvgCal">0</div>
-      </div>
-      <div class="weekly-avg-item">
-        <div class="lbl">ממוצע שבועי חלבון</div>
-        <div class="val" id="weeklyAvgPro">0</div>
-      </div>
-    </div>
-  </div></div><div class="card">
-  <div class="stats-board">
-    <div class="stat-card-target-unified">
-      <div class="unified-headline">נשאר להיום</div>
-      <div class="unified-columns">
-        <div class="target-column cal" id="boxRemCal">
-          <div class="col-label">קלוריות</div>
-          <div id="remainingCal" class="col-number">1,800</div>
-          <div class="bar-container">
-            <div id="barRemainingCal" class="bar-fill" style="background: var(--accent-primary);"></div>
-          </div>
-        </div>
-
-        <div class="target-column pro" id="boxRemPro">
-          <div class="col-label">חלבון (ג')</div>
-          <div id="remainingPro" class="col-number">140</div>
-          <div class="bar-container">
-            <div id="barRemainingPro" class="bar-fill" style="background: var(--accent-secondary);"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="stats-secondary-row">
-      <div class="stat-chip-box">
-        <div class="chip-title">🍽️ נאכל היום</div>
-        <div style="display:flex; justify-content:space-around; align-items:baseline; margin-top:2px;">
-          <span style="font-size:1.22rem; font-weight:800; color:var(--accent-secondary);" id="eatenCal">0</span>
-          <span style="font-size:0.85rem; color:var(--text-subtle);">|</span>
-          <span style="font-size:1.22rem; font-weight:800; color:var(--accent-secondary);" id="eatenPro">0</span>
-        </div>
-        <div class="bar-container" style="height:5px; margin-top:4px;">
-          <div id="barEatenCal" class="bar-fill" style="background: var(--accent-secondary);"></div>
-        </div>
+<!-- Main Native Slider Container -->
+<div class="screens-slider-container" id="sliderContainer">
+  
+  <!-- עמוד 0 (ימין): DATABASE - מאגר מאכלים -->
+  <div class="screen-tab" id="screenDb">
+    <div class="card" id="poolCard">
+      <div class="pool-tabs">
+        <button class="pool-tab-btn" id="tabMyFood" onclick="handlePoolTabClick('myfood')">⭐ האוכל שלי (0)</button>
+        <button class="pool-tab-btn" id="tabBase" onclick="handlePoolTabClick('base')">⚖️ מאגר בסיס (0)</button>
       </div>
 
-      <div class="stat-chip-box">
-        <div class="chip-title" onclick="toggleBankDrawer()" title="לחץ לפירוט תוקף יתרות הספייר">
-          <span>🏦 ספייר</span>
-          <span id="bankChevron" style="font-size:0.65rem; transition:transform 0.2s;">▼</span>
-        </div>
-        <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-          <span id="weeklyBank" class="chip-num" onclick="promptManualBankEdit()" title="לחץ לעריכה ידנית של הספייר">0</span>
-          <button class="btn-edit-bank-inline" onclick="promptManualBankEdit()" title="עריכה ידנית">✎</button>
-        </div>
+      <div id="allSearchRow" style="display:none; margin-bottom:12px;">
+        <input type="text" id="allSearchInput" placeholder="סינון ברשימה..." oninput="renderPresets()">
       </div>
-    </div>
 
-    <div class="bank-details-drawer" id="bankDetailsDrawer">
-      <div style="font-size:0.84rem; font-weight:900; color:var(--accent-secondary); margin-bottom:8px; text-align:center;">
-        תוקף הספייר
+      <div class="burn-action-wrap" id="myFoodSpecialActions">
+        <button class="btn-tint btn-tint-pair-bottom" onclick="openExerciseBurnModal()">🏃 אימון / קיזוז מינוס (הוסף קלוריות לספייר)</button>
       </div>
-      <div id="bankDetailsList"></div>
+
+      <div id="categoryContainer"></div>
     </div>
   </div>
 
-  <div class="entry-flat-section" id="entryBox">
-    <div class="entry-flat-title" id="entryTitle">🔍 הזנת מנה מהירה</div>
+  <!-- עמוד 1 (אמצע): ADD FOOD - הזנת מנה מהירה ואפשרויות שמירה למאגר -->
+  <div class="screen-tab" id="screenAdd">
     
-    <div class="search-wrapper">
-      <input type="text" id="entryNameInput" placeholder="חפש מנה במאגר או הקלד חדשה..." autocomplete="off" oninput="handleLiveSearch(this.value)">
-      <div class="custom-dropdown-panel" id="searchDropdown"></div>
-    </div>
-
-    <div class="portion-panel" id="portionCalcRow">
-      <div class="portion-dual-inputs">
-        <div class="portion-input-cell" id="unitInputCell">
-          <label id="portionUnitLabel">יחידות / כמות:</label>
-          <input type="number" id="portionUnitsInput" value="1" step="any" oninput="onPortionUnitsChanged()" inputmode="decimal">
+    <!-- קובייה 1: הזנת מנה מהירה לתפריט היומי -->
+    <div class="card">
+      <div class="entry-flat-section" id="entryBox">
+        <div class="entry-flat-title" id="entryTitle">🔍 הזנת מנה מהירה</div>
+        
+        <div class="search-wrapper">
+          <input type="text" id="entryNameInput" placeholder="חפש מנה במאגר או הקלד חדשה..." autocomplete="off" oninput="handleLiveSearch(this.value)">
+          <div class="custom-dropdown-panel" id="searchDropdown"></div>
         </div>
-        <div class="portion-input-cell">
-          <label>גרם / מ"ל:</label>
-          <input type="number" id="portionGramsInput" value="100" step="any" oninput="onPortionGramsChanged()" inputmode="decimal">
+
+        <div class="portion-panel" id="portionCalcRow">
+          <div class="portion-dual-inputs">
+            <div class="portion-input-cell" id="unitInputCell">
+              <label id="portionUnitLabel">יחידות / כמות:</label>
+              <input type="number" id="portionUnitsInput" value="1" step="any" oninput="onPortionUnitsChanged()" inputmode="decimal">
+            </div>
+            <div class="portion-input-cell">
+              <label>גרם / מ"ל:</label>
+              <input type="number" id="portionGramsInput" value="100" step="any" oninput="onPortionGramsChanged()" inputmode="decimal">
+            </div>
+          </div>
+        </div>
+
+        <div class="input-row">
+          <input type="number" id="calInput" placeholder="קלוריות" inputmode="numeric" enterkeyhint="next">
+          <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
+        </div>
+
+        <div class="action-buttons-stack" id="defaultActionBtns">
+          <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
+        </div>
+
+        <div class="action-buttons-stack" id="logEditActionBtns" style="display:none; margin-top:10px;">
+          <button class="btn-tint btn-tint-primary" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
+          <button class="btn-cancel-edit-soft" onclick="cancelLogEdit()">ביטול עריכה/בחירה</button>
         </div>
       </div>
     </div>
 
-    <div class="input-row">
-      <input type="number" id="calInput" placeholder="קלוריות" inputmode="numeric" enterkeyhint="next">
-      <input type="number" id="proInput" placeholder="חלבון (ג')" inputmode="numeric" enterkeyhint="next">
-    </div>
+    <!-- קובייה 2: אפשרויות שמירה למאגר (ללא כותרת "לפי:") -->
+    <div class="goals-card-wrapper" id="poolSaveCard">
+      <div class="goals-card-header" onclick="togglePoolOptionsDrawer()">
+        <div class="goals-title">
+          <span>📦 אפשרויות שמירה למאגר</span>
+        </div>
+        <span class="goals-chevron" id="poolDrawerChevron">▼</span>
+      </div>
 
-    <div class="action-buttons-stack" id="defaultActionBtns">
-      <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
-
-      <button type="button" class="btn-pool-opts-toggle" id="btnPoolToggle" onclick="togglePoolOptionsDrawer()">
-        <span></span>
-        <span id="poolDrawerBtnText">📦 אפשרויות שמירה למאגר</span>
-        <span id="poolDrawerChevron" style="font-size:0.75rem;">▼</span>
-      </button>
-
-      <div class="pool-options-drawer" id="poolOptionsDrawer">
-        <div class="input-row" id="saveTypeRow" style="margin-bottom:8px;">
-          <select id="entryPortionModeSelect" onchange="onSaveModeSelectionChanged()">
-            <option value="per100g">לפי 100 גרם / מ"ל</option>
-            <option value="fixed">מנה קבועה</option>
-            <option value="customUnit">לפי יחידה</option>
-          </select>
+      <div class="goals-body" id="poolOptionsDrawer" onclick="event.stopPropagation()">
+        
+        <div class="segmented-mode-container">
+          <div class="segmented-buttons-row">
+            <button type="button" class="btn-segment-option active" id="btnModePer100g" onclick="selectSegmentMode('per100g')">
+              100 גרם / מ"ל
+            </button>
+            <button type="button" class="btn-segment-option" id="btnModeFixed" onclick="selectSegmentMode('fixed')">
+              מנה קבועה
+            </button>
+            <button type="button" class="btn-segment-option" id="btnModeCustomUnit" onclick="selectSegmentMode('customUnit')">
+              לפי יחידה
+            </button>
+          </div>
         </div>
 
-        <div class="input-row" id="customUnitWeightRow" style="display:none; margin-bottom:8px;">
+        <input type="hidden" id="entryPortionModeSelect" value="per100g">
+
+        <div class="input-row" id="customUnitWeightRow" style="display:none; margin-bottom:12px;">
           <input type="number" id="customUnitGramsInput" placeholder="משקל ממוצע ליחידה (גרם / מ&quot;ל)">
         </div>
 
-        <div class="search-wrapper" id="catRow" style="margin-bottom:8px;">
-          <input type="text" id="entryCatInput" placeholder="קטגוריה" autocomplete="off" oninput="handleCategoryLiveSearch(this.value)" enterkeyhint="done">
+        <div class="search-wrapper" id="catRow" style="margin-bottom:12px;">
+          <input type="text" id="entryCatInput" placeholder="קטגוריה במאגר" autocomplete="off" oninput="handleCategoryLiveSearch(this.value)" enterkeyhint="done">
           <div class="custom-dropdown-panel" id="categoryDropdown"></div>
         </div>
 
-        <div style="display:flex; gap:8px;">
+        <div style="display:flex; gap:10px;">
           <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="actionAddPool()">+ שמור למאגר</button>
           <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="actionAddBoth()">+ מאגר + תפריט</button>
         </div>
+
+        <button id="cancelEditPoolBtn" class="btn-cancel-edit-soft" style="display:none; margin-top:10px;" onclick="cancelEditPreset()">ביטול עריכת מנה מהמאגר</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- עמוד 2 (שמאל): HOME - יומן, יעדים והיסטוריה -->
+  <div class="screen-tab" id="screenHome">
+    <div class="goals-card-wrapper" id="goalsCard">
+      <div class="goals-card-header" onclick="toggleGoalsCard(event)">
+        <div class="goals-title">
+          <span>🎯 מטרות אישיות</span>
+        </div>
+        <span class="goals-chevron" id="goalsChevron">▼</span>
       </div>
 
-      <button id="cancelEditPoolBtn" class="btn-cancel-edit-soft" style="display:none;" onclick="cancelEditPreset()">ביטול עריכה/בחירה</button>
+      <div class="goals-body" id="goalsBody" onclick="event.stopPropagation()">
+        <div class="program-duration-box">
+          <span class="label" id="programDurationLabel">זמן בתוכנית:</span>
+          <span class="val" id="programDurationValue">יום 1</span>
+        </div>
+
+        <div class="goals-target-row">
+          <span>יעד יומי שהוגדר:</span>
+          <span class="target-val" id="goalsTargetSummary">1,800 קל' | 140 חלבון</span>
+        </div>
+
+        <div class="weekly-avg-grid">
+          <div class="weekly-avg-item">
+            <div class="lbl">ממוצע שבועי קלוריות</div>
+            <div class="val" id="weeklyAvgCal">0</div>
+          </div>
+          <div class="weekly-avg-item">
+            <div class="lbl">ממוצע שבועי חלבון</div>
+            <div class="val" id="weeklyAvgPro">0</div>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="action-buttons-stack" id="logEditActionBtns" style="display:none;">
-      <button class="btn-tint btn-tint-primary" onclick="saveLogEdit()">עדכן מנה בהיסטוריה</button>
-      <button class="btn-cancel-edit-soft" onclick="cancelLogEdit()">ביטול עריכה/בחירה</button>
+    <div class="card">
+      <div class="stats-board">
+        <div class="stat-card-target-unified">
+          <div class="unified-headline">נשאר להיום</div>
+          <div class="unified-columns">
+            <div class="target-column" id="boxRemCal">
+              <div class="col-label">קלוריות</div>
+              <div id="remainingCal" class="col-number">1,800</div>
+              <div class="bar-container">
+                <div id="barRemainingCal" class="bar-fill" style="background: var(--accent-primary);"></div>
+              </div>
+            </div>
+
+            <div class="target-column" id="boxRemPro">
+              <div class="col-label">חלבון (ג')</div>
+              <div id="remainingPro" class="col-number">140</div>
+              <div class="bar-container">
+                <div id="barRemainingPro" class="bar-fill" style="background: var(--accent-primary);"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-secondary-row">
+          <div class="stat-chip-box">
+            <div class="chip-title">🍽️ נאכל היום</div>
+            <div style="display:flex; justify-content:space-around; align-items:baseline; margin-top:4px;">
+              <span style="font-size:1.35rem; font-weight:900; color:var(--accent-secondary);" id="eatenCal">0</span>
+              <span style="font-size:0.95rem; color:var(--text-subtle);">|</span>
+              <span style="font-size:1.35rem; font-weight:900; color:var(--accent-secondary);" id="eatenPro">0</span>
+            </div>
+            <div class="bar-container" style="height:6px; margin-top:6px;">
+              <div id="barEatenCal" class="bar-fill" style="background: var(--accent-secondary);"></div>
+            </div>
+          </div>
+
+          <div class="stat-chip-box">
+            <div class="chip-title" onclick="toggleBankDrawer()" title="לחץ לפירוט תוקף יתרות הספייר">
+              <span>🏦 ספייר</span>
+              <span id="bankChevron" style="font-size:0.7rem; transition:transform 0.2s;">▼</span>
+            </div>
+            <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
+              <span id="weeklyBank" class="chip-num" onclick="promptManualBankEdit()" title="לחץ לעריכה ידנית של הספייר">0</span>
+              <button class="btn-edit-bank-inline" onclick="promptManualBankEdit()" title="עריכה ידנית">✎</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="bank-details-drawer" id="bankDetailsDrawer">
+          <div style="font-size:0.9rem; font-weight:900; color:var(--accent-secondary); margin-bottom:8px; text-align:center;">
+            תוקף הספייר
+          </div>
+          <div id="bankDetailsList"></div>
+        </div>
+      </div>
+
+      <button class="btn-day-single" onclick="closeDay(false, true)">
+        🌅 יום חדש
+      </button>
+
+      <div class="collapsible-wrapper">
+        <button class="btn-toggle-box-green" id="btnToggleLogs" onclick="toggleLogs()">
+          <span></span>
+          <span id="btnToggleLogsTitle">📜 היסטוריה שבועית (0)</span>
+          <span style="font-size:0.8rem;">▼</span>
+        </button>
+        <div class="collapsible-box" id="logsContent">
+          <div class="log-scroll-area" id="logs"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <button class="btn-day-single" onclick="closeDay(false, true)">
-    🌅 יום חדש
-  </button>
+</div>
 
-  <div class="collapsible-wrapper">
-    <button class="btn-toggle-box-green" id="btnToggleLogs" onclick="toggleLogs()">
-      <span></span>
-      <span id="btnToggleLogsTitle">📜 היסטוריה שבועית (0)</span>
-      <span style="font-size:0.75rem;">▼</span>
-    </button>
-    <div class="collapsible-box" id="logsContent">
-      <div class="log-scroll-area" id="logs"></div>
-    </div>
-  </div></div><div class="card" id="poolCard">
-  <div class="pool-tabs">
-    <button class="pool-tab-btn" id="tabMyFood" onclick="handlePoolTabClick('myfood')">⭐ האוכל שלי (0)</button>
-    <button class="pool-tab-btn" id="tabBase" onclick="handlePoolTabClick('base')">⚖️ מאגר בסיס (0)</button>
-  </div>
-
-  <div id="allSearchRow" style="display:none; margin-bottom:8px;">
-    <input type="text" id="allSearchInput" placeholder="סינון ברשימה..." oninput="renderPresets()">
-  </div>
-
-  <div class="burn-action-wrap" id="myFoodSpecialActions">
-    <button class="btn-tint btn-tint-pair-bottom" onclick="openExerciseBurnModal()">🏃 אימון / קיזוז מינוס (הוסף קלוריות לספייר)</button>
-  </div>
-
-  <div id="categoryContainer"></div></div><div class="ai-card" id="aiAssistantCard">
-  <div class="ai-header">
-    <span>🤖 עוזר AI</span>
-    <span id="aiStatus" style="font-size:0.7rem; color:var(--text-muted); font-weight:normal;"></span>
-  </div>
-  <div style="display:flex; gap:6px;">
-    <input type="text" id="aiFoodQuery" placeholder="מה אכלת וכמה? (למשל: 150ג סייטן)" onkeydown="if(event.key==='Enter') askAI()">
-    <button class="btn-tint btn-tint-primary" style="width:auto; padding:0 16px;" onclick="askAI()">שלח</button>
-  </div>
-  <div id="aiResultBox" style="display:none; margin-top:10px; background:#fbfbfc; padding:12px; border-radius:14px; border:1.5px solid var(--card-border);">
-    <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:800; margin-bottom:6px;">ערוך לפני שמירה:</div>
-    <input type="text" id="aiEditName" style="margin-bottom:6px;">
-    <div class="input-row" style="margin-bottom:8px;">
-      <input type="number" id="aiEditCal" placeholder="קלוריות">
-      <input type="number" id="aiEditPro" placeholder="חלבון">
-    </div>
-    <div style="display:flex; gap:6px;">
-      <button class="btn-tint btn-tint-primary" style="flex:1;" onclick="addAiToDaily()">+ ליומי</button>
-      <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="addAiToPool()">+ למאגר</button>
-    </div>
-  </div></div><div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
+<!-- Modal: Settings -->
+<div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-header-bar">
       <h3>⚙ הגדרות וניהול</h3>
       <button class="modal-close-btn" onclick="closeSettingsModal()">✕</button>
     </div>
 
+    <!-- Centered Goals & Plan Accordion Header -->
     <button type="button" class="btn-setting-accordion" id="btnAccordionGoals" onclick="toggleSettingAccordion('goals')">
-      <span>🎯 מטרות ותוכנית</span>
-      <span id="chevronSettingGoals" style="font-size:0.75rem;">▼</span>
+      <span></span>
+      <span class="accordion-title-center">🎯 מטרות ותוכנית</span>
+      <span id="chevronSettingGoals" style="font-size:0.8rem;">▼</span>
     </button>
 
     <div class="setting-accordion-drawer" id="drawerSettingGoals">
-      <div style="margin-bottom:8px;">
+      <div style="margin-bottom:10px;">
         <select id="userGoalTypeSelect" style="font-weight:700;">
           <option value="cut">חיטוב (גירעון קלורי)</option>
           <option value="bulk">מסה (עודף קלורי)</option>
@@ -1351,70 +1386,60 @@
         </select>
       </div>
 
-      <div class="input-row" style="margin-bottom:8px;">
+      <div class="input-row" style="margin-bottom:10px;">
         <input type="number" id="targetCalInput" placeholder="יעד קלוריות">
         <input type="number" id="targetProInput" placeholder="יעד חלבון (ג')">
       </div>
 
-      <div style="font-size:0.76rem; color:var(--text-muted); font-weight:700; margin-bottom:4px;">
+      <div style="font-size:0.82rem; color:var(--text-muted); font-weight:700; margin-bottom:6px;">
         תאריך התחלת התוכנית (יום / חודש / שנה):
       </div>
       <div class="date-dmy-wrap">
-        <input type="number" id="startDayInput" placeholder="יום" style="width:58px;" min="1" max="31">
-        <input type="number" id="startMonthInput" placeholder="חודש" style="width:58px;" min="1" max="12">
-        <input type="number" id="startYearInput" placeholder="שנה" style="width:78px;" min="2020" max="2035">
+        <input type="number" id="startDayInput" placeholder="יום" style="width:64px;" min="1" max="31">
+        <input type="number" id="startMonthInput" placeholder="חודש" style="width:64px;" min="1" max="12">
+        <input type="number" id="startYearInput" placeholder="שנה" style="width:84px;" min="2020" max="2035">
       </div>
 
       <button class="btn-tint btn-tint-primary" onclick="updateTargets()">שמור יעדים ומטרה</button>
     </div>
 
-    <button type="button" class="btn-setting-accordion" id="btnAccordionAI" onclick="toggleSettingAccordion('ai')">
-      <span>🤖 עוזר AI</span>
-      <span id="chevronSettingAI" style="font-size:0.75rem;">▼</span>
-    </button>
-
-    <div class="setting-accordion-drawer" id="drawerSettingAI">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-        <span style="font-size:0.85rem; font-weight:800;">הפעלה:</span>
-        <button id="btnAiToggle" class="switch-btn active" onclick="toggleAiEnabled()">ON</button>
-      </div>
-      <div style="font-size:0.74rem; color:var(--text-muted); margin-bottom:6px;">מפתח Gemini API:</div>
-      <div style="display:flex; gap:6px;">
-        <input type="text" id="geminiApiKeyInput" placeholder="הדבק מפתח API..." style="font-size:0.8rem; direction:ltr;">
-        <button class="btn-tint btn-tint-primary" style="width:auto; padding:0 14px;" onclick="saveApiKey()">שמור</button>
-      </div>
-    </div>
-
     <button class="btn-tint btn-tint-pair-top" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
 
-    <div style="display:flex; gap:6px;">
+    <div style="display:flex; gap:8px;">
       <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
       <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
       <input type="file" id="importFile" style="display: none;" onchange="importBackupTxt(event)" accept=".txt">
     </div>
 
-    <div style="background:#fbfbfc; border:1.5px solid var(--card-border); border-radius:14px; padding:12px;">
-      <div style="font-size:0.82rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🗄️ ארכיון היסטוריה תמידי</div>
-      <div style="font-size:0.72rem; color:var(--text-muted); margin-bottom:8px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
-      <div style="display:flex; gap:6px;">
+    <div style="background:#fbfbfc; border:1.5px solid var(--card-border); border-radius:18px; padding:14px;">
+      <div style="font-size:0.88rem; font-weight:800; color:var(--accent-primary); margin-bottom:4px;">🗄 ארכיון היסטוריה תמידי</div>
+      <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;" id="archiveCountText">שמירה מלאה של כל ההזנות.</div>
+      <div style="display:flex; gap:8px;">
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="toggleArchiveViewer()">👁️ צפייה</button>
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportArchiveOnly()">📥 הורד TXT</button>
       </div>
       <div class="archive-viewer-box" id="archiveViewerBox"></div>
     </div>
-  </div></div><div class="modal-overlay" id="menuImportModal" onclick="closeMenuImportModal(event)">
+  </div>
+</div>
+
+<!-- Modal: Import Menu -->
+<div class="modal-overlay" id="menuImportModal" onclick="closeMenuImportModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-header-bar">
       <h3>📋 ייבוא מנות מטקסט</h3>
       <button class="modal-close-btn" onclick="closeMenuImportModal()">✕</button>
     </div>
-    <div style="font-size:0.75rem; color:var(--text-muted);">
+    <div style="font-size:0.8rem; color:var(--text-muted);">
       הדבק שורות (פסיק או טאב):<br>
       <code>שם המנה, קלוריות, חלבון, קטגוריה</code>
     </div>
-    <textarea id="bulkMenuInput" placeholder="טופו צרוב, 350, 27, ארוחת ערב"></textarea>
+    <textarea id="bulkMenuInput" rows="5" placeholder="טופו צרוב, 350, 27, ארוחת ערב"></textarea>
     <button class="btn-tint btn-tint-primary" onclick="processBulkMenu()">טען מנות למאגר</button>
-  </div></div><script>
+  </div>
+</div>
+
+<script>
   const BASE_FOODS = [
     { name: "עגבנייה", cal: 18, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 130 },
     { name: "עגבניית שרי", cal: 18, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 15 },
@@ -1527,8 +1552,6 @@
   let presets = JSON.parse(localStorage.getItem('cal_presets') || '[]');
   let categoryOrder = JSON.parse(localStorage.getItem('cal_catOrder') || '["כללי"]');
   let lastActiveDate = localStorage.getItem('cal_lastDate') || new Date().toISOString().slice(0, 10);
-  let geminiApiKey = localStorage.getItem('cal_geminiApiKey') || '';
-  let isAiEnabled = localStorage.getItem('cal_isAiEnabled') !== 'false';
   
   let currentPoolTab = localStorage.getItem('cal_poolTabState') || 'myfood';
   let activePortionContext = null;
@@ -1539,14 +1562,88 @@
 
   let editingPresetIndex = -1;
   let editingLogIndex = -1;
-  let aiStatusTimer = null;
   let toastFadeTimer = null;
   let cloudSyncTimeout = null;
+
+  /* === Multi-screen Scroll Controller (1:1 Continuous Tracker without LAG) === */
+  const slider = document.getElementById('sliderContainer');
+  const indicator = document.getElementById('fbNavIndicator');
+  const navItems = [
+    document.getElementById('fbNavDb'),
+    document.getElementById('fbNavAdd'),
+    document.getElementById('fbNavHome')
+  ];
+
+  let isProgrammaticScroll = false;
+  let scrollReleaseTimer = null;
+
+  function setIndicatorDirectPosition(percent) {
+    indicator.style.transform = `translateX(-${percent}%)`;
+  }
+
+  function updateActiveNavTab(index) {
+    navItems.forEach((btn, idx) => {
+      if (idx === index) btn.classList.add('active');
+      else btn.classList.remove('active');
+    });
+  }
+
+  function goToPageIndex(index) {
+    const screens = [
+      document.getElementById('screenDb'),
+      document.getElementById('screenAdd'),
+      document.getElementById('screenHome')
+    ];
+    if (screens[index]) {
+      isProgrammaticScroll = true;
+      if (scrollReleaseTimer) clearTimeout(scrollReleaseTimer);
+      
+      indicator.style.transition = 'transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1)';
+      setIndicatorDirectPosition(index * 100);
+      updateActiveNavTab(index);
+
+      slider.style.scrollBehavior = 'auto';
+      screens[index].scrollIntoView({ inline: 'start' });
+      
+      scrollReleaseTimer = setTimeout(() => {
+        slider.style.scrollBehavior = 'smooth';
+        isProgrammaticScroll = false;
+      }, 300);
+    }
+  }
+
+  slider.addEventListener('scroll', () => {
+    if (isProgrammaticScroll) return;
+    
+    const scrollLeft = Math.abs(slider.scrollLeft);
+    const width = slider.clientWidth;
+    if (width <= 0) return;
+
+    indicator.style.transition = 'none';
+
+    const currentPercent = (scrollLeft / width) * 100;
+    setIndicatorDirectPosition(currentPercent);
+
+    const activeIndex = Math.min(2, Math.max(0, Math.round(scrollLeft / width)));
+    updateActiveNavTab(activeIndex);
+  }, { passive: true });
+
+  /* === Segmented Mode Selection for Pool Options === */
+  function selectSegmentMode(mode) {
+    document.getElementById('entryPortionModeSelect').value = mode;
+    ['per100g', 'fixed', 'customUnit'].forEach(m => {
+      const btn = document.getElementById('btnMode' + (m === 'per100g' ? 'Per100g' : m === 'fixed' ? 'Fixed' : 'CustomUnit'));
+      if (btn) {
+        if (m === mode) btn.classList.add('active');
+        else btn.classList.remove('active');
+      }
+    });
+    document.getElementById('customUnitWeightRow').style.display = (mode === 'customUnit') ? 'flex' : 'none';
+  }
 
   document.getElementById('targetCalInput').value = targetCal;
   document.getElementById('targetProInput').value = targetPro;
   document.getElementById('userGoalTypeSelect').value = userGoalType;
-  document.getElementById('geminiApiKeyInput').value = geminiApiKey;
 
   function syncDateInputsFromStorage() {
     const parts = programStartDate.split('-');
@@ -1557,8 +1654,6 @@
     }
   }
   syncDateInputsFromStorage();
-
-  applyAiStateUI();
   applyUserGoalBadge();
 
   const entryNameInput = document.getElementById('entryNameInput');
@@ -1572,43 +1667,25 @@
   const customUnitGramsInput = document.getElementById('customUnitGramsInput');
 
   function toggleSettingAccordion(type) {
-    const isGoals = type === 'goals';
-    const btn = document.getElementById(isGoals ? 'btnAccordionGoals' : 'btnAccordionAI');
-    const drawer = document.getElementById(isGoals ? 'drawerSettingGoals' : 'drawerSettingAI');
-    const chevron = document.getElementById(isGoals ? 'chevronSettingGoals' : 'chevronSettingAI');
+    const btn = document.getElementById('btnAccordionGoals');
+    const drawer = document.getElementById('drawerSettingGoals');
+    const chevron = document.getElementById('chevronSettingGoals');
 
     const isOpen = drawer.style.display === 'block';
     drawer.style.display = isOpen ? 'none' : 'block';
     chevron.textContent = isOpen ? '▼' : '▲';
-    if (isOpen) {
-      btn.classList.remove('active');
-    } else {
-      btn.classList.add('active');
-    }
+    if (isOpen) btn.classList.remove('active');
+    else btn.classList.add('active');
   }
 
   function togglePoolOptionsDrawer() {
-    const drawer = document.getElementById('poolOptionsDrawer');
-    const btn = document.getElementById('btnPoolToggle');
-    const chevron = document.getElementById('poolDrawerChevron');
-    const isOpen = drawer.style.display === 'block';
-    
-    drawer.style.display = isOpen ? 'none' : 'block';
-    chevron.textContent = isOpen ? '▼' : '▲';
-    if (isOpen) {
-      btn.classList.remove('active');
-    } else {
-      btn.classList.add('active');
-    }
+    const card = document.getElementById('poolSaveCard');
+    card.classList.toggle('open');
   }
 
   function openPoolOptionsDrawer() {
-    const drawer = document.getElementById('poolOptionsDrawer');
-    const btn = document.getElementById('btnPoolToggle');
-    const chevron = document.getElementById('poolDrawerChevron');
-    drawer.style.display = 'block';
-    chevron.textContent = '▲';
-    btn.classList.add('active');
+    const card = document.getElementById('poolSaveCard');
+    card.classList.add('open');
   }
 
   function toggleBankDrawer() {
@@ -1628,7 +1705,7 @@
       alert('נא להזין מספר תקין');
       return;
     }
-    pushState();
+    pushState('עריכת ספייר');
     weeklyBank = parsed;
     updateDisplay();
     showToast(`ספייר עודכן ידנית ל: ${weeklyBank >= 0 ? '+' : ''}${weeklyBank}`);
@@ -1663,10 +1740,6 @@
   }
 
   function applyUserGoalBadge() {
-    const badge = document.getElementById('goalBadgeText');
-    if (userGoalType === 'cut') badge.textContent = 'חיטוב';
-    else if (userGoalType === 'bulk') badge.textContent = 'מסה';
-    else badge.textContent = 'ניטרלי';
     document.getElementById('goalsTargetSummary').textContent = `${targetCal.toLocaleString()} קל' | ${targetPro} חלבון`;
     updateProgramDurationDisplay();
   }
@@ -1674,11 +1747,6 @@
   function toggleGoalsCard(e) {
     const card = document.getElementById('goalsCard');
     card.classList.toggle('open');
-  }
-
-  function onSaveModeSelectionChanged() {
-    const val = entryPortionModeSelect.value;
-    customUnitWeightRow.style.display = (val === 'customUnit') ? 'flex' : 'none';
   }
 
   function updateCancelBtnVisibility() {
@@ -1810,7 +1878,7 @@
   });
 
   function selectCustomPreset(preset) {
-    pushState();
+    pushState(`בחירת מנה מהמאגר: ${preset.name}`);
     const mode = preset.portionMode || (preset.isPer100g ? 'per100g' : 'fixed');
 
     if (mode === 'per100g') {
@@ -1824,8 +1892,7 @@
       };
       entryNameInput.value = preset.name;
       entryCatInput.value = (preset.cat === 'כללי' ? '' : (preset.cat || ''));
-      entryPortionModeSelect.value = "per100g";
-      onSaveModeSelectionChanged();
+      selectSegmentMode("per100g");
 
       document.getElementById('unitInputCell').style.display = 'none';
       document.getElementById('portionGramsInput').value = 100;
@@ -1843,9 +1910,8 @@
       };
       entryNameInput.value = preset.name;
       entryCatInput.value = (preset.cat === 'כללי' ? '' : (preset.cat || ''));
-      entryPortionModeSelect.value = "customUnit";
+      selectSegmentMode("customUnit");
       customUnitGramsInput.value = preset.unitWeight;
-      onSaveModeSelectionChanged();
 
       const unitCell = document.getElementById('unitInputCell');
       const unitLabel = document.getElementById('portionUnitLabel');
@@ -1862,8 +1928,7 @@
       calInput.value = preset.cal;
       proInput.value = preset.pro;
       entryCatInput.value = (preset.cat === 'כללי' ? '' : (preset.cat || ''));
-      entryPortionModeSelect.value = "fixed";
-      onSaveModeSelectionChanged();
+      selectSegmentMode("fixed");
     }
     updateCancelBtnVisibility();
   }
@@ -1872,7 +1937,7 @@
     const item = BASE_FOODS.find(b => b.name === foodName);
     if (!item) return;
 
-    pushState();
+    pushState(`טעינת מנת בסיס: ${item.name}`);
     activePortionContext = {
       name: item.name,
       calPerGram: item.cal / 100,
@@ -1884,9 +1949,8 @@
 
     entryNameInput.value = item.name;
     entryCatInput.value = item.cat || '';
-    entryPortionModeSelect.value = item.unitWeight ? "customUnit" : "per100g";
+    selectSegmentMode(item.unitWeight ? "customUnit" : "per100g");
     if (item.unitWeight) customUnitGramsInput.value = item.unitWeight;
-    onSaveModeSelectionChanged();
 
     const portionRow = document.getElementById('portionCalcRow');
     const unitCell = document.getElementById('unitInputCell');
@@ -1909,7 +1973,7 @@
     portionRow.style.display = 'flex';
     updateCancelBtnVisibility();
 
-    document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    goToPageIndex(1);
   }
 
   function onPortionUnitsChanged() {
@@ -2008,7 +2072,7 @@
       return;
     }
 
-    pushState();
+    pushState(`קיזוז אימון (+${burned})`);
     const today = getTodayString();
     weeklyBank += burned;
 
@@ -2024,27 +2088,7 @@
 
     renderLogs();
     updateDisplay();
-    showToast(`נוספו +${burned} קלוריות לספייר!`);
-  }
-
-  function toggleAiEnabled() {
-    isAiEnabled = !isAiEnabled;
-    localStorage.setItem('cal_isAiEnabled', isAiEnabled ? 'true' : 'false');
-    applyAiStateUI();
-  }
-
-  function applyAiStateUI() {
-    const btn = document.getElementById('btnAiToggle');
-    const card = document.getElementById('aiAssistantCard');
-    if (isAiEnabled) {
-      btn.textContent = 'ON';
-      btn.className = 'switch-btn active';
-      card.style.display = 'block';
-    } else {
-      btn.textContent = 'OFF';
-      btn.className = 'switch-btn';
-      card.style.display = 'none';
-    }
+    showToast(`נוספו ${burned} קלוריות לספייר!`);
   }
 
   function showToast(text) {
@@ -2057,17 +2101,18 @@
     toastFadeTimer = setTimeout(() => {
       el.classList.remove('show');
       el.classList.add('fade-out');
-    }, 1000);
+    }, 1200);
   }
 
-  function pushState() {
+  function pushState(actionLabel = 'פעולה') {
     historyStack.push({
       targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate
+      lastActiveDate,
+      actionLabel
     });
     if (historyStack.length > 30) historyStack.shift();
     redoStack = [];
@@ -2086,8 +2131,6 @@
     localStorage.setItem('cal_presets', JSON.stringify(presets));
     localStorage.setItem('cal_catOrder', JSON.stringify(categoryOrder));
     localStorage.setItem('cal_lastDate', lastActiveDate);
-    localStorage.setItem('cal_geminiApiKey', geminiApiKey);
-    localStorage.setItem('cal_isAiEnabled', isAiEnabled ? 'true' : 'false');
     localStorage.setItem('cal_historyStack', JSON.stringify(historyStack));
     localStorage.setItem('cal_poolTabState', currentPoolTab);
 
@@ -2102,7 +2145,7 @@
       const payload = {
         targetCal, targetPro, userGoalType, programStartDate,
         eatenCal, eatenPro, weeklyBank, logs, archiveLogs,
-        presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled
+        presets, categoryOrder, lastActiveDate
       };
       await fetch('/api/data', {
         method: 'POST',
@@ -2133,16 +2176,12 @@
         presets = d.presets ?? presets;
         categoryOrder = d.categoryOrder ?? categoryOrder;
         lastActiveDate = d.lastActiveDate ?? lastActiveDate;
-        if (d.geminiApiKey) geminiApiKey = d.geminiApiKey;
-        if (typeof d.isAiEnabled !== 'undefined') isAiEnabled = d.isAiEnabled;
 
         document.getElementById('targetCalInput').value = targetCal;
         document.getElementById('targetProInput').value = targetPro;
         document.getElementById('userGoalTypeSelect').value = userGoalType;
-        if (d.geminiApiKey) document.getElementById('geminiApiKeyInput').value = geminiApiKey;
 
         syncDateInputsFromStorage();
-        applyAiStateUI();
         applyUserGoalBadge();
         renderLogs();
         applyPoolTabUI();
@@ -2154,102 +2193,6 @@
       console.log('טעינה מהענן נכשלה, טוען נתונים מקומיים');
       return false;
     }
-  }
-
-  function saveApiKey() {
-    geminiApiKey = document.getElementById('geminiApiKeyInput').value.trim().replace(/\s+/g, '');
-    saveData();
-    alert(geminiApiKey ? 'מפתח נשמר בהצלחה!' : 'המפתח נמחק');
-  }
-
-  function setAiStatus(msg, color, autoClear = true) {
-    const statusEl = document.getElementById('aiStatus');
-    statusEl.textContent = msg;
-    statusEl.style.color = color || 'var(--text-muted)';
-    if (aiStatusTimer) clearTimeout(aiStatusTimer);
-    if (autoClear && msg) {
-      aiStatusTimer = setTimeout(() => { statusEl.textContent = ''; }, 10000);
-    }
-  }
-
-  async function askAI() {
-    const query = document.getElementById('aiFoodQuery').value.trim();
-    if (!query) return;
-    if (!geminiApiKey) {
-      alert('נא להזין תחילה מפתח Gemini בהגדרות (⚙)');
-      openSettingsModal();
-      return;
-    }
-
-    const cleanKey = geminiApiKey.trim().replace(/\s+/g, '');
-    setAiStatus('מחשב...', 'var(--accent-primary)', false);
-
-    const promptText = `אתה מחשבון תזונה טבעוני. נתח את המנה: "${query}". השב ב-JSON בלבד בפורמט:
-{"name": "שם המנה בעברית", "cal": מספר קלוריות, "pro": מספר גרם חלבון (רק אם הוא משמעותי, אחרת 0)}`;
-
-    try {
-      const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${cleanKey}`;
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: promptText }] }],
-          generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
-        })
-      });
-
-      const data = await response.json();
-      const candidateText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!candidateText) throw new Error('לא התקבל פיענוח');
-
-      const parsed = JSON.parse(candidateText);
-      document.getElementById('aiEditName').value = parsed.name || query;
-      document.getElementById('aiEditCal').value = parseInt(parsed.cal) || 0;
-      document.getElementById('aiEditPro').value = parseFloat(parsed.pro) || 0;
-
-      document.getElementById('aiResultBox').style.display = 'block';
-      setAiStatus('הושלם!', 'var(--accent-primary)', true);
-    } catch (e) {
-      setAiStatus('שגיאה', 'var(--danger-soft-text)', true);
-      alert('שגיאה בחיבור ל-AI: ' + e.message);
-    }
-  }
-
-  function addAiToDaily() {
-    const name = document.getElementById('aiEditName').value.trim() || 'מנה חדשה';
-    const cal = parseInt(document.getElementById('aiEditCal').value) || 0;
-    const pro = parseFloat(document.getElementById('aiEditPro').value) || 0;
-
-    pushState();
-    eatenCal += cal;
-    eatenPro = Math.round((eatenPro + pro) * 10) / 10;
-    const today = getTodayString();
-    const logObj = { id: Date.now() + Math.random().toString(), name, cal, pro, date: today };
-    logs.unshift(logObj);
-    archiveLogs.unshift(logObj);
-
-    renderLogs();
-    updateDisplay();
-    document.getElementById('aiResultBox').style.display = 'none';
-    document.getElementById('aiFoodQuery').value = '';
-    showToast('נוסף ליומי מה-AI!');
-  }
-
-  function addAiToPool() {
-    const name = document.getElementById('aiEditName').value.trim() || 'מנה חדשה';
-    const cal = parseInt(document.getElementById('aiEditCal').value) || 0;
-    const pro = parseFloat(document.getElementById('aiEditPro').value) || 0;
-    const cat = prompt('קטגוריה עבור המנה:', 'כללי') || 'כללי';
-
-    pushState();
-    presets.push({ name, cal, pro, cat: cat.trim(), portionMode: 'fixed' });
-    if (!categoryOrder.includes(cat.trim())) categoryOrder.push(cat.trim());
-
-    renderPresets();
-    saveData();
-    document.getElementById('aiResultBox').style.display = 'none';
-    document.getElementById('aiFoodQuery').value = '';
-    showToast('נשמר במאגר!');
   }
 
   function handlePoolTabClick(tab) {
@@ -2297,7 +2240,7 @@
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = `<div style="text-align:right; font-size:0.82rem; color:var(--text-muted); padding:14px;">אין מנות שמורות ב"האוכל שלי"</div>`;
+      container.innerHTML = `<div style="text-align:right; font-size:0.88rem; color:var(--text-muted); padding:16px;">אין מנות שמורות ב"האוכל שלי"</div>`;
       return;
     }
 
@@ -2315,7 +2258,7 @@
       block.innerHTML = `
         <div class="category-header" data-cat-idx="${catIdx}">
           <span class="category-title">📂 ${catName} (${catPresets.length})</span>
-          <span style="font-size:0.75rem; color:var(--text-subtle);">⋮⋮</span>
+          <span style="font-size:0.8rem; color:var(--text-subtle);">⋮⋮</span>
         </div>
         <div class="category-content">
           <div class="preset-list" data-category="${catName}" id="cat-list-${catIdx}"></div>
@@ -2335,7 +2278,7 @@
         
         const mode = p.portionMode || (p.isPer100g ? 'per100g' : 'fixed');
         let labelText = `${p.name} (${p.cal} קל' | ${p.pro}ג')`;
-        if (mode === 'per100g') labelText = `⚖️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ל-100ג)`;
+        if (mode === 'per100g') labelText = `⚖️️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ל-100ג)`;
         if (mode === 'customUnit') labelText = `⚖️ ${p.name} (${p.cal} קל' | ${p.pro}ג' ליח' ~${p.unitWeight}ג)`;
 
         itemWrap.innerHTML = `
@@ -2460,7 +2403,7 @@
   }
 
   function finalizeCategoryDomReorder() {
-    pushState();
+    pushState('סידור קטגוריות');
     const newOrder = [];
     document.querySelectorAll('.category-block').forEach(b => {
       const c = b.getAttribute('data-category');
@@ -2573,7 +2516,7 @@
   }
 
   function finalizePresetDomReorder(newCategory) {
-    pushState();
+    pushState('סידור מנות במאגר');
     const newPresets = [];
     document.querySelectorAll('.preset-list').forEach(listEl => {
       const cat = listEl.getAttribute('data-category');
@@ -2607,7 +2550,7 @@
 
     if (mode === 'per100g' || mode === 'customUnit') {
       selectCustomPreset(p);
-      document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      goToPageIndex(1);
       showToast('הזן כמות או משקל');
     } else {
       addPresetEntry(idx);
@@ -2621,7 +2564,7 @@
     });
 
     if (filtered.length === 0) {
-      container.innerHTML = '<div style="text-align:right; font-size:0.82rem; color:var(--text-muted); padding:14px;">לא נמצאו תוצאות תואמות</div>';
+      container.innerHTML = '<div style="text-align:right; font-size:0.88rem; color:var(--text-muted); padding:16px;">לא נמצאו תוצאות תואמות</div>';
       return;
     }
 
@@ -2742,7 +2685,7 @@
     const closedDays = getClosedDaysStats().filter(d => d.isActive);
 
     if (closedDays.length === 0) {
-      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.78rem; padding:6px 0;">אין יתרות ספייר מ-3 הימים האחרונים</div>';
+      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.82rem; padding:8px 0;">אין יתרות ספייר מ-3 הימים האחרונים</div>';
       return;
     }
 
@@ -2762,7 +2705,7 @@
         <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
         <span style="font-weight:800; color:${color};">
           <span style="direction:ltr; unicode-bidi:isolate; display:inline-block;">${sign}${absVal}</span> קל' 
-          <span style="font-size:0.75rem; color:var(--text-muted); font-weight:normal;">(${expiryLabel})</span>
+          <span style="font-size:0.78rem; color:var(--text-muted); font-weight:normal;">(${expiryLabel})</span>
         </span>
       `;
       listEl.appendChild(row);
@@ -2775,11 +2718,9 @@
 
     const remCalEl = document.getElementById('remainingCal');
     remCalEl.textContent = remCal.toLocaleString();
-    document.getElementById('boxRemCal').className = 'target-column cal';
 
     const remProEl = document.getElementById('remainingPro');
     remProEl.textContent = remPro;
-    document.getElementById('boxRemPro').className = 'target-column pro';
 
     document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
     document.getElementById('eatenPro').textContent = eatenPro;
@@ -2802,11 +2743,9 @@
 
     const barRemCal = document.getElementById('barRemainingCal');
     barRemCal.style.width = calRemPercent + '%';
-    barRemCal.style.background = 'var(--accent-primary)';
 
     const barRemPro = document.getElementById('barRemainingPro');
     barRemPro.style.width = proRemPercent + '%';
-    barRemPro.style.background = 'var(--accent-secondary)';
 
     const barEatCal = document.getElementById('barEatenCal');
     barEatCal.style.width = calEatenPercent + '%';
@@ -2836,7 +2775,7 @@
     document.getElementById('btnToggleLogsTitle').textContent = `📜 היסטוריה שבועית (${getTodayLogsCount()})`;
 
     if (logs.length === 0) {
-      logList.innerHTML = '<div style="text-align:center; font-size:0.8rem; color:var(--text-muted); padding:12px 0;">אין הזנות רשומות כרגע</div>';
+      logList.innerHTML = '<div style="text-align:center; font-size:0.85rem; color:var(--text-muted); padding:14px 0;">אין הזנות רשומות כרגע</div>';
       return;
     }
 
@@ -2917,10 +2856,10 @@
         row.setAttribute('data-id', item.id);
 
         row.innerHTML = `
-          <div style="flex:1; pointer-events:none; font-size:0.82rem; text-align:right;">
+          <div style="flex:1; pointer-events:none; font-size:0.88rem; text-align:right;">
             <strong>${item.name || ''}</strong> <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro})</span>
           </div>
-          <div style="display:flex; gap:2px;">
+          <div style="display:flex; gap:3px;">
             <button class="btn-log-action" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
             <button class="btn-log-action" onclick="saveLogItemToPoolById('${item.id}')">📥</button>
             <button class="btn-log-action btn-log-del" onclick="deleteLogItemById('${item.id}')">✕</button>
@@ -2962,7 +2901,7 @@
 
         placeholder = document.createElement('div');
         placeholder.className = 'drag-placeholder';
-        placeholder.style.height = '38px';
+        placeholder.style.height = '42px';
         rowEl.parentNode.insertBefore(placeholder, rowEl);
         rowEl.style.display = 'none';
       }, 700);
@@ -2994,7 +2933,7 @@
         for (let sib of siblings) {
           const r = sib.getBoundingClientRect();
           if (point.clientY < r.top + r.height / 2 || (point.clientX > r.left + r.width / 2 && Math.abs(point.clientY - r.top) < 30)) {
-            targetList.insertBefore(placeholder, sib);
+            dayContainer.insertBefore(placeholder, sib);
             inserted = true;
             break;
           }
@@ -3029,7 +2968,7 @@
   function finalizeDomReorder() {
     const todayStr = getTodayString();
     const newLogs = [];
-    pushState();
+    pushState('סידור מנות בהיסטוריה');
 
     let oldTodayCal = 0, oldTodayPro = 0;
     logs.forEach(l => {
@@ -3088,13 +3027,13 @@
     calInput.value = item.cal;
     proInput.value = item.pro;
     document.getElementById('catRow').style.display = 'none';
-    document.getElementById('saveTypeRow').style.display = 'none';
     customUnitWeightRow.style.display = 'none';
 
     document.getElementById('entryTitle').textContent = '✎ עריכת הזנה מההיסטוריה';
     document.getElementById('defaultActionBtns').style.display = 'none';
     document.getElementById('logEditActionBtns').style.display = 'flex';
-    document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    
+    goToPageIndex(1);
     entryNameInput.focus();
     updateCancelBtnVisibility();
   }
@@ -3105,7 +3044,7 @@
     if (!item) return;
 
     const val = getEntryValues();
-    pushState();
+    pushState(`עריכת מנה: ${val.name}`);
 
     const today = getTodayString();
     if (!item.date || item.date === today) {
@@ -3127,13 +3066,13 @@
     cancelLogEdit();
     renderLogs();
     updateDisplay();
+    goToPageIndex(2);
   }
 
   function cancelLogEdit() {
     editingLogIndex = -1;
     clearEntryInputs();
     document.getElementById('catRow').style.display = 'block';
-    document.getElementById('saveTypeRow').style.display = 'flex';
     document.getElementById('entryTitle').textContent = '🔍 הזנת מנה מהירה';
     document.getElementById('defaultActionBtns').style.display = 'flex';
     document.getElementById('logEditActionBtns').style.display = 'none';
@@ -3146,7 +3085,7 @@
 
     if (!confirm(`למחוק את "${item.name || 'המנה'}"?`)) return;
 
-    pushState();
+    pushState(`מחיקת מנה מההיסטוריה: ${item.name || 'מנה'}`);
     const today = getTodayString();
     if (!item.date || item.date === today) {
       eatenCal = Math.max(0, eatenCal - item.cal);
@@ -3164,17 +3103,27 @@
   function saveLogItemToPoolById(itemId) {
     const item = logs.find(l => l.id === itemId);
     if (!item) return;
-    const name = item.name || prompt('הזן שם למנה זו למאגר:');
-    if (!name) return;
-    const cat = prompt('קטגוריה עבור המנה:', 'כללי') || 'כללי';
 
-    pushState();
-    presets.push({ name: name.trim(), cal: item.cal, pro: item.pro, cat: cat.trim(), portionMode: 'fixed' });
-    if (!categoryOrder.includes(cat.trim())) categoryOrder.push(cat.trim());
+    if (!confirm(`להוסיף את "${item.name || 'המנה'}" למאגר?`)) return;
 
-    renderPresets();
-    saveData();
-    showToast('נוסף למאגר!');
+    if (editingPresetIndex >= 0) cancelEditPreset();
+    if (editingLogIndex >= 0) cancelLogEdit();
+    closePortionCalculator();
+
+    entryNameInput.value = item.name || '';
+    calInput.value = item.cal || 0;
+    proInput.value = item.pro || 0;
+    entryCatInput.value = '';
+    selectSegmentMode('fixed');
+
+    openPoolOptionsDrawer();
+    goToPageIndex(1);
+
+    setTimeout(() => {
+      entryCatInput.focus();
+    }, 320);
+
+    showToast('בחר קטגוריה ושמור למאגר');
   }
 
   function getEntryValues() {
@@ -3202,25 +3151,19 @@
     calInput.value = '';
     proInput.value = '';
     entryCatInput.value = '';
-    entryPortionModeSelect.value = 'per100g';
+    selectSegmentMode('per100g');
     customUnitGramsInput.value = '';
-    onSaveModeSelectionChanged();
     closePortionCalculator();
     searchDropdown.style.display = 'none';
     categoryDropdown.style.display = 'none';
     updateCancelBtnVisibility();
   }
 
-  function clearEntryInputsManually() {
-    pushState();
-    clearEntryInputs();
-  }
-
   function actionAddMenu() {
     const val = getEntryValues();
     if (val.cal <= 0 && val.pro <= 0) return;
 
-    pushState();
+    pushState(`הוספת מנה לתפריט: ${val.name}`);
     eatenCal += val.cal;
     eatenPro = Math.round((eatenPro + val.pro) * 10) / 10;
     const today = getTodayString();
@@ -3231,7 +3174,7 @@
     clearEntryInputs();
     renderLogs();
     updateDisplay();
-    showToast();
+    showToast('מנה נוספה לתפריט!');
   }
 
   function actionAddPool() {
@@ -3240,7 +3183,7 @@
       alert('נא להזין שם מנה וערכים');
       return;
     }
-    pushState();
+    pushState(`שמירת מנה למאגר: ${val.name}`);
     const newPreset = { 
       name: val.name, 
       cat: val.cat, 
@@ -3261,6 +3204,7 @@
     renderPresets();
     saveData();
     showToast('נשמר במאגר!');
+    goToPageIndex(0);
   }
 
   function actionAddBoth() {
@@ -3270,7 +3214,7 @@
       return;
     }
     actionAddPool();
-    pushState();
+    pushState(`הוספה לתפריט ולמאגר: ${val.name}`);
     eatenCal += val.cal;
     eatenPro = Math.round((eatenPro + val.pro) * 10) / 10;
     const today = getTodayString();
@@ -3280,14 +3224,14 @@
 
     renderLogs();
     updateDisplay();
-    showToast();
+    showToast('מנה נוספה לתפריט ולמאגר!');
   }
 
   function addPresetEntry(idx) {
     const p = presets[idx];
     if (!p) return;
 
-    pushState();
+    pushState(`הוספה מהמאגר: ${p.name}`);
     eatenCal += p.cal;
     eatenPro = Math.round((eatenPro + p.pro) * 10) / 10;
     const today = getTodayString();
@@ -3295,7 +3239,7 @@
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
 
-    showToast();
+    showToast('מנה נוספה לתפריט!');
     renderLogs();
     updateDisplay();
   }
@@ -3321,15 +3265,14 @@
     proInput.value = p.pro;
 
     const mode = p.portionMode || (p.isPer100g ? 'per100g' : 'fixed');
-    entryPortionModeSelect.value = mode;
+    selectSegmentMode(mode);
     if (mode === 'customUnit' && p.unitWeight) {
       customUnitGramsInput.value = p.unitWeight;
     }
-    onSaveModeSelectionChanged();
     openPoolOptionsDrawer();
 
     document.getElementById('cancelEditPoolBtn').style.display = 'block';
-    document.getElementById('entryBox').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    goToPageIndex(1);
     entryNameInput.focus();
     updateCancelBtnVisibility();
   }
@@ -3342,7 +3285,7 @@
 
   function deletePreset(idx) {
     if (confirm(`למחוק את "${presets[idx].name}" מהמאגר?`)) {
-      pushState();
+      pushState(`מחיקת מנה מהמאגר: ${presets[idx].name}`);
       if (editingPresetIndex === idx) cancelEditPreset();
       presets.splice(idx, 1);
       renderPresets();
@@ -3351,29 +3294,47 @@
   }
 
   function undoLastAction() {
-    if (historyStack.length === 0) return;
+    if (historyStack.length === 0) {
+      showToast('אין פעולות לביטול');
+      return;
+    }
+    const previousState = historyStack.pop();
+    const actionDesc = previousState.actionLabel || 'פעולה אחרונה';
+
     redoStack.push({
       targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate
+      lastActiveDate,
+      actionLabel: actionDesc
     });
-    applyStateSilent(historyStack.pop());
+
+    applyStateSilent(previousState);
+    showToast(`בוטל: ${actionDesc}`);
   }
 
   function redoLastAction() {
-    if (redoStack.length === 0) return;
+    if (redoStack.length === 0) {
+      showToast('אין פעולות להחזרה');
+      return;
+    }
+    const nextState = redoStack.pop();
+    const actionDesc = nextState.actionLabel || 'פעולה';
+
     historyStack.push({
       targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank,
       logs: JSON.parse(JSON.stringify(logs)),
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
-      lastActiveDate
+      lastActiveDate,
+      actionLabel: actionDesc
     });
-    applyStateSilent(redoStack.pop());
+
+    applyStateSilent(nextState);
+    showToast(`הוחזר: ${actionDesc}`);
   }
 
   function applyStateSilent(st) {
@@ -3407,7 +3368,7 @@
       const msg = `להתחיל יום חדש?\nספייר שיועבר: ${diffCal >= 0 ? '+' : ''}${diffCal} קלוריות.`;
       if (!confirm(msg)) return;
     }
-    pushState();
+    pushState('סגירת יום חדש');
 
     weeklyBank += diffCal;
 
@@ -3428,7 +3389,7 @@
     const d = String(document.getElementById('startDayInput').value).padStart(2, '0');
 
     if (newCal > 0 || newPro > 0) {
-      pushState();
+      pushState('עדכון יעדים ומטרות');
       if (newCal > 0) targetCal = newCal;
       if (newPro > 0) targetPro = newPro;
       userGoalType = newGoal;
@@ -3475,7 +3436,7 @@
   function processBulkMenu() {
     const rawText = document.getElementById('bulkMenuInput').value.trim();
     if (!rawText) return;
-    pushState();
+    pushState('ייבוא תפריט מטקסט');
     let count = 0;
     rawText.split('\n').forEach(line => {
       line = line.trim();
@@ -3508,7 +3469,7 @@
     box.innerHTML = '';
     
     if (archiveLogs.length === 0) {
-      box.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:10px;">הארכיון ריק כרגע</div>';
+      box.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:12px;">הארכיון ריק כרגע</div>';
     } else {
       const groups = {};
       archiveLogs.forEach(item => {
@@ -3553,7 +3514,7 @@
 
   function exportBackupTxt() {
     if (!confirm('האם לייצא ולהוריד קובץ גיבוי מלא של הנתונים?')) return;
-    const data = { targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate, geminiApiKey, isAiEnabled };
+    const data = { targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate };
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -3566,7 +3527,7 @@
     if (archiveLogs.length === 0) { alert('הארכיון ריק'); return; }
     if (!confirm('האם להוריד את היסטוריית הארכיון כקובץ טקסט?')) return;
     const blob = new Blob([JSON.stringify(archiveLogs, null, 2)], { type: 'text/plain;charset=utf-8' });
-    const a = document.createElement('a');
+    a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `archive_logs_${new Date().toISOString().slice(0,10)}.txt`;
     a.click();
@@ -3580,7 +3541,7 @@
       try {
         const d = JSON.parse(evt.target.result);
         if (confirm('לייבא גיבוי ולדרוס נתונים קיימים?')) {
-          pushState();
+          pushState('ייבוא גיבוי');
           targetCal = d.targetCal || 1800; targetPro = d.targetPro || 140;
           userGoalType = d.userGoalType || 'cut';
           programStartDate = d.programStartDate || getTodayString();
@@ -3589,10 +3550,7 @@
           logs = d.logs || []; archiveLogs = d.archiveLogs || (d.logs ? JSON.parse(JSON.stringify(d.logs)) : []);
           presets = d.presets || []; categoryOrder = d.categoryOrder || ['כללי'];
           lastActiveDate = d.lastActiveDate || getTodayString();
-          if (d.geminiApiKey) geminiApiKey = d.geminiApiKey;
-          if (typeof d.isAiEnabled !== 'undefined') isAiEnabled = d.isAiEnabled;
 
-          applyAiStateUI();
           syncDateInputsFromStorage();
           applyUserGoalBadge();
           closeSettingsModal();
@@ -3632,6 +3590,9 @@
   applyPoolTabUI();
   renderPresets();
   updateDisplay();
+  
+  setTimeout(() => { goToPageIndex(0); }, 50);
+
   loadFromCloud().then(cloudLoaded => {
     if (!cloudLoaded) return;
     applySevenDayRollingWindow();
