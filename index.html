@@ -57,6 +57,14 @@
     box-sizing: border-box; 
     font-family: 'Heebo', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
     -webkit-tap-highlight-color: transparent;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+  }
+
+  *::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
   }
 
   html, body {
@@ -74,7 +82,7 @@
     touch-action: none;
   }
 
-  /* Fixed Top Bar (LTR Direction for English mirror order) */
+  /* Fixed Top Bar */
   .floating-top-bar {
     position: fixed;
     top: 0;
@@ -99,7 +107,6 @@
     gap: 6px;
     flex-shrink: 0;
   }
-  /* הגדלת כתב הכותרת הראשית */
   .floating-top-bar h2 {
     margin: 0;
     font-size: 1.25rem;
@@ -133,7 +140,6 @@
     padding: 0 4px;
     min-width: 0;
   }
-  /* Toast תומך עטיפת שורות/טקסט ארוך ללא 3 נקודות */
   .toast-pill {
     font-size: 0.76rem;
     font-weight: 800;
@@ -155,7 +161,7 @@
   .toast-pill.show { opacity: 1; }
   .toast-pill.fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
 
-  /* Nav Buttons Group - חזור מימין להלוך ב-LTR, אייקונים עגולים תואמים */
+  /* Nav Buttons: Undo left (circular counter-clockwise), Redo right (straight right arrow) */
   .nav-history-group { 
     display: flex; 
     flex-direction: row; 
@@ -250,10 +256,6 @@
     -webkit-overflow-scrolling: touch;
     display: flex;
     flex-direction: row;
-    scrollbar-width: none;
-  }
-  .screens-slider-container::-webkit-scrollbar {
-    display: none;
   }
 
   .screen-tab {
@@ -379,7 +381,7 @@
     font-weight: 800;
   }
 
-  /* Stats Card - Matched Colors */
+  /* Stats Card */
   .stats-board {
     display: flex;
     flex-direction: column;
@@ -647,7 +649,7 @@
     padding: 13px 14px;
   }
   
-  /* כפתור ביטול קבוע וקומפקטי מתחת להוספה לתפריט */
+  /* כפתור בטל תחתון וקומפקטי */
   .btn-cancel-compact {
     border-radius: 12px;
     padding: 8px 12px;
@@ -799,7 +801,6 @@
     padding: 11px 0; 
     border-bottom: 1px solid #f8fafc; 
     color: var(--text-main); 
-    touch-action: pan-y; 
     user-select: none;
     -webkit-user-select: none;
   }
@@ -882,7 +883,6 @@
     user-select: none;
     -webkit-user-select: none;
     background: #ffffff;
-    touch-action: pan-y;
   }
   .category-header:active { background: var(--input-bg); }
   .category-title { font-size: 0.95rem; font-weight: 800; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
@@ -896,7 +896,7 @@
   }
   .category-block.open .category-content { display: block; }
 
-  /* רשימת המנות במאגר - תמיכה ברשת 2 עמודות מעל 2 מנות ונטרול סימון טקסט */
+  /* רשימת המנות במאגר - תמיכה ב-2 עמודות מעל 2 מנות ונטרול בחירת טקסט */
   .preset-list { 
     display: flex; 
     flex-direction: column; 
@@ -916,7 +916,6 @@
     border: 1.5px solid var(--input-border); 
     border-radius: 12px; 
     overflow: hidden; 
-    touch-action: pan-y; 
     box-shadow: 0 2px 0 var(--neutral-btn-shadow); 
     user-select: none;
     -webkit-user-select: none;
@@ -1013,7 +1012,7 @@
     transform: scale(0.98);
   }
 
-  /* Modals - חלון קבוע שלא גדל אלא גולל פנימית */
+  /* Modals */
   .modal-overlay {
     display: none;
     position: fixed;
@@ -1173,16 +1172,16 @@
   </div>
 
   <div class="nav-history-group">
-    <!-- Redo Button: כפתור הלוך עם חץ ימינה מעגלי ב-LTR משמאל -->
-    <button class="btn-nav-circle" onclick="redoLastAction()" title="הלוך">
-      <svg viewBox="0 0 24 24" style="transform: scaleX(-1);">
-        <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
-      </svg>
-    </button>
-    <!-- Undo Button: כפתור חזור עם חץ עגול נגד כיוון השעון בקצה הימני -->
+    <!-- Undo Button (משמאל): חץ מעגלי נגד כיוון השעון (מחזיר פעולה לאחור) -->
     <button class="btn-nav-circle" onclick="undoLastAction()" title="חזור">
       <svg viewBox="0 0 24 24">
         <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
+      </svg>
+    </button>
+    <!-- Redo Button (מימין): חץ ישר שפונה ימינה (מבטל את הביטול) -->
+    <button class="btn-nav-circle" onclick="redoLastAction()" title="הלוך">
+      <svg viewBox="0 0 24 24">
+        <path d="M4 11h12.17l-5.59-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4v-2z"/>
       </svg>
     </button>
   </div>
@@ -1217,7 +1216,7 @@
       </div>
 
       <div class="burn-action-wrap" id="myFoodSpecialActions">
-        <button class="btn-tint btn-tint-pair-bottom" onclick="openExerciseBurnModal()">🏃 אימון / קיזוז מינוס (הוסף קלוריות לספייר)</button>
+        <button class="btn-tint btn-tint-pair-bottom" onclick="openExerciseBurnModal()">🏃 אימון / קיזוז מינוס (תיעוד בהיסטוריה)</button>
       </div>
 
       <div id="categoryContainer"></div>
@@ -1422,7 +1421,7 @@
 
 </div>
 
-<!-- Modal: Settings (גובה קבוע עם גלילה לחלק התחתון ללא התרחבות החלון) -->
+<!-- Modal: Settings (חלון קבוע ללא התרחבות, גלילה פנימית מוסתרת) -->
 <div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-header-bar">
@@ -1812,7 +1811,7 @@
     card.classList.toggle('open');
   }
 
-  /* עדכון כפתור הביטול: אפור אם ריק, אדום פעיל כשיש נתונים */
+  /* כפתור בטל דינמי: אפור אם אין תוכן, אדום כשיש */
   function updateCancelBtnVisibility() {
     const btn = document.getElementById('btnCancelEntry');
     if (!btn) return;
@@ -1856,7 +1855,7 @@
     }
   });
 
-  /* חיפוש חי מקומי למסך ADD FOOD בלבד ללא השפעה על המאגר */
+  /* חיפוש מקומי מנות בלבד */
   function handleLiveSearch(query) {
     query = query.trim().toLowerCase();
     searchDropdown.innerHTML = '';
@@ -2114,8 +2113,7 @@
       if (d === todayStr) return;
 
       if (item.name && item.name.includes('קיזוז אימון')) {
-        const match = item.name.match(/\+?(\d+)/);
-        const val = match ? parseInt(match[1]) : 0;
+        const val = Math.abs(item.cal || 0);
         dayBurned[d] = (dayBurned[d] || 0) + val;
         return;
       }
@@ -2140,8 +2138,9 @@
     }).sort((a, b) => b.date.localeCompare(a.date));
   }
 
+  /* קיזוז אימון: נרשם כמינוס בהיסטוריה, לא משנה את הספייר ולא את נאכל היום כעת */
   function openExerciseBurnModal() {
-    const val = prompt('כמה קלוריות שרפת באימון האקסטרה? (יוזן ישירות כתוספת לספייר)');
+    const val = prompt('כמה קלוריות שרפת באימון? (יירשם במינוס בהיסטוריה ויקוזז לספייר בסיום יום)');
     if (val === null) return;
     const burned = parseInt(val, 10);
     if (isNaN(burned) || burned <= 0) {
@@ -2149,14 +2148,13 @@
       return;
     }
 
-    pushState(`קיזוז אימון (+${burned})`);
+    pushState(`קיזוז אימון (-${burned})`);
     const today = getTodayString();
-    weeklyBank += burned;
 
     const logObj = { 
       id: Date.now() + Math.random().toString(), 
-      name: `קיזוז אימון (+${burned} לספייר)`, 
-      cal: 0, 
+      name: `קיזוז אימון`, 
+      cal: -burned, 
       pro: 0, 
       date: today 
     };
@@ -2165,10 +2163,9 @@
 
     renderLogs();
     updateDisplay();
-    showToast(`נוספו ${burned} קלוריות לספייר!`);
+    showToast(`אימון תועד: -${burned} קלוריות!`);
   }
 
-  /* תצוגת Toast עם 0.5 שניות נוספות (1.7 שניות סה"כ) לפני התפוגגות */
   function showToast(text) {
     const el = document.getElementById('toastMsg');
     if (!el) return;
@@ -2291,7 +2288,6 @@
     renderPresets();
   }
 
-  /* תצוגת מאגרים: הצגה מלאה וקבועה של כל המנות (ללא תלות בשדה החיפוש) */
   function renderPresets() {
     const container = document.getElementById('categoryContainer');
     container.innerHTML = '';
@@ -2368,7 +2364,6 @@
     });
   }
 
-  /* גלילה רציפה ומדויקת תוך כדי גרירת פריט או קטגוריה למעלה/למטה */
   function handleAutoScrollDuringDrag(clientY) {
     const edgeThreshold = 90;
     const scrollSpeed = 16;
@@ -2704,7 +2699,9 @@
     relevant.forEach(l => {
       const d = l.date;
       if (!dayGroups[d]) dayGroups[d] = { cal: 0, pro: 0 };
-      dayGroups[d].cal += (l.cal || 0);
+      if (!l.name || !l.name.includes('קיזוז אימון')) {
+        dayGroups[d].cal += (l.cal || 0);
+      }
       dayGroups[d].pro += (l.pro || 0);
     });
 
@@ -2864,7 +2861,11 @@
     Object.keys(groups).sort().reverse().forEach(dStr => {
       const entries = groups[dStr];
       const isCurrentDay = (dStr === todayStr);
-      const dayCal = entries.reduce((acc, c) => acc + (c.cal || 0), 0);
+      
+      const dayCal = entries.reduce((acc, c) => {
+        if (c.name && c.name.includes('קיזוז אימון')) return acc;
+        return acc + (c.cal || 0);
+      }, 0);
       const dayPro = Math.round(entries.reduce((acc, c) => acc + (c.pro || 0), 0) * 10) / 10;
 
       let bankIndicatorHtml = '';
@@ -2924,13 +2925,21 @@
         row.className = 'log-item-row';
         row.setAttribute('data-id', item.id);
 
+        const isWorkout = item.name && item.name.includes('קיזוז אימון');
+        let macroInfo = '';
+        if (isWorkout) {
+          macroInfo = `<span style="color:var(--status-red); font-weight:800;">(${item.cal} קל')</span>`;
+        } else {
+          macroInfo = `<span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro})</span>`;
+        }
+
         row.innerHTML = `
           <div style="flex:1; pointer-events:none; font-size:0.88rem; text-align:right;">
-            <strong>${item.name || ''}</strong> <span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro})</span>
+            <strong>${item.name || ''}</strong> ${macroInfo}
           </div>
           <div style="display:flex; gap:3px;">
             <button class="btn-log-action" onclick="confirmStartEditLogItem('${item.id}')">✎</button>
-            <button class="btn-log-action" onclick="saveLogItemToPoolById('${item.id}')">📥</button>
+            ${!isWorkout ? `<button class="btn-log-action" onclick="saveLogItemToPoolById('${item.id}')">📥</button>` : ''}
             <button class="btn-log-action btn-log-del" onclick="deleteLogItemById('${item.id}')">✕</button>
           </div>
         `;
@@ -3041,7 +3050,7 @@
 
     let oldTodayCal = 0, oldTodayPro = 0;
     logs.forEach(l => {
-      if ((l.date || todayStr) === todayStr) {
+      if ((l.date || todayStr) === todayStr && (!l.name || !l.name.includes('קיזוז אימון'))) {
         oldTodayCal += l.cal;
         oldTodayPro += l.pro;
       }
@@ -3064,7 +3073,7 @@
     logs = newLogs;
     let newTodayCal = 0, newTodayPro = 0;
     logs.forEach(l => {
-      if ((l.date || todayStr) === todayStr) {
+      if ((l.date || todayStr) === todayStr && (!l.name || !l.name.includes('קיזוז אימון'))) {
         newTodayCal += l.cal;
         newTodayPro += l.pro;
       }
@@ -3093,7 +3102,7 @@
 
     editingLogIndex = index;
     entryNameInput.value = item.name || '';
-    calInput.value = item.cal;
+    calInput.value = Math.abs(item.cal);
     proInput.value = item.pro;
     document.getElementById('catRow').style.display = 'none';
     customUnitWeightRow.style.display = 'none';
@@ -3115,21 +3124,24 @@
     const val = getEntryValues();
     pushState(`עריכת מנה: ${val.name}`);
 
+    const isWorkout = item.name && item.name.includes('קיזוז אימון');
+    const finalCal = isWorkout ? -Math.abs(val.cal) : val.cal;
+
     const today = getTodayString();
-    if (!item.date || item.date === today) {
-      eatenCal = Math.max(0, eatenCal - item.cal + val.cal);
+    if (!isWorkout && (!item.date || item.date === today)) {
+      eatenCal = Math.max(0, eatenCal - item.cal + finalCal);
       eatenPro = Math.max(0, Math.round((eatenPro - item.pro + val.pro) * 10) / 10);
     }
 
     const arch = archiveLogs.find(a => a.id === item.id);
     if (arch) {
       arch.name = val.name;
-      arch.cal = val.cal;
+      arch.cal = finalCal;
       arch.pro = val.pro;
     }
 
     item.name = val.name;
-    item.cal = val.cal;
+    item.cal = finalCal;
     item.pro = val.pro;
 
     cancelLogEdit();
@@ -3155,8 +3167,9 @@
     if (!confirm(`למחוק את "${item.name || 'המנה'}"?`)) return;
 
     pushState(`מחיקת מנה מההיסטוריה: ${item.name || 'מנה'}`);
+    const isWorkout = item.name && item.name.includes('קיזוז אימון');
     const today = getTodayString();
-    if (!item.date || item.date === today) {
+    if (!isWorkout && (!item.date || item.date === today)) {
       eatenCal = Math.max(0, eatenCal - item.cal);
       eatenPro = Math.max(0, Math.round((eatenPro - item.pro) * 10) / 10);
     }
@@ -3429,8 +3442,17 @@
     updateDisplay();
   }
 
+  /* סגירת יום: מחשבת את הגירעון מהאוכל + מוסיפה את כל קלוריות האימונים שבוצעו היום */
   function closeDay(isAuto, transferBank = true) {
-    const diffCal = targetCal - eatenCal;
+    const today = getTodayString();
+    let todayWorkoutsBurn = 0;
+    logs.forEach(l => {
+      if ((l.date || today) === today && l.name && l.name.includes('קיזוז אימון')) {
+        todayWorkoutsBurn += Math.abs(l.cal || 0);
+      }
+    });
+
+    const diffCal = (targetCal - eatenCal) + todayWorkoutsBurn;
     if (!isAuto) {
       const msg = `להתחיל יום חדש?\nספייר שיועבר: ${diffCal >= 0 ? '+' : ''}${diffCal} קלוריות.`;
       if (!confirm(msg)) return;
@@ -3440,7 +3462,7 @@
     weeklyBank += diffCal;
 
     eatenCal = 0; eatenPro = 0;
-    lastActiveDate = getTodayString();
+    lastActiveDate = today;
     renderLogs();
     updateDisplay();
     showToast(`יום חדש התחיל! ספייר עודכן ב-${diffCal >= 0 ? '+' : ''}${diffCal}`);
@@ -3569,7 +3591,7 @@
           grp.innerHTML += `
             <div class="archive-item-row">
               <span>${it.name || 'ללא שם'}</span>
-              <span style="color:var(--text-muted);">+${it.cal} קל' | +${it.pro}</span>
+              <span style="color:var(--text-muted);">${it.cal >= 0 ? '+' : ''}${it.cal} קל' | +${it.pro}</span>
             </div>
           `;
         });
