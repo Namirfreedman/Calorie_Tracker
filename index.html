@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Macro Tracker</title><link rel="manifest" href="manifest.json?v=2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Macro Tracker"><link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"><style>
+<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Macro Tracker</title><link rel="manifest" href="manifest.json?v=2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Macro Tracker"><link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"><script src="base-foods.js"></script><style>
   :root {
     --bg-page: #f8f9fa;
     --card-bg: #ffffff;
@@ -161,7 +161,7 @@
   .toast-pill.show { opacity: 1; }
   .toast-pill.fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
 
-  /* Nav Buttons: Undo left (circular counter-clockwise), Redo right (straight right arrow) */
+  /* Nav Buttons: Undo left (counter-clockwise), Redo right (straight right arrow) */
   .nav-history-group { 
     display: flex; 
     flex-direction: row; 
@@ -381,7 +381,7 @@
     font-weight: 800;
   }
 
-  /* Stats Card */
+  /* Stats Board */
   .stats-board {
     display: flex;
     flex-direction: column;
@@ -649,7 +649,6 @@
     padding: 13px 14px;
   }
   
-  /* כפתור בטל תחתון וקומפקטי */
   .btn-cancel-compact {
     border-radius: 12px;
     padding: 8px 12px;
@@ -816,6 +815,7 @@
     margin: 4px 0;
     pointer-events: none;
   }
+  /* פריט נגרר ביחס 1:1 בדיוק ללא הגדלה */
   .floating-drag-clone {
     position: fixed;
     pointer-events: none;
@@ -824,12 +824,11 @@
     border: 2px solid var(--accent-primary);
     box-shadow: 0 12px 30px rgba(0,0,0,0.18);
     border-radius: 14px;
-    padding: 10px 14px;
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     color: var(--text-main);
-    transform: scale(1.02);
   }
 
   .btn-log-action { background: transparent; border: none; font-size: 1.05rem; cursor: pointer; padding: 3px 6px; color: var(--text-subtle); }
@@ -896,7 +895,6 @@
   }
   .category-block.open .category-content { display: block; }
 
-  /* רשימת המנות במאגר - תמיכה ב-2 עמודות מעל 2 מנות ונטרול בחירת טקסט */
   .preset-list { 
     display: flex; 
     flex-direction: column; 
@@ -1160,7 +1158,7 @@
   }
 </style></head><body>
 
-<!-- Fixed Top Bar: Mirrored in English Order (Left to Right) -->
+<!-- Fixed Top Bar: Undo left (counter-clockwise), Redo right (straight right arrow) -->
 <div class="floating-top-bar">
   <div class="header-left-group">
     <button class="btn-icon-top" onclick="openSettingsModal()" title="Settings">⚙</button>
@@ -1172,13 +1170,11 @@
   </div>
 
   <div class="nav-history-group">
-    <!-- Undo Button (משמאל): חץ מעגלי נגד כיוון השעון (מחזיר פעולה לאחור) -->
     <button class="btn-nav-circle" onclick="undoLastAction()" title="חזור">
       <svg viewBox="0 0 24 24">
         <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
       </svg>
     </button>
-    <!-- Redo Button (מימין): חץ ישר שפונה ימינה (מבטל את הביטול) -->
     <button class="btn-nav-circle" onclick="redoLastAction()" title="הלוך">
       <svg viewBox="0 0 24 24">
         <path d="M4 11h12.17l-5.59-5.59L12 4l8 8-8 8-1.41-1.41L16.17 13H4v-2z"/>
@@ -1187,7 +1183,7 @@
   </div>
 </div>
 
-<!-- Facebook-like Top Tabs (Right to Left: DATABASE -> ADD FOOD -> HOME) -->
+<!-- Facebook-like Top Tabs -->
 <div class="fb-nav-bar">
   <button class="fb-nav-item active" id="fbNavDb" onclick="goToPageIndex(0)">
     <span class="fb-icon">📚</span>
@@ -1207,7 +1203,7 @@
 <!-- Main Native Slider Container -->
 <div class="screens-slider-container" id="sliderContainer">
   
-  <!-- עמוד 0 (ימין): DATABASE - מאגר מאכלים (ללא שורת חיפוש כלל) -->
+  <!-- עמוד 0 (ימין): DATABASE - ללא שורת חיפוש, גרירה חופשית בין עמודים -->
   <div class="screen-tab" id="screenDb">
     <div class="card" id="poolCard">
       <div class="pool-tabs">
@@ -1223,10 +1219,9 @@
     </div>
   </div>
 
-  <!-- עמוד 1 (אמצע): ADD FOOD - הזנת מנה מהירה ואפשרויות שמירה למאגר -->
+  <!-- עמוד 1 (אמצע): ADD FOOD -->
   <div class="screen-tab" id="screenAdd">
     
-    <!-- קובייה 1: הזנת מנה מהירה לתפריט היומי -->
     <div class="card">
       <div class="entry-flat-section" id="entryBox">
         <div class="entry-flat-title" id="entryTitle">🔍 הזנת מנה מהירה</div>
@@ -1256,7 +1251,6 @@
 
         <div class="action-buttons-stack" id="defaultActionBtns">
           <button class="btn-tint btn-tint-primary" onclick="actionAddMenu()">+ הוסף לתפריט</button>
-          <!-- כפתור בטל קומפקטי תמיד נוכח, אפור כברירת מחדל ואדום כשיש תוכן -->
           <button type="button" id="btnCancelEntry" class="btn-cancel-compact" onclick="handleCancelEntryClick()">בטל</button>
         </div>
 
@@ -1312,7 +1306,7 @@
 
   </div>
 
-  <!-- עמוד 2 (שמאל): HOME - יומן, יעדים והיסטוריה -->
+  <!-- עמוד 2 (שמאל): HOME -->
   <div class="screen-tab" id="screenHome">
     <div class="goals-card-wrapper" id="goalsCard">
       <div class="goals-card-header" onclick="toggleGoalsCard(event)">
@@ -1396,7 +1390,7 @@
 
         <div class="bank-details-drawer" id="bankDetailsDrawer">
           <div style="font-size:0.9rem; font-weight:900; color:var(--accent-secondary); margin-bottom:8px; text-align:center;">
-            תוקף הספייר
+            תוקף הספייר (FIFO - נוצל/נשאר)
           </div>
           <div id="bankDetailsList"></div>
         </div>
@@ -1421,7 +1415,7 @@
 
 </div>
 
-<!-- Modal: Settings (חלון קבוע ללא התרחבות, גלילה פנימית מוסתרת) -->
+<!-- Modal: Settings -->
 <div class="modal-overlay" id="settingsModal" onclick="closeSettingsModal(event)">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-header-bar">
@@ -1502,105 +1496,6 @@
 </div>
 
 <script>
-  const BASE_FOODS = [
-    { name: "עגבנייה", cal: 18, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 130 },
-    { name: "עגבניית שרי", cal: 18, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 15 },
-    { name: "מלפפון", cal: 15, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 120 },
-    { name: "פלפל אדום (גמבה)", cal: 31, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 150 },
-    { name: "פלפל צהוב / כתום", cal: 27, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 150 },
-    { name: "גזר", cal: 41, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 80 },
-    { name: "בצל יבש", cal: 40, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 110 },
-    { name: "בצל ירוק", cal: 32, pro: 0, cat: "ירקות", unitName: "גבעול", unitWeight: 15 },
-    { name: "שום", cal: 149, pro: 0, cat: "ירקות", unitName: "שן", unitWeight: 4 },
-    { name: "חסה ערבית / אייסברג", cal: 15, pro: 0, cat: "ירקות", unitName: "עלה", unitWeight: 20 },
-    { name: "כרוב לבן", cal: 25, pro: 0, cat: "ירקות" },
-    { name: "כרוב סגול", cal: 31, pro: 0, cat: "ירקות" },
-    { name: "תרד חי", cal: 23, pro: 0, cat: "ירקות" },
-    { name: "קישוא / זוקיני", cal: 17, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 180 },
-    { name: "חציל אפוי / קלוי", cal: 35, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 300 },
-    { name: "ברוקולי מבושל", cal: 35, pro: 0, cat: "ירקות" },
-    { name: "כרובית מבושלת / אפויה", cal: 25, pro: 0, cat: "ירקות" },
-    { name: "פטריות שמפיניון", cal: 22, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 18 },
-    { name: "פטריות פורטובלו", cal: 22, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 60 },
-    { name: "בטטה אפויה", cal: 90, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 180 },
-    { name: "תפוח אדמה מבושל", cal: 87, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 170 },
-    { name: "דלעת מבושלת / אפויה", cal: 26, pro: 0, cat: "ירקות" },
-    { name: "סלק מבושל", cal: 44, pro: 0, cat: "ירקות", unitName: "יחידה", unitWeight: 120 },
-    { name: "שעועית ירוקה עדינה מבושלת", cal: 31, pro: 0, cat: "ירקות" },
-    { name: "מנגו", cal: 60, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 200 },
-    { name: "בננה", cal: 89, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 110 },
-    { name: "תפוח עץ", cal: 52, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 160 },
-    { name: "אגס", cal: 57, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 160 },
-    { name: "תות שדה", cal: 32, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 15 },
-    { name: "אוכמניות טריות / קפואות", cal: 57, pro: 0, cat: "פירות" },
-    { name: "אבטיח", cal: 30, pro: 0, cat: "פירות", unitName: "משולש בינוני", unitWeight: 280 },
-    { name: "מלון", cal: 34, pro: 0, cat: "פירות" },
-    { name: "ענבים", cal: 69, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 5 },
-    { name: "תפוז", cal: 47, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 130 },
-    { name: "קלמנטינה", cal: 47, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 85 },
-    { name: "אפרסק / נקטרינה", cal: 44, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 140 },
-    { name: "קיווי", cal: 61, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 75 },
-    { name: "תמר מג'הול", cal: 277, pro: 0, cat: "פירות", unitName: "יחידה", unitWeight: 20 },
-    { name: "צימוקים", cal: 299, pro: 0, cat: "פירות", unitName: "כף", unitWeight: 12 },
-    { name: "טופו קשה", cal: 144, pro: 15.5, cat: "חלבונים מובחרים" },
-    { name: "טופו משי", cal: 55, pro: 5.0, cat: "חלבונים מובחרים" },
-    { name: "טמפה", cal: 192, pro: 20.3, cat: "חלבונים מובחרים" },
-    { name: "סייטן", cal: 140, pro: 24.0, cat: "חלבונים מובחרים" },
-    { name: "שבבי סויה יבשים (TVP)", cal: 330, pro: 50.0, cat: "חלבונים מובחרים" },
-    { name: "יובה (עור טופו יבש)", cal: 420, pro: 52.0, cat: "חלבונים מובחרים" },
-    { name: "אדממה (פולי סויה מבושלים)", cal: 122, pro: 11.0, cat: "חלבונים מובחרים" },
-    { name: "אבקת חלבון צמחית", cal: 400, pro: 80.0, cat: "חלבונים מובחרים", unitName: "סקופ", unitWeight: 30 },
-    { name: "שמרי בירה (פתיתים)", cal: 360, pro: 48.0, cat: "חלבונים מובחרים", unitName: "כף", unitWeight: 8 },
-    { name: "חלב סויה ללא סוכר", cal: 35, pro: 3.3, cat: "חלבונים מובחרים", unitName: "כוס", unitWeight: 200 },
-    { name: "יוגורט סויה טבעי", cal: 50, pro: 4.0, cat: "חלבונים מובחרים", unitName: "גביע", unitWeight: 150 },
-    { name: "עדשים חומות / ירוקות מבושלות", cal: 116, pro: 9.0, cat: "קטניות" },
-    { name: "עדשים כתומות מבושלות", cal: 112, pro: 8.5, cat: "קטניות" },
-    { name: "עדשים שחורות (בלוגה) מבושלות", cal: 120, pro: 9.5, cat: "קטניות" },
-    { name: "גרגרי חומוס מבושלים", cal: 164, pro: 8.9, cat: "קטניות" },
-    { name: "שעועית שחורה מבושלת", cal: 132, pro: 8.9, cat: "קטניות" },
-    { name: "שעועית לבנה מבושלת", cal: 139, pro: 9.7, cat: "קטניות" },
-    { name: "שעועית אדומה (קידני) מבושלת", cal: 127, pro: 8.7, cat: "קטניות" },
-    { name: "אפונה ירוקה מבושלת", cal: 81, pro: 5.4, cat: "קטניות" },
-    { name: "פול מצרי מבושל", cal: 110, pro: 7.6, cat: "קטניות" },
-    { name: "תורמוס מבושל", cal: 119, pro: 15.6, cat: "קטניות" },
-    { name: "שיבולת שועל (קוואקר יבש)", cal: 389, pro: 16.9, cat: "דגנים ופחמימות", unitName: "כף מלאה", unitWeight: 12 },
-    { name: "אורז לבן מבושל", cal: 130, pro: 2.7, cat: "דגנים ופחמימות" },
-    { name: "אורז מלא מבושל", cal: 112, pro: 2.6, cat: "דגנים ופחמימות" },
-    { name: "פסטה רגילה מבושלת", cal: 158, pro: 5.8, cat: "דגנים ופחמימות" },
-    { name: "פסטה מקמח מלא מבושלת", cal: 145, pro: 6.0, cat: "דגנים ופחמימות" },
-    { name: "פסטה מקמח עדשים מבושלת", cal: 160, pro: 13.0, cat: "דגנים ופחמימות" },
-    { name: "קינואה מבושלת", cal: 120, pro: 4.4, cat: "דגנים ופחמימות" },
-    { name: "כוסמת מבושלת", cal: 92, pro: 3.4, cat: "דגנים ופחמימות" },
-    { name: "בורגול מבושל", cal: 83, pro: 3.1, cat: "דגנים ופחמימות" },
-    { name: "קוסקוס מבושל", cal: 112, pro: 3.8, cat: "דגנים ופחמימות" },
-    { name: "פיתה רגילה", cal: 242, pro: 8.4, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 95 },
-    { name: "פיתה מקמח מלא", cal: 221, pro: 9.5, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 95 },
-    { name: "לחם אחיד", cal: 250, pro: 8.3, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 30 },
-    { name: "לחם מלא / מחמצת", cal: 240, pro: 10.0, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 35 },
-    { name: "לחם קל", cal: 180, pro: 8.0, cat: "דגנים ופחמימות", unitName: "פרוסה", unitWeight: 25 },
-    { name: "טורטיה", cal: 300, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה בינונית", unitWeight: 40 },
-    { name: "פריכיות אורז", cal: 375, pro: 7.5, cat: "דגנים ופחמימות", unitName: "יחידה", unitWeight: 8 },
-    { name: "טחינה מוכנה", cal: 213, pro: 6.7, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 15 },
-    { name: "טחינה גולמית", cal: 595, pro: 17.0, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 15 },
-    { name: "חומוס ממרח מוכן", cal: 240, pro: 7.0, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 25 },
-    { name: "חמאת בוטנים טבעית", cal: 588, pro: 25.0, cat: "שומנים וממרחים", unitName: "כף שטוחה", unitWeight: 15 },
-    { name: "שקדים טבעיים", cal: 579, pro: 21.0, cat: "שומנים וממרחים", unitName: "יחידה", unitWeight: 1.2 },
-    { name: "אגוזי מלך", cal: 654, pro: 15.2, cat: "שומנים וממרחים", unitName: "חצי אגוז", unitWeight: 2.5 },
-    { name: "אגוזי קשיו", cal: 553, pro: 18.0, cat: "שומנים וממרחים", unitName: "יחידה", unitWeight: 1.5 },
-    { name: "גרעיני דלעת קלופים", cal: 559, pro: 30.0, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 10 },
-    { name: "זרעי צ'יה", cal: 486, pro: 16.5, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 12 },
-    { name: "זרעי פשתן טחונים", cal: 534, pro: 18.3, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 10 },
-    { name: "שמן זית", cal: 884, pro: 0, cat: "שומנים וממרחים", unitName: "כף", unitWeight: 10 },
-    { name: "אבוקדו", cal: 160, pro: 0, cat: "שומנים וממרחים", unitName: "חצי", unitWeight: 75 },
-    { name: "זיתים ירוקים / שחורים", cal: 145, pro: 0, cat: "שומנים וממרחים", unitName: "יחידה", unitWeight: 4 },
-    { name: "בירה (לאגר)", cal: 42, pro: 0.5, cat: "אלכוהול", unitName: "בקבוק 330 מ\"ל", unitWeight: 330 },
-    { name: "יין אדום יבש", cal: 85, pro: 0.1, cat: "אלכוהול", unitName: "כוס 150 מ\"ל", unitWeight: 150 },
-    { name: "יין לבן יבש", cal: 82, pro: 0.1, cat: "אלכוהול", unitName: "כוס 150 מ\"ל", unitWeight: 150 },
-    { name: "וויסקי", cal: 231, pro: 0, cat: "אלכוהול", unitName: "שוט 40 מ\"ל", unitWeight: 40 },
-    { name: "ערק / וודקה (40%)", cal: 231, pro: 0, cat: "אלכוהול", unitName: "שוט 40 מ\"ל", unitWeight: 40 },
-    { name: "ג'ין", cal: 231, pro: 0, cat: "אלכוהול", unitName: "שוט 40 מ\"ל", unitWeight: 40 }
-  ];
-
   let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
   let targetPro = parseInt(localStorage.getItem('cal_targetPro')) || 140;
   let userGoalType = localStorage.getItem('cal_userGoalType') || 'cut';
@@ -1627,7 +1522,7 @@
   let toastFadeTimer = null;
   let cloudSyncTimeout = null;
 
-  /* === Multi-screen Scroll Controller (1:1 Continuous Tracker without LAG) === */
+  /* === Multi-screen Scroll Controller (1:1 Continuous Tracker) === */
   const slider = document.getElementById('sliderContainer');
   const indicator = document.getElementById('fbNavIndicator');
   const navItems = [
@@ -1811,7 +1706,6 @@
     card.classList.toggle('open');
   }
 
-  /* כפתור בטל דינמי: אפור אם אין תוכן, אדום כשיש */
   function updateCancelBtnVisibility() {
     const btn = document.getElementById('btnCancelEntry');
     if (!btn) return;
@@ -1855,7 +1749,6 @@
     }
   });
 
-  /* חיפוש מקומי מנות בלבד */
   function handleLiveSearch(query) {
     query = query.trim().toLowerCase();
     searchDropdown.innerHTML = '';
@@ -1873,11 +1766,13 @@
       }
     });
 
-    BASE_FOODS.forEach(b => {
-      if (b.name.toLowerCase().includes(query) || (b.cat && b.cat.toLowerCase().includes(query))) {
-        matches.push({ type: 'base', data: b });
-      }
-    });
+    if (typeof BASE_FOODS !== 'undefined') {
+      BASE_FOODS.forEach(b => {
+        if (b.name.toLowerCase().includes(query) || (b.cat && b.cat.toLowerCase().includes(query))) {
+          matches.push({ type: 'base', data: b });
+        }
+      });
+    }
 
     if (matches.length === 0) {
       searchDropdown.style.display = 'none';
@@ -1922,10 +1817,11 @@
     val = val.trim().toLowerCase();
     categoryDropdown.innerHTML = '';
 
+    const baseCats = (typeof BASE_FOODS !== 'undefined') ? BASE_FOODS.map(b => b.cat) : [];
     const allCats = Array.from(new Set([
       ...categoryOrder,
       ...presets.map(p => p.cat || 'כללי'),
-      ...BASE_FOODS.map(b => b.cat)
+      ...baseCats
     ]));
 
     const filtered = allCats.filter(c => !val || c.toLowerCase().includes(val));
@@ -2010,6 +1906,7 @@
   }
 
   function loadBaseFoodForPortion(foodName, shouldGlow = true) {
+    if (typeof BASE_FOODS === 'undefined') return;
     const item = BASE_FOODS.find(b => b.name === foodName);
     if (!item) return;
 
@@ -2101,46 +1998,61 @@
     return dayNames[d.getDay()];
   }
 
-  function getClosedDaysStats() {
+  /* === אלגוריתם FIFO מלא לחישוב יתרות ספייר לפי תאריכים וקיזוז גירעונות === */
+  function getFifoSpareStats() {
     const todayStr = getTodayString();
     const sourceLogs = (archiveLogs && archiveLogs.length > 0) ? archiveLogs : logs;
 
-    const dayTotals = {};
+    const dayEaten = {};
     const dayBurned = {};
 
     sourceLogs.forEach(item => {
       const d = item.date || todayStr;
-      if (d === todayStr) return;
-
+      if (d === todayStr) return; // רק ימים שנסגרו בעבר
       if (item.name && item.name.includes('קיזוז אימון')) {
-        const val = Math.abs(item.cal || 0);
-        dayBurned[d] = (dayBurned[d] || 0) + val;
-        return;
+        dayBurned[d] = (dayBurned[d] || 0) + Math.abs(item.cal || 0);
+      } else {
+        dayEaten[d] = (dayEaten[d] || 0) + (item.cal || 0);
       }
-
-      dayTotals[d] = (dayTotals[d] || 0) + (item.cal || 0);
     });
 
-    const allDates = Array.from(new Set([...Object.keys(dayTotals), ...Object.keys(dayBurned)]));
-    
-    return allDates.map(dateStr => {
-      const eaten = dayTotals[dateStr] || 0;
+    const allDates = Array.from(new Set([...Object.keys(dayEaten), ...Object.keys(dayBurned)])).sort();
+
+    const days = allDates.map(dateStr => {
+      const eaten = dayEaten[dateStr] || 0;
       const burned = dayBurned[dateStr] || 0;
-      const baseDiff = targetCal - eaten;
-      const netSpare = baseDiff + burned;
+      const net = (targetCal - eaten) + burned;
       const daysAgo = getDaysDifference(dateStr);
       return {
         date: dateStr,
-        netSpare,
-        daysAgo,
+        initialNet: net,
+        remainingSpare: net > 0 ? net : 0,
+        deficit: net < 0 ? Math.abs(net) : 0,
+        daysAgo: daysAgo,
         isActive: daysAgo >= 1 && daysAgo <= 3
       };
-    }).sort((a, b) => b.date.localeCompare(a.date));
+    });
+
+    // הרצת FIFO כרונולוגי: כל גירעון מקזז קודם את הספייר מהיום הישן ביותר שעדיין נותר בו פלוס
+    for (let i = 0; i < days.length; i++) {
+      let def = days[i].deficit;
+      if (def > 0) {
+        for (let j = 0; j < i; j++) {
+          if (days[j].remainingSpare > 0) {
+            const consume = Math.min(days[j].remainingSpare, def);
+            days[j].remainingSpare -= consume;
+            def -= consume;
+            if (def === 0) break;
+          }
+        }
+      }
+    }
+
+    return days;
   }
 
-  /* קיזוז אימון: נרשם כמינוס בהיסטוריה, לא משנה את הספייר ולא את נאכל היום כעת */
   function openExerciseBurnModal() {
-    const val = prompt('כמה קלוריות שרפת באימון? (יירשם במינוס בהיסטוריה ויקוזז לספייר בסיום יום)');
+    const val = prompt('כמה קלוריות שרפת באימון? (יירשם במינוס בהיסטוריה ויועבר לספייר בסיום היום)');
     if (val === null) return;
     const burned = parseInt(val, 10);
     if (isNaN(burned) || burned <= 0) {
@@ -2279,6 +2191,7 @@
 
   function applyPoolTabUI() {
     document.getElementById('tabMyFood').className = 'pool-tab-btn ' + (currentPoolTab === 'myfood' ? 'active' : '');
+    const baseCount = (typeof BASE_FOODS !== 'undefined') ? BASE_FOODS.length : 0;
     document.getElementById('tabBase').className = 'pool-tab-btn ' + (currentPoolTab === 'base' ? 'active' : '');
     document.getElementById('myFoodSpecialActions').style.display = (currentPoolTab === 'myfood') ? 'block' : 'none';
   }
@@ -2292,8 +2205,9 @@
     const container = document.getElementById('categoryContainer');
     container.innerHTML = '';
 
+    const baseCount = (typeof BASE_FOODS !== 'undefined') ? BASE_FOODS.length : 0;
     document.getElementById('tabMyFood').textContent = `⭐ האוכל שלי (${presets.length})`;
-    document.getElementById('tabBase').textContent = `⚖️ מאגר בסיס (${BASE_FOODS.length})`;
+    document.getElementById('tabBase').textContent = `⚖️ מאגר בסיס (${baseCount})`;
 
     if (currentPoolTab === 'none') {
       container.style.display = 'none';
@@ -2469,14 +2383,14 @@
       }
     };
 
-    headerEl.addEventListener('touchstart', onStart, { passive: false });
+    headerEl.addEventListener('touchstart', onStart, { passive: true });
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
     window.addEventListener('touchcancel', onEnd);
   }
 
   function finalizeCategoryDomReorder() {
-    pushState('סידור קטגוריות');
+    const oldOrder = JSON.stringify(categoryOrder);
     const newOrder = [];
     document.querySelectorAll('.category-block').forEach(b => {
       const c = b.getAttribute('data-category');
@@ -2487,6 +2401,9 @@
       if (!newOrder.includes(c)) newOrder.push(c);
     });
 
+    if (JSON.stringify(newOrder) === oldOrder) return; // לא שונה דבר
+
+    pushState('סידור קטגוריות');
     categoryOrder = newOrder;
     renderPresets();
     saveData();
@@ -2582,14 +2499,14 @@
       }
     };
 
-    rowEl.addEventListener('touchstart', onStart, { passive: false });
+    rowEl.addEventListener('touchstart', onStart, { passive: true });
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
     window.addEventListener('touchcancel', onEnd);
   }
 
   function finalizePresetDomReorder(newCategory) {
-    pushState('סידור מנות במאגר');
+    const oldPresetsStr = JSON.stringify(presets);
     const newPresets = [];
     document.querySelectorAll('.preset-list').forEach(listEl => {
       const cat = listEl.getAttribute('data-category');
@@ -2603,6 +2520,9 @@
       });
     });
 
+    if (JSON.stringify(newPresets) === oldPresetsStr) return; // לא שונה דבר
+
+    pushState('סידור מנות במאגר');
     presets = newPresets;
     renderPresets();
     saveData();
@@ -2631,6 +2551,10 @@
   }
 
   function renderBaseFoodAccordion(container) {
+    if (typeof BASE_FOODS === 'undefined') {
+      container.innerHTML = '<div style="text-align:right; font-size:0.88rem; color:var(--text-muted); padding:16px;">טוען מאגר בסיס...</div>';
+      return;
+    }
     const cats = Array.from(new Set(BASE_FOODS.map(b => b.cat)));
     cats.forEach(catName => {
       const catItems = BASE_FOODS.filter(b => b.cat === catName);
@@ -2744,36 +2668,45 @@
     }
   }
 
+  /* הצגת מגירת תוקף הספייר לפי תוצאות ה-FIFO המדויקות */
   function renderBankDetailsDrawer() {
     const listEl = document.getElementById('bankDetailsList');
     listEl.innerHTML = '';
 
-    const closedDays = getClosedDaysStats().filter(d => d.isActive);
+    const fifoDays = getFifoSpareStats().filter(d => d.isActive).reverse();
 
-    if (closedDays.length === 0) {
+    if (fifoDays.length === 0) {
       listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.82rem; padding:8px 0;">אין יתרות ספייר מ-3 הימים האחרונים</div>';
       return;
     }
 
-    closedDays.forEach(item => {
+    fifoDays.forEach(item => {
       const daysLeft = 3 - item.daysAgo;
       const expiryDay = getExpiryDayName(item.date);
       const expiryLabel = daysLeft === 0 ? 'עד היום' : `עד ${expiryDay}`;
       
-      const isPos = item.netSpare >= 0;
-      const sign = isPos ? '+' : '-';
-      const absVal = Math.abs(item.netSpare).toLocaleString();
-      const color = isPos ? 'var(--status-green)' : 'var(--status-red)';
-
       const row = document.createElement('div');
       row.className = 'bank-detail-item';
-      row.innerHTML = `
-        <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
-        <span style="font-weight:800; color:${color};">
-          <span style="direction:ltr; unicode-bidi:isolate; display:inline-block;">${sign}${absVal}</span> קל' 
-          <span style="font-size:0.78rem; color:var(--text-muted); font-weight:normal;">(${expiryLabel})</span>
-        </span>
-      `;
+
+      if (item.initialNet < 0) {
+        row.innerHTML = `
+          <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
+          <span style="font-weight:800; color:var(--status-red);">
+            חריגה של ${Math.abs(item.initialNet).toLocaleString()} קל' (קוזזה מספייר קודם)
+          </span>
+        `;
+      } else {
+        const remaining = item.remainingSpare;
+        const color = remaining > 0 ? 'var(--status-green)' : 'var(--text-muted)';
+        const statusTxt = remaining > 0 ? `+${remaining.toLocaleString()} קל' (${expiryLabel})` : 'נוצל במלואו (0 קל\')';
+
+        row.innerHTML = `
+          <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
+          <span style="font-weight:800; color:${color};">
+            ${statusTxt}
+          </span>
+        `;
+      }
       listEl.appendChild(row);
     });
   }
@@ -2853,9 +2786,9 @@
       groups[d].push(item);
     });
 
-    const closedDaysMap = {};
-    getClosedDaysStats().forEach(item => {
-      closedDaysMap[item.date] = item;
+    const fifoMap = {};
+    getFifoSpareStats().forEach(item => {
+      fifoMap[item.date] = item;
     });
 
     Object.keys(groups).sort().reverse().forEach(dStr => {
@@ -2872,36 +2805,32 @@
       if (isCurrentDay) {
         bankIndicatorHtml = '<span class="bank-pill-mini">היום פעיל</span>';
       } else {
-        const dayStat = closedDaysMap[dStr];
-        const netSpare = dayStat ? dayStat.netSpare : (targetCal - dayCal);
+        const dayStat = fifoMap[dStr];
         const daysAgo = getDaysDifference(dStr);
         const isActive = daysAgo >= 1 && daysAgo <= 3;
         
-        const isPos = netSpare >= 0;
-        const sign = isPos ? '+' : '-';
-        const absVal = Math.abs(netSpare).toLocaleString();
+        if (dayStat) {
+          if (isActive) {
+            const daysLeft = 3 - daysAgo;
+            const expiryDay = getExpiryDayName(dStr);
+            const expiryTxt = daysLeft === 0 ? 'עד היום' : `עד ${expiryDay}`;
 
-        if (isActive) {
-          const daysLeft = 3 - daysAgo;
-          const expiryDay = getExpiryDayName(dStr);
-          const expiryTxt = daysLeft === 0 ? 'עד היום' : `עד ${expiryDay}`;
-          const colorClass = isPos ? 'active-pos' : 'active-neg';
-
-          bankIndicatorHtml = `
-            <span class="bank-pill-mini ${colorClass}">
-              <span>ספייר:</span>
-              <span class="num-span">${sign}${absVal}</span>
-              <span>(${expiryTxt})</span>
-            </span>
-          `;
-        } else {
-          bankIndicatorHtml = `
-            <span class="bank-pill-mini expired-gray">
-              <span>ספייר:</span>
-              <span class="num-span">${sign}${absVal}</span>
-              <span>(פג תוקף)</span>
-            </span>
-          `;
+            if (dayStat.initialNet < 0) {
+              bankIndicatorHtml = `<span class="bank-pill-mini active-neg">חריגה קוזזה</span>`;
+            } else if (dayStat.remainingSpare > 0) {
+              bankIndicatorHtml = `
+                <span class="bank-pill-mini active-pos">
+                  <span>ספייר נותר:</span>
+                  <span class="num-span">+${dayStat.remainingSpare.toLocaleString()}</span>
+                  <span>(${expiryTxt})</span>
+                </span>
+              `;
+            } else {
+              bankIndicatorHtml = `<span class="bank-pill-mini expired-gray">ספייר נוצל במלואו</span>`;
+            }
+          } else {
+            bankIndicatorHtml = `<span class="bank-pill-mini expired-gray">פג תוקף</span>`;
+          }
         }
       }
 
@@ -3037,7 +2966,7 @@
       }
     };
 
-    rowEl.addEventListener('touchstart', onStart, { passive: false });
+    rowEl.addEventListener('touchstart', onStart, { passive: true });
     window.addEventListener('touchmove', onMove, { passive: false });
     window.addEventListener('touchend', onEnd);
     window.addEventListener('touchcancel', onEnd);
@@ -3046,7 +2975,6 @@
   function finalizeDomReorder() {
     const todayStr = getTodayString();
     const newLogs = [];
-    pushState('סידור מנות בהיסטוריה');
 
     let oldTodayCal = 0, oldTodayPro = 0;
     logs.forEach(l => {
@@ -3070,6 +2998,9 @@
       });
     });
 
+    if (JSON.stringify(newLogs) === JSON.stringify(logs)) return;
+
+    pushState('סידור מנות בהיסטוריה');
     logs = newLogs;
     let newTodayCal = 0, newTodayPro = 0;
     logs.forEach(l => {
@@ -3442,7 +3373,7 @@
     updateDisplay();
   }
 
-  /* סגירת יום: מחשבת את הגירעון מהאוכל + מוסיפה את כל קלוריות האימונים שבוצעו היום */
+  /* סגירת יום עם חישוב אימונים מלא והעברה לספייר */
   function closeDay(isAuto, transferBank = true) {
     const today = getTodayString();
     let todayWorkoutsBurn = 0;
@@ -3616,7 +3547,7 @@
     if (archiveLogs.length === 0) { alert('הארכיון ריק'); return; }
     if (!confirm('האם להוריד את היסטוריית הארכיון כקובץ טקסט?')) return;
     const blob = new Blob([JSON.stringify(archiveLogs, null, 2)], { type: 'text/plain;charset=utf-8' });
-    const a = document.createElement('a');
+    a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `archive_logs_${new Date().toISOString().slice(0,10)}.txt`;
     a.click();
