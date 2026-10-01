@@ -161,7 +161,7 @@
   .toast-pill.show { opacity: 1; }
   .toast-pill.fade-out { opacity: 0; transition: opacity 0.8s ease-out; }
 
-  /* Nav Buttons: Undo left (counter-clockwise), Redo right (straight right arrow) */
+  /* Nav Buttons: Undo left, Redo right */
   .nav-history-group { 
     display: flex; 
     flex-direction: row; 
@@ -555,6 +555,15 @@
     transition: all 0.2s; 
   }
 
+  /* שדה משקל ממוצע - התאמת פונט וגודל מדויקת לקטגוריה */
+  #customUnitGramsInput {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    font-family: inherit !important;
+    padding: 13px 14px !important;
+    text-align: center !important;
+  }
+
   input:focus, textarea:focus, select:focus { 
     background: #ffffff; 
     border-color: var(--accent-primary); 
@@ -688,7 +697,7 @@
     margin-top: 14px;
   }
 
-  /* Segmented 3-button Mode Picker */
+  /* Segmented 3-button Mode Picker: מסומן בכחול בהיר */
   .segmented-mode-container {
     background: var(--input-bg);
     border: 1.5px solid var(--card-border);
@@ -720,10 +729,10 @@
     box-shadow: none;
   }
   .btn-segment-option.active {
-    background: var(--accent-primary);
-    color: #ffffff;
-    border-color: var(--accent-primary-shadow);
-    box-shadow: 0 2px 0 var(--accent-primary-shadow);
+    background: var(--tint-blue-bg) !important;
+    color: var(--tint-blue-text) !important;
+    border-color: var(--tint-blue-border) !important;
+    box-shadow: 0 2px 0 var(--tint-blue-shadow) !important;
   }
 
   .collapsible-wrapper { margin-top: 12px; width: 100%; }
@@ -976,6 +985,10 @@
     user-select: none;
     -webkit-user-select: none;
   }
+  .base-food-btn-wrap.holding-active {
+    background: var(--primary-surface) !important;
+    border-color: var(--accent-primary);
+  }
   .base-food-btn {
     width: 100%;
     text-align: right;
@@ -1087,6 +1100,7 @@
     grid-template-columns: 24px 1fr 24px;
     align-items: center;
     box-shadow: 0 2px 0 var(--neutral-btn-shadow);
+    transition: all 0.2s ease;
   }
   .btn-setting-accordion .accordion-title-center {
     text-align: center;
@@ -1096,10 +1110,12 @@
     justify-content: center;
     gap: 6px;
   }
+  /* כותרת מטרות בהגדרות: כחול בהיר נקי בעת פתיחה */
   .btn-setting-accordion.active {
-    background: var(--accent-primary);
-    color: #ffffff;
-    border-color: var(--accent-primary-shadow);
+    background: var(--primary-surface) !important;
+    color: var(--accent-primary) !important;
+    border-color: var(--tint-blue-border) !important;
+    box-shadow: 0 2px 0 var(--tint-blue-border) !important;
   }
   .setting-accordion-drawer {
     display: none;
@@ -1109,6 +1125,25 @@
     padding: 14px;
     margin-top: 4px;
     text-align: center;
+  }
+
+  /* כפתור שמירת מטרות: קטן וירוק בהיר מאוד */
+  .btn-save-goals-compact {
+    background: var(--tint-green-bg);
+    color: var(--tint-green-text);
+    border: 1.5px solid var(--tint-green-border);
+    box-shadow: 0 2px 0 var(--tint-green-shadow);
+    border-radius: 14px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    font-weight: 800;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.08s ease;
+  }
+  .btn-save-goals-compact:active {
+    transform: translateY(2px);
+    box-shadow: none;
   }
 
   .date-dmy-wrap {
@@ -1157,7 +1192,7 @@
   }
 </style></head><body>
 
-<!-- Fixed Top Bar: Undo left (counter-clockwise), Redo right (straight right arrow) -->
+<!-- Fixed Top Bar -->
 <div class="floating-top-bar">
   <div class="header-left-group">
     <button class="btn-icon-top" onclick="openSettingsModal()" title="Settings">⚙</button>
@@ -1184,7 +1219,7 @@
 
 <!-- Facebook-like Top Tabs -->
 <div class="fb-nav-bar">
-  <button class="fb-nav-item active" id="fbNavDb" onclick="goToPageIndex(0)">
+  <button class="fb-nav-item" id="fbNavDb" onclick="goToPageIndex(0)">
     <span class="fb-icon">📚</span>
     <span class="fb-label">DATABASE</span>
   </button>
@@ -1192,7 +1227,7 @@
     <span class="fb-icon">🍽️</span>
     <span class="fb-label">ADD FOOD</span>
   </button>
-  <button class="fb-nav-item" id="fbNavHome" onclick="goToPageIndex(2)">
+  <button class="fb-nav-item active" id="fbNavHome" onclick="goToPageIndex(2)">
     <span class="fb-icon">🏠</span>
     <span class="fb-label">HOME</span>
   </button>
@@ -1211,7 +1246,7 @@
       </div>
 
       <div class="burn-action-wrap" id="myFoodSpecialActions">
-        <button class="btn-tint btn-tint-pair-bottom" onclick="openExerciseBurnModal()">🏃 אימון / קיזוז מינוס (תיעוד בהיסטוריה)</button>
+        <button class="btn-tint btn-tint-pair-bottom" onclick="openExerciseBurnModal()">🏃 אימון</button>
       </div>
 
       <div id="categoryContainer"></div>
@@ -1452,7 +1487,7 @@
           <input type="number" id="startYearInput" placeholder="שנה" style="width:84px;" min="2020" max="2035">
         </div>
 
-        <button class="btn-tint btn-tint-primary" onclick="updateTargets()">שמור יעדים ומטרה</button>
+        <button class="btn-save-goals-compact" onclick="updateTargets()">שמור יעדים ומטרה</button>
       </div>
 
       <button class="btn-tint btn-tint-pair-top" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
@@ -1510,6 +1545,11 @@
   let lastActiveDate = localStorage.getItem('cal_lastDate') || new Date().toISOString().slice(0, 10);
   
   let currentPoolTab = localStorage.getItem('cal_poolTabState') || 'myfood';
+  if (currentPoolTab !== 'myfood' && currentPoolTab !== 'base') currentPoolTab = 'myfood';
+
+  let baseCatOrder = JSON.parse(localStorage.getItem('cal_baseCatOrder') || '[]');
+  let baseFoodOrder = JSON.parse(localStorage.getItem('cal_baseFoodOrder') || '{}');
+
   let activePortionContext = null;
   let openCategoriesState = {};
 
@@ -1997,7 +2037,7 @@
     return dayNames[d.getDay()];
   }
 
-  /* === אלגוריתם FIFO מלא לחישוב יתרות ספייר לפי תאריכים וקיזוז גירעונות === */
+  /* אלגוריתם FIFO לספייר */
   function getFifoSpareStats() {
     const todayStr = getTodayString();
     const sourceLogs = (archiveLogs && archiveLogs.length > 0) ? archiveLogs : logs;
@@ -2096,6 +2136,8 @@
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
+      baseCatOrder: JSON.parse(JSON.stringify(baseCatOrder)),
+      baseFoodOrder: JSON.parse(JSON.stringify(baseFoodOrder)),
       lastActiveDate,
       actionLabel
     });
@@ -2115,6 +2157,8 @@
     localStorage.setItem('cal_archiveLogs', JSON.stringify(archiveLogs));
     localStorage.setItem('cal_presets', JSON.stringify(presets));
     localStorage.setItem('cal_catOrder', JSON.stringify(categoryOrder));
+    localStorage.setItem('cal_baseCatOrder', JSON.stringify(baseCatOrder));
+    localStorage.setItem('cal_baseFoodOrder', JSON.stringify(baseFoodOrder));
     localStorage.setItem('cal_lastDate', lastActiveDate);
     localStorage.setItem('cal_historyStack', JSON.stringify(historyStack));
     localStorage.setItem('cal_poolTabState', currentPoolTab);
@@ -2130,7 +2174,7 @@
       const payload = {
         targetCal, targetPro, userGoalType, programStartDate,
         eatenCal, eatenPro, weeklyBank, logs, archiveLogs,
-        presets, categoryOrder, lastActiveDate
+        presets, categoryOrder, baseCatOrder, baseFoodOrder, lastActiveDate
       };
       await fetch('/api/data', {
         method: 'POST',
@@ -2160,6 +2204,8 @@
         archiveLogs = d.archiveLogs ?? archiveLogs;
         presets = d.presets ?? presets;
         categoryOrder = d.categoryOrder ?? categoryOrder;
+        baseCatOrder = d.baseCatOrder ?? baseCatOrder;
+        baseFoodOrder = d.baseFoodOrder ?? baseFoodOrder;
         lastActiveDate = d.lastActiveDate ?? lastActiveDate;
 
         document.getElementById('targetCalInput').value = targetCal;
@@ -2180,8 +2226,10 @@
     }
   }
 
+  /* לחיצה על טאב מאגר: לא מאפשר סגירה ל-'none', תמיד נשאר על אחד המאגרים */
   function handlePoolTabClick(tab) {
-    currentPoolTab = (currentPoolTab === tab) ? 'none' : tab;
+    if (currentPoolTab === tab) return;
+    currentPoolTab = tab;
     saveData();
     applyPoolTabUI();
     renderPresets();
@@ -2207,10 +2255,6 @@
     document.getElementById('tabMyFood').textContent = `⭐ האוכל שלי (${presets.length})`;
     document.getElementById('tabBase').textContent = `⚖️ מאגר בסיס (${baseCount})`;
 
-    if (currentPoolTab === 'none') {
-      container.style.display = 'none';
-      return;
-    }
     container.style.display = 'block';
 
     if (currentPoolTab === 'base') {
@@ -2289,17 +2333,9 @@
         activeScreen.scrollTop += scrollSpeed;
       }
     }
-
-    const logContainer = document.getElementById('logs');
-    if (logContainer && logContainer.offsetParent !== null) {
-      const rect = logContainer.getBoundingClientRect();
-      if (clientY >= rect.top && clientY <= rect.bottom) {
-        if (clientY - rect.top < 40) logContainer.scrollTop -= 12;
-        else if (rect.bottom - clientY < 40) logContainer.scrollTop += 12;
-      }
-    }
   }
 
+  /* גרירת קטגוריות ב"האוכל שלי" - שיבוט 1:1 ובדיקת שינוי אמיתי */
   function setupCategoryDragAndDrop(headerEl, blockEl, catName) {
     let timer = null;
     let isDragging = false;
@@ -2390,7 +2426,7 @@
   function finalizeCategoryDomReorder() {
     const oldOrder = JSON.stringify(categoryOrder);
     const newOrder = [];
-    document.querySelectorAll('.category-block').forEach(b => {
+    document.querySelectorAll('#screenDb .category-block').forEach(b => {
       const c = b.getAttribute('data-category');
       if (c && !newOrder.includes(c)) newOrder.push(c);
     });
@@ -2408,6 +2444,7 @@
     showToast('סדר הקטגוריות עודכן!');
   }
 
+  /* גרירת מנות ב"האוכל שלי" */
   function setupPresetDragAndDrop(rowEl, presetIndex, currentCategory) {
     let holdTimer = null, isDragging = false, dragClone = null, placeholder = null;
     let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
@@ -2548,35 +2585,60 @@
     }
   }
 
+  /* תצוגה וגרירה מלאה עבור מאגר בסיס (נשמרים ב-localStorage) */
   function renderBaseFoodAccordion(container) {
     if (typeof BASE_FOODS === 'undefined') {
       container.innerHTML = '<div style="text-align:right; font-size:0.88rem; color:var(--text-muted); padding:16px;">טוען מאגר בסיס...</div>';
       return;
     }
-    const cats = Array.from(new Set(BASE_FOODS.map(b => b.cat)));
-    cats.forEach(catName => {
-      const catItems = BASE_FOODS.filter(b => b.cat === catName);
+    const allBaseCats = Array.from(new Set(BASE_FOODS.map(b => b.cat)));
+    
+    // סידור קטגוריות בסיס לפי הסדר השמור
+    allBaseCats.forEach(c => {
+      if (!baseCatOrder.includes(c)) baseCatOrder.push(c);
+    });
+    const sortedCats = baseCatOrder.filter(c => allBaseCats.includes(c));
+
+    sortedCats.forEach((catName, catIdx) => {
+      let catItems = BASE_FOODS.filter(b => b.cat === catName);
+      
+      // סידור המנות בתוך הקטגוריה לפי הסדר השמור
+      const savedItemOrder = baseFoodOrder[catName] || [];
+      catItems.sort((a, b) => {
+        const idxA = savedItemOrder.indexOf(a.name);
+        const idxB = savedItemOrder.indexOf(b.name);
+        if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+        if (idxA !== -1) return -1;
+        if (idxB !== -1) return 1;
+        return 0;
+      });
+
       const catKey = 'base_' + catName;
       const isOpen = !!openCategoriesState[catKey];
       const isDense = catItems.length > 2;
 
       const block = document.createElement('div');
       block.className = 'category-block' + (isOpen ? ' open' : '');
+      block.setAttribute('data-base-category', catName);
 
       block.innerHTML = `
-        <div class="category-header" onclick="toggleCategoryAccordion('${catKey}')">
-          <span class="category-title">📂 ${catName} (${catItems.length})</span>
-          <span class="category-chevron">${isOpen ? '▲' : '▼'}</span>
+        <div class="category-header" data-base-cat-idx="${catIdx}">
+          <span class="category-title" onclick="toggleCategoryAccordion('${catKey}')">📂 ${catName} (${catItems.length})</span>
+          <span class="category-chevron" onclick="toggleCategoryAccordion('${catKey}')">${isOpen ? '▲' : '▼'}</span>
         </div>
         <div class="category-content">
-          <div class="base-food-list ${isDense ? 'grid-dense' : ''}"></div>
+          <div class="base-food-list ${isDense ? 'grid-dense' : ''}" data-base-category="${catName}"></div>
         </div>
       `;
+
+      const catHeader = block.querySelector('.category-header');
+      setupBaseCategoryDragAndDrop(catHeader, block, catName);
 
       const listEl = block.querySelector('.base-food-list');
       catItems.forEach(item => {
         const wrap = document.createElement('div');
         wrap.className = 'base-food-btn-wrap';
+        wrap.setAttribute('data-food-name', item.name);
         const unitSuffix = item.unitWeight ? `100ג / ${item.unitName || 'יח'}` : '100ג';
         
         wrap.innerHTML = `
@@ -2586,18 +2648,238 @@
           </button>
         `;
 
-        wrap.onclick = () => {
+        wrap.querySelector('.base-food-btn').onclick = (e) => {
           wrap.classList.add('pulse-active-glow');
           setTimeout(() => wrap.classList.remove('pulse-active-glow'), 350);
           loadBaseFoodForPortion(item.name);
           showToast(`נטען: ${item.name}`);
         };
 
+        setupBaseFoodDragAndDrop(wrap, item.name, catName);
         listEl.appendChild(wrap);
       });
 
       container.appendChild(block);
     });
+  }
+
+  function setupBaseCategoryDragAndDrop(headerEl, blockEl, catName) {
+    let timer = null, isDragging = false, dragClone = null, placeholder = null;
+    let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
+
+    const onStart = function(e) {
+      if (e.target.closest('.category-chevron') || e.target.closest('.category-title')) {
+        // מתאפשרת גם לחיצה על הכותרת לפתיחה
+      }
+      const point = e.touches ? e.touches[0] : e;
+      startX = point.clientX; startY = point.clientY;
+
+      timer = setTimeout(() => {
+        isDragging = true;
+        blockEl.classList.add('category-holding');
+        if (navigator.vibrate) navigator.vibrate(60);
+
+        const rect = blockEl.getBoundingClientRect();
+        offsetX = startX - rect.left; offsetY = startY - rect.top;
+
+        dragClone = document.createElement('div');
+        dragClone.className = 'floating-drag-clone';
+        dragClone.innerHTML = `<strong style="color:var(--accent-primary);">📂 ${catName}</strong>`;
+        dragClone.style.width = rect.width + 'px';
+        dragClone.style.left = (startX - offsetX) + 'px';
+        dragClone.style.top = (startY - offsetY) + 'px';
+        document.body.appendChild(dragClone);
+
+        placeholder = document.createElement('div');
+        placeholder.className = 'drag-placeholder';
+        placeholder.style.height = blockEl.offsetHeight + 'px';
+        blockEl.parentNode.insertBefore(placeholder, blockEl);
+        blockEl.style.display = 'none';
+      }, 550);
+    };
+
+    const onMove = function(e) {
+      const point = e.touches ? e.touches[0] : e;
+      if (!isDragging) {
+        if (Math.abs(point.clientY - startY) > 8 || Math.abs(point.clientX - startX) > 8) clearTimeout(timer);
+        return;
+      }
+      if (e.cancelable) e.preventDefault();
+
+      if (dragClone) {
+        dragClone.style.left = (point.clientX - offsetX) + 'px';
+        dragClone.style.top = (point.clientY - offsetY) + 'px';
+      }
+
+      handleAutoScrollDuringDrag(point.clientY);
+
+      const elBelow = document.elementFromPoint(point.clientX, point.clientY);
+      const targetBlock = elBelow?.closest('.category-block:not(.category-holding)');
+      if (targetBlock && placeholder) {
+        const r = targetBlock.getBoundingClientRect();
+        if (point.clientY < r.top + r.height / 2) {
+          targetBlock.parentNode.insertBefore(placeholder, targetBlock);
+        } else {
+          targetBlock.parentNode.insertBefore(placeholder, targetBlock.nextSibling);
+        }
+      }
+    };
+
+    const onEnd = function() {
+      clearTimeout(timer);
+      if (isDragging) {
+        isDragging = false;
+        blockEl.classList.remove('category-holding');
+        if (dragClone) { dragClone.remove(); dragClone = null; }
+        if (placeholder && placeholder.parentNode) {
+          placeholder.parentNode.insertBefore(blockEl, placeholder);
+          placeholder.remove();
+          blockEl.style.display = 'block';
+          finalizeBaseCategoryDomReorder();
+        } else {
+          blockEl.style.display = 'block';
+        }
+      }
+    };
+
+    headerEl.addEventListener('touchstart', onStart, { passive: false });
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+    window.addEventListener('touchcancel', onEnd);
+  }
+
+  function finalizeBaseCategoryDomReorder() {
+    const oldOrder = JSON.stringify(baseCatOrder);
+    const newOrder = [];
+    document.querySelectorAll('#screenDb .category-block[data-base-category]').forEach(b => {
+      const c = b.getAttribute('data-base-category');
+      if (c && !newOrder.includes(c)) newOrder.push(c);
+    });
+
+    baseCatOrder.forEach(c => {
+      if (!newOrder.includes(c)) newOrder.push(c);
+    });
+
+    if (JSON.stringify(newOrder) === oldOrder) return;
+
+    pushState('סידור קטגוריות בסיס');
+    baseCatOrder = newOrder;
+    renderPresets();
+    saveData();
+    showToast('סדר קטגוריות הבסיס עודכן!');
+  }
+
+  function setupBaseFoodDragAndDrop(wrapEl, foodName, currentCategory) {
+    let holdTimer = null, isDragging = false, dragClone = null, placeholder = null;
+    let startX = 0, startY = 0, offsetX = 0, offsetY = 0;
+
+    const onStart = function(e) {
+      const point = e.touches ? e.touches[0] : e;
+      startX = point.clientX; startY = point.clientY;
+      wrapEl.classList.add('holding-active');
+
+      holdTimer = setTimeout(() => {
+        isDragging = true;
+        wrapEl.classList.remove('holding-active');
+        if (navigator.vibrate) navigator.vibrate(50);
+
+        const rect = wrapEl.getBoundingClientRect();
+        offsetX = startX - rect.left; offsetY = startY - rect.top;
+
+        dragClone = document.createElement('div');
+        dragClone.className = 'floating-drag-clone';
+        dragClone.innerHTML = wrapEl.innerHTML;
+        dragClone.style.width = rect.width + 'px';
+        dragClone.style.left = (startX - offsetX) + 'px';
+        dragClone.style.top = (startY - offsetY) + 'px';
+        document.body.appendChild(dragClone);
+
+        placeholder = document.createElement('div');
+        placeholder.className = 'drag-placeholder';
+        placeholder.style.width = rect.width + 'px';
+        placeholder.style.height = rect.height + 'px';
+        wrapEl.parentNode.insertBefore(placeholder, wrapEl);
+        wrapEl.style.display = 'none';
+      }, 550);
+    };
+
+    const onMove = function(e) {
+      const point = e.touches ? e.touches[0] : e;
+      if (!isDragging) {
+        if (Math.abs(point.clientX - startX) > 8 || Math.abs(point.clientY - startY) > 8) {
+          clearTimeout(holdTimer);
+          wrapEl.classList.remove('holding-active');
+        }
+        return;
+      }
+
+      if (e.cancelable) e.preventDefault();
+      if (dragClone) {
+        dragClone.style.left = (point.clientX - offsetX) + 'px';
+        dragClone.style.top = (point.clientY - offsetY) + 'px';
+      }
+
+      handleAutoScrollDuringDrag(point.clientY);
+
+      const elBelow = document.elementFromPoint(point.clientX, point.clientY);
+      const targetList = elBelow?.closest('.base-food-list');
+      if (targetList) {
+        const siblings = Array.from(targetList.querySelectorAll('.base-food-btn-wrap:not([style*="display: none"])'));
+        let inserted = false;
+        for (let sib of siblings) {
+          const r = sib.getBoundingClientRect();
+          if (point.clientY < r.top + r.height / 2 || (point.clientX > r.left + r.width / 2 && Math.abs(point.clientY - r.top) < 30)) {
+            targetList.insertBefore(placeholder, sib);
+            inserted = true;
+            break;
+          }
+        }
+        if (!inserted) targetList.appendChild(placeholder);
+      }
+    };
+
+    const onEnd = function() {
+      clearTimeout(holdTimer);
+      wrapEl.classList.remove('holding-active');
+      if (isDragging) {
+        isDragging = false;
+        if (dragClone) { dragClone.remove(); dragClone = null; }
+        if (placeholder && placeholder.parentNode) {
+          const targetList = placeholder.parentNode;
+          const targetCategory = targetList.getAttribute('data-base-category');
+          targetList.insertBefore(wrapEl, placeholder);
+          placeholder.remove();
+          wrapEl.style.display = 'flex';
+          finalizeBaseFoodDomReorder(targetCategory);
+        } else {
+          wrapEl.style.display = 'flex';
+        }
+      }
+    };
+
+    wrapEl.addEventListener('touchstart', onStart, { passive: false });
+    window.addEventListener('touchmove', onMove, { passive: false });
+    window.addEventListener('touchend', onEnd);
+    window.addEventListener('touchcancel', onEnd);
+  }
+
+  function finalizeBaseFoodDomReorder(category) {
+    const listEl = document.querySelector(`.base-food-list[data-base-category="${category}"]`);
+    if (!listEl) return;
+    const newItemsOrder = [];
+    listEl.querySelectorAll('.base-food-btn-wrap').forEach(w => {
+      const name = w.getAttribute('data-food-name');
+      if (name) newItemsOrder.push(name);
+    });
+
+    const oldStr = JSON.stringify(baseFoodOrder[category] || []);
+    if (JSON.stringify(newItemsOrder) === oldStr) return;
+
+    pushState('סידור מנות בסיס');
+    baseFoodOrder[category] = newItemsOrder;
+    renderPresets();
+    saveData();
+    showToast('סדר המנות במאגר עודכן!');
   }
 
   function calculateWeeklyStats() {
@@ -3315,6 +3597,8 @@
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
+      baseCatOrder: JSON.parse(JSON.stringify(baseCatOrder)),
+      baseFoodOrder: JSON.parse(JSON.stringify(baseFoodOrder)),
       lastActiveDate,
       actionLabel: actionDesc
     });
@@ -3337,6 +3621,8 @@
       archiveLogs: JSON.parse(JSON.stringify(archiveLogs)),
       presets: JSON.parse(JSON.stringify(presets)),
       categoryOrder: JSON.parse(JSON.stringify(categoryOrder)),
+      baseCatOrder: JSON.parse(JSON.stringify(baseCatOrder)),
+      baseFoodOrder: JSON.parse(JSON.stringify(baseFoodOrder)),
       lastActiveDate,
       actionLabel: actionDesc
     });
@@ -3353,6 +3639,8 @@
     weeklyBank = st.weeklyBank || 0;
     logs = st.logs; archiveLogs = st.archiveLogs || archiveLogs;
     presets = st.presets || presets; categoryOrder = st.categoryOrder || categoryOrder;
+    baseCatOrder = st.baseCatOrder || baseCatOrder;
+    baseFoodOrder = st.baseFoodOrder || baseFoodOrder;
     lastActiveDate = st.lastActiveDate || lastActiveDate;
 
     if (editingPresetIndex >= 0) cancelEditPreset();
@@ -3530,7 +3818,7 @@
 
   function exportBackupTxt() {
     if (!confirm('האם לייצא ולהוריד קובץ גיבוי מלא של הנתונים?')) return;
-    const data = { targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, lastActiveDate };
+    const data = { targetCal, targetPro, userGoalType, programStartDate, eatenCal, eatenPro, weeklyBank, logs, archiveLogs, presets, categoryOrder, baseCatOrder, baseFoodOrder, lastActiveDate };
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -3565,6 +3853,8 @@
           weeklyBank = d.weeklyBank || 0;
           logs = d.logs || []; archiveLogs = d.archiveLogs || (d.logs ? JSON.parse(JSON.stringify(d.logs)) : []);
           presets = d.presets || []; categoryOrder = d.categoryOrder || ['כללי'];
+          baseCatOrder = d.baseCatOrder || [];
+          baseFoodOrder = d.baseFoodOrder || {};
           lastActiveDate = d.lastActiveDate || getTodayString();
 
           syncDateInputsFromStorage();
@@ -3607,7 +3897,8 @@
   renderPresets();
   updateDisplay();
   
-  setTimeout(() => { goToPageIndex(0); }, 50);
+  // פתיחה קבועה במסך HOME
+  setTimeout(() => { goToPageIndex(2); }, 50);
 
   loadFromCloud().then(cloudLoaded => {
     if (!cloudLoaded) return;
