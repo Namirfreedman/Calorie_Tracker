@@ -799,6 +799,7 @@
   }
   .bank-pill-mini.active-pos { background: var(--tint-green-bg); color: var(--status-green); }
   .bank-pill-mini.active-neg { background: var(--danger-soft-bg); color: var(--danger-soft-text); }
+  .budget-breakdown { text-align:center; font-size:0.75rem; font-weight:700; color:var(--text-muted); margin:-2px 0 6px; min-height:1em; }
   .bank-pill-mini.expired-gray { background: #f1f5f9; color: #94a3b8; }
 
   .day-items-container { min-height: 32px; display: flex; flex-direction: column; }
@@ -1378,6 +1379,7 @@
       <div class="stats-board">
         <div class="stat-card-target-unified">
           <div class="unified-headline">נשאר להיום</div>
+          <div id="budgetBreakdown" class="budget-breakdown"></div>
           <div class="unified-columns">
             <div class="target-column" id="boxRemCal">
               <div class="col-label">קלוריות</div>
@@ -1411,28 +1413,27 @@
           </div>
 
           <div class="stat-chip-box">
-            <div class="chip-title" onclick="toggleBankDrawer()" title="לחץ לפירוט תוקף יתרות הספייר">
+            <div class="chip-title" onclick="toggleBankDrawer()" title="לחץ לפירוט הספייר">
               <span>🏦 ספייר</span>
               <span id="bankChevron" style="font-size:0.7rem; transition:transform 0.2s;">▼</span>
             </div>
-            <div style="display:flex; align-items:center; justify-content:center; gap:6px;">
-              <span id="weeklyBank" class="chip-num" onclick="promptManualBankEdit()" title="לחץ לעריכה ידנית של הספייר">0</span>
-              <button class="btn-edit-bank-inline" onclick="promptManualBankEdit()" title="עריכה ידנית">✎</button>
+            <div style="display:flex; align-items:center; justify-content:center; gap:6px;" onclick="toggleBankDrawer()">
+              <span id="weeklyBank" class="chip-num">0</span>
             </div>
           </div>
         </div>
 
         <div class="bank-details-drawer" id="bankDetailsDrawer">
           <div style="font-size:0.9rem; font-weight:900; color:var(--accent-secondary); margin-bottom:8px; text-align:center;">
-            תוקף הספייר (FIFO - נוצל/נשאר)
+            הספייר מ-3 הימים האחרונים
+          </div>
+          <div style="font-size:0.75rem; color:var(--text-muted); text-align:center; margin-bottom:8px; line-height:1.4;">
+            כל יום נשמר 3 ימים: אכלת פחות = עודף, אכלת יותר = חוב.<br>עודף וחוב מקזזים זה את זה. אחרי 3 ימים מה שנשאר נמחק.
           </div>
           <div id="bankDetailsList"></div>
         </div>
       </div>
 
-      <button class="btn-day-single" onclick="closeDay(false, true)">
-        🌅 יום חדש
-      </button>
 
       <div class="collapsible-wrapper">
         <button class="btn-toggle-box-green" id="btnToggleLogs" onclick="toggleLogs()">
@@ -1496,6 +1497,8 @@
 
       <button class="btn-tint btn-tint-pair-top" onclick="inspectCloudData()">🩺 בדיקה ושחזור מהענן</button>
 
+      <button class="btn-tint btn-tint-pair-top" onclick="restoreWeeklyBackup()">🗓 שחזור מגיבוי שבועי</button>
+
       <div style="display:flex; gap:8px;">
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
@@ -1537,7 +1540,7 @@
 
 <script>
   /* מספר גרסה — לעדכן בכל שינוי. מוצג בהגדרות, ובהודעה בפתיחה הראשונה של גרסה חדשה */
-  const APP_VERSION = '1.4';
+  const APP_VERSION = '1.5';
 
   /* תאריך מקומי (לא UTC) — כדי שהיום יתחלף בחצות שעון ישראל ולא ב-02:00/03:00 */
   function toLocalDateStr(d) {
@@ -1706,21 +1709,6 @@
     const isOpen = drawer.classList.contains('open');
     drawer.classList.toggle('open');
     chevron.textContent = isOpen ? '▼' : '▲';
-  }
-
-  function promptManualBankEdit() {
-    const current = weeklyBank;
-    const input = prompt('עריכת ספייר מצטבר (הזן מספר חיובי או שלילי):', current);
-    if (input === null) return;
-    const parsed = parseInt(input.trim(), 10);
-    if (isNaN(parsed)) {
-      alert('נא להזין מספר תקין');
-      return;
-    }
-    pushState('עריכת ספייר');
-    weeklyBank = parsed;
-    updateDisplay();
-    showToast(`ספייר עודכן ידנית ל: ${weeklyBank >= 0 ? '+' : ''}${weeklyBank}`);
   }
 
   function updateProgramDurationDisplay() {
@@ -2046,67 +2034,80 @@
     return Math.floor((today - target) / (1000 * 60 * 60 * 24));
   }
 
-  function getExpiryDayName(dateStr) {
-    const d = new Date(dateStr + 'T00:00:00');
-    d.setDate(d.getDate() + 3);
-    const dayNames = ['ראשון', 'שני', 'שלישי', 'רביעי', 'חמישי', 'שישי', 'שבת'];
-    return dayNames[d.getDay()];
+  /* האם הרשומה היא אימון נוסף (כולל רשומות ישנות בשם "קיזוז אימון") */
+  function isWorkoutEntry(item) {
+    return !!item && (item.type === 'workout' || (item.name && item.name.includes('קיזוז אימון')));
   }
 
-  /* אלגוריתם FIFO לספייר */
-  function getFifoSpareStats() {
+  /* סיכום יום: נאכל, חלבון, נשרף באימונים */
+  function getDayTotals(dateStr, source) {
     const todayStr = getTodayString();
-    const sourceLogs = (archiveLogs && archiveLogs.length > 0) ? archiveLogs : logs;
+    let eaten = 0, pro = 0, burned = 0, hasFood = false;
+    (source || logs).forEach(l => {
+      if ((l.date || todayStr) !== dateStr) return;
+      if (isWorkoutEntry(l)) burned += Math.abs(l.cal || 0);
+      else { eaten += (l.cal || 0); pro += (l.pro || 0); hasFood = true; }
+    });
+    return { eaten, pro: Math.round(pro * 10) / 10, burned, hasFood };
+  }
 
-    const dayEaten = {};
-    const dayBurned = {};
+  const SPARE_DAYS = 3;
+  function daysBetween(fromStr, toStr) {
+    return Math.round((new Date(toStr + 'T00:00:00') - new Date(fromStr + 'T00:00:00')) / 86400000);
+  }
 
-    sourceLogs.forEach(item => {
-      const d = item.date || todayStr;
-      if (d === todayStr) return;
-      if (item.name && item.name.includes('קיזוז אימון')) {
-        dayBurned[d] = (dayBurned[d] || 0) + Math.abs(item.cal || 0);
-      } else {
-        dayEaten[d] = (dayEaten[d] || 0) + (item.cal || 0);
+  /* ספייר — חישוב אוטומטי מההיסטוריה:
+     • כל יום שהסתיים = יעד - נאכל + אימונים. חיובי = עודף, שלילי = חוב.
+     • יום חדש מקזז קודם את היתרות ההפוכות הכי ישנות (מ-3 הימים שלפניו).
+     • יתרה של יום נשארת 3 ימים ואז נמחקת.
+     • ימים בלי שום אוכל רשום לא נספרים. */
+  function getSpareLedger() {
+    const todayStr = getTodayString();
+    const source = (archiveLogs && archiveLogs.length > 0) ? archiveLogs : logs;
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 30);
+    const cutoffStr = toLocalDateStr(cutoff);
+
+    const dates = Array.from(new Set(source.map(l => l.date || todayStr)))
+      .filter(d => d < todayStr && d >= cutoffStr).sort();
+
+    const entries = [];
+    dates.forEach(date => {
+      const t = getDayTotals(date, source);
+      if (!t.hasFood) return;
+      const initial = targetCal - t.eaten + t.burned;
+      let bal = initial;
+      for (const e of entries) {
+        if (bal === 0) break;
+        const age = daysBetween(e.date, date);
+        if (age < 1 || age > SPARE_DAYS || e.remaining === 0) continue;
+        if (Math.sign(e.remaining) === Math.sign(bal)) continue;
+        const x = Math.min(Math.abs(e.remaining), Math.abs(bal));
+        e.remaining -= Math.sign(e.remaining) * x;
+        bal -= Math.sign(bal) * x;
       }
+      entries.push({ date, initial, remaining: bal });
     });
 
-    const allDates = Array.from(new Set([...Object.keys(dayEaten), ...Object.keys(dayBurned)])).sort();
-
-    const days = allDates.map(dateStr => {
-      const eaten = dayEaten[dateStr] || 0;
-      const burned = dayBurned[dateStr] || 0;
-      const net = (targetCal - eaten) + burned;
-      const daysAgo = getDaysDifference(dateStr);
-      return {
-        date: dateStr,
-        initialNet: net,
-        remainingSpare: net > 0 ? net : 0,
-        deficit: net < 0 ? Math.abs(net) : 0,
-        daysAgo: daysAgo,
-        isActive: daysAgo >= 1 && daysAgo <= 3
-      };
+    entries.forEach(e => {
+      e.daysAgo = daysBetween(e.date, todayStr);
+      e.isActive = e.daysAgo >= 1 && e.daysAgo <= SPARE_DAYS;
     });
+    const active = entries.filter(e => e.isActive);
+    const spare = active.reduce((sum, e) => sum + e.remaining, 0);
+    return { entries, active, spare };
+  }
 
-    for (let i = 0; i < days.length; i++) {
-      let def = days[i].deficit;
-      if (def > 0) {
-        for (let j = 0; j < i; j++) {
-          if (days[j].remainingSpare > 0) {
-            const consume = Math.min(days[j].remainingSpare, def);
-            days[j].remainingSpare -= consume;
-            def -= consume;
-            if (def === 0) break;
-          }
-        }
-      }
-    }
-
-    return days;
+  /* היום שבו יתרה של יום מסוים נמחקת */
+  function getSpareExpiryLabel(dateStr) {
+    const d = new Date(dateStr + 'T00:00:00');
+    d.setDate(d.getDate() + SPARE_DAYS + 1);
+    const daysLeft = daysBetween(getTodayString(), toLocalDateStr(d));
+    if (daysLeft <= 1) return 'נמחק מחר';
+    return `נמחק ב${d.toLocaleDateString('he-IL', { weekday: 'long' })}`;
   }
 
   function openExerciseBurnModal() {
-    const val = prompt('כמה קלוריות שרפת באימון? (יירשם במינוס בהיסטוריה ויועבר לספייר בסיום היום)');
+    const val = prompt('🏃 אימון נוסף — כמה קלוריות שרפת?\n(יתווסף לתקציב של היום)');
     if (val === null) return;
     const burned = parseInt(val, 10);
     if (isNaN(burned) || burned <= 0) {
@@ -2114,22 +2115,21 @@
       return;
     }
 
-    pushState(`קיזוז אימון (-${burned})`);
-    const today = getTodayString();
-
-    const logObj = { 
-      id: Date.now() + Math.random().toString(), 
-      name: `קיזוז אימון`, 
-      cal: -burned, 
-      pro: 0, 
-      date: today 
+    pushState(`אימון נוסף (+${burned})`);
+    const logObj = {
+      id: Date.now() + Math.random().toString(),
+      name: '🏃 אימון נוסף',
+      type: 'workout',
+      cal: -burned,
+      pro: 0,
+      date: getTodayString()
     };
     logs.unshift(logObj);
     archiveLogs.unshift(logObj);
 
     renderLogs();
     updateDisplay();
-    showToast(`אימון תועד: -${burned} קלוריות!`);
+    showToast(`🏃 נוספו ${burned} קלוריות לתקציב היום`);
   }
 
   function showToast(text) {
@@ -2351,6 +2351,46 @@
     renderPresets();
     updateDisplay();
     showToast('הנתונים שוחזרו מהענן');
+  }
+
+  /* גיבוי שבועי: נוצר בשרת בכל יום ראשון. בפתיחה מוודאים בשקט שקיים גיבוי לשבוע הזה */
+  function ensureWeeklyBackup() {
+    fetch('/api/backup', { method: 'POST', headers: apiHeaders() }).catch(() => {});
+  }
+
+  async function restoreWeeklyBackup() {
+    let dates;
+    try {
+      const res = await fetch('/api/backup?list=1', { cache: 'no-store', headers: apiHeaders() });
+      if (res.status === 401) { alert('🔑 מפתח הסנכרון שגוי או חסר.'); return; }
+      dates = (await res.json()).backups || [];
+    } catch (e) { alert('לא ניתן להתחבר לענן כרגע.'); return; }
+    if (dates.length === 0) { alert('עדיין אין גיבויים שבועיים.'); return; }
+
+    const list = dates.map((d, i) => `${i + 1}. ${formatLogDateTitle(d)}`).join('\n');
+    const pick = prompt(`איזה גיבוי לשחזר? (הזן מספר)\n\n${list}`);
+    if (pick === null) return;
+    const date = dates[parseInt(pick, 10) - 1];
+    if (!date) { alert('מספר לא תקין'); return; }
+
+    let d;
+    try {
+      const res = await fetch('/api/backup?date=' + encodeURIComponent(date), { cache: 'no-store', headers: apiHeaders() });
+      d = (await res.json()).result;
+    } catch (e) { alert('לא ניתן להתחבר לענן כרגע.'); return; }
+    if (!d) { alert('הגיבוי לא נמצא'); return; }
+
+    if (!confirm(`לשחזר את הגיבוי מ${formatLogDateTitle(date)}?\n(${(d.presets || []).length} מנות, ${(d.archiveLogs || []).length} רשומות בארכיון)\nאפשר לבטל עם "חזור".`)) return;
+    pushState('שחזור גיבוי שבועי');
+    applyCloudData(d, 0);
+    lastSavedJson = null;
+    saveData(); // הגיבוי המשוחזר הופך לגרסה העדכנית ומסתנכרן לענן
+    closeSettingsModal();
+    renderLogs();
+    applyPoolTabUI();
+    renderPresets();
+    updateDisplay();
+    showToast('הגיבוי שוחזר');
   }
 
   /* מחזיר true רק אם נתוני הענן חדשים יותר והוחלו על המכשיר */
@@ -3060,10 +3100,10 @@
     relevant.forEach(l => {
       const d = l.date;
       if (!dayGroups[d]) dayGroups[d] = { cal: 0, pro: 0 };
-      if (!l.name || !l.name.includes('קיזוז אימון')) {
+      if (!isWorkoutEntry(l)) {
         dayGroups[d].cal += (l.cal || 0);
+        dayGroups[d].pro += (l.pro || 0);
       }
-      dayGroups[d].pro += (l.pro || 0);
     });
 
     const recordedDays = Object.keys(dayGroups).length;
@@ -3105,76 +3145,85 @@
     }
   }
 
-  function renderBankDetailsDrawer() {
+  function renderBankDetailsDrawer(ledger) {
     const listEl = document.getElementById('bankDetailsList');
     listEl.innerHTML = '';
+    const items = ledger.active.slice().reverse();
 
-    const fifoDays = getFifoSpareStats().filter(d => d.isActive).reverse();
-
-    if (fifoDays.length === 0) {
-      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.82rem; padding:8px 0;">אין יתרות ספייר מ-3 הימים האחרונים</div>';
+    if (items.length === 0) {
+      listEl.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:0.82rem; padding:8px 0;">אין יתרות מ-3 הימים האחרונים</div>';
       return;
     }
 
-    fifoDays.forEach(item => {
-      const daysLeft = 3 - item.daysAgo;
-      const expiryDay = getExpiryDayName(item.date);
-      const expiryLabel = daysLeft === 0 ? 'עד היום' : `עד ${expiryDay}`;
-      
+    items.forEach(item => {
       const row = document.createElement('div');
       row.className = 'bank-detail-item';
-
-      if (item.initialNet < 0) {
-        row.innerHTML = `
-          <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
-          <span style="font-weight:800; color:var(--status-red);">
-            חריגה של ${Math.abs(item.initialNet).toLocaleString()} קל' (קוזזה מספייר קודם)
-          </span>
-        `;
+      let txt, color;
+      if (item.remaining > 0) {
+        txt = `עודף +${item.remaining.toLocaleString()} · ${getSpareExpiryLabel(item.date)}`;
+        color = 'var(--status-green)';
+      } else if (item.remaining < 0) {
+        txt = `חוב ${item.remaining.toLocaleString()} · ${getSpareExpiryLabel(item.date)}`;
+        color = 'var(--status-red)';
       } else {
-        const remaining = item.remainingSpare;
-        const color = remaining > 0 ? 'var(--status-green)' : 'var(--text-muted)';
-        const statusTxt = remaining > 0 ? `+${remaining.toLocaleString()} קל' (${expiryLabel})` : 'נוצל במלואו (0 קל\')';
-
-        row.innerHTML = `
-          <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
-          <span style="font-weight:800; color:${color};">
-            ${statusTxt}
-          </span>
-        `;
+        txt = `${item.initial >= 0 ? '+' : ''}${item.initial.toLocaleString()} · קוזז במלואו`;
+        color = 'var(--text-muted)';
       }
+      row.innerHTML = `
+        <span style="font-weight:700;">${formatLogDateTitle(item.date)}:</span>
+        <span style="font-weight:800; color:${color};">${txt}</span>
+      `;
       listEl.appendChild(row);
     });
   }
 
   function updateDisplay() {
-    const remCal = targetCal - eatenCal;
+    // נאכל היום מחושב תמיד מהרשומות של היום (מקור אמת אחד)
+    const todayTotals = getDayTotals(getTodayString());
+    eatenCal = todayTotals.eaten;
+    eatenPro = todayTotals.pro;
+
+    const ledger = getSpareLedger();
+    weeklyBank = ledger.spare;
+    const workoutToday = todayTotals.burned;
+    const budget = targetCal + ledger.spare + workoutToday;
+    const remCal = budget - eatenCal;
     const remPro = Math.round((targetPro - eatenPro) * 10) / 10;
 
     const remCalEl = document.getElementById('remainingCal');
     remCalEl.textContent = remCal.toLocaleString();
+    remCalEl.style.color = remCal < 0 ? 'var(--status-red)' : '';
 
+    // חלבון: מעל היעד זה טוב — מציגים בירוק עם ✓ ולא במינוס
     const remProEl = document.getElementById('remainingPro');
-    remProEl.textContent = remPro;
+    if (remPro <= 0) {
+      const over = Math.round((eatenPro - targetPro) * 10) / 10;
+      remProEl.textContent = over > 0 ? `✓ +${over}` : '✓';
+      remProEl.style.color = 'var(--status-green)';
+    } else {
+      remProEl.textContent = remPro;
+      remProEl.style.color = '';
+    }
+
+    // פירוט התקציב (מוצג רק כשיש ספייר או אימון)
+    const parts = [`יעד <bdi dir="ltr">${targetCal.toLocaleString()}</bdi>`];
+    if (ledger.spare !== 0) parts.push(`ספייר <bdi dir="ltr">${ledger.spare > 0 ? '+' : '−'}${Math.abs(ledger.spare).toLocaleString()}</bdi>`);
+    if (workoutToday > 0) parts.push(`אימון <bdi dir="ltr">+${workoutToday.toLocaleString()}</bdi>`);
+    document.getElementById('budgetBreakdown').innerHTML = parts.length > 1 ? parts.join(' · ') : '';
 
     document.getElementById('eatenCal').textContent = eatenCal.toLocaleString();
     document.getElementById('eatenPro').textContent = eatenPro;
 
     const bankEl = document.getElementById('weeklyBank');
-    const sign = weeklyBank >= 0 ? '+' : '-';
-    bankEl.textContent = `${sign}${Math.abs(weeklyBank).toLocaleString()}`;
+    const spare = ledger.spare;
+    bankEl.textContent = `${spare > 0 ? '+' : spare < 0 ? '−' : ''}${Math.abs(spare).toLocaleString()}`;
+    if (spare >= 0) bankEl.style.color = "var(--status-green)";
+    else if (spare >= -200) bankEl.style.color = "var(--status-orange)";
+    else bankEl.style.color = "var(--status-red)";
 
-    if (weeklyBank >= 0) {
-      bankEl.style.color = "var(--status-green)";
-    } else if (weeklyBank >= -200) {
-      bankEl.style.color = "var(--status-orange)";
-    } else {
-      bankEl.style.color = "var(--status-red)";
-    }
-
-    const calRemPercent = Math.min(100, Math.max(0, (remCal / targetCal) * 100));
+    const calRemPercent = budget > 0 ? Math.min(100, Math.max(0, (remCal / budget) * 100)) : 0;
     const proRemPercent = Math.min(100, Math.max(0, (remPro / targetPro) * 100));
-    const calEatenPercent = Math.min(100, Math.max(0, (eatenCal / targetCal) * 100));
+    const calEatenPercent = budget > 0 ? Math.min(100, Math.max(0, (eatenCal / budget) * 100)) : 0;
 
     const barRemCal = document.getElementById('barRemainingCal');
     barRemCal.style.width = calRemPercent + '%';
@@ -3187,7 +3236,7 @@
 
     document.getElementById('archiveCountText').textContent = `בארכיון שמורות ${archiveLogs.length} הזנות תמידיות.`;
     
-    renderBankDetailsDrawer();
+    renderBankDetailsDrawer(ledger);
     calculateWeeklyStats();
     updateProgramDurationDisplay();
     saveData();
@@ -3222,50 +3271,30 @@
       groups[d].push(item);
     });
 
-    const fifoMap = {};
-    getFifoSpareStats().forEach(item => {
-      fifoMap[item.date] = item;
-    });
+    const ledgerMap = {};
+    getSpareLedger().entries.forEach(e => { ledgerMap[e.date] = e; });
 
     Object.keys(groups).sort().reverse().forEach(dStr => {
       const entries = groups[dStr];
       const isCurrentDay = (dStr === todayStr);
       
-      const dayCal = entries.reduce((acc, c) => {
-        if (c.name && c.name.includes('קיזוז אימון')) return acc;
-        return acc + (c.cal || 0);
-      }, 0);
-      const dayPro = Math.round(entries.reduce((acc, c) => acc + (c.pro || 0), 0) * 10) / 10;
+      const dayCal = entries.reduce((acc, c) => isWorkoutEntry(c) ? acc : acc + (c.cal || 0), 0);
+      const dayPro = Math.round(entries.reduce((acc, c) => isWorkoutEntry(c) ? acc : acc + (c.pro || 0), 0) * 10) / 10;
 
       let bankIndicatorHtml = '';
       if (isCurrentDay) {
         bankIndicatorHtml = '<span class="bank-pill-mini">היום פעיל</span>';
       } else {
-        const dayStat = fifoMap[dStr];
-        const daysAgo = getDaysDifference(dStr);
-        const isActive = daysAgo >= 1 && daysAgo <= 3;
-        
-        if (dayStat) {
-          if (isActive) {
-            const daysLeft = 3 - daysAgo;
-            const expiryDay = getExpiryDayName(dStr);
-            const expiryTxt = daysLeft === 0 ? 'עד היום' : `עד ${expiryDay}`;
-
-            if (dayStat.initialNet < 0) {
-              bankIndicatorHtml = `<span class="bank-pill-mini active-neg">חריגה קוזזה</span>`;
-            } else if (dayStat.remainingSpare > 0) {
-              bankIndicatorHtml = `
-                <span class="bank-pill-mini active-pos">
-                  <span>ספייר נותר:</span>
-                  <span class="num-span">+${dayStat.remainingSpare.toLocaleString()}</span>
-                  <span>(${expiryTxt})</span>
-                </span>
-              `;
-            } else {
-              bankIndicatorHtml = `<span class="bank-pill-mini expired-gray">ספייר נוצל במלואו</span>`;
-            }
+        const e = ledgerMap[dStr];
+        if (e) {
+          if (!e.isActive) {
+            bankIndicatorHtml = `<span class="bank-pill-mini expired-gray">${e.remaining === 0 ? 'מאוזן' : 'נמחק'}</span>`;
+          } else if (e.remaining > 0) {
+            bankIndicatorHtml = `<span class="bank-pill-mini active-pos"><span>עודף</span><span class="num-span">+${e.remaining.toLocaleString()}</span></span>`;
+          } else if (e.remaining < 0) {
+            bankIndicatorHtml = `<span class="bank-pill-mini active-neg"><span>חוב</span><span class="num-span">${e.remaining.toLocaleString()}</span></span>`;
           } else {
-            bankIndicatorHtml = `<span class="bank-pill-mini expired-gray">פג תוקף</span>`;
+            bankIndicatorHtml = `<span class="bank-pill-mini expired-gray">קוזז</span>`;
           }
         }
       }
@@ -3290,10 +3319,10 @@
         row.className = 'log-item-row';
         row.setAttribute('data-id', item.id);
 
-        const isWorkout = item.name && item.name.includes('קיזוז אימון');
+        const isWorkout = isWorkoutEntry(item);
         let macroInfo = '';
         if (isWorkout) {
-          macroInfo = `<span style="color:var(--status-red); font-weight:800;">(${item.cal} קל')</span>`;
+          macroInfo = `<span style="color:var(--status-green); font-weight:800;">(+${Math.abs(item.cal)} קל' לתקציב)</span>`;
         } else {
           macroInfo = `<span style="color:var(--text-muted);">(+${item.cal} קל' | +${item.pro})</span>`;
         }
@@ -3414,7 +3443,7 @@
 
     let oldTodayCal = 0, oldTodayPro = 0;
     logs.forEach(l => {
-      if ((l.date || todayStr) === todayStr && (!l.name || !l.name.includes('קיזוז אימון'))) {
+      if ((l.date || todayStr) === todayStr && !isWorkoutEntry(l)) {
         oldTodayCal += l.cal;
         oldTodayPro += l.pro;
       }
@@ -3440,7 +3469,7 @@
     logs = newLogs;
     let newTodayCal = 0, newTodayPro = 0;
     logs.forEach(l => {
-      if ((l.date || todayStr) === todayStr && (!l.name || !l.name.includes('קיזוז אימון'))) {
+      if ((l.date || todayStr) === todayStr && !isWorkoutEntry(l)) {
         newTodayCal += l.cal;
         newTodayPro += l.pro;
       }
@@ -3491,7 +3520,7 @@
     const val = getEntryValues();
     pushState(`עריכת מנה: ${val.name}`);
 
-    const isWorkout = item.name && item.name.includes('קיזוז אימון');
+    const isWorkout = isWorkoutEntry(item);
     const finalCal = isWorkout ? -Math.abs(val.cal) : val.cal;
 
     const today = getTodayString();
@@ -3534,7 +3563,7 @@
     if (!confirm(`למחוק את "${item.name || 'המנה'}"?`)) return;
 
     pushState(`מחיקת מנה מההיסטוריה: ${item.name || 'מנה'}`);
-    const isWorkout = item.name && item.name.includes('קיזוז אימון');
+    const isWorkout = isWorkoutEntry(item);
     const today = getTodayString();
     if (!isWorkout && (!item.date || item.date === today)) {
       eatenCal = Math.max(0, eatenCal - item.cal);
@@ -3818,31 +3847,6 @@
     updateDisplay();
   }
 
-  function closeDay(isAuto, transferBank = true) {
-    const today = getTodayString();
-    let todayWorkoutsBurn = 0;
-    logs.forEach(l => {
-      if ((l.date || today) === today && l.name && l.name.includes('קיזוז אימון')) {
-        todayWorkoutsBurn += Math.abs(l.cal || 0);
-      }
-    });
-
-    const diffCal = (targetCal - eatenCal) + todayWorkoutsBurn;
-    if (!isAuto) {
-      const msg = `להתחיל יום חדש?\nספייר שיועבר: ${diffCal >= 0 ? '+' : ''}${diffCal} קלוריות.`;
-      if (!confirm(msg)) return;
-    }
-    pushState('סגירת יום חדש');
-
-    weeklyBank += diffCal;
-
-    eatenCal = 0; eatenPro = 0;
-    lastActiveDate = today;
-    renderLogs();
-    updateDisplay();
-    showToast(`יום חדש התחיל! ספייר עודכן ב-${diffCal >= 0 ? '+' : ''}${diffCal}`);
-  }
-
   function updateTargets() {
     const newCal = parseInt(document.getElementById('targetCalInput').value);
     const newPro = parseInt(document.getElementById('targetProInput').value);
@@ -4034,14 +4038,16 @@
 
   function checkMidnightRollover() {
     const today = getTodayString();
-    if (lastActiveDate && lastActiveDate !== today) {
-      if (eatenCal > 0 || eatenPro > 0) {
-        alert(`שים לב: התחיל יום חדש (${today}) וטרם איפסת את אתמול!`);
-      }
+    // היום מתחלף אוטומטית בחצות — אין צורך לאפס ידנית
+    if (lastActiveDate !== today) {
       lastActiveDate = today;
-      saveData();
+      renderLogs();
+      updateDisplay();
     }
   }
+  // אם האפליקציה פתוחה בחצות / חוזרים אליה ביום חדש
+  setInterval(checkMidnightRollover, 60000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkMidnightRollover(); });
 
   /* תיקון ארכיון: כל רשומה בהיסטוריה השבועית חייבת להופיע גם בארכיון (למשל אחרי שחזור עם "חזור") */
   function ensureLogsInArchive() {
@@ -4100,7 +4106,7 @@
       updateDisplay();
     });
   }
-  runCloudStartupSync();
+  runCloudStartupSync().then(ensureWeeklyBackup);
 
   // Service Worker: האפליקציה נפתחת מיידית מהמטמון, ומתעדכנת ברקע
   if ('serviceWorker' in navigator) {
