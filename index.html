@@ -1494,6 +1494,8 @@
 
       <button class="btn-tint btn-tint-pair-top" onclick="changeSyncKey()">🔑 מפתח סנכרון ענן</button>
 
+      <button class="btn-tint btn-tint-pair-top" onclick="inspectCloudData()">🩺 בדיקה ושחזור מהענן</button>
+
       <div style="display:flex; gap:8px;">
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
@@ -1535,7 +1537,7 @@
 
 <script>
   /* מספר גרסה — לעדכן בכל שינוי. מוצג בהגדרות, ובהודעה בפתיחה הראשונה של גרסה חדשה */
-  const APP_VERSION = '1.2';
+  const APP_VERSION = '1.3';
 
   /* תאריך מקומי (לא UTC) — כדי שהיום יתחלף בחצות שעון ישראל ולא ב-02:00/03:00 */
   function toLocalDateStr(d) {
@@ -2285,6 +2287,72 @@
     }
   });
 
+  /* מחליף את נתוני המכשיר בנתוני הענן (בלי לסמן שינוי מקומי) */
+  function applyCloudData(d, ts) {
+    targetCal = d.targetCal ?? targetCal;
+    targetPro = d.targetPro ?? targetPro;
+    userGoalType = d.userGoalType ?? userGoalType;
+    programStartDate = d.programStartDate ?? programStartDate;
+    eatenCal = d.eatenCal ?? eatenCal;
+    eatenPro = d.eatenPro ?? eatenPro;
+    weeklyBank = d.weeklyBank ?? weeklyBank;
+    logs = d.logs ?? logs;
+    archiveLogs = d.archiveLogs ?? archiveLogs;
+    presets = d.presets ?? presets;
+    categoryOrder = d.categoryOrder ?? categoryOrder;
+    baseCatOrder = d.baseCatOrder ?? baseCatOrder;
+    baseFoodOrder = d.baseFoodOrder ?? baseFoodOrder;
+    lastActiveDate = d.lastActiveDate ?? lastActiveDate;
+
+    lastModified = ts;
+    lastSavedJson = JSON.stringify(buildPayload());
+    writeLocalStorage();
+
+    document.getElementById('targetCalInput').value = targetCal;
+    document.getElementById('targetProInput').value = targetPro;
+    document.getElementById('userGoalTypeSelect').value = userGoalType;
+    syncDateInputsFromStorage();
+    applyUserGoalBadge();
+  }
+
+  /* 🩺 בדיקה ושחזור: מציג מה יש בענן מול המכשיר, ומאפשר לשחזר מהענן */
+  async function inspectCloudData() {
+    let d;
+    try {
+      const res = await fetch('/api/data', { cache: 'no-store', headers: apiHeaders() });
+      if (res.status === 401) { alert('🔑 מפתח הסנכרון שגוי או חסר. עדכן אותו ב"מפתח סנכרון ענן".'); return; }
+      if (!res.ok) throw new Error(res.status);
+      d = (await res.json()).result;
+    } catch (e) {
+      alert('לא ניתן להתחבר לענן כרגע.');
+      return;
+    }
+    if (!d) { alert('☁️ אין נתונים שמורים בענן.'); return; }
+    const fmt = ts => ts ? new Date(ts).toLocaleString('he-IL') : 'לא ידוע';
+    const msg =
+      `☁️ ענן:\n` +
+      `• ${(d.presets || []).length} מנות ב"האוכל שלי"\n` +
+      `• ${(d.logs || []).length} רשומות בהיסטוריה השבועית\n` +
+      `• ${(d.archiveLogs || []).length} רשומות בארכיון\n` +
+      `• עודכן: ${fmt(d.lastModified)}\n\n` +
+      `📱 מכשיר:\n` +
+      `• ${presets.length} מנות ב"האוכל שלי"\n` +
+      `• ${logs.length} רשומות בהיסטוריה השבועית\n` +
+      `• ${archiveLogs.length} רשומות בארכיון\n` +
+      `• עודכן: ${fmt(lastModified)}\n\n` +
+      `לשחזר את נתוני הענן למכשיר? (אפשר לבטל עם "חזור")`;
+    if (!confirm(msg)) return;
+    pushState('שחזור מהענן');
+    applyCloudData(d, d.lastModified || 0);
+    saveData(); // מסמן את המצב המשוחזר כעדכני ומסנכרן
+    closeSettingsModal();
+    renderLogs();
+    applyPoolTabUI();
+    renderPresets();
+    updateDisplay();
+    showToast('הנתונים שוחזרו מהענן');
+  }
+
   /* מחזיר true רק אם נתוני הענן חדשים יותר והוחלו על המכשיר */
   async function loadFromCloud() {
     try {
@@ -2305,30 +2373,9 @@
         return false;
       }
 
-      targetCal = d.targetCal ?? targetCal;
-      targetPro = d.targetPro ?? targetPro;
-      userGoalType = d.userGoalType ?? userGoalType;
-      programStartDate = d.programStartDate ?? programStartDate;
-      eatenCal = d.eatenCal ?? eatenCal;
-      eatenPro = d.eatenPro ?? eatenPro;
-      weeklyBank = d.weeklyBank ?? weeklyBank;
-      logs = d.logs ?? logs;
-      archiveLogs = d.archiveLogs ?? archiveLogs;
-      presets = d.presets ?? presets;
-      categoryOrder = d.categoryOrder ?? categoryOrder;
-      baseCatOrder = d.baseCatOrder ?? baseCatOrder;
-      baseFoodOrder = d.baseFoodOrder ?? baseFoodOrder;
-      lastActiveDate = d.lastActiveDate ?? lastActiveDate;
-
-      lastModified = cloudTs;
-      lastSavedJson = JSON.stringify(buildPayload());
-      writeLocalStorage();
-
-      document.getElementById('targetCalInput').value = targetCal;
-      document.getElementById('targetProInput').value = targetPro;
-      document.getElementById('userGoalTypeSelect').value = userGoalType;
-      syncDateInputsFromStorage();
-      applyUserGoalBadge();
+      // רשת ביטחון: אפשר לבטל (חזור) החלפה של נתוני המכשיר בנתוני הענן
+      pushState('סנכרון מהענן');
+      applyCloudData(d, cloudTs);
       return true;
     } catch (e) {
       console.log('טעינה מהענן נכשלה, טוען נתונים מקומיים');
