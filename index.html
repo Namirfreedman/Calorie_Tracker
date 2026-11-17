@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Macro Tracker</title><link rel="manifest" href="manifest.json?v=2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Macro Tracker"><link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"><script src="base-food.js" onload="if(typeof renderPresets==='function'){renderPresets();applyPoolTabUI();}"></script><style>
+<!DOCTYPE html><html lang="he" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>Macro Tracker</title><link rel="manifest" href="manifest.json?v=2"><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet" media="print" onload="this.media='all'"><noscript><link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="Macro Tracker"><link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/1046/1046857.png"><script src="base-food.js" onload="if(typeof renderPresets==='function'){renderPresets();applyPoolTabUI();}"></script><style>
   :root {
     --bg-page: #f8f9fa;
     --card-bg: #ffffff;
@@ -1530,10 +1530,15 @@
 </div>
 
 <script>
+  /* תאריך מקומי (לא UTC) — כדי שהיום יתחלף בחצות שעון ישראל ולא ב-02:00/03:00 */
+  function toLocalDateStr(d) {
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
   let targetCal = parseInt(localStorage.getItem('cal_targetCal')) || 1800;
   let targetPro = parseInt(localStorage.getItem('cal_targetPro')) || 140;
   let userGoalType = localStorage.getItem('cal_userGoalType') || 'cut';
-  let programStartDate = localStorage.getItem('cal_programStartDate') || new Date().toISOString().slice(0, 10);
+  let programStartDate = localStorage.getItem('cal_programStartDate') || toLocalDateStr(new Date());
   let eatenCal = parseInt(localStorage.getItem('cal_eatenCal')) || 0;
   let eatenPro = parseFloat(localStorage.getItem('cal_eatenPro')) || 0;
   let weeklyBank = parseInt(localStorage.getItem('cal_weeklyBank')) || 0;
@@ -1542,7 +1547,7 @@
   let archiveLogs = JSON.parse(localStorage.getItem('cal_archiveLogs') || '[]');
   let presets = JSON.parse(localStorage.getItem('cal_presets') || '[]');
   let categoryOrder = JSON.parse(localStorage.getItem('cal_catOrder') || '["כללי"]');
-  let lastActiveDate = localStorage.getItem('cal_lastDate') || new Date().toISOString().slice(0, 10);
+  let lastActiveDate = localStorage.getItem('cal_lastDate') || toLocalDateStr(new Date());
   
   let currentPoolTab = localStorage.getItem('cal_poolTabState') || 'myfood';
   if (currentPoolTab !== 'myfood' && currentPoolTab !== 'base') currentPoolTab = 'myfood';
@@ -1560,6 +1565,8 @@
   let editingLogIndex = -1;
   let toastFadeTimer = null;
   let cloudSyncTimeout = null;
+  let lastModified = parseInt(localStorage.getItem('cal_lastModified')) || 0;
+  let lastSavedJson = null;
 
   /* === Multi-screen Scroll Controller (1:1 Continuous Tracker) === */
   const slider = document.getElementById('sliderContainer');
@@ -2021,7 +2028,7 @@
   }
 
   function getTodayString() {
-    return new Date().toISOString().slice(0, 10);
+    return toLocalDateStr(new Date());
   }
 
   function getDaysDifference(dateStr) {
@@ -2145,7 +2152,15 @@
     redoStack = [];
   }
 
-  function saveData() {
+  function buildPayload() {
+    return {
+      targetCal, targetPro, userGoalType, programStartDate,
+      eatenCal, eatenPro, weeklyBank, logs, archiveLogs,
+      presets, categoryOrder, baseCatOrder, baseFoodOrder, lastActiveDate
+    };
+  }
+
+  function writeLocalStorage() {
     localStorage.setItem('cal_targetCal', targetCal);
     localStorage.setItem('cal_targetPro', targetPro);
     localStorage.setItem('cal_userGoalType', userGoalType);
@@ -2161,64 +2176,92 @@
     localStorage.setItem('cal_baseFoodOrder', JSON.stringify(baseFoodOrder));
     localStorage.setItem('cal_lastDate', lastActiveDate);
     localStorage.setItem('cal_historyStack', JSON.stringify(historyStack));
+    localStorage.setItem('cal_lastModified', lastModified);
+  }
+
+  /* שומר רק אם משהו באמת השתנה — חוסך כתיבות מיותרות ומונע "חותמת זמן" שגויה */
+  function saveData() {
     localStorage.setItem('cal_poolTabState', currentPoolTab);
+    const json = JSON.stringify(buildPayload());
+    if (json === lastSavedJson) return;
+    lastSavedJson = json;
+    lastModified = Date.now();
+    writeLocalStorage();
 
     if (cloudSyncTimeout) clearTimeout(cloudSyncTimeout);
     cloudSyncTimeout = setTimeout(() => {
+      cloudSyncTimeout = null;
       syncToCloud();
     }, 1000);
   }
 
-  async function syncToCloud() {
+  async function syncToCloud(keepalive = false) {
     try {
-      const payload = {
-        targetCal, targetPro, userGoalType, programStartDate,
-        eatenCal, eatenPro, weeklyBank, logs, archiveLogs,
-        presets, categoryOrder, baseCatOrder, baseFoodOrder, lastActiveDate
-      };
+      const body = JSON.stringify({ ...buildPayload(), lastModified });
       await fetch('/api/data', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+        body,
+        // keepalive מאפשר לבקשה להסתיים גם כשהאפליקציה נסגרת (מוגבל ל-64KB)
+        keepalive: keepalive && body.length < 60000
       });
     } catch (e) {
       console.log('סנכרון ענן נכשל, נשמר מקומית בלבד');
     }
   }
 
+  /* סגירת/מזעור האפליקציה: שולח מיד שינויים שעוד ממתינים לסנכרון */
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'hidden' && cloudSyncTimeout) {
+      clearTimeout(cloudSyncTimeout);
+      cloudSyncTimeout = null;
+      syncToCloud(true);
+    }
+  });
+
+  /* מחזיר true רק אם נתוני הענן חדשים יותר והוחלו על המכשיר */
   async function loadFromCloud() {
     try {
-      const res = await fetch('/api/data');
+      const ctrl = new AbortController();
+      const abortTimer = setTimeout(() => ctrl.abort(), 5000);
+      const res = await fetch('/api/data', { cache: 'no-store', signal: ctrl.signal });
+      clearTimeout(abortTimer);
       if (!res.ok) throw new Error(`Cloud load failed: ${res.status}`);
       const data = await res.json();
-      if (data && data.result) {
-        const d = data.result;
-        targetCal = d.targetCal ?? targetCal;
-        targetPro = d.targetPro ?? targetPro;
-        userGoalType = d.userGoalType ?? userGoalType;
-        programStartDate = d.programStartDate ?? programStartDate;
-        eatenCal = d.eatenCal ?? eatenCal;
-        eatenPro = d.eatenPro ?? eatenPro;
-        weeklyBank = d.weeklyBank ?? weeklyBank;
-        logs = d.logs ?? logs;
-        archiveLogs = d.archiveLogs ?? archiveLogs;
-        presets = d.presets ?? presets;
-        categoryOrder = d.categoryOrder ?? categoryOrder;
-        baseCatOrder = d.baseCatOrder ?? baseCatOrder;
-        baseFoodOrder = d.baseFoodOrder ?? baseFoodOrder;
-        lastActiveDate = d.lastActiveDate ?? lastActiveDate;
+      if (!data || !data.result) return false;
+      const d = data.result;
+      const cloudTs = d.lastModified || 0;
 
-        document.getElementById('targetCalInput').value = targetCal;
-        document.getElementById('targetProInput').value = targetPro;
-        document.getElementById('userGoalTypeSelect').value = userGoalType;
-
-        syncDateInputsFromStorage();
-        applyUserGoalBadge();
-        renderLogs();
-        applyPoolTabUI();
-        renderPresets();
-        updateDisplay();
+      // המכשיר מעודכן יותר מהענן (למשל נסגר לפני שהסנכרון הספיק) — דוחפים את המקומי לענן
+      if (lastModified > 0 && cloudTs <= lastModified) {
+        if (cloudTs < lastModified) syncToCloud();
+        return false;
       }
+
+      targetCal = d.targetCal ?? targetCal;
+      targetPro = d.targetPro ?? targetPro;
+      userGoalType = d.userGoalType ?? userGoalType;
+      programStartDate = d.programStartDate ?? programStartDate;
+      eatenCal = d.eatenCal ?? eatenCal;
+      eatenPro = d.eatenPro ?? eatenPro;
+      weeklyBank = d.weeklyBank ?? weeklyBank;
+      logs = d.logs ?? logs;
+      archiveLogs = d.archiveLogs ?? archiveLogs;
+      presets = d.presets ?? presets;
+      categoryOrder = d.categoryOrder ?? categoryOrder;
+      baseCatOrder = d.baseCatOrder ?? baseCatOrder;
+      baseFoodOrder = d.baseFoodOrder ?? baseFoodOrder;
+      lastActiveDate = d.lastActiveDate ?? lastActiveDate;
+
+      lastModified = cloudTs;
+      lastSavedJson = JSON.stringify(buildPayload());
+      writeLocalStorage();
+
+      document.getElementById('targetCalInput').value = targetCal;
+      document.getElementById('targetProInput').value = targetPro;
+      document.getElementById('userGoalTypeSelect').value = userGoalType;
+      syncDateInputsFromStorage();
+      applyUserGoalBadge();
       return true;
     } catch (e) {
       console.log('טעינה מהענן נכשלה, טוען נתונים מקומיים');
@@ -2884,15 +2927,15 @@
 
   function calculateWeeklyStats() {
     const today = new Date();
-    const todayStr = today.toISOString().slice(0, 10);
+    const todayStr = toLocalDateStr(today);
 
     const yesterday = new Date(today);
     yesterday.setDate(today.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().slice(0, 10);
+    const yesterdayStr = toLocalDateStr(yesterday);
 
     const startCutoff = new Date(today);
     startCutoff.setDate(today.getDate() - 7);
-    const startCutoffStr = startCutoff.toISOString().slice(0, 10);
+    const startCutoffStr = toLocalDateStr(startCutoff);
 
     const relevant = archiveLogs.filter(l => {
       const d = l.date || '';
@@ -3822,7 +3865,7 @@
     const blob = new Blob([JSON.stringify(data)], { type: 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `calorie_backup_${new Date().toISOString().slice(0,10)}.txt`;
+    a.download = `calorie_backup_${toLocalDateStr(new Date())}.txt`;
     a.click();
     closeSettingsModal();
   }
@@ -3833,7 +3876,7 @@
     const blob = new Blob([JSON.stringify(archiveLogs, null, 2)], { type: 'text/plain;charset=utf-8' });
     a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `archive_logs_${new Date().toISOString().slice(0,10)}.txt`;
+    a.download = `archive_logs_${toLocalDateStr(new Date())}.txt`;
     a.click();
   }
 
@@ -3886,28 +3929,50 @@
   function applySevenDayRollingWindow() {
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - 7);
-    const cutoffIso = cutoff.toISOString().slice(0, 10);
+    const cutoffIso = toLocalDateStr(cutoff);
     const len = logs.length;
     logs = logs.filter(l => (l.date || getTodayString()) >= cutoffIso);
     if (logs.length !== len) saveData();
   }
 
+  // מצב התחלתי: מה שנטען מ-localStorage נחשב "שמור" (לא מסמן שינוי)
+  lastSavedJson = JSON.stringify(buildPayload());
+
+  // פתיחה קבועה במסך HOME — מיד, לפני הציור הראשון (בלי הבהוב של מסך המאגר)
+  goToPageIndex(2);
+
   renderLogs();
   applyPoolTabUI();
   renderPresets();
   updateDisplay();
-  
-  // פתיחה קבועה במסך HOME
   setTimeout(() => { goToPageIndex(2); }, 50);
 
+  // סנכרון ענן ברקע (עד 5 שניות) — מחליף נתונים רק אם בענן יש גרסה חדשה יותר.
+  // ניקוי שבועי + בדיקת יום חדש רצים אחריו בכל מקרה, גם בלי אינטרנט.
   loadFromCloud().then(cloudLoaded => {
-    if (!cloudLoaded) return;
     applySevenDayRollingWindow();
     checkMidnightRollover();
-    saveData();
     renderLogs();
     applyPoolTabUI();
     renderPresets();
     updateDisplay();
   });
+
+  // Service Worker: האפליקציה נפתחת מיידית מהמטמון, ומתעדכנת ברקע
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').catch(() => {});
+    });
+    // גרסה חדשה ירדה ברקע: מודיעים, ומרעננים בפעם הבאה שחוזרים לאפליקציה
+    let appUpdatePending = false;
+    navigator.serviceWorker.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'APP_UPDATED') {
+        appUpdatePending = true;
+        showToast('גרסה חדשה הותקנה — תתעדכן בפתיחה הבאה');
+      }
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (appUpdatePending && document.visibilityState === 'visible') location.reload();
+    });
+  }
 </script></body></html>
