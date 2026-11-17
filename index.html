@@ -1492,6 +1492,8 @@
 
       <button class="btn-tint btn-tint-pair-top" onclick="openMenuImportFromSettings()">📋 ייבוא תפריט מטקסט</button>
 
+      <button class="btn-tint btn-tint-pair-top" onclick="changeSyncKey()">🔑 מפתח סנכרון ענן</button>
+
       <div style="display:flex; gap:8px;">
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="exportBackupTxt()">ייצוא גיבוי</button>
         <button class="btn-tint btn-tint-pair-top" style="flex:1;" onclick="document.getElementById('importFile').click()">ייבוא גיבוי</button>
@@ -2160,7 +2162,30 @@
     };
   }
 
+  /* היסטוריית ביטול שנשמרת במכשיר: רק 5 פעולות אחרונות, ובלי הארכיון בכל עותק.
+     (בזמן שהאפליקציה פתוחה עדיין יש 30 פעולות מלאות בזיכרון.)
+     בלי זה האחסון במכשיר (~5MB) מתמלא תוך חודשים והשמירה נכשלת. */
+  const PERSISTED_HISTORY_LIMIT = 5;
+  function getPersistedHistory() {
+    return historyStack.slice(-PERSISTED_HISTORY_LIMIT).map(({ archiveLogs, ...rest }) => rest);
+  }
+
+  let storageWarningShown = false;
   function writeLocalStorage() {
+    try {
+      writeLocalStorageUnsafe();
+    } catch (e) {
+      console.error('localStorage write failed', e);
+      if (!storageWarningShown) {
+        storageWarningShown = true;
+        alert('⚠️ האחסון במכשיר מלא — השמירה המקומית נכשלה. מומלץ לייצא גיבוי מההגדרות.');
+      }
+    }
+  }
+
+  function writeLocalStorageUnsafe() {
+    // קודם ההיסטוריה (מתכווצת) כדי לפנות מקום לשאר הנתונים
+    localStorage.setItem('cal_historyStack', JSON.stringify(getPersistedHistory()));
     localStorage.setItem('cal_targetCal', targetCal);
     localStorage.setItem('cal_targetPro', targetPro);
     localStorage.setItem('cal_userGoalType', userGoalType);
@@ -2175,7 +2200,6 @@
     localStorage.setItem('cal_baseCatOrder', JSON.stringify(baseCatOrder));
     localStorage.setItem('cal_baseFoodOrder', JSON.stringify(baseFoodOrder));
     localStorage.setItem('cal_lastDate', lastActiveDate);
-    localStorage.setItem('cal_historyStack', JSON.stringify(historyStack));
     localStorage.setItem('cal_lastModified', lastModified);
   }
 
@@ -2195,16 +2219,53 @@
     }, 1000);
   }
 
+  /* מפתח סנכרון: נשמר רק במכשיר (לא בקוד — הריפו ציבורי). השרת בודק אותו מול APP_SECRET ב-Vercel */
+  let syncKey = localStorage.getItem('cal_syncKey') || '';
+  let syncKeyPrompted = false;
+
+  function apiHeaders(extra = {}) {
+    return syncKey ? { ...extra, 'x-app-key': syncKey } : extra;
+  }
+
+  function askForSyncKey(message) {
+    const val = prompt(message, syncKey);
+    if (val === null) return false;
+    syncKey = val.trim();
+    localStorage.setItem('cal_syncKey', syncKey);
+    return true;
+  }
+
+  /* השרת החזיר 401 — מבקש מפתח פעם אחת לכל פתיחה ומנסה שוב */
+  function handleUnauthorized() {
+    if (syncKeyPrompted) return;
+    syncKeyPrompted = true;
+    setTimeout(() => {
+      if (askForSyncKey('🔑 הסנכרון לענן נחסם.\nהזן את מפתח הסנכרון (APP_SECRET):')) {
+        syncKeyPrompted = false;
+        runCloudStartupSync();
+      }
+    }, 400);
+  }
+
+  function changeSyncKey() {
+    if (askForSyncKey('🔑 מפתח סנכרון ענן (APP_SECRET):')) {
+      syncKeyPrompted = false;
+      showToast('מפתח סנכרון נשמר');
+      runCloudStartupSync();
+    }
+  }
+
   async function syncToCloud(keepalive = false) {
     try {
       const body = JSON.stringify({ ...buildPayload(), lastModified });
-      await fetch('/api/data', {
+      const res = await fetch('/api/data', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: apiHeaders({ 'Content-Type': 'application/json' }),
         body,
         // keepalive מאפשר לבקשה להסתיים גם כשהאפליקציה נסגרת (מוגבל ל-64KB)
         keepalive: keepalive && body.length < 60000
       });
+      if (res.status === 401) handleUnauthorized();
     } catch (e) {
       console.log('סנכרון ענן נכשל, נשמר מקומית בלבד');
     }
@@ -2224,8 +2285,9 @@
     try {
       const ctrl = new AbortController();
       const abortTimer = setTimeout(() => ctrl.abort(), 5000);
-      const res = await fetch('/api/data', { cache: 'no-store', signal: ctrl.signal });
+      const res = await fetch('/api/data', { cache: 'no-store', signal: ctrl.signal, headers: apiHeaders() });
       clearTimeout(abortTimer);
+      if (res.status === 401) { handleUnauthorized(); return false; }
       if (!res.ok) throw new Error(`Cloud load failed: ${res.status}`);
       const data = await res.json();
       if (!data || !data.result) return false;
@@ -3938,6 +4000,11 @@
   // מצב התחלתי: מה שנטען מ-localStorage נחשב "שמור" (לא מסמן שינוי)
   lastSavedJson = JSON.stringify(buildPayload());
 
+  // כיווץ חד-פעמי של היסטוריית ביטול ישנה (שנשמרה עם 30 עותקים מלאים)
+  if (historyStack.length > PERSISTED_HISTORY_LIMIT || historyStack.some(h => h.archiveLogs)) {
+    try { localStorage.setItem('cal_historyStack', JSON.stringify(getPersistedHistory())); } catch (e) {}
+  }
+
   // פתיחה קבועה במסך HOME — מיד, לפני הציור הראשון (בלי הבהוב של מסך המאגר)
   goToPageIndex(2);
 
@@ -3949,14 +4016,17 @@
 
   // סנכרון ענן ברקע (עד 5 שניות) — מחליף נתונים רק אם בענן יש גרסה חדשה יותר.
   // ניקוי שבועי + בדיקת יום חדש רצים אחריו בכל מקרה, גם בלי אינטרנט.
-  loadFromCloud().then(cloudLoaded => {
-    applySevenDayRollingWindow();
-    checkMidnightRollover();
-    renderLogs();
-    applyPoolTabUI();
-    renderPresets();
-    updateDisplay();
-  });
+  function runCloudStartupSync() {
+    return loadFromCloud().then(() => {
+      applySevenDayRollingWindow();
+      checkMidnightRollover();
+      renderLogs();
+      applyPoolTabUI();
+      renderPresets();
+      updateDisplay();
+    });
+  }
+  runCloudStartupSync();
 
   // Service Worker: האפליקציה נפתחת מיידית מהמטמון, ומתעדכנת ברקע
   if ('serviceWorker' in navigator) {

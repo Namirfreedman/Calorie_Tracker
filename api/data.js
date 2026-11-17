@@ -1,9 +1,29 @@
+import { timingSafeEqual } from "crypto";
+
+// בדיקת מפתח סנכרון: אם APP_SECRET מוגדר ב-Vercel, כל בקשה חייבת לשלוח אותו בכותרת x-app-key.
+// אם לא מוגדר — הגישה פתוחה (כמו קודם), כדי שהעדכון לא ישבור סנכרון לפני שהמפתח הוגדר.
+function isAuthorized(req) {
+  const secret = process.env.APP_SECRET;
+  if (!secret) return true;
+  const provided = req.headers["x-app-key"];
+  if (typeof provided !== "string") return false;
+  const a = Buffer.from(provided);
+  const b = Buffer.from(secret);
+  return a.length === b.length && timingSafeEqual(a, b);
+}
+
 export default async function handler(req, res) {
   const url = process.env.KV_REST_API_URL;
   const token = process.env.KV_REST_API_TOKEN;
 
+  res.setHeader("Cache-Control", "no-store");
+
   if (!url || !token) {
     return res.status(500).json({ error: "Missing KV credentials" });
+  }
+
+  if (!isAuthorized(req)) {
+    return res.status(401).json({ error: "Unauthorized" });
   }
 
   // שמירת נתונים בענן
