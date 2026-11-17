@@ -1509,6 +1509,8 @@
         </div>
         <div class="archive-viewer-box" id="archiveViewerBox"></div>
       </div>
+
+      <div id="appVersionText" style="text-align:center; font-size:0.75rem; color:var(--text-subtle); padding:4px 0 2px;"></div>
     </div>
   </div>
 </div>
@@ -1532,6 +1534,9 @@
 </div>
 
 <script>
+  /* מספר גרסה — לעדכן בכל שינוי. מוצג בהגדרות, ובהודעה בפתיחה הראשונה של גרסה חדשה */
+  const APP_VERSION = '1.1';
+
   /* תאריך מקומי (לא UTC) — כדי שהיום יתחלף בחצות שעון ישראל ולא ב-02:00/03:00 */
   function toLocalDateStr(d) {
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
@@ -4005,6 +4010,14 @@
     try { localStorage.setItem('cal_historyStack', JSON.stringify(getPersistedHistory())); } catch (e) {}
   }
 
+  // גרסה: מוצגת בהגדרות + הודעה כשנפתחת גרסה חדשה בפעם הראשונה
+  document.getElementById('appVersionText').textContent = `גרסה ${APP_VERSION}`;
+  const seenVersion = localStorage.getItem('cal_appVersion');
+  localStorage.setItem('cal_appVersion', APP_VERSION);
+  if (seenVersion && seenVersion !== APP_VERSION) {
+    setTimeout(() => showToast(`✨ האפליקציה עודכנה לגרסה ${APP_VERSION}`), 600);
+  }
+
   // פתיחה קבועה במסך HOME — מיד, לפני הציור הראשון (בלי הבהוב של מסך המאגר)
   goToPageIndex(2);
 
@@ -4032,17 +4045,33 @@
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js').catch(() => {});
+      // האפליקציה נפתחה מהמטמון — בודקים עכשיו ברקע אם יש גרסה חדשה
+      if (navigator.serviceWorker.controller) fetch('./index.html', { cache: 'no-store' }).catch(() => {});
     });
-    // גרסה חדשה ירדה ברקע: מודיעים, ומרעננים בפעם הבאה שחוזרים לאפליקציה
+    // גרסה חדשה ירדה ברקע: מרעננים מיד — אלא אם המשתמש באמצע הקלדה / חלון פתוח
     let appUpdatePending = false;
+    function isSafeToReload() {
+      const a = document.activeElement;
+      if (a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA' || a.tagName === 'SELECT')) return false;
+      const openModal = Array.from(document.querySelectorAll('.modal-overlay')).some(m => getComputedStyle(m).display !== 'none');
+      return !openModal;
+    }
+    function reloadForUpdate() {
+      if (isSafeToReload()) location.reload();
+      else appUpdatePending = true;
+    }
     navigator.serviceWorker.addEventListener('message', (e) => {
-      if (e.data && e.data.type === 'APP_UPDATED') {
-        appUpdatePending = true;
-        showToast('גרסה חדשה הותקנה — תתעדכן בפתיחה הבאה');
-      }
+      if (e.data && e.data.type === 'APP_UPDATED') reloadForUpdate();
     });
+    // ממתין לרגע בטוח: סיום הקלדה / סגירת חלון
+    document.addEventListener('focusout', () => { if (appUpdatePending) setTimeout(reloadForUpdate, 300); });
+    document.addEventListener('click', () => { if (appUpdatePending) setTimeout(reloadForUpdate, 300); });
+    // חזרה לאפליקציה (בטלפון היא לרוב "ממשיכה" ולא נפתחת מחדש) — בודקים אם יש גרסה חדשה
     document.addEventListener('visibilitychange', () => {
-      if (appUpdatePending && document.visibilityState === 'visible') location.reload();
+      if (document.visibilityState !== 'visible') return;
+      if (appUpdatePending) { reloadForUpdate(); return; }
+      fetch('./index.html', { cache: 'no-store' }).catch(() => {});
+      navigator.serviceWorker.getRegistration().then(r => r && r.update()).catch(() => {});
     });
   }
 </script></body></html>

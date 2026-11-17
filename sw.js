@@ -2,7 +2,7 @@
 // האפליקציה נפתחת מיידית מהמטמון (גם בלי אינטרנט), ומתעדכנת ברקע.
 // /api/* לעולם לא נשמר במטמון.
 
-const CACHE = 'macro-tracker-v1';
+const CACHE = 'macro-tracker-v3';
 const APP_SHELL = ['./', './index.html', './base-food.js', './manifest.json?v=2'];
 
 self.addEventListener('install', (event) => {
@@ -24,29 +24,36 @@ async function notifyUpdate() {
   clients.forEach((c) => c.postMessage({ type: 'APP_UPDATED' }));
 }
 
-// Stale-while-revalidate: מחזיר מיד מהמטמון, ומרענן ברקע לפעם הבאה
-async function staleWhileRevalidate(request, cacheKey, watchForUpdate) {
+// Stale-while-revalidate: מחזיר מיד מהמטמון, ומרענן ברקע
+async function staleWhileRevalidate(event, cacheKey, watchForUpdate) {
   const cache = await caches.open(CACHE);
   const cached = await cache.match(cacheKey, { ignoreSearch: true });
+  // קוראים את הגרסה הישנה לפני שהעותק נמסר לדף (אחרי זה אי אפשר לקרוא אותו)
+  const oldTextPromise = watchForUpdate && cached ? cached.clone().text() : Promise.resolve(null);
 
-  const networkPromise = fetch(request)
+  const networkPromise = fetch(event.request.url, { cache: 'no-cache', credentials: 'same-origin' })
     .then(async (res) => {
       if (res && res.ok) {
-        if (watchForUpdate && cached) {
-          const [oldText, newText] = await Promise.all([cached.clone().text(), res.clone().text()]);
-          await cache.put(cacheKey, res.clone());
-          if (oldText !== newText) notifyUpdate();
-        } else {
-          await cache.put(cacheKey, res.clone());
-        }
+        const oldText = await oldTextPromise;
+        await cache.put(cacheKey, res.clone());
+        if (oldText !== null && oldText !== (await res.clone().text())) notifyUpdate();
       }
       return res;
     })
     .catch(() => null);
+  event.waitUntil(networkPromise);
 
   if (cached) return cached;
   const res = await networkPromise;
   return res || new Response('Offline', { status: 503 });
+}
+
+// ניווט (פתיחת האפליקציה): מיד מהמטמון. הבדיקה לגרסה חדשה נעשית מהדף עצמו אחרי שנטען
+async function cachedShell(event) {
+  const cache = await caches.open(CACHE);
+  const cached = await cache.match('./index.html', { ignoreSearch: true });
+  if (cached) return cached;
+  return staleWhileRevalidate(event, './index.html', false);
 }
 
 // Cache-first לקבצים חיצוניים שלא משתנים (פונטים, אייקון)
@@ -70,12 +77,16 @@ self.addEventListener('fetch', (event) => {
 
   if (url.origin === self.location.origin) {
     if (url.pathname.startsWith('/api/')) return; // נתונים — תמיד מהרשת
-    if (req.mode === 'navigate' || url.pathname === '/' || url.pathname.endsWith('/index.html')) {
-      event.respondWith(staleWhileRevalidate(req, './index.html', true));
+    if (req.mode === 'navigate') {
+      event.respondWith(cachedShell(event));
+      return;
+    }
+    if (url.pathname === '/' || url.pathname.endsWith('/index.html')) {
+      event.respondWith(staleWhileRevalidate(event, './index.html', true));
       return;
     }
     const watch = url.pathname.endsWith('/base-food.js');
-    event.respondWith(staleWhileRevalidate(req, req, watch));
+    event.respondWith(staleWhileRevalidate(event, req, watch));
     return;
   }
 
