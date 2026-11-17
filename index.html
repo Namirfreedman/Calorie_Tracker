@@ -1537,7 +1537,7 @@
 
 <script>
   /* מספר גרסה — לעדכן בכל שינוי. מוצג בהגדרות, ובהודעה בפתיחה הראשונה של גרסה חדשה */
-  const APP_VERSION = '1.3';
+  const APP_VERSION = '1.4';
 
   /* תאריך מקומי (לא UTC) — כדי שהיום יתחלף בחצות שעון ישראל ולא ב-02:00/03:00 */
   function toLocalDateStr(d) {
@@ -3795,6 +3795,9 @@
     eatenCal = st.eatenCal; eatenPro = st.eatenPro;
     weeklyBank = st.weeklyBank || 0;
     logs = st.logs; archiveLogs = st.archiveLogs || archiveLogs;
+    { const ids = new Set(archiveLogs.map(a => a.id));
+      const missing = logs.filter(l => l.id && !ids.has(l.id));
+      if (missing.length) archiveLogs = [...missing.map(l => ({ ...l })), ...archiveLogs].sort((a, b) => (b.date || '').localeCompare(a.date || '')); }
     presets = st.presets || presets; categoryOrder = st.categoryOrder || categoryOrder;
     baseCatOrder = st.baseCatOrder || baseCatOrder;
     baseFoodOrder = st.baseFoodOrder || baseFoodOrder;
@@ -4040,6 +4043,16 @@
     }
   }
 
+  /* תיקון ארכיון: כל רשומה בהיסטוריה השבועית חייבת להופיע גם בארכיון (למשל אחרי שחזור עם "חזור") */
+  function ensureLogsInArchive() {
+    const ids = new Set(archiveLogs.map(a => a.id));
+    const missing = logs.filter(l => l.id && !ids.has(l.id));
+    if (missing.length === 0) return;
+    archiveLogs = [...missing.map(l => ({ ...l })), ...archiveLogs]
+      .sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+    saveData();
+  }
+
   function applySevenDayRollingWindow() {
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() - 7);
@@ -4078,6 +4091,7 @@
   // ניקוי שבועי + בדיקת יום חדש רצים אחריו בכל מקרה, גם בלי אינטרנט.
   function runCloudStartupSync() {
     return loadFromCloud().then(() => {
+      ensureLogsInArchive();
       applySevenDayRollingWindow();
       checkMidnightRollover();
       renderLogs();
